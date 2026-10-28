@@ -1,0 +1,108 @@
+[
+ {
+  "notes": "wui-tung-report",
+  "code_blocks": 1,
+  "text_outside_block": "",
+  "parse_warnings": [],
+  "numbers_in_notes": [
+   "150",
+   "19%",
+   "2027",
+   "3",
+   "300",
+   "35",
+   "350",
+   "37%",
+   "44%",
+   "45",
+   "800",
+   "92%",
+   "97%"
+  ],
+  "numbers_missing": [],
+  "slides": [
+   "匯通物流 2027 年度計劃 (fits)",
+   "目標一：本地送貨準時率 (fits)",
+   "目標二：葵涌倉存貨周轉 (fits)",
+   "目標三：大灣區跨境路線 (fits)",
+   "全年預算 (fits)",
+   "主要風險 (fits)",
+   "營運部建議 (fits)"
+  ],
+  "fill_c1": true,
+  "fill_c3": [],
+  "fill_c5": [],
+  "pass": true
+ },
+ {
+  "notes": "english-update",
+  "code_blocks": 1,
+  "text_outside_block": "",
+  "parse_warnings": [],
+  "numbers_in_notes": [
+   "1",
+   "1.65",
+   "120,000",
+   "14",
+   "15",
+   "2",
+   "2.4",
+   "2.8",
+   "20",
+   "2026",
+   "24",
+   "3",
+   "30",
+   "31",
+   "4.5",
+   "6",
+   "70%"
+  ],
+  "numbers_missing": [],
+  "slides": [
+   "Project Atlas weekly update (fits)",
+   "Scanner rollout (fits)",
+   "Budget (fits)",
+   "Old process versus new process (fits)",
+   "Risks (fits)",
+   "Next steps (fits)"
+  ],
+  "fill_c1": true,
+  "fill_c3": [],
+  "fill_c5": [],
+  "pass": true
+ },
+ {
+  "notes": "meeting-summary",
+  "code_blocks": 1,
+  "text_outside_block": "",
+  "parse_warnings": [],
+  "numbers_in_notes": [
+   "10",
+   "12,400",
+   "18%",
+   "18,000",
+   "2026",
+   "25,000",
+   "27",
+   "38,000",
+   "5,300",
+   "500",
+   "6,000",
+   "9%"
+  ],
+  "numbers_missing": [],
+  "slides": [
+   "市場部週會紀錄 (fits)",
+   "出席人員 (fits)",
+   "十月社交媒體廣告開支 (fits)",
+   "十月社交媒體觸及表現 (fits)",
+   "雙十一推廣方案比較 (fits)",
+   "跟進事項 (fits)"
+  ],
+  "fill_c1": true,
+  "fill_c3": [],
+  "fill_c5": [],
+  "pass": true
+ }
+]
