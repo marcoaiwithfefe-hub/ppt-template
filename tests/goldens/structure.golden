@@ -1,0 +1,22 @@
+#! BOM, CRLF or CR line ends, fences, a preamble line, trailing spaces, a bullet in the subtitle
+#! zone, plain lines, repeated bullets, an empty bullet, a second # line, a ### line, two ||.
+slide 1 title 年度檢討
+slide 1 subtitle 財務部
+slide 1 subtitle 2027 年 1 月
+slide 2 title 收入
+slide 2 body1 L1 收入比去年高
+slide 2 body1 L1 本地 120 萬
+slide 2 body1 L1 本地 120 萬
+slide 2 body1 L1 -5% 成本
+slide 3 title 第二個標題
+slide 3 body1 L1 內容
+slide 3 body1 L1 小標題
+slide 4 title 比較
+slide 4 body1 L1 甲
+slide 4 body2 L1 乙
+slide 4 body2 L1 丙
+warn 1 outside_slide
+warn 12 empty_bullet
+warn 13 second_title
+warn 15 heading_level
+warn 20 extra_columns

@@ -1,0 +1,14 @@
+#! English titles take " (cont.)" on continuation slides.
+slide 1 title Q3 Review
+slide 1 subtitle Operations team
+slide 2 title Eight priorities
+slide 2 body1 L1 one
+slide 2 body1 L1 two
+slide 2 body1 L1 three
+slide 2 body1 L1 four
+slide 2 body1 L1 five
+slide 2 body1 L1 six
+slide 3 title Eight priorities (cont.)
+slide 3 body1 L1 seven
+slide 3 body1 L1 eight
+slide 4 title Questions
