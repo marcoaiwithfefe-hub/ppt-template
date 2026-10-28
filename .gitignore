@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+fixtures/out/
+qa/real-templates/*
+!qa/real-templates/SOURCES.md
+tools/dotnet/
+tools/validate/bin/
+tools/validate/obj/
+tools/dotnet-install.log
+node_modules/
+tools/dotnet-install.sh
