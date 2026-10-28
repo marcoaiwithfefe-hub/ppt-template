@@ -10,3 +10,5 @@ tools/validate/obj/
 tools/dotnet-install.log
 node_modules/
 tools/dotnet-install.sh
+qa/g0/wt-g0/
+qa/g0/**/renders/*.pptx
