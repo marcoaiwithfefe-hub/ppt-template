@@ -1,0 +1,22 @@
+# c1-text-lost: fill drops the last paragraph of every body
+# mutation in src/deckfill/fill.py: '_put(shapes[idx], paras)' -> '_put(shapes[idx], paras[:-1])'
+# tests: tests/test_c1_text.py
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-typed.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-custom.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-wui-tung.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-wui-tung.potx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-two-masters.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-sections.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-footer-active.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-contradict.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[marks-typed.pptx-marks]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[structure-typed.pptx-structure]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[structure-cr-typed.pptx-structure]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[no-title-typed.pptx-no-title]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[english-typed.pptx-english]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-no-two.pptx-reference.merged]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-no-section.pptx-reference]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-no-title.pptx-reference.title-in-body]
+FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-only-content.pptx-reference.only-content]
+FAILED tests/test_c1_text.py::test_control_characters_do_not_reach_the_deck
+18 failed, 4 passed in 0.37s

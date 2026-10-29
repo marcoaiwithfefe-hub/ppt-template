@@ -203,6 +203,9 @@ def make_custom() -> Path:
     two = prs.slide_layouts[3]._element
     tree = two.find(q("p:cSld")).find(q("p:spTree"))
     left, right = ph_sp(two, "obj", 1), ph_sp(two, "obj", 2)
+    # right column wider than the left, so neither size nor XML order gives left-to-right
+    set_xfrm(left, 457200, 1600200, 3657600, 4525963)
+    set_xfrm(right, 4572000, 1600200, 4114800, 4525963)
     # right column first in XML order
     tree.remove(right)
     left.addprevious(right)

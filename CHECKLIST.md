@@ -11,7 +11,7 @@
 - [ ] End-to-end (Playwright): C8 page part, C9, C10, C12, C13
 - [ ] C14 copy floors, C15 Gemini outlines (C15 3 of 3 pass; C14 waits on the page)
 - [ ] D10 demo deck and renders
-- [ ] Failure demos for C1, C2, C4, C5, C9 in qa/failure-demos/
+- [ ] Failure demos for C1, C2, C4, C5, C9 in qa/failure-demos/ (C1, C2, C4, C5 integrity done by qa/failure-demos/run_demos.py; C3 rels-order extra; C9 waits on the page)
 - [ ] Slop scan triage
 - [ ] blast-radius: privacy proof from a saved request log
 - [ ] Walkthrough rendered to qa/walkthrough/

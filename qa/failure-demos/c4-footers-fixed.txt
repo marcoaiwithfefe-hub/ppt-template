@@ -1,0 +1,4 @@
+# c4-footers: no footer or slide number is ever added to a new slide
+# mutation in src/deckfill/fill.py: '    """D4 footer rules for one new slide. Returns shape elements to add."""\n    out = []' -> '    """D4 footer rules for one new slide. Returns shape elements to add."""\n    return []\n    out = []'
+# tests: tests/test_c4_footers.py
+6 passed in 0.18s

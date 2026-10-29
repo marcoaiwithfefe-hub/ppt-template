@@ -1,0 +1,6 @@
+# c5-integrity: the integrity check stops checking relationship attributes (r:id, r:embed, ...)
+# mutation in src/deckfill/package.py: 'if attr.startswith("{%s}" % R_NS) and value and value not in rels:' -> 'if False:'
+# tests: tests/test_c3_c6_package.py -k c5
+FAILED tests/test_c3_c6_package.py::test_c5_broken_templates_refused[dangling-relationship.pptx]
+FAILED tests/test_c3_c6_package.py::test_c5_broken_templates_refused[missing-embed.pptx]
+2 failed, 24 passed, 66 deselected in 0.53s
