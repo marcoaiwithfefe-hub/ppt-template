@@ -1,68 +1,108 @@
 {
-  "title": "PPT template gift: notes to a deck in the company's own template, inside the browser",
-  "plain": "A web page takes a company PowerPoint template and a plain-text outline and gives back an editable deck in that template, and after it has loaded it cannot send anything anywhere.",
-  "what_why": "The page in docs/ loads Python (Pyodide, python-pptx and the deckfill package) from its own folder. It then adds a second Content Security Policy that blocks fetch, XHR, beacons, image requests and new workers. From then on, the user's template, outline and deck stay in the tab.\n\nThe deckfill package does the work in three calls the page makes one at a time:\n- read: check the template's size and package graph, then sort its layouts into title, content, two, section and other\n- plan: turn the outline into slides, choose a layout for each, and split slides the fit estimate says are too full\n- fill: remove the template's sample slides, add the planned slides into the layouts' own boxes, copy footers the template shows, and put the template's own bytes back for every part the fill did not mean to change\n\nThe same package runs under CPython in the tests, and the browser's download is byte for byte the CPython output (C10).",
-  "requirements": [
-    "D1: static site in docs/, Python through self-hosted Pyodide on the main thread, one deckfill module with read_template, parse_outline, plan_deck, fill",
-    "D1b (rev 5): the template is untrusted: 100 MB file, 2,000 members, 150 MB uncompressed, 30 MB XML, 5 MB per XML part, 100:1 ratio, caps enforced on bytes actually read; safe XML parsing; the seat may lower a cap to meet C12",
-    "D3: layouts classed by type and placeholders, never by name; a slide may only use a layout with a destination for every need",
-    "D4: sample slides removed with everything only they reach; every other part kept; footers follow what the template already shows; no text outside a placeholder",
-    "D5: split, warned or marked 'check this slide' by a fit estimate",
-    "D6: no request to another origin; at ready the page locks the network off, and Python's fetches are covered",
-    "D8: Cantonese copy in one file; mentron.hk look; phone view explains and hands over the link"
-  ],
-  "design": {
-    "text": "Three layers. The page (docs/app.js) owns the UI, the loading and the lockdown. It calls a small Python bridge (deckfill.web.Session) that turns each step into JSON. The deckfill package reads, plans and fills. Python runs on the main thread, because GitHub Pages cannot give a worker its own policy and a worker made from a URL does not inherit the page's lockdown. The page paints a working state and yields before every Python call, and the D1b caps bound the longest call.",
-    "diagram": "sequenceDiagram\n  participant U as User\n  participant P as Page (app.js)\n  participant Y as Pyodide + deckfill\n  P->>Y: load runtime, wheels, deckfill.zip, fonts (own origin only)\n  P->>P: add lockdown policy, status ready\n  U->>P: drop template\n  P->>Y: Session.read(bytes, name)\n  Y-->>P: layouts and classes (JSON)\n  U->>P: paste outline, change a layout\n  P->>Y: Session.plan(text, overrides)\n  Y-->>P: slides, fit status, warnings (JSON)\n  U->>P: download\n  P->>Y: Session.fill()\n  Y-->>P: .pptx bytes\n  P-->>U: blob download, no request",
-    "decisions": [
-      {"decision": "Kept parts go back as the template's own bytes when their meaning is unchanged", "why": "G0 showed python-pptx re-sorting relationships and relativising absolute targets on every real template (EDB, elderly.gov.hk, Microsoft, USC), which C3 flagged; fixtures made by python-pptx never showed it"},
-      {"decision": "The restore step compares libxml2 serialisations, not C14N 2.0", "why": "C14N 2.0 in lxml is pure Python: a 5.6 s main-thread task on the elderly.gov.hk template against C12's 3 s bar; now 1.55 s"},
-      {"decision": "Lockdown is a second CSP meta added at ready", "why": "D6; measured in Chromium: after it, fetch from JS and Python and new workers are blocked and the server sees nothing (qa/e2e/c9-report.json)"}
-    ]
-  },
-  "call_path": {
-    "text": "Everything here is new in this build. Boxes link to the steps below.",
-    "diagram": "flowchart TD\n  A[\"Page opens\"] --> B[\"Load Python from own folder\"]\n  B --> C[\"Lock the network\"]\n  C --> D[\"Drop template\"]\n  D --> E[\"Read: caps, integrity, classes\"]\n  E --> F[\"Paste outline\"]\n  F --> G[\"Plan: layouts, splits, fit\"]\n  G --> H[\"Fill: remove samples, add slides\"]\n  H --> I[\"Put template bytes back\"]\n  I --> J[\"Blob download\"]\n  class A,B,C,D,E,F,G,H,I,J new\n  click B href \"#step-1\"\n  click C href \"#step-1\"\n  click E href \"#step-2\"\n  click G href \"#step-3\"\n  click H href \"#step-4\"\n  click I href \"#step-5\"\n  click J href \"#step-6\""
-  },
-  "implementation": [
-    {
-      "title": "The page loads Python from its own folder, then locks the network",
-      "text": "loadEngine imports pyodide.mjs from docs/vendor, with indexURL and packageBaseUrl both set to that folder, so Pyodide's default CDN is never used. It loads lxml, Pillow and the vendored wheels, and unpacks deckfill.zip, which scripts/build_docs.py builds from src/deckfill ([build](scripts/build_docs.py#L15-L22)). Then it imports every module it will need and waits for the three font families, which scripts/build_fonts.py subsets and self-hosts ([fonts](scripts/build_fonts.py#L39-L50)). Only then does it call lockdown, which appends a meta policy with connect-src 'none', img-src data: blob: and worker-src 'none'. The #e2e hook exposes the Pyodide handle to the test only when the URL hash asks for it.",
-      "peek": {"path": "docs/app.js", "start": 85, "end": 116, "side": "head"}
-    },
-    {
-      "title": "Read: caps first, then integrity, then classes",
-      "text": "read_template runs package.load. unzip refuses too_big from the central directory before reading, and again on bytes actually read ([caps](src/deckfill/package.py#L79-L100)). Every XML part is parsed by xmlsafe.parse: entities, network and huge trees are off, and any DOCTYPE is bad_file ([parser](src/deckfill/xmlsafe.py#L25-L46)). check_integrity requires every relationship attribute to name a relationship and every internal target to exist ([integrity](src/deckfill/package.py#L234-L272)). Failures are DeckfillError codes the page maps to Cantonese messages ([errors](src/deckfill/errors.py#L1-L22)). classify then sorts each layout by its type attribute when the placeholders agree with it, and otherwise by its placeholders. A title placeholder is required, so HKUST template 15, whose titles are body placeholders, is refused as no_text_layout.",
-      "peek": {"path": "src/deckfill/template.py", "start": 293, "end": 316, "side": "head"}
-    },
-    {
-      "title": "Plan: a compatible layout per slide, then splits by the fit estimate",
-      "text": "parse_outline turns the D2 format into slides and warnings for lines it cannot place ([parser](src/deckfill/outline.py#L63-L80)). For each outline slide, plan_deck lists every layout with a destination for each of the slide's needs. It takes the user's override or the default, and refuses a layout without a destination. Each body's items go through chunk, which breaks between level-1 groups at 6 groups or when the height estimate passes the box. A group that alone overflows sets a fit warning, and a box the estimate cannot model sets 'check'. Continuation slides get （續） or (cont.).",
-      "peek": {"path": "src/deckfill/plan.py", "start": 233, "end": 262, "side": "head"}
-    },
-    {
-      "title": "Fill: sample slides out, with everything that pointed at them",
-      "text": "remove_slides empties the slide list and drops custom shows and the section list. Then, in every kept part, it removes relationships to removed slides together with the elements that used them, such as a layout hyperlink to a sample slide. python-pptx then drops parts only those slides reached. The fill loop adds each planned slide from its layout, writes the title and bodies into the layout's own placeholders, removes the ones left empty, and appends footers chosen by footers_for, with each slide's own number written into slide-number fields ([loop](src/deckfill/fill.py#L286-L310)).",
-      "peek": {"path": "src/deckfill/fill.py", "start": 53, "end": 82, "side": "head"}
-    },
-    {
-      "title": "Fill: the template's own bytes go back for unchanged parts",
-      "text": "python-pptx re-serialises every part it saves. _restore_kept compares each output part with the input's. For .rels it compares the resolved relationship sets; for XML it compares libxml2 serialisations of both parsed trees. When they mean the same, the input's bytes go back. It never touches the parts the fill is meant to change: the presentation part and its relationships, [Content_Types].xml, docProps/app.xml, and slide and notes parts. Then the output is zipped again and must pass the same integrity check as the input.",
-      "peek": {"path": "src/deckfill/fill.py", "start": 223, "end": 251, "side": "head"}
-    },
-    {
-      "title": "Download: bytes to a blob, no request",
-      "text": "Session.fill returns the deck's bytes ([bridge](src/deckfill/web.py#L27-L81)). The page copies them out of Python, wraps them in a Blob and clicks a temporary anchor whose download name is the deck title, made safe for Windows by file_name. The working overlay is painted before the call and hidden after it. The session log shows no request after ready across two fills, a reset, 30 s idle and an offline fill.",
-      "peek": {"path": "docs/app.js", "start": 333, "end": 353, "side": "head"}
-    }
-  ],
-  "check": [
-    "C5 validator part NOT RUN: the Open XML SDK is not installed. qa/c5/run_validator.py runs it on every output beside its input once tools/dotnet exists.",
-    "G0 is 4 of 5 clean on every part except the validator. HKUST template 15 is refused by D3 step 5 as written. HKUST template 14, outside the five, reads under rev 5 and fills clean, every slide on its cover layout (qa/g0/G0-RESULT.md).",
-    "C12 warm second visit is 5.0 s against a 5 s bar. The headless test profile does not keep the 9.6 MB wasm in its memory cache, so check it in real Chrome.",
-    "Rev 5 C12 bar, wasm heap 1.5 GB or less at the worst case: 1,674 MB at a 150 MB uncompressed cap, so MAX_TOTAL is 130 MB (130 x 1024 x 1024), where the heap is 1,384 MB (decisions.tsv). The spec says 150 MB; the code says 130.",
-    "GitHub Pages MIME types for .wasm and .mjs are untested locally (deploy gate).",
-    "Pending eye and deploy rows: C13 by Fable, C16 real Gemini app, C17 desktop PowerPoint on Windows, C18 the page beside mentron.hk, C19 Marco's Rule 25 proof of docs/copy.js and README.md (changed since the last proof: too_big now says 上限 100 MB, the no_text_layout wording, the exampleOutline), C21 test chain and audit.",
-    "Not walked through, with the reason: fixtures/make_fixtures.py and fixtures/make_template.py (test fixtures by script; C1 to C8 exercise them), fixtures/wui-tung-template.pptx (generated by make_template.py), tools/validate/Program.cs and validate.csproj (the C5 validator, not yet runnable), package.json (test tooling only), src/deckfill/__init__.py (exports only), .gitignore and decisions.tsv (repo housekeeping and the decision log shown below)."
+ "title": "PPT template gift after Codex round 1: notes to a deck in the company's own template, inside the browser",
+ "plain": "A web page takes a company PowerPoint template and a plain-text outline and gives back an editable deck in that template, and after it has loaded it cannot send anything anywhere.",
+ "what_why": "The page in docs/ loads Python (Pyodide, python-pptx and the deckfill package) from its own folder. It then adds a second Content Security Policy that blocks fetch, XHR, beacons, image requests and new workers. From then on, the user's template, outline and deck stay in the tab.\n\nThe deckfill package does the work in three calls the page makes one at a time:\n- read: check the template's size and package graph, then sort its layouts into title, content, two, section and other\n- plan: turn the outline into slides, choose a layout for each, and split slides the fit estimate says are too full\n- fill: remove the template's sample slides, add the planned slides into the layouts' own boxes, copy footers the template shows, and put the template's own bytes back for every part the fill did not mean to change\n\nThe same package runs under CPython in the tests, and the browser's download is byte for byte the CPython output (C10).",
+ "requirements": [
+  "D1: static site in docs/, Python through self-hosted Pyodide on the main thread, one deckfill module with read_template, parse_outline, plan_deck, fill",
+  "D1b (rev 5): the template is untrusted: 100 MB file, 2,000 members, 150 MB uncompressed, 30 MB XML, 5 MB per XML part, 100:1 ratio, caps enforced on bytes actually read; safe XML parsing; the seat may lower a cap to meet C12",
+  "D3: layouts classed by type and placeholders, never by name; a slide may only use a layout with a destination for every need",
+  "D4: sample slides removed with everything only they reach; every other part kept; footers follow what the template already shows; no text outside a placeholder",
+  "D5: split, warned or marked 'check this slide' by a fit estimate",
+  "D6: no request to another origin; at ready the page locks the network off, and Python's fetches are covered",
+  "D8: Cantonese copy in one file; mentron.hk look; phone view explains and hands over the link"
+ ],
+ "design": {
+  "text": "Three layers. The page (docs/app.js) owns the UI, the loading and the lockdown. It calls a small Python bridge (deckfill.web.Session) that turns each step into JSON. The deckfill package reads, plans and fills. Python runs on the main thread, because GitHub Pages cannot give a worker its own policy and a worker made from a URL does not inherit the page's lockdown. The page paints a working state and yields before every Python call, and the D1b caps bound the longest call.",
+  "diagram": "sequenceDiagram\n  participant U as User\n  participant P as Page (app.js)\n  participant Y as Pyodide + deckfill\n  P->>Y: load runtime, wheels, deckfill.zip, fonts (own origin only)\n  P->>P: add lockdown policy, status ready\n  U->>P: drop template\n  P->>Y: Session.read(bytes, name)\n  Y-->>P: layouts and classes (JSON)\n  U->>P: paste outline, change a layout\n  P->>Y: Session.plan(text, overrides)\n  Y-->>P: slides, fit status, warnings (JSON)\n  U->>P: download\n  P->>Y: Session.fill()\n  Y-->>P: .pptx bytes\n  P-->>U: blob download, no request",
+  "decisions": [
+   {
+    "decision": "Kept parts go back as the template's own bytes when their meaning is unchanged",
+    "why": "G0 showed python-pptx re-sorting relationships and relativising absolute targets on every real template (EDB, elderly.gov.hk, Microsoft, USC), which C3 flagged; fixtures made by python-pptx never showed it"
+   },
+   {
+    "decision": "The restore step compares libxml2 serialisations, not C14N 2.0",
+    "why": "C14N 2.0 in lxml is pure Python: a 5.6 s main-thread task on the elderly.gov.hk template against C12's 3 s bar; now 1.55 s"
+   },
+   {
+    "decision": "Lockdown is a second CSP meta added at ready",
+    "why": "D6; measured in Chromium: after it, fetch from JS and Python and new workers are blocked and the server sees nothing (qa/e2e/c9-report.json)"
+   }
   ]
+ },
+ "call_path": {
+  "text": "Everything is new in this build. Changed in fix round 1: the boot order (prompt before engine), the stale-plan guard around download, and the engine checks marked in steps 2 to 4. Boxes link to the steps below.",
+  "diagram": "flowchart TD\n  A[\"Page opens\"] --> P[\"Prompt loads, or retry state\"]\n  P --> B[\"Load Python from own folder\"]\n  B --> C[\"Lock the network\"]\n  C --> D[\"Drop template\"]\n  D --> E[\"Read: preflight, caps, integrity, classes\"]\n  E --> F[\"Type or paste outline\"]\n  F --> S[\"Download off until replanned\"]\n  S --> G[\"Plan: layouts, splits, fit\"]\n  G --> H[\"Click: plan from current text, fill\"]\n  H --> I[\"Template bytes back, integrity\"]\n  I --> J[\"Blob download\"]\n  class A,B,C,D,E,F,G,I,J new\n  class P,S,H changed\n  click P href \"#step-1\"\n  click C href \"#step-1\"\n  click E href \"#step-2\"\n  click G href \"#step-3\"\n  click I href \"#step-4\"\n  click S href \"#step-5\"\n  click H href \"#step-5\""
+ },
+ "implementation": [
+  {
+   "title": "Boot: the prompt first, then the engine, then the lockdown",
+   "text": "boot loads prompt.txt and checks the HTTP status before anything else; a failure sets the retry state and stops, and retry runs boot again, so Copy is never enabled with no prompt behind it ([loadPromptText](docs/app.js#L129-L138)). Only then does loadEngine load Pyodide, the wheels and deckfill.zip (zipped from src/deckfill by [build_docs](scripts/build_docs.py#L1-L25)) from the page's own folder, import every module and append the lockdown policy ([lockdown](docs/app.js#L113-L118)). The base policy is the first meta in the head ([CSP](docs/index.html#L5-L5)); the only links out are three fixed anchors ([anchors](docs/index.html#L15-L16)); at 760 px or less the page shows the explainer and the copy-link button and skips the engine ([phone CSS](docs/style.css#L248-L268)). Fonts are self-hosted: [build_fonts](scripts/build_fonts.py#L1-L66) subsets Noto Serif TC to the glyphs the page's own strings use and Newsreader to Latin, and copies Mentron Serif. Every page string, the example outline included, sits in one copy file ([copy](docs/copy.js#L1-L126)); the prompt text ([prompt](docs/prompt.txt#L1-L29)) is the same text as [PROMPT.md](PROMPT.md#L1-L35) and the skill body ([skill](skill/ppt-outline/SKILL.md#L1-L34)), checked by [C14](tests/test_c14_copy.py#L1-L62); the [README](README.md#L1-L25) points to the page.",
+   "peek": {
+    "path": "docs/app.js",
+    "start": 452,
+    "end": 468,
+    "side": "head"
+   }
+  },
+  {
+   "title": "Read: preflight, caps, XML by content type, integrity",
+   "text": "Before zipfile builds anything, preflight walks the central directory from the raw bytes, ZIP64 included: over 2,000 records is too_big, a count that disagrees with the end record is bad_file. unzip then enforces the size caps on declared and actual bytes ([unzip](src/deckfill/package.py#L118-L130)). load treats a part as XML by name or by content type ([is_xml](src/deckfill/package.py#L226-L228)), holds every XML part to the XML caps and the safe parser ([load](src/deckfill/package.py#L325-L345)), and check_integrity now resolves the package root's relationships too ([root](src/deckfill/package.py#L304-L311)). The parser has entities, network, huge trees and DTD loading off, and any DOCTYPE is refused as bad_file ([xmlsafe](src/deckfill/xmlsafe.py#L25-L46)). read_template then classes each layout from its type and placeholders, never its name: a typed layout keeps its class only when it has the boxes that class needs, otherwise the placeholder rules decide, and anything left is other ([classify](src/deckfill/template.py#L293-L318)); each body box gets a fit model from its position, autofit and level styles, or none when the box is missing ([measure_body](src/deckfill/template.py#L242-L274)). Failures are codes the page maps to Cantonese messages ([errors](src/deckfill/errors.py#L1-L22)).",
+   "peek": {
+    "path": "src/deckfill/package.py",
+    "start": 84,
+    "end": 116,
+    "side": "head"
+   }
+  },
+  {
+   "title": "Plan: every body estimated, subtitles included",
+   "text": "parse_outline refuses text over the character cap as too_long, normalises line ends and a BOM, then reads the # deck title, ## slides and indented bullets into slides with line-numbered warnings ([parse_outline](src/deckfill/outline.py#L63-L145)). plan_deck lists the compatible layouts per outline slide, takes the override or the default, and splits bodies by the fit estimate. A title slide whose subtitle goes into a content body (the no-title-layout fallback, or an override) now gets that body's estimate: warned when it overflows, check when the box is not modelled. The wrap estimate counts a long word's lines with one division instead of one subtraction per line ([text_lines](src/deckfill/plan.py#L133-L170)).",
+   "peek": {
+    "path": "src/deckfill/plan.py",
+    "start": 243,
+    "end": 257,
+    "side": "head"
+   }
+  },
+  {
+   "title": "Fill: sample slides out, footers placed, template bytes back",
+   "text": "remove_slides strips every element that used a relationship to a removed slide, in parts python-pptx parses and, now, in XML parts it keeps as bytes such as viewProps.xml. footers_for copies an example footer onto the new slide; when the new layout has no box of that type, _place_footer keeps the footer's own position, else its layout's or master's ([place](src/deckfill/fill.py#L146-L179)). _restore_kept puts the template's own bytes back for every kept part whose meaning is unchanged, XML found by content type ([restore](src/deckfill/fill.py#L268-L304)), and the output must pass the same integrity check as the input.",
+   "peek": {
+    "path": "src/deckfill/fill.py",
+    "start": 76,
+    "end": 100,
+    "side": "head"
+   }
+  },
+  {
+   "title": "Page state: no download from an older plan",
+   "text": "Any change to the outline, a layout or the template calls staleNow: Download is disabled at once and the generation counter moves, so a plan that finishes for older input is dropped ([staleNow](docs/app.js#L241-L251), [gen check](docs/app.js#L272-L272)). On click, download reads the outline and the overrides and Session.fill plans and fills from exactly those in one Python call ([bridge](src/deckfill/web.py#L81-L89)), so even a click that lands mid-edit ships the text on screen.",
+   "peek": {
+    "path": "docs/app.js",
+    "start": 353,
+    "end": 372,
+    "side": "head"
+   }
+  },
+  {
+   "title": "QA tooling: what each check proves",
+   "text": "C9 runs one session through the real page on a local server ([server](tests/e2e/server.mjs#L1-L41)): two fills, reset, a measured 30 s idle, probes, an offline fill, then all three link-outs, each answered 204 so the page stays; the report records the commit and sha256 of every input and download, and [privacy_proof](qa/e2e/privacy_proof.py#L1-L50) fails on any request after ready, idle under 30 s or a changed tree. [C10](qa/e2e/c10_compare.py#L1-L48) compares the downloads part by part with CPython; [C1 page](tests/e2e/c1_edit_download.mjs#L1-L78) and [F9](tests/e2e/f9_prompt_load.mjs#L1-L55) drive the two page fixes. [C12](tests/e2e/c12_load.mjs#L1-L192) throttles the network, reads Long Tasks and the wasm heap on the worst case [make_worst](qa/c12/make_worst.py#L1-L147) builds at both caps. [G0](qa/g0/run_g0.py#L1-L184) now gates on text outside placeholders through the [oracle](tests/oracle.py#L159-L177), whose C3 check takes out only the authorised link edits ([kept parts](tests/oracle.py#L265-L310)); goldens and fixtures come from [C1 tests](tests/test_c1_text.py#L1-L80) and [conftest](tests/conftest.py#L1-L32). [C15](qa/gemini/check_c15.py#L1-L91) needs all three cases and whole-number matches; the [validator runner](qa/c5/run_validator.py#L1-L104) needs every output in its [manifest](qa/c5/manifest.json#L1-L28) before it runs the [SDK tool](tools/validate/Program.cs#L1-L29); [D10](qa/demo/make_demo.py#L1-L69) builds the demo deck; [provenance](qa/provenance.py#L1-L30) stamps reports; [run_demos](qa/failure-demos/run_demos.py#L1-L107) mutates code and shows each check failing, its C9 runs in their own folders; [runner tests](tests/test_qa_runners.py#L1-L48).",
+   "peek": {
+    "path": "tests/e2e/c9_privacy.mjs",
+    "start": 160,
+    "end": 172,
+    "side": "head"
+   }
+  }
+ ],
+ "check": [
+  "C5 validator part NOT RUN: the Open XML SDK is not installed. qa/c5/run_validator.py needs every output in qa/c5/manifest.json, then runs the SDK on each beside its input.",
+  "G0 is 4 of 5 clean on every part except the validator; HKUST 15 is refused by D3 step 5 as written; HKUST 14 outside the five fills clean, every slide on its cover layout.",
+  "MAX_TOTAL is 130 MB, below rev 5's 150, for the 1.5 GB heap bar (decisions.tsv).",
+  "Codex round 1 findings F1 to F14 each have a failing-first test; before and after runs in qa/codex1/fixes/.",
+  "Pending eye and deploy rows: C13 by Fable, C16 real Gemini app, C17 desktop PowerPoint on Windows, C18 the page beside mentron.hk, C19 Marco's Rule 25 proof of docs/copy.js and README.md (changed since the last proof: too_big now says 上限 100 MB, the no_text_layout wording, the exampleOutline), C21 test chain and audit.",
+  "GitHub Pages MIME types for .wasm and .mjs are untested locally (deploy gate).",
+  "Follow-up outside F1 to F14, not built: layout overrides are keyed by outline slide index, so an outline edit that inserts or removes a slide can leave an override on the wrong slide; the fill then refuses it with the generic error, never silently.",
+  "Not walked through, with the reason: fixtures/make_fixtures.py and fixtures/make_template.py (fixtures by script, exercised by every C test), fixtures/wui-tung-template.pptx (generated), tools/validate/validate.csproj (the SDK project file), package.json (test tooling), src/deckfill/__init__.py (exports only), .gitignore and decisions.tsv (housekeeping and the decision log below)."
+ ]
 }
