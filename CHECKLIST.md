@@ -14,5 +14,5 @@
 - [x] Failure demos for C1, C2, C4, C5, C9 in qa/failure-demos/ (qa/failure-demos/run_demos.py; C3 rels-order and C4 slide-number extra; C5 validator part NOT RUN)
 - [x] Slop scan triage (qa/slop-triage.md: 2 hits, both kept)
 - [x] blast-radius: privacy proof from a saved request log (qa/blast-radius.md, qa/e2e/privacy_proof.py PASS on fc505ff)
-- [ ] Walkthrough rendered to qa/walkthrough/
+- [x] Walkthrough rendered to qa/walkthrough/ (not published)
 - [ ] Report to ai-brain-52
