@@ -25,6 +25,7 @@ const state = {
   overrides: {},
   plan: null,
   planTimer: 0,
+  gen: 0, // bumps on every change to the outline, overrides or template; a plan from an older gen is dropped
 };
 
 // ---------------------------------------------------------------- copy into the page
@@ -155,6 +156,7 @@ async function readTemplate(file) {
   if (!state.ready || !file) return;
   $("template-error").hidden = true;
   $("downloaded").hidden = true;
+  staleNow();
   state.template = null;
   state.overrides = {};
   state.plan = null;
@@ -229,7 +231,15 @@ function refreshOutlineState() {
   $("need-template").hidden = !!state.template;
 }
 
+// The current plan no longer matches what the user sees: block the download at once (F1).
+function staleNow() {
+  state.gen += 1;
+  $("download").disabled = true;
+  $("downloaded").hidden = true;
+}
+
 function schedulePlan() {
+  staleNow();
   clearTimeout(state.planTimer);
   state.planTimer = setTimeout(replan, 450);
 }
@@ -238,6 +248,7 @@ async function replan() {
   clearTimeout(state.planTimer);
   $("outline-error").hidden = true;
   $("downloaded").hidden = true;
+  const gen = state.gen;
   const text = $("outline").value;
   if (!state.template || !text.trim()) {
     state.plan = null;
@@ -252,6 +263,7 @@ async function replan() {
       return { ok: false, code: "unknown" };
     }
   });
+  if (gen !== state.gen) return; // the outline or a layout changed while this plan was made
   if (!result.ok) {
     state.plan = null;
     renderPlan();
@@ -303,6 +315,7 @@ function renderPlan() {
       sel.disabled = src.compatible.length < 2;
       sel.addEventListener("change", () => {
         state.overrides[s.source] = sel.value;
+        staleNow();
         replan();
       });
       lay.append(sel);
@@ -328,19 +341,33 @@ function renderPlan() {
   }
   $("warnings").hidden = !p.warnings.length;
   $("download-label").textContent = fmt(COPY.download, { name: p.name });
+  $("download").disabled = false;
 }
 
 async function download() {
-  if (!state.plan) return;
-  const name = state.plan.name;
-  const bytes = await working(async () => {
-    const out = state.session.fill();
+  if (!state.plan || !state.template) return;
+  // Read the outline and layouts now; Python plans from exactly these and fills in one call (F1).
+  const text = $("outline").value;
+  const overrides = JSON.stringify(state.overrides);
+  const result = await working(async () => {
+    let out;
     try {
-      return out.toJs();
+      out = state.session.fill(text, overrides);
+      return { bytes: out.toJs(), name: state.session.fill_name };
+    } catch (err) {
+      console.error(err);
+      return null;
     } finally {
-      out.destroy();
+      if (out) out.destroy();
     }
   });
+  if (!result) {
+    const el = $("outline-error");
+    el.textContent = COPY.outlineErrors.unknown;
+    el.hidden = false;
+    return;
+  }
+  const { bytes, name } = result;
   const url = URL.createObjectURL(new Blob([bytes], { type: PPTX_TYPE }));
   const a = document.createElement("a");
   a.href = url;
@@ -353,6 +380,7 @@ async function download() {
 }
 
 function reset() {
+  staleNow();
   state.template = null;
   state.overrides = {};
   state.plan = null;
@@ -387,6 +415,7 @@ function wire() {
   window.addEventListener("drop", (e) => e.preventDefault());
 
   $("change-template").addEventListener("click", () => {
+    staleNow();
     state.template = null;
     state.overrides = {};
     state.plan = null;

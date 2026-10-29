@@ -1,0 +1,5 @@
+FAIL C1 page download is disabled as soon as the outline changes -- 
+FAIL C1 page forced click mid-edit ships the new outline -- OLD 舊標題
+FAIL C1 page ordinary click after an edit ships the new outline -- OLD 舊標題
+FAIL C1 page download name follows the new title -- OLD 舊標題.pptx
+0 passed, 4 failed

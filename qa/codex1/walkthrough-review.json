@@ -1,0 +1,74 @@
+{
+ "reviewer": "Codex round 1",
+ "steps": {
+  "step-1": {
+   "verdict": "holds",
+   "note": "Same-origin runtime/package configuration, archive unpacking, imports, font wait, conditional test hook and subsequent lockdown match code. Build scripts perform described archive and font preparation.",
+   "evidence": "884f33a:docs/app.js:67-116; 884f33a:scripts/build_docs.py:14-21; 884f33a:scripts/build_fonts.py:39-60"
+  },
+  "step-2": {
+   "verdict": "partial",
+   "note": "Classifier and ordinary checks match, but 'every XML part' and 'every internal target' overstate coverage: content-typed XML with another extension and package-root relationships escape relevant checks. F2 and F5.",
+   "evidence": "884f33a:src/deckfill/package.py:60-62,238-266,282-285; 884f33a:src/deckfill/template.py:293-316,396-397"
+  },
+  "step-3": {
+   "verdict": "partial",
+   "note": "Compatibility, overrides, body chunking and continuation titles match. Claim that each body's items receive fit handling misses subtitle-to-body destinations, which unconditionally receive fits. F7.",
+   "evidence": "884f33a:src/deckfill/plan.py:73-98,192-213,234-266"
+  },
+  "step-4": {
+   "verdict": "partial",
+   "note": "Slide removal and fill loop largely match, but elements are removed only from parts exposing _element, not every kept XML part. Footer selection also silently skips positioned examples without matching layout placeholders. F6 and F8.",
+   "evidence": "884f33a:src/deckfill/fill.py:53-86,147-175,279-322"
+  },
+  "step-5": {
+   "verdict": "holds",
+   "note": "Restoration uses resolved relationship sets or parsed-tree serialization, excludes listed mutable parts and slide/notes content types, then re-zips and checks integrity. Integrity coverage itself has F5's separate gap.",
+   "evidence": "884f33a:src/deckfill/fill.py:223-258,313-323"
+  },
+  "step-6": {
+   "verdict": "partial",
+   "note": "Bridge, Blob download and working-state sequence match. Saved session log at walkthrough's target head does not establish claimed 30-second idle interval; download also uses cached plan during edit debounce. F1 and F10.",
+   "evidence": "884f33a:docs/app.js:232-235,333-353; 884f33a:src/deckfill/web.py:80-81; 884f33a:qa/e2e/c9-report.json:143-164"
+  }
+ },
+ "call_path": {
+  "verdict": "holds",
+  "note": "All boxes represent newly added code, and edges match successful user-triggered flow. Diagram omits error and replan branches but does not assert false control flow.",
+  "evidence": "884f33a:docs/app.js:67-116,154-186,237-264,333-353,398-399; 884f33a:src/deckfill/fill.py:261-323"
+ },
+ "missed": [
+  {
+   "note": "[diff] Edit debounce, reset, template replacement and failure recovery affect which cached plan gets downloaded. Walkthrough skips these state transitions, including F1 and F9.",
+   "evidence": "884f33a:docs/app.js:154-186,232-265,355-428"
+  },
+  {
+   "note": "[diff] Base CSP, fixed external anchors, phone-only flow and responsive CSS are separate new surfaces without implementation steps.",
+   "evidence": "884f33a:docs/index.html:5-16,28-55; 884f33a:docs/style.css:246-268"
+  },
+  {
+   "note": "[diff] New copy, prompt and skill deliverables define user instructions and error recovery; prompt identity tests are outside walkthrough.",
+   "evidence": "884f33a:docs/copy.js:21-51,85-113; 884f33a:docs/prompt.txt:1-29; 884f33a:skill/ppt-outline/SKILL.md:1-34; 884f33a:PROMPT.md:1-35; 884f33a:README.md:7-21; 884f33a:tests/test_c14_copy.py:34-62"
+  },
+  {
+   "note": "[diff] Test tooling adds handwritten golden comparisons, package oracles, fixture generation and mutation runs. Walkthrough names some checks but does not describe blind spots or mutation evidence overwrites.",
+   "evidence": "884f33a:tests/test_c1_text.py:9-49; 884f33a:tests/oracle.py:226-250; 884f33a:tests/conftest.py:15-18; 884f33a:qa/failure-demos/run_demos.py:74-99"
+  },
+  {
+   "note": "[diff] Browser checks, local MIME-serving behavior and CPython/download comparison are new executable paths. C9 link coverage and C10 artifact dependence warrant review.",
+   "evidence": "884f33a:tests/e2e/c9_privacy.mjs:233-255; 884f33a:tests/e2e/server.mjs:8-12,29-40; 884f33a:qa/e2e/privacy_proof.py:18-42; 884f33a:qa/e2e/c10_compare.py:25-38"
+  },
+  {
+   "note": "[diff] C12 adds generated stress inputs, throttled cold/warm measurements, Long Tasks sampling and screencast-based working-state evidence. These mechanisms are only summarized as results.",
+   "evidence": "884f33a:qa/c12/make_worst.py:54-132; 884f33a:tests/e2e/c12_load.mjs:60-110,127-173"
+  },
+  {
+   "note": "[diff] G0, Gemini and demo QA runners generate their own outputs and acceptance results; G0's hardcoded placeholder assertion and C15's missing-case behavior are omitted.",
+   "evidence": "884f33a:qa/g0/run_g0.py:114-171; 884f33a:qa/gemini/check_c15.py:33-77; 884f33a:qa/demo/make_demo.py:1-65"
+  },
+  {
+   "note": "[diff] Validator is named in check section, but artifact selection and allowlist logic are not explained. Missing artifacts can be silently excluded.",
+   "evidence": "884f33a:qa/c5/run_validator.py:60-95; 884f33a:tools/validate/Program.cs:9-29"
+  }
+ ]
+}

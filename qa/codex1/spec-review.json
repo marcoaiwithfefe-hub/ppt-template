@@ -1,0 +1,202 @@
+{
+ "reviewer": "Codex round 1",
+ "spec": "/Users/marcoaiwithfefe/Desktop/AI brain/Projects/ai-agency/specs/2026-10-29-ppt-template-gift-design.md",
+ "missing": [],
+ "not_asked": [],
+ "built_wrong": [
+  {
+   "spec_line": "L56: \"I download an editable `.pptx` where every title and bullet sits in the template's own boxes\"; L213: \"silent break: no text lost\".",
+   "note": "[diff] F1: Download can use previous outline during 450 ms debounce. Invalidate stale plan immediately and require current input revision before filling.",
+   "evidence": "f6c30a9:docs/app.js:232-235,333-337; f6c30a9:src/deckfill/web.py:80-81"
+  },
+  {
+   "spec_line": "L103: \"declares over 30 MB of XML in total or an XML part over 5 MB\"; \"a document type declaration with entities is `bad_file`\".",
+   "note": "[diff] F2: XML content types with non-XML filename suffixes bypass XML caps and DOCTYPE rejection. Both bypasses reproduced.",
+   "evidence": "f6c30a9:src/deckfill/package.py:60-62,92-95,106-120,282-285"
+  },
+  {
+   "spec_line": "L103: \"has over 2,000 members\"; \"these caps are what keep the tab responsive\".",
+   "note": "[diff] F3: Member-count refusal occurs only after allocation for every central-directory record. Crafted under-cap archive exceeded 500 MiB process peak RSS before refusal.",
+   "evidence": "f6c30a9:src/deckfill/package.py:81-86"
+  },
+  {
+   "spec_line": "L97: \"the D1b caps bound the worst case\"; L224: \"none over 10 s on the largest input the D1b caps allow\".",
+   "note": "[diff] F4: Repeated subtraction makes wrapping cost grow with font-size-to-width ratio, not just bounded outline length. Tiny positive width permits billions of iterations. Browser duration remains unmeasured.",
+   "evidence": "f6c30a9:src/deckfill/plan.py:158-164; f6c30a9:src/deckfill/template.py:266-272"
+  },
+  {
+   "spec_line": "L149: \"every internal relationship target resolves to a part in the package\"; \"A template failing it is `bad_file`.\"",
+   "note": "[claims] F5: Missing package-root target is accepted because root relationships are not fully validated.",
+   "evidence": "f6c30a9:src/deckfill/package.py:238-266"
+  },
+  {
+   "spec_line": "L150: \"Any element in a kept part whose relationship points to a removed slide ... is removed together with that relationship. The output passes the same integrity check.\"",
+   "note": "[claims] F6: Generic view-properties XML retains removed-slide reference after relationship deletion, causing output integrity failure and no deck.",
+   "evidence": "f6c30a9:src/deckfill/fill.py:73-86,320-322"
+  },
+  {
+   "spec_line": "L165: \"For each body, `plan_deck` estimates the text height\"; \"Bodies the estimate does not model ... get no estimate\".",
+   "note": "[claims] F7: Subtitle routed into content body bypasses estimation and always receives fits. Long-subtitle override reproduced without warning.",
+   "evidence": "f6c30a9:src/deckfill/plan.py:78-83,245-247"
+  },
+  {
+   "spec_line": "L155: \"Input slides on the same layout: if one carries the type, the new slide gets it, copied from the first such slide\".",
+   "note": "[spec] F8: Positioned example footer is silently discarded when layout lacks matching footer placeholder.",
+   "evidence": "f6c30a9:src/deckfill/fill.py:147-160"
+  },
+  {
+   "spec_line": "L49: \"I copy one prompt from the page with one tap\"; L189: \"failures to load show a plain retry message\".",
+   "note": "[diff] F9: Failed prompt load is swallowed; page can report ready and copy empty text. Retry does not update copy closure.",
+   "evidence": "f6c30a9:docs/app.js:126-143,401-409,423-428"
+  }
+ ],
+ "unproven": [
+  {
+   "entry": "C1",
+   "state": "FAIL",
+   "gate": "build",
+   "note": "[diff] F1. L213 promises \"silent break: no text lost\". Pinned-JS probe selected old session contents after new textarea edit. Existing golden tests exercise engine inputs, not this UI timing path.",
+   "evidence": "f6c30a9:docs/app.js:232-235,333-337; f6c30a9:tests/test_c1_text.py:43-49"
+  },
+  {
+   "entry": "C3",
+   "state": "weak_check",
+   "gate": "build",
+   "note": "[spec] F11. L215 requires \"every part outside D4's allowed changes\" to be preserved. Oracle skips entire parts containing removed-slide hyperlinks; destructive layout mutation passed pinned oracle.",
+   "evidence": "f6c30a9:tests/oracle.py:230-250"
+  },
+  {
+   "entry": "C4",
+   "state": "FAIL",
+   "gate": "build",
+   "note": "[spec] F8. L155 says an example footer means \"the new slide gets it\". Positioned slide-local footer disappeared in pinned-engine probe; current fixtures do not cover missing layout counterpart.",
+   "evidence": "f6c30a9:src/deckfill/fill.py:147-160; f6c30a9:tests/test_c4_footers.py:26-80"
+  },
+  {
+   "entry": "C5 integrity",
+   "state": "FAIL",
+   "gate": "build",
+   "note": "[claims] F5 and F6. L149 requires \"every internal relationship target\" to resolve; L150 requires output to pass integrity. Missing root target was accepted, and saved outline-view reference caused fill to reject its output. SDK execution exclusion does not cover these failures.",
+   "evidence": "f6c30a9:src/deckfill/package.py:238-266; f6c30a9:src/deckfill/fill.py:73-86,320-322"
+  },
+  {
+   "entry": "C5 runner",
+   "state": "weak_check",
+   "gate": "build",
+   "note": "[spec] F13. L217 requires validation \"on every output\". Missing G0 and C10 artifacts are silently skipped rather than recorded incomplete.",
+   "evidence": "f6c30a9:qa/c5/run_validator.py:60-76"
+  },
+  {
+   "entry": "C7",
+   "state": "FAIL",
+   "gate": "build",
+   "note": "[claims] F7. L165 requires estimation \"For each body\". A 4,000-character subtitle directed into a content body returned fits with no warning. Existing overflow cases do not cover this fallback.",
+   "evidence": "f6c30a9:src/deckfill/plan.py:245-247; f6c30a9:tests/test_c7_overflow.py:31-113"
+  },
+  {
+   "entry": "C8 / D1b",
+   "state": "FAIL",
+   "gate": "build",
+   "note": "[diff] F2 and F3. L103 requires XML limits and entity-bearing DOCTYPE rejection; L220 specifies bomb memory below 300 MB. Renamed XML parts bypassed refusal, and crafted central-directory probe exceeded memory bar. Existing three bomb fixtures miss these cases.",
+   "evidence": "f6c30a9:src/deckfill/package.py:60-62,81-86,282-285; f6c30a9:tests/test_c8_errors.py:60-68"
+  },
+  {
+   "entry": "C9",
+   "state": "bad_evidence",
+   "gate": "build",
+   "note": "[spec] F10. L221 requires \"30 s idle after the last download\". Pinned report has only 5.247 seconds between ready and final link click. Mutation runner shortens idle to 3 seconds and overwrites same report; saved 33-second narrative does not describe pinned JSON.",
+   "evidence": "f6c30a9:qa/e2e/c9-report.json:143-164; f6c30a9:qa/failure-demos/run_demos.py:74-78; f6c30a9:qa/blast-radius.md:15-23"
+  },
+  {
+   "entry": "C9",
+   "state": "weak_check",
+   "gate": "build",
+   "note": "[spec] F10. L221 requires \"clicking each link-out\". Three anchors are listed, but only Mentron navigation appears. Test suppresses click errors and accepts any nonempty subset.",
+   "evidence": "f6c30a9:tests/e2e/c9_privacy.mjs:233-249; f6c30a9:qa/e2e/c9-report.json:70-85,162-168"
+  },
+  {
+   "entry": "G0",
+   "state": "weak_check",
+   "gate": "build",
+   "note": "[spec] F12. L212 requires \"every text in a placeholder\". Runner hardcodes that result; shared reader skips non-placeholder text shapes.",
+   "evidence": "f6c30a9:qa/g0/run_g0.py:150-159; f6c30a9:tests/oracle.py:127-134"
+  },
+  {
+   "entry": "G0 / C7 visual evidence",
+   "state": "bad_evidence",
+   "gate": "build",
+   "note": "[spec] L212 requires per-slide renders showing \"no text past the slide edge or over another text block\"; L219 requires \"no text past a box\". Four visual passes are reported, but renders are explicitly untracked and unavailable at pinned commits. Judgment cannot be independently checked here; this is not an observed visual failure.",
+   "evidence": "f6c30a9:qa/g0/G0-RESULT.md:9-12,39-47"
+  },
+  {
+   "entry": "C10",
+   "state": "bad_evidence",
+   "gate": "build",
+   "note": "[spec] L222 requires browser and CPython outputs to \"have equal XML in every part\". Comparison code genuinely checks all parts and saved report contains two successes. Browser artifacts are untracked, with no input/output hashes in report, so equality cannot be independently reconstructed from pinned evidence. Application source parity with claimed tested commit was confirmed.",
+   "evidence": "f6c30a9:qa/e2e/c10_compare.py:25-38; f6c30a9:qa/e2e/c10-report.json:1-14; f6c30a9:qa/e2e/c9-report.json:145-158"
+  },
+  {
+   "entry": "C12",
+   "state": "weak_check",
+   "gate": "build",
+   "note": "[diff] F4. L224 requires \"none over 10 s on the largest input the D1b caps allow\". Stress generator uses fixed template geometry and short tokens; it does not exercise tiny usable widths and near-limit unbroken text. Recorded 4.985-second warm load passes; no browser timing failure is asserted.",
+   "evidence": "f6c30a9:qa/c12/make_worst.py:111-129; f6c30a9:src/deckfill/plan.py:158-164; f6c30a9:qa/e2e/c12-report.json:47-50"
+  },
+  {
+   "entry": "C15",
+   "state": "weak_check",
+   "gate": "build",
+   "note": "[spec] F14. L227 requires \"three notes\" and preservation of \"every number\". Checker silently omits absent cases, compares numeric substrings and never exits nonzero for failed records. Current three saved outputs were not found to lose numbers.",
+   "evidence": "f6c30a9:qa/gemini/check_c15.py:41,60-77"
+  },
+  {
+   "entry": "C13",
+   "state": "PENDING",
+   "gate": "final_qa",
+   "note": "[spec] L225 specifies \"script plus Fable\" at 390 by 844. Script result is saved; Fable's visual acceptance remains pending. Later gate, not counted as current execution defect.",
+   "evidence": "f6c30a9:qa/e2e/c9-report.json:135-139; f6c30a9:tests/e2e/c9_privacy.mjs:290-302"
+  },
+  {
+   "entry": "C14",
+   "state": "PENDING",
+   "gate": "build",
+   "note": "[spec] L226 requires \"the skill file matches Google's format page\". Pinned code checks naming, description and prompt equality. External format-page agreement and claimed review history cannot be established from pinned code; this portion remains unverified.",
+   "evidence": "f6c30a9:tests/test_c14_copy.py:44-62; f6c30a9:skill/ppt-outline/SKILL.md:1-34"
+  },
+  {
+   "entry": "C16",
+   "state": "PENDING",
+   "gate": "final_qa",
+   "note": "[spec] L228 requires \"in Marco's Gemini ... the skill uploads and runs; the prompt route gives an outline that fills\". Saved CLI runs do not establish real-app behavior; seat report leaves this pending.",
+   "evidence": "f6c30a9:qa/gemini/run_c15.sh:1-14; f6c30a9:qa/walkthrough/walkthrough.json:65"
+  },
+  {
+   "entry": "C17",
+   "state": "PENDING",
+   "gate": "deploy",
+   "note": "[spec] L229 requires five outputs opened \"in desktop PowerPoint on Windows\" with no repair prompt. Current rendering path does not prove this; seat report leaves Windows acceptance pending.",
+   "evidence": "f6c30a9:qa/g0/run_g0.py:74-90; f6c30a9:qa/walkthrough/walkthrough.json:65"
+  },
+  {
+   "entry": "C18",
+   "state": "PENDING",
+   "gate": "final_qa",
+   "note": "[spec] L230 requires \"the page beside mentron.hk; slop scan run once, hits triaged\". Scan triage exists; visual comparison remains pending.",
+   "evidence": "f6c30a9:qa/slop-triage.md:3-10; f6c30a9:qa/walkthrough/walkthrough.json:65"
+  },
+  {
+   "entry": "C19",
+   "state": "PENDING",
+   "gate": "deploy",
+   "note": "[spec] L231 requires \"Rule 25 card of every page string and the README; Marco's edits folded byte for byte\". Seat report leaves copy proof pending; source strings do not establish approval history.",
+   "evidence": "f6c30a9:CHECKLIST.md:8-10; f6c30a9:qa/walkthrough/walkthrough.json:65"
+  },
+  {
+   "entry": "C21",
+   "state": "PENDING",
+   "gate": "deploy",
+   "note": "[spec] L233 requires test chain and audit \"on the deploy commit; deploy paste written with rollback steps\". Deploy chain remains pending, including live Pages MIME/runtime checks. Local server's MIME table does not prove deployed behavior.",
+   "evidence": "f6c30a9:qa/blast-radius.md:31,44-48; f6c30a9:tests/e2e/server.mjs:8-12; f6c30a9:qa/walkthrough/walkthrough.json:65"
+  }
+ ]
+}

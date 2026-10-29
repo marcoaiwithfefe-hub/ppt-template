@@ -16,8 +16,19 @@ def test_read_plan_fill_round(tpl):
     plan = json.loads(s.plan(outline_text("reference")))
     assert plan["ok"] and plan["name"] == "匯通物流 2027 年度計劃"
     assert [x["fit"] for x in plan["slides"]].count("split") == 2
-    deck = read_deck(s.fill())
+    deck = read_deck(s.fill(outline_text("reference")))
     assert len(deck) == len(plan["slides"])
+    assert s.fill_name == plan["name"]
+
+
+def test_fill_plans_from_the_text_it_is_given(tpl):
+    """Codex round 1 F1: the last plan() call was for older text; fill must use the text it gets."""
+    s = Session()
+    s.read(tpl("typed.pptx"), "typed.pptx")
+    s.plan("# OLD\n\n## 一\n- 舊")
+    deck = read_deck(s.fill("# NEW\n\n## 一\n- 新"))
+    assert deck[0].title == "NEW" and s.fill_name == "NEW"
+    assert [t for _, t in deck[1].bodies[0]] == ["新"]
 
 
 def test_override_goes_through_plan_deck(tpl):

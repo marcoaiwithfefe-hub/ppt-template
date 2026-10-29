@@ -30,6 +30,7 @@ class Session:
         self.filename = ""
         self.info = None
         self.plan_ = None
+        self.fill_name = ""
 
     def read(self, data: bytes, filename: str) -> str:
         self.data, self.filename, self.info, self.plan_ = None, "", None, None
@@ -77,5 +78,12 @@ class Session:
             ensure_ascii=False,
         )
 
-    def fill(self) -> bytes:
-        return fill(self.data, self.filename, self.plan_)
+    def fill(self, text: str, overrides_json: str = "{}") -> bytes:
+        """Plan from the outline and overrides the page reads at the click, then fill, in one
+        call, so a download can never use a plan made from older text (Codex round 1, F1).
+        Sets fill_name to the download's name for that same outline."""
+        overrides = {int(k): v for k, v in json.loads(overrides_json).items()}
+        outline = parse_outline(text)
+        plan = plan_deck(self.info, outline, overrides or None)
+        self.fill_name = file_name(outline.title)
+        return fill(self.data, self.filename, plan)
