@@ -1,1 +1,11 @@
-[]
+[
+ {
+  "id": "Sch_UndeclaredAttribute",
+  "template": "hkust-template14.potx",
+  "part": "/ppt/slideLayouts/slideLayout9.xml",
+  "why": "the template's own <p:extLst mod=\"1\"> on layout 9 (its slide guides, p15:sldGuideLst), copied unchanged by the fill; the unfilled template, authored in PowerPoint and published by HKUST, carries the same diagnostic; ECMA-376 may declare mod on this extLst (CT_ExtensionListModify), unverified",
+  "evidence": "qa/c5/c5-report.json: errors_in_template 1, added_by_fill 0; layout 9 byte-identical in the output",
+  "provisional": true,
+  "settled_by": "C17"
+ }
+]

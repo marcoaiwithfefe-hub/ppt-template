@@ -82,20 +82,29 @@ def main() -> int:
         before = {key(e) for e in results[str(src)]}
         after = results[str(dst)]
         added = [e for e in after if key(e) not in before]
-        unlisted = [e for e in after if not any(a["id"] == e["id"] and a["template"] == src.name for a in allow)]
+        def entry(e):
+            return next((a for a in allow if a["id"] == e["id"] and a["template"] == src.name
+                         and a.get("part") in (None, e.get("part"))), None)
+
+        unlisted = [e for e in after if entry(e) is None]
+        used = [a for a in allow if any(entry(e) is a for e in after)]
         ok = not unlisted
         bad += not ok
         rows.append({
             "family": fam, "template": str(src.relative_to(ROOT)), "output": str(dst.relative_to(ROOT)),
             "errors_in_template": len(before), "errors_in_output": len(after), "added_by_fill": added[:20],
-            "not_allowlisted": unlisted[:20], "ok": ok,
+            "not_allowlisted": unlisted[:20], "allowlisted_by": used, "ok": ok,
         })
-        print("PASS" if ok else "FAIL", dst.relative_to(ROOT), f"output {len(after)} errors, added {len(added)}, unlisted {len(unlisted)}")
+        provisional = [f"{a['id']} (provisional until {a.get('settled_by')})" for a in used if a.get("provisional")]
+        print("PASS" if ok else "FAIL", dst.relative_to(ROOT), f"output {len(after)} errors, added {len(added)}, unlisted {len(unlisted)}",
+              f"allowlisted: {', '.join(provisional)}" if provisional else "")
     sys.path.insert(0, str(ROOT / "qa"))
     from provenance import tested
 
     files = sorted({p for src, dst, _ in pairs for p in (src, dst)})
-    (OUT / "c5-report.json").write_text(json.dumps({"tested": tested(files), "rows": rows}, indent=1, ensure_ascii=False))
+    provisional = [a for a in allow if a.get("provisional")]
+    (OUT / "c5-report.json").write_text(json.dumps(
+        {"tested": tested(files), "provisional_allowlist": provisional, "rows": rows}, indent=1, ensure_ascii=False))
     print(f"{len(rows) - bad} passed, {bad} failed")
     return 1 if bad else 0
 
