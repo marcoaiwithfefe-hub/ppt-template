@@ -26,6 +26,7 @@ const state = {
   plan: null,
   planTimer: 0,
   gen: 0, // bumps on every change to the outline, overrides or template; a plan from an older gen is dropped
+  promptText: "",
 };
 
 // ---------------------------------------------------------------- copy into the page
@@ -124,10 +125,15 @@ function enableInputs() {
 }
 
 // ---------------------------------------------------------------- step 1
+// The prompt loads before the engine, so before the lockdown; Copy stays off until it is in (F9).
 async function loadPromptText() {
-  const text = await (await fetch(new URL("prompt.txt", location.href))).text();
+  const res = await fetch(new URL("prompt.txt", location.href));
+  if (!res.ok) throw new Error(`prompt.txt: HTTP ${res.status}`);
+  const text = await res.text();
+  if (!text.trim()) throw new Error("prompt.txt is empty");
+  state.promptText = text;
   $("prompt-text").textContent = text;
-  return text;
+  $("copy-prompt").disabled = false;
 }
 
 function bindCopy(button, labelEl, getText, doneEl) {
@@ -427,34 +433,39 @@ function wire() {
   $("outline").addEventListener("input", schedulePlan);
   $("download").addEventListener("click", download);
   $("reset").addEventListener("click", reset);
-  $("retry").addEventListener("click", () => {
-    loadPromptText().catch(() => {});
-    loadEngine();
-  });
+  $("retry").addEventListener("click", boot);
 
-  let promptText = "";
-  bindCopy($("copy-prompt"), $("copy-prompt-label"), () => promptText);
+  $("copy-prompt").disabled = true;
+  bindCopy($("copy-prompt"), $("copy-prompt-label"), () => state.promptText);
   bindCopy($("copy-link"), null, () => location.href, $("copy-link-done"));
-  return (text) => (promptText = text);
 }
 
 function start() {
   applyCopy();
-  const setPrompt = wire();
+  wire();
   if (PHONE.matches) {
     // The phone view explains and hands over the link; the engine loads if the window widens.
-    PHONE.addEventListener("change", () => !PHONE.matches && boot(setPrompt), { once: true });
+    PHONE.addEventListener("change", () => !PHONE.matches && boot(), { once: true });
     return;
   }
-  boot(setPrompt);
+  boot();
 }
 
-function boot(setPrompt) {
+// Prompt first, then the engine. A prompt that fails to load stops here with the retry state,
+// and retry runs this same path again (F9).
+async function boot() {
+  if (state.loading || state.ready) return;
   setStatus("loading");
-  loadPromptText()
-    .then(setPrompt)
-    .catch(() => {})
-    .finally(loadEngine);
+  if (!state.promptText) {
+    try {
+      await loadPromptText();
+    } catch (err) {
+      console.error(err);
+      setStatus("failed");
+      return;
+    }
+  }
+  loadEngine();
 }
 
 start();
