@@ -2,10 +2,40 @@
  "repo": "/Users/marcoaiwithfefe/Code/ppt-template",
  "name": "ppt-template",
  "base": "d97256c324e547a5958f736a0b2682ae24f80f44",
- "head": "72fb67e85ee5ce6e97930250a832711ee4041927",
+ "head": "009e04368f231e5fb7414b909ad110d5161af815",
  "branch": "main",
  "github": "",
  "commits": [
+  [
+   "009e043",
+   "2026-10-30",
+   "Layout-override fix evidence on 247fa54: after-runs, C9, C10, C12, C1 and C2 failure demos; C19 proof list; decision rows"
+  ],
+  [
+   "247fa54",
+   "2026-10-30",
+   "Layout overrides follow their slide: remembered by title, kind and nth; a gone or misfit override drops to the default with a note"
+  ],
+  [
+   "b5db511",
+   "2026-10-30",
+   "Layout-override tests: an override follows its slide, a dropped one leaves a note; fail on the code before the fix"
+  ],
+  [
+   "c49de09",
+   "2026-10-30",
+   "Checklist: Codex round 1 fix round and report done"
+  ],
+  [
+   "15adc0e",
+   "2026-10-30",
+   "F10 after-run: the clean privacy proof at e85ebd9, replacing a mid-fix dirty-tree run"
+  ],
+  [
+   "fd78e9f",
+   "2026-10-30",
+   "Walkthrough re-rendered for Codex round 1 fixes on 72fb67e; outline, template, xmlsafe and build scripts covered; layout-override follow-up named"
+  ],
   [
    "72fb67e",
    "2026-10-30",
@@ -279,8 +309,8 @@
   {
    "path": "CHECKLIST.md",
    "class": "docs",
-   "add": 16,
-   "del": 15,
+   "add": 19,
+   "del": 16,
    "hunks": [
     {
      "header": "",
@@ -388,6 +418,12 @@
        "- [ ] Walkthrough rendered to qa/walkthrough/"
       ],
       [
+       "del",
+       18,
+       null,
+       "- [ ] Report to ai-brain-52"
+      ],
+      [
        "add",
        null,
        3,
@@ -484,10 +520,22 @@
        "- [x] Rev 5: caps 100 MB file, uncompressed 150 MB lowered to 130 MB for the heap bar; copy, tests, worst case, C12, G0 sixth run, notes"
       ],
       [
-       "ctx",
-       18,
+       "add",
+       null,
        19,
-       "- [ ] Report to ai-brain-52"
+       "- [x] Report to ai-brain-52"
+      ],
+      [
+       "add",
+       null,
+       20,
+       "- [x] Codex round 1: F1 to F14 fixed with failing-first tests (qa/codex1/fixes/); final rerun on e85ebd9, evidence 72fb67e, walkthrough fd78e9f"
+      ],
+      [
+       "add",
+       null,
+       21,
+       "- [x] Layout-override fix (after round 1, MAJOR): picks follow their slide by title, kind and nth; gone or misfit picks drop with a note; tests fail before at b5db511, pass at 247fa54 (qa/override-fix/); C19 list in qa/c19/PROOF-LIST.md"
       ]
      ]
     }
@@ -508,7 +556,10 @@
     15,
     16,
     17,
-    18
+    18,
+    19,
+    20,
+    21
    ],
    "removed": [
     3,
@@ -525,7 +576,8 @@
     14,
     15,
     16,
-    17
+    17,
+    18
    ]
   },
   {
@@ -983,7 +1035,7 @@
   {
    "path": "decisions.tsv",
    "class": "source",
-   "add": 75,
+   "add": 79,
    "del": 0,
    "hunks": [
     {
@@ -1438,6 +1490,30 @@
        null,
        75,
        "2026-10-29T14:32:07Z\tF14\tC15 checker requires all three named cases, compares numbers as whole tokens, exits 1 on any FAIL or missing case\tCodex round 1: absent cases were skipped, 14 passed inside 114, and FAIL still exited 0\ttests/test_qa_runners.py::test_f14_*\tfixed; the three saved Gemini outputs still pass"
+      ],
+      [
+       "add",
+       null,
+       76,
+       "2026-10-29T14:53:27Z\toverride-fix\tLayout overrides are remembered as the slide's title, kind and nth (which slide with that title and kind); the bridge places them on the outline it is given, in plan and in fill\tIndex-keyed overrides moved onto the wrong slide after a slide was added or removed above (follow-up to Codex round 1, rated MAJOR by ai-brain-52). nth keeps two slides with one title apart; plain first unused match would swap them on every replan. Agreed by ai-brain-52\ttests/e2e/override_follow.mjs 9 FAIL before (qa/override-fix/page-before.txt); tests/test_web_bridge.py\tbuilt in 247fa54"
+      ],
+      [
+       "add",
+       null,
+       77,
+       "2026-10-29T14:53:27Z\toverride-fix\tplan_deck drops an out-of-range or incompatible override, uses the slide's default and warns (layout_gone, layout_dropped); an unknown layout id still raises unknown_layout\tai-brain-52's spec for the fix. An unknown id cannot come from the page: a template change clears the overrides\ttests/test_c2_layouts.py::test_incompatible_override_falls_back_to_the_default_with_a_warning, ::test_out_of_range_override_is_dropped_with_a_warning\tbuilt in 247fa54"
+      ],
+      [
+       "add",
+       null,
+       78,
+       "2026-10-29T14:53:27Z\toverride-fix\tPlan.overrides keeps the overrides as requested, dropped ones included\tfill re-runs plan_deck from plan.overrides and compares the result; keeping only the applied ones would lose the drop warnings and refuse the plan as stale_plan\tthe incompatible-override test fills its plan\tbuilt in 247fa54"
+      ],
+      [
+       "add",
+       null,
+       79,
+       "2026-10-29T14:53:27Z\toverride-fix\tA dropped override is forgotten after the plan that dropped it: its note shows once. Editing an overridden slide's title drops it with the note\tGuessing which slide a renamed title became would bring back the wrong-slide case (ai-brain-52)\ttests/e2e/override_follow.mjs steps 2 and 3\tbuilt in 247fa54"
       ]
      ]
     }
@@ -1517,14 +1593,18 @@
     72,
     73,
     74,
-    75
+    75,
+    76,
+    77,
+    78,
+    79
    ],
    "removed": []
   },
   {
    "path": "docs/app.js",
    "class": "docs",
-   "add": 471,
+   "add": 475,
    "del": 0,
    "hunks": [
     {
@@ -1678,7 +1758,7 @@
        "add",
        null,
        25,
-       "  overrides: {},"
+       "  overrides: [], // { title, kind, nth, layout } per picked layout; the bridge places each on its slide"
       ],
       [
        "add",
@@ -2530,7 +2610,7 @@
        "add",
        null,
        167,
-       "  state.overrides = {};"
+       "  state.overrides = [];"
       ],
       [
        "add",
@@ -3220,1140 +3300,1164 @@
        "add",
        null,
        282,
-       "  renderPlan();"
+       "  state.overrides = result.overrides; // a dropped override is forgotten; its note shows once"
       ],
       [
        "add",
        null,
        283,
-       "}"
-      ],
-      [
-       "add",
-       null,
-       284,
-       ""
-      ],
-      [
-       "add",
-       null,
-       285,
-       "function layoutName(id) {"
-      ],
-      [
-       "add",
-       null,
-       286,
-       "  const lay = state.template.layouts.find((l) => l.id === id);"
-      ],
-      [
-       "add",
-       null,
-       287,
-       "  if (!lay) return id;"
-      ],
-      [
-       "add",
-       null,
-       288,
-       "  const name = lay.name || COPY.unnamed;"
-      ],
-      [
-       "add",
-       null,
-       289,
-       "  return state.template.masters > 1 ? `${name}（${fmt(COPY.master, { n: lay.master + 1 })}）` : name;"
-      ],
-      [
-       "add",
-       null,
-       290,
-       "}"
-      ],
-      [
-       "add",
-       null,
-       291,
-       ""
-      ],
-      [
-       "add",
-       null,
-       292,
-       "function renderPlan() {"
-      ],
-      [
-       "add",
-       null,
-       293,
-       "  const p = state.plan;"
-      ],
-      [
-       "add",
-       null,
-       294,
-       "  $(\"plan\").hidden = !p;"
-      ],
-      [
-       "add",
-       null,
-       295,
-       "  if (!p) return;"
-      ],
-      [
-       "add",
-       null,
-       296,
-       "  $(\"slides-heading\").textContent = fmt(COPY.slidesHeading, { n: p.slides.length });"
-      ],
-      [
-       "add",
-       null,
-       297,
-       "  const body = $(\"slides\");"
-      ],
-      [
-       "add",
-       null,
-       298,
-       "  body.replaceChildren();"
-      ],
-      [
-       "add",
-       null,
-       299,
-       "  p.slides.forEach((s, i) => {"
-      ],
-      [
-       "add",
-       null,
-       300,
-       "    const tr = document.createElement(\"tr\");"
-      ],
-      [
-       "add",
-       null,
-       301,
-       "    if (s.part > 0) tr.className = \"cont\";"
-      ],
-      [
-       "add",
-       null,
-       302,
-       "    const no = document.createElement(\"td\");"
-      ],
-      [
-       "add",
-       null,
-       303,
-       "    no.className = \"no\";"
-      ],
-      [
-       "add",
-       null,
-       304,
-       "    no.textContent = fmt(COPY.slideNo, { n: i + 1 });"
-      ],
-      [
-       "add",
-       null,
-       305,
-       "    const title = document.createElement(\"td\");"
-      ],
-      [
-       "add",
-       null,
-       306,
-       "    title.className = \"title\";"
-      ],
-      [
-       "add",
-       null,
-       307,
-       "    title.textContent = s.title;"
-      ],
-      [
-       "add",
-       null,
-       308,
-       "    const lay = document.createElement(\"td\");"
-      ],
-      [
-       "add",
-       null,
-       309,
-       "    lay.className = \"lay\";"
-      ],
-      [
-       "add",
-       null,
-       310,
-       "    if (s.part === 0) {"
-      ],
-      [
-       "add",
-       null,
-       311,
-       "      const src = p.sources[s.source];"
-      ],
-      [
-       "add",
-       null,
-       312,
-       "      const sel = document.createElement(\"select\");"
-      ],
-      [
-       "add",
-       null,
-       313,
-       "      sel.setAttribute(\"aria-label\", `${COPY.layoutLabel}：${s.title}`);"
-      ],
-      [
-       "add",
-       null,
-       314,
-       "      for (const id of src.compatible) {"
-      ],
-      [
-       "add",
-       null,
-       315,
-       "        const opt = document.createElement(\"option\");"
-      ],
-      [
-       "add",
-       null,
-       316,
-       "        opt.value = id;"
-      ],
-      [
-       "add",
-       null,
-       317,
-       "        opt.textContent = layoutName(id);"
-      ],
-      [
-       "add",
-       null,
-       318,
-       "        opt.selected = id === src.chosen;"
-      ],
-      [
-       "add",
-       null,
-       319,
-       "        sel.append(opt);"
-      ],
-      [
-       "add",
-       null,
-       320,
-       "      }"
-      ],
-      [
-       "add",
-       null,
-       321,
-       "      sel.disabled = src.compatible.length < 2;"
-      ],
-      [
-       "add",
-       null,
-       322,
-       "      sel.addEventListener(\"change\", () => {"
-      ],
-      [
-       "add",
-       null,
-       323,
-       "        state.overrides[s.source] = sel.value;"
-      ],
-      [
-       "add",
-       null,
-       324,
-       "        staleNow();"
-      ],
-      [
-       "add",
-       null,
-       325,
-       "        replan();"
-      ],
-      [
-       "add",
-       null,
-       326,
-       "      });"
-      ],
-      [
-       "add",
-       null,
-       327,
-       "      lay.append(sel);"
-      ],
-      [
-       "add",
-       null,
-       328,
-       "    } else {"
-      ],
-      [
-       "add",
-       null,
-       329,
-       "      const f = document.createElement(\"span\");"
-      ],
-      [
-       "add",
-       null,
-       330,
-       "      f.className = \"lay__follows\";"
-      ],
-      [
-       "add",
-       null,
-       331,
-       "      f.textContent = layoutName(s.layout);"
-      ],
-      [
-       "add",
-       null,
-       332,
-       "      lay.append(f);"
-      ],
-      [
-       "add",
-       null,
-       333,
-       "    }"
-      ],
-      [
-       "add",
-       null,
-       334,
-       "    const fit = document.createElement(\"td\");"
-      ],
-      [
-       "add",
-       null,
-       335,
-       "    fit.className = \"fit\" + (s.fit === \"fits\" ? \"\" : \" is-flag\");"
-      ],
-      [
-       "add",
-       null,
-       336,
-       "    fit.textContent = COPY.fit[s.fit] || s.fit;"
-      ],
-      [
-       "add",
-       null,
-       337,
-       "    tr.append(no, title, lay, fit);"
-      ],
-      [
-       "add",
-       null,
-       338,
-       "    body.append(tr);"
-      ],
-      [
-       "add",
-       null,
-       339,
-       "  });"
-      ],
-      [
-       "add",
-       null,
-       340,
-       "  const list = $(\"warnings-list\");"
-      ],
-      [
-       "add",
-       null,
-       341,
-       "  list.replaceChildren();"
-      ],
-      [
-       "add",
-       null,
-       342,
-       "  for (const w of p.warnings) {"
-      ],
-      [
-       "add",
-       null,
-       343,
-       "    const li = document.createElement(\"li\");"
-      ],
-      [
-       "add",
-       null,
-       344,
-       "    const tpl = COPY.warnings[w.code];"
-      ],
-      [
-       "add",
-       null,
-       345,
-       "    li.textContent = tpl ? fmt(tpl, { line: w.line, text: w.text }) : `${w.line} ${w.text}`;"
-      ],
-      [
-       "add",
-       null,
-       346,
-       "    list.append(li);"
-      ],
-      [
-       "add",
-       null,
-       347,
-       "  }"
-      ],
-      [
-       "add",
-       null,
-       348,
-       "  $(\"warnings\").hidden = !p.warnings.length;"
-      ],
-      [
-       "add",
-       null,
-       349,
-       "  $(\"download-label\").textContent = fmt(COPY.download, { name: p.name });"
-      ],
-      [
-       "add",
-       null,
-       350,
-       "  $(\"download\").disabled = false;"
-      ],
-      [
-       "add",
-       null,
-       351,
-       "}"
-      ],
-      [
-       "add",
-       null,
-       352,
-       ""
-      ],
-      [
-       "add",
-       null,
-       353,
-       "async function download() {"
-      ],
-      [
-       "add",
-       null,
-       354,
-       "  if (!state.plan || !state.template) return;"
-      ],
-      [
-       "add",
-       null,
-       355,
-       "  // Read the outline and layouts now; Python plans from exactly these and fills in one call (F1)."
-      ],
-      [
-       "add",
-       null,
-       356,
-       "  const text = $(\"outline\").value;"
-      ],
-      [
-       "add",
-       null,
-       357,
-       "  const overrides = JSON.stringify(state.overrides);"
-      ],
-      [
-       "add",
-       null,
-       358,
-       "  const result = await working(async () => {"
-      ],
-      [
-       "add",
-       null,
-       359,
-       "    let out;"
-      ],
-      [
-       "add",
-       null,
-       360,
-       "    try {"
-      ],
-      [
-       "add",
-       null,
-       361,
-       "      out = state.session.fill(text, overrides);"
-      ],
-      [
-       "add",
-       null,
-       362,
-       "      return { bytes: out.toJs(), name: state.session.fill_name };"
-      ],
-      [
-       "add",
-       null,
-       363,
-       "    } catch (err) {"
-      ],
-      [
-       "add",
-       null,
-       364,
-       "      console.error(err);"
-      ],
-      [
-       "add",
-       null,
-       365,
-       "      return null;"
-      ],
-      [
-       "add",
-       null,
-       366,
-       "    } finally {"
-      ],
-      [
-       "add",
-       null,
-       367,
-       "      if (out) out.destroy();"
-      ],
-      [
-       "add",
-       null,
-       368,
-       "    }"
-      ],
-      [
-       "add",
-       null,
-       369,
-       "  });"
-      ],
-      [
-       "add",
-       null,
-       370,
-       "  if (!result) {"
-      ],
-      [
-       "add",
-       null,
-       371,
-       "    const el = $(\"outline-error\");"
-      ],
-      [
-       "add",
-       null,
-       372,
-       "    el.textContent = COPY.outlineErrors.unknown;"
-      ],
-      [
-       "add",
-       null,
-       373,
-       "    el.hidden = false;"
-      ],
-      [
-       "add",
-       null,
-       374,
-       "    return;"
-      ],
-      [
-       "add",
-       null,
-       375,
-       "  }"
-      ],
-      [
-       "add",
-       null,
-       376,
-       "  const { bytes, name } = result;"
-      ],
-      [
-       "add",
-       null,
-       377,
-       "  const url = URL.createObjectURL(new Blob([bytes], { type: PPTX_TYPE }));"
-      ],
-      [
-       "add",
-       null,
-       378,
-       "  const a = document.createElement(\"a\");"
-      ],
-      [
-       "add",
-       null,
-       379,
-       "  a.href = url;"
-      ],
-      [
-       "add",
-       null,
-       380,
-       "  a.download = `${name}.pptx`;"
-      ],
-      [
-       "add",
-       null,
-       381,
-       "  document.body.append(a);"
-      ],
-      [
-       "add",
-       null,
-       382,
-       "  a.click();"
-      ],
-      [
-       "add",
-       null,
-       383,
-       "  a.remove();"
-      ],
-      [
-       "add",
-       null,
-       384,
-       "  setTimeout(() => URL.revokeObjectURL(url), 60_000);"
-      ],
-      [
-       "add",
-       null,
-       385,
-       "  $(\"downloaded\").hidden = false;"
-      ],
-      [
-       "add",
-       null,
-       386,
-       "}"
-      ],
-      [
-       "add",
-       null,
-       387,
-       ""
-      ],
-      [
-       "add",
-       null,
-       388,
-       "function reset() {"
-      ],
-      [
-       "add",
-       null,
-       389,
-       "  staleNow();"
-      ],
-      [
-       "add",
-       null,
-       390,
-       "  state.template = null;"
-      ],
-      [
-       "add",
-       null,
-       391,
-       "  state.overrides = {};"
-      ],
-      [
-       "add",
-       null,
-       392,
-       "  state.plan = null;"
-      ],
-      [
-       "add",
-       null,
-       393,
-       "  $(\"outline\").value = \"\";"
-      ],
-      [
-       "add",
-       null,
-       394,
-       "  $(\"file\").value = \"\";"
-      ],
-      [
-       "add",
-       null,
-       395,
-       "  $(\"template-error\").hidden = true;"
-      ],
-      [
-       "add",
-       null,
-       396,
-       "  $(\"outline-error\").hidden = true;"
-      ],
-      [
-       "add",
-       null,
-       397,
-       "  $(\"downloaded\").hidden = true;"
-      ],
-      [
-       "add",
-       null,
-       398,
-       "  renderTemplate();"
-      ],
-      [
-       "add",
-       null,
-       399,
        "  renderPlan();"
       ],
       [
        "add",
        null,
-       400,
-       "  window.scrollTo({ top: $(\"step2\").offsetTop - 24 });"
-      ],
-      [
-       "add",
-       null,
-       401,
+       284,
        "}"
       ],
       [
        "add",
        null,
-       402,
+       285,
        ""
       ],
       [
        "add",
        null,
-       403,
-       "// ---------------------------------------------------------------- wiring"
+       286,
+       "function layoutName(id) {"
       ],
       [
        "add",
        null,
-       404,
-       "function wire() {"
+       287,
+       "  const lay = state.template.layouts.find((l) => l.id === id);"
       ],
       [
        "add",
        null,
-       405,
-       "  const drop = $(\"drop\");"
+       288,
+       "  if (!lay) return id;"
       ],
       [
        "add",
        null,
-       406,
-       "  drop.classList.add(\"is-off\");"
+       289,
+       "  const name = lay.name || COPY.unnamed;"
       ],
       [
        "add",
        null,
-       407,
-       "  $(\"file\").addEventListener(\"change\", (e) => readTemplate(e.target.files[0]));"
+       290,
+       "  return state.template.masters > 1 ? `${name}（${fmt(COPY.master, { n: lay.master + 1 })}）` : name;"
       ],
       [
        "add",
        null,
-       408,
-       "  for (const ev of [\"dragenter\", \"dragover\"]) {"
-      ],
-      [
-       "add",
-       null,
-       409,
-       "    drop.addEventListener(ev, (e) => {"
-      ],
-      [
-       "add",
-       null,
-       410,
-       "      e.preventDefault();"
-      ],
-      [
-       "add",
-       null,
-       411,
-       "      if (state.ready) drop.classList.add(\"is-over\");"
-      ],
-      [
-       "add",
-       null,
-       412,
-       "    });"
-      ],
-      [
-       "add",
-       null,
-       413,
-       "  }"
-      ],
-      [
-       "add",
-       null,
-       414,
-       "  for (const ev of [\"dragleave\", \"drop\"]) drop.addEventListener(ev, () => drop.classList.remove(\"is-over\"));"
-      ],
-      [
-       "add",
-       null,
-       415,
-       "  drop.addEventListener(\"drop\", (e) => {"
-      ],
-      [
-       "add",
-       null,
-       416,
-       "    e.preventDefault();"
-      ],
-      [
-       "add",
-       null,
-       417,
-       "    readTemplate(e.dataTransfer.files[0]);"
-      ],
-      [
-       "add",
-       null,
-       418,
-       "  });"
-      ],
-      [
-       "add",
-       null,
-       419,
-       "  // a file dropped outside the box must not navigate the tab to it"
-      ],
-      [
-       "add",
-       null,
-       420,
-       "  window.addEventListener(\"dragover\", (e) => e.preventDefault());"
-      ],
-      [
-       "add",
-       null,
-       421,
-       "  window.addEventListener(\"drop\", (e) => e.preventDefault());"
-      ],
-      [
-       "add",
-       null,
-       422,
-       ""
-      ],
-      [
-       "add",
-       null,
-       423,
-       "  $(\"change-template\").addEventListener(\"click\", () => {"
-      ],
-      [
-       "add",
-       null,
-       424,
-       "    staleNow();"
-      ],
-      [
-       "add",
-       null,
-       425,
-       "    state.template = null;"
-      ],
-      [
-       "add",
-       null,
-       426,
-       "    state.overrides = {};"
-      ],
-      [
-       "add",
-       null,
-       427,
-       "    state.plan = null;"
-      ],
-      [
-       "add",
-       null,
-       428,
-       "    $(\"file\").value = \"\";"
-      ],
-      [
-       "add",
-       null,
-       429,
-       "    renderTemplate();"
-      ],
-      [
-       "add",
-       null,
-       430,
-       "    renderPlan();"
-      ],
-      [
-       "add",
-       null,
-       431,
-       "    $(\"file\").click();"
-      ],
-      [
-       "add",
-       null,
-       432,
-       "  });"
-      ],
-      [
-       "add",
-       null,
-       433,
-       "  $(\"outline\").addEventListener(\"input\", schedulePlan);"
-      ],
-      [
-       "add",
-       null,
-       434,
-       "  $(\"download\").addEventListener(\"click\", download);"
-      ],
-      [
-       "add",
-       null,
-       435,
-       "  $(\"reset\").addEventListener(\"click\", reset);"
-      ],
-      [
-       "add",
-       null,
-       436,
-       "  $(\"retry\").addEventListener(\"click\", boot);"
-      ],
-      [
-       "add",
-       null,
-       437,
-       ""
-      ],
-      [
-       "add",
-       null,
-       438,
-       "  $(\"copy-prompt\").disabled = true;"
-      ],
-      [
-       "add",
-       null,
-       439,
-       "  bindCopy($(\"copy-prompt\"), $(\"copy-prompt-label\"), () => state.promptText);"
-      ],
-      [
-       "add",
-       null,
-       440,
-       "  bindCopy($(\"copy-link\"), null, () => location.href, $(\"copy-link-done\"));"
-      ],
-      [
-       "add",
-       null,
-       441,
+       291,
        "}"
       ],
       [
        "add",
        null,
-       442,
+       292,
        ""
       ],
       [
        "add",
        null,
-       443,
-       "function start() {"
+       293,
+       "function renderPlan() {"
       ],
       [
        "add",
        null,
-       444,
-       "  applyCopy();"
+       294,
+       "  const p = state.plan;"
       ],
       [
        "add",
        null,
-       445,
-       "  wire();"
+       295,
+       "  $(\"plan\").hidden = !p;"
       ],
       [
        "add",
        null,
-       446,
-       "  if (PHONE.matches) {"
+       296,
+       "  if (!p) return;"
       ],
       [
        "add",
        null,
-       447,
-       "    // The phone view explains and hands over the link; the engine loads if the window widens."
+       297,
+       "  $(\"slides-heading\").textContent = fmt(COPY.slidesHeading, { n: p.slides.length });"
       ],
       [
        "add",
        null,
-       448,
-       "    PHONE.addEventListener(\"change\", () => !PHONE.matches && boot(), { once: true });"
+       298,
+       "  const body = $(\"slides\");"
       ],
       [
        "add",
        null,
-       449,
-       "    return;"
+       299,
+       "  body.replaceChildren();"
       ],
       [
        "add",
        null,
-       450,
-       "  }"
+       300,
+       "  p.slides.forEach((s, i) => {"
       ],
       [
        "add",
        null,
-       451,
-       "  boot();"
+       301,
+       "    const tr = document.createElement(\"tr\");"
       ],
       [
        "add",
        null,
-       452,
-       "}"
+       302,
+       "    if (s.part > 0) tr.className = \"cont\";"
       ],
       [
        "add",
        null,
-       453,
-       ""
+       303,
+       "    const no = document.createElement(\"td\");"
       ],
       [
        "add",
        null,
-       454,
-       "// Prompt first, then the engine. A prompt that fails to load stops here with the retry state,"
+       304,
+       "    no.className = \"no\";"
       ],
       [
        "add",
        null,
-       455,
-       "// and retry runs this same path again (F9)."
+       305,
+       "    no.textContent = fmt(COPY.slideNo, { n: i + 1 });"
       ],
       [
        "add",
        null,
-       456,
-       "async function boot() {"
+       306,
+       "    const title = document.createElement(\"td\");"
       ],
       [
        "add",
        null,
-       457,
-       "  if (state.loading || state.ready) return;"
+       307,
+       "    title.className = \"title\";"
       ],
       [
        "add",
        null,
-       458,
-       "  setStatus(\"loading\");"
+       308,
+       "    title.textContent = s.title;"
       ],
       [
        "add",
        null,
-       459,
-       "  if (!state.promptText) {"
+       309,
+       "    const lay = document.createElement(\"td\");"
       ],
       [
        "add",
        null,
-       460,
-       "    try {"
+       310,
+       "    lay.className = \"lay\";"
       ],
       [
        "add",
        null,
-       461,
-       "      await loadPromptText();"
+       311,
+       "    if (s.part === 0) {"
       ],
       [
        "add",
        null,
-       462,
-       "    } catch (err) {"
+       312,
+       "      const src = p.sources[s.source];"
       ],
       [
        "add",
        null,
-       463,
-       "      console.error(err);"
+       313,
+       "      const sel = document.createElement(\"select\");"
       ],
       [
        "add",
        null,
-       464,
-       "      setStatus(\"failed\");"
+       314,
+       "      sel.setAttribute(\"aria-label\", `${COPY.layoutLabel}：${s.title}`);"
       ],
       [
        "add",
        null,
-       465,
-       "      return;"
+       315,
+       "      for (const id of src.compatible) {"
       ],
       [
        "add",
        null,
-       466,
+       316,
+       "        const opt = document.createElement(\"option\");"
+      ],
+      [
+       "add",
+       null,
+       317,
+       "        opt.value = id;"
+      ],
+      [
+       "add",
+       null,
+       318,
+       "        opt.textContent = layoutName(id);"
+      ],
+      [
+       "add",
+       null,
+       319,
+       "        opt.selected = id === src.chosen;"
+      ],
+      [
+       "add",
+       null,
+       320,
+       "        sel.append(opt);"
+      ],
+      [
+       "add",
+       null,
+       321,
+       "      }"
+      ],
+      [
+       "add",
+       null,
+       322,
+       "      sel.disabled = src.compatible.length < 2;"
+      ],
+      [
+       "add",
+       null,
+       323,
+       "      sel.addEventListener(\"change\", () => {"
+      ],
+      [
+       "add",
+       null,
+       324,
+       "        // remembered by the slide's title, kind and nth, not its index, so it follows the slide"
+      ],
+      [
+       "add",
+       null,
+       325,
+       "        const same = (o) => o.title === src.title && o.kind === src.kind && o.nth === src.nth;"
+      ],
+      [
+       "add",
+       null,
+       326,
+       "        state.overrides = state.overrides.filter((o) => !same(o));"
+      ],
+      [
+       "add",
+       null,
+       327,
+       "        state.overrides.push({ title: src.title, kind: src.kind, nth: src.nth, layout: sel.value });"
+      ],
+      [
+       "add",
+       null,
+       328,
+       "        staleNow();"
+      ],
+      [
+       "add",
+       null,
+       329,
+       "        replan();"
+      ],
+      [
+       "add",
+       null,
+       330,
+       "      });"
+      ],
+      [
+       "add",
+       null,
+       331,
+       "      lay.append(sel);"
+      ],
+      [
+       "add",
+       null,
+       332,
+       "    } else {"
+      ],
+      [
+       "add",
+       null,
+       333,
+       "      const f = document.createElement(\"span\");"
+      ],
+      [
+       "add",
+       null,
+       334,
+       "      f.className = \"lay__follows\";"
+      ],
+      [
+       "add",
+       null,
+       335,
+       "      f.textContent = layoutName(s.layout);"
+      ],
+      [
+       "add",
+       null,
+       336,
+       "      lay.append(f);"
+      ],
+      [
+       "add",
+       null,
+       337,
        "    }"
       ],
       [
        "add",
        null,
-       467,
+       338,
+       "    const fit = document.createElement(\"td\");"
+      ],
+      [
+       "add",
+       null,
+       339,
+       "    fit.className = \"fit\" + (s.fit === \"fits\" ? \"\" : \" is-flag\");"
+      ],
+      [
+       "add",
+       null,
+       340,
+       "    fit.textContent = COPY.fit[s.fit] || s.fit;"
+      ],
+      [
+       "add",
+       null,
+       341,
+       "    tr.append(no, title, lay, fit);"
+      ],
+      [
+       "add",
+       null,
+       342,
+       "    body.append(tr);"
+      ],
+      [
+       "add",
+       null,
+       343,
+       "  });"
+      ],
+      [
+       "add",
+       null,
+       344,
+       "  const list = $(\"warnings-list\");"
+      ],
+      [
+       "add",
+       null,
+       345,
+       "  list.replaceChildren();"
+      ],
+      [
+       "add",
+       null,
+       346,
+       "  for (const w of p.warnings) {"
+      ],
+      [
+       "add",
+       null,
+       347,
+       "    const li = document.createElement(\"li\");"
+      ],
+      [
+       "add",
+       null,
+       348,
+       "    const tpl = COPY.warnings[w.code];"
+      ],
+      [
+       "add",
+       null,
+       349,
+       "    li.textContent = tpl ? fmt(tpl, { line: w.line, text: w.text }) : `${w.line} ${w.text}`;"
+      ],
+      [
+       "add",
+       null,
+       350,
+       "    list.append(li);"
+      ],
+      [
+       "add",
+       null,
+       351,
        "  }"
       ],
       [
        "add",
        null,
-       468,
-       "  loadEngine();"
+       352,
+       "  $(\"warnings\").hidden = !p.warnings.length;"
       ],
       [
        "add",
        null,
-       469,
+       353,
+       "  $(\"download-label\").textContent = fmt(COPY.download, { name: p.name });"
+      ],
+      [
+       "add",
+       null,
+       354,
+       "  $(\"download\").disabled = false;"
+      ],
+      [
+       "add",
+       null,
+       355,
        "}"
       ],
       [
        "add",
        null,
-       470,
+       356,
        ""
       ],
       [
        "add",
        null,
+       357,
+       "async function download() {"
+      ],
+      [
+       "add",
+       null,
+       358,
+       "  if (!state.plan || !state.template) return;"
+      ],
+      [
+       "add",
+       null,
+       359,
+       "  // Read the outline and layouts now; Python plans from exactly these and fills in one call (F1)."
+      ],
+      [
+       "add",
+       null,
+       360,
+       "  const text = $(\"outline\").value;"
+      ],
+      [
+       "add",
+       null,
+       361,
+       "  const overrides = JSON.stringify(state.overrides);"
+      ],
+      [
+       "add",
+       null,
+       362,
+       "  const result = await working(async () => {"
+      ],
+      [
+       "add",
+       null,
+       363,
+       "    let out;"
+      ],
+      [
+       "add",
+       null,
+       364,
+       "    try {"
+      ],
+      [
+       "add",
+       null,
+       365,
+       "      out = state.session.fill(text, overrides);"
+      ],
+      [
+       "add",
+       null,
+       366,
+       "      return { bytes: out.toJs(), name: state.session.fill_name };"
+      ],
+      [
+       "add",
+       null,
+       367,
+       "    } catch (err) {"
+      ],
+      [
+       "add",
+       null,
+       368,
+       "      console.error(err);"
+      ],
+      [
+       "add",
+       null,
+       369,
+       "      return null;"
+      ],
+      [
+       "add",
+       null,
+       370,
+       "    } finally {"
+      ],
+      [
+       "add",
+       null,
+       371,
+       "      if (out) out.destroy();"
+      ],
+      [
+       "add",
+       null,
+       372,
+       "    }"
+      ],
+      [
+       "add",
+       null,
+       373,
+       "  });"
+      ],
+      [
+       "add",
+       null,
+       374,
+       "  if (!result) {"
+      ],
+      [
+       "add",
+       null,
+       375,
+       "    const el = $(\"outline-error\");"
+      ],
+      [
+       "add",
+       null,
+       376,
+       "    el.textContent = COPY.outlineErrors.unknown;"
+      ],
+      [
+       "add",
+       null,
+       377,
+       "    el.hidden = false;"
+      ],
+      [
+       "add",
+       null,
+       378,
+       "    return;"
+      ],
+      [
+       "add",
+       null,
+       379,
+       "  }"
+      ],
+      [
+       "add",
+       null,
+       380,
+       "  const { bytes, name } = result;"
+      ],
+      [
+       "add",
+       null,
+       381,
+       "  const url = URL.createObjectURL(new Blob([bytes], { type: PPTX_TYPE }));"
+      ],
+      [
+       "add",
+       null,
+       382,
+       "  const a = document.createElement(\"a\");"
+      ],
+      [
+       "add",
+       null,
+       383,
+       "  a.href = url;"
+      ],
+      [
+       "add",
+       null,
+       384,
+       "  a.download = `${name}.pptx`;"
+      ],
+      [
+       "add",
+       null,
+       385,
+       "  document.body.append(a);"
+      ],
+      [
+       "add",
+       null,
+       386,
+       "  a.click();"
+      ],
+      [
+       "add",
+       null,
+       387,
+       "  a.remove();"
+      ],
+      [
+       "add",
+       null,
+       388,
+       "  setTimeout(() => URL.revokeObjectURL(url), 60_000);"
+      ],
+      [
+       "add",
+       null,
+       389,
+       "  $(\"downloaded\").hidden = false;"
+      ],
+      [
+       "add",
+       null,
+       390,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       391,
+       ""
+      ],
+      [
+       "add",
+       null,
+       392,
+       "function reset() {"
+      ],
+      [
+       "add",
+       null,
+       393,
+       "  staleNow();"
+      ],
+      [
+       "add",
+       null,
+       394,
+       "  state.template = null;"
+      ],
+      [
+       "add",
+       null,
+       395,
+       "  state.overrides = [];"
+      ],
+      [
+       "add",
+       null,
+       396,
+       "  state.plan = null;"
+      ],
+      [
+       "add",
+       null,
+       397,
+       "  $(\"outline\").value = \"\";"
+      ],
+      [
+       "add",
+       null,
+       398,
+       "  $(\"file\").value = \"\";"
+      ],
+      [
+       "add",
+       null,
+       399,
+       "  $(\"template-error\").hidden = true;"
+      ],
+      [
+       "add",
+       null,
+       400,
+       "  $(\"outline-error\").hidden = true;"
+      ],
+      [
+       "add",
+       null,
+       401,
+       "  $(\"downloaded\").hidden = true;"
+      ],
+      [
+       "add",
+       null,
+       402,
+       "  renderTemplate();"
+      ],
+      [
+       "add",
+       null,
+       403,
+       "  renderPlan();"
+      ],
+      [
+       "add",
+       null,
+       404,
+       "  window.scrollTo({ top: $(\"step2\").offsetTop - 24 });"
+      ],
+      [
+       "add",
+       null,
+       405,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       406,
+       ""
+      ],
+      [
+       "add",
+       null,
+       407,
+       "// ---------------------------------------------------------------- wiring"
+      ],
+      [
+       "add",
+       null,
+       408,
+       "function wire() {"
+      ],
+      [
+       "add",
+       null,
+       409,
+       "  const drop = $(\"drop\");"
+      ],
+      [
+       "add",
+       null,
+       410,
+       "  drop.classList.add(\"is-off\");"
+      ],
+      [
+       "add",
+       null,
+       411,
+       "  $(\"file\").addEventListener(\"change\", (e) => readTemplate(e.target.files[0]));"
+      ],
+      [
+       "add",
+       null,
+       412,
+       "  for (const ev of [\"dragenter\", \"dragover\"]) {"
+      ],
+      [
+       "add",
+       null,
+       413,
+       "    drop.addEventListener(ev, (e) => {"
+      ],
+      [
+       "add",
+       null,
+       414,
+       "      e.preventDefault();"
+      ],
+      [
+       "add",
+       null,
+       415,
+       "      if (state.ready) drop.classList.add(\"is-over\");"
+      ],
+      [
+       "add",
+       null,
+       416,
+       "    });"
+      ],
+      [
+       "add",
+       null,
+       417,
+       "  }"
+      ],
+      [
+       "add",
+       null,
+       418,
+       "  for (const ev of [\"dragleave\", \"drop\"]) drop.addEventListener(ev, () => drop.classList.remove(\"is-over\"));"
+      ],
+      [
+       "add",
+       null,
+       419,
+       "  drop.addEventListener(\"drop\", (e) => {"
+      ],
+      [
+       "add",
+       null,
+       420,
+       "    e.preventDefault();"
+      ],
+      [
+       "add",
+       null,
+       421,
+       "    readTemplate(e.dataTransfer.files[0]);"
+      ],
+      [
+       "add",
+       null,
+       422,
+       "  });"
+      ],
+      [
+       "add",
+       null,
+       423,
+       "  // a file dropped outside the box must not navigate the tab to it"
+      ],
+      [
+       "add",
+       null,
+       424,
+       "  window.addEventListener(\"dragover\", (e) => e.preventDefault());"
+      ],
+      [
+       "add",
+       null,
+       425,
+       "  window.addEventListener(\"drop\", (e) => e.preventDefault());"
+      ],
+      [
+       "add",
+       null,
+       426,
+       ""
+      ],
+      [
+       "add",
+       null,
+       427,
+       "  $(\"change-template\").addEventListener(\"click\", () => {"
+      ],
+      [
+       "add",
+       null,
+       428,
+       "    staleNow();"
+      ],
+      [
+       "add",
+       null,
+       429,
+       "    state.template = null;"
+      ],
+      [
+       "add",
+       null,
+       430,
+       "    state.overrides = [];"
+      ],
+      [
+       "add",
+       null,
+       431,
+       "    state.plan = null;"
+      ],
+      [
+       "add",
+       null,
+       432,
+       "    $(\"file\").value = \"\";"
+      ],
+      [
+       "add",
+       null,
+       433,
+       "    renderTemplate();"
+      ],
+      [
+       "add",
+       null,
+       434,
+       "    renderPlan();"
+      ],
+      [
+       "add",
+       null,
+       435,
+       "    $(\"file\").click();"
+      ],
+      [
+       "add",
+       null,
+       436,
+       "  });"
+      ],
+      [
+       "add",
+       null,
+       437,
+       "  $(\"outline\").addEventListener(\"input\", schedulePlan);"
+      ],
+      [
+       "add",
+       null,
+       438,
+       "  $(\"download\").addEventListener(\"click\", download);"
+      ],
+      [
+       "add",
+       null,
+       439,
+       "  $(\"reset\").addEventListener(\"click\", reset);"
+      ],
+      [
+       "add",
+       null,
+       440,
+       "  $(\"retry\").addEventListener(\"click\", boot);"
+      ],
+      [
+       "add",
+       null,
+       441,
+       ""
+      ],
+      [
+       "add",
+       null,
+       442,
+       "  $(\"copy-prompt\").disabled = true;"
+      ],
+      [
+       "add",
+       null,
+       443,
+       "  bindCopy($(\"copy-prompt\"), $(\"copy-prompt-label\"), () => state.promptText);"
+      ],
+      [
+       "add",
+       null,
+       444,
+       "  bindCopy($(\"copy-link\"), null, () => location.href, $(\"copy-link-done\"));"
+      ],
+      [
+       "add",
+       null,
+       445,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       446,
+       ""
+      ],
+      [
+       "add",
+       null,
+       447,
+       "function start() {"
+      ],
+      [
+       "add",
+       null,
+       448,
+       "  applyCopy();"
+      ],
+      [
+       "add",
+       null,
+       449,
+       "  wire();"
+      ],
+      [
+       "add",
+       null,
+       450,
+       "  if (PHONE.matches) {"
+      ],
+      [
+       "add",
+       null,
+       451,
+       "    // The phone view explains and hands over the link; the engine loads if the window widens."
+      ],
+      [
+       "add",
+       null,
+       452,
+       "    PHONE.addEventListener(\"change\", () => !PHONE.matches && boot(), { once: true });"
+      ],
+      [
+       "add",
+       null,
+       453,
+       "    return;"
+      ],
+      [
+       "add",
+       null,
+       454,
+       "  }"
+      ],
+      [
+       "add",
+       null,
+       455,
+       "  boot();"
+      ],
+      [
+       "add",
+       null,
+       456,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       457,
+       ""
+      ],
+      [
+       "add",
+       null,
+       458,
+       "// Prompt first, then the engine. A prompt that fails to load stops here with the retry state,"
+      ],
+      [
+       "add",
+       null,
+       459,
+       "// and retry runs this same path again (F9)."
+      ],
+      [
+       "add",
+       null,
+       460,
+       "async function boot() {"
+      ],
+      [
+       "add",
+       null,
+       461,
+       "  if (state.loading || state.ready) return;"
+      ],
+      [
+       "add",
+       null,
+       462,
+       "  setStatus(\"loading\");"
+      ],
+      [
+       "add",
+       null,
+       463,
+       "  if (!state.promptText) {"
+      ],
+      [
+       "add",
+       null,
+       464,
+       "    try {"
+      ],
+      [
+       "add",
+       null,
+       465,
+       "      await loadPromptText();"
+      ],
+      [
+       "add",
+       null,
+       466,
+       "    } catch (err) {"
+      ],
+      [
+       "add",
+       null,
+       467,
+       "      console.error(err);"
+      ],
+      [
+       "add",
+       null,
+       468,
+       "      setStatus(\"failed\");"
+      ],
+      [
+       "add",
+       null,
+       469,
+       "      return;"
+      ],
+      [
+       "add",
+       null,
+       470,
+       "    }"
+      ],
+      [
+       "add",
+       null,
        471,
+       "  }"
+      ],
+      [
+       "add",
+       null,
+       472,
+       "  loadEngine();"
+      ],
+      [
+       "add",
+       null,
+       473,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       474,
+       ""
+      ],
+      [
+       "add",
+       null,
+       475,
        "start();"
       ]
      ]
@@ -4830,14 +4934,18 @@
     468,
     469,
     470,
-    471
+    471,
+    472,
+    473,
+    474,
+    475
    ],
    "removed": []
   },
   {
    "path": "docs/copy.js",
    "class": "docs",
-   "add": 126,
+   "add": 128,
    "del": 0,
    "hunks": [
     {
@@ -5525,78 +5633,90 @@
        "add",
        null,
        114,
-       "  },"
+       "    layout_gone: \"大綱已經冇「{text}」呢張投影片，之前幫佢揀嘅版面取消咗。如果只係改咗標題，請再揀一次版面。\","
       ],
       [
        "add",
        null,
        115,
-       ""
+       "    layout_dropped: \"「{text}」：之前揀嘅版面放唔落呢張投影片而家嘅內容，改返用預設版面。\","
       ],
       [
        "add",
        null,
        116,
-       "  phoneTitle: \"呢個工具要用電腦開\","
+       "  },"
       ],
       [
        "add",
        null,
        117,
-       "  phoneBody: \"喺手機睇唔到全部功能。撳下面複製連結，喺公司電腦嘅 Chrome 或者 Edge 打開。\","
-      ],
-      [
-       "add",
-       null,
-       118,
-       "  copyLink: \"複製連結\","
-      ],
-      [
-       "add",
-       null,
-       119,
-       "  phoneSteps: ["
-      ],
-      [
-       "add",
-       null,
-       120,
-       "    \"Gemini 幫你將筆記寫成大綱\","
-      ],
-      [
-       "add",
-       null,
-       121,
-       "    \"拖公司 PowerPoint 範本入網頁\","
-      ],
-      [
-       "add",
-       null,
-       122,
-       "    \"貼大綱，下載用公司範本做好嘅簡報\","
-      ],
-      [
-       "add",
-       null,
-       123,
-       "  ],"
-      ],
-      [
-       "add",
-       null,
-       124,
        ""
       ],
       [
        "add",
        null,
+       118,
+       "  phoneTitle: \"呢個工具要用電腦開\","
+      ],
+      [
+       "add",
+       null,
+       119,
+       "  phoneBody: \"喺手機睇唔到全部功能。撳下面複製連結，喺公司電腦嘅 Chrome 或者 Edge 打開。\","
+      ],
+      [
+       "add",
+       null,
+       120,
+       "  copyLink: \"複製連結\","
+      ],
+      [
+       "add",
+       null,
+       121,
+       "  phoneSteps: ["
+      ],
+      [
+       "add",
+       null,
+       122,
+       "    \"Gemini 幫你將筆記寫成大綱\","
+      ],
+      [
+       "add",
+       null,
+       123,
+       "    \"拖公司 PowerPoint 範本入網頁\","
+      ],
+      [
+       "add",
+       null,
+       124,
+       "    \"貼大綱，下載用公司範本做好嘅簡報\","
+      ],
+      [
+       "add",
+       null,
        125,
-       "  footer: \"Mentron · 開源（MIT）\","
+       "  ],"
       ],
       [
        "add",
        null,
        126,
+       ""
+      ],
+      [
+       "add",
+       null,
+       127,
+       "  footer: \"Mentron · 開源（MIT）\","
+      ],
+      [
+       "add",
+       null,
+       128,
        "};"
       ]
      ]
@@ -5728,7 +5848,9 @@
     123,
     124,
     125,
-    126
+    126,
+    127,
+    128
    ],
    "removed": []
   },
@@ -25688,6 +25810,127 @@
    "removed": []
   },
   {
+   "path": "qa/c19/PROOF-LIST.md",
+   "class": "test",
+   "add": 15,
+   "del": 0,
+   "hunks": [
+    {
+     "header": "",
+     "lines": [
+      [
+       "add",
+       null,
+       1,
+       "# C19 proof list"
+      ],
+      [
+       "add",
+       null,
+       2,
+       ""
+      ],
+      [
+       "add",
+       null,
+       3,
+       "The page strings that changed after Marco's last Rule 25 proof. Each one waits on his proof before deploy. All of them are in `docs/copy.js`. The text is quoted exactly; `{text}` is filled in by the page."
+      ],
+      [
+       "add",
+       null,
+       4,
+       ""
+      ],
+      [
+       "add",
+       null,
+       5,
+       "| Key | Since | Text |"
+      ],
+      [
+       "add",
+       null,
+       6,
+       "|---|---|---|"
+      ],
+      [
+       "add",
+       null,
+       7,
+       "| `templateErrors.too_big` | rev 5 caps | 檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走示範投影片，或者壓縮圖片，另存再試。 |"
+      ],
+      [
+       "add",
+       null,
+       8,
+       "| `templateErrors.no_text_layout` | rev 5 | 呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本，例如有「標題及內容」版面嘅範本。 |"
+      ],
+      [
+       "add",
+       null,
+       9,
+       "| `exampleOutline` | rev 5 | the whole example outline in `docs/copy.js`, lines 32 onwards |"
+      ],
+      [
+       "add",
+       null,
+       10,
+       "| `warnings.layout_gone` | layout-override fix | 大綱已經冇「{text}」呢張投影片，之前幫佢揀嘅版面取消咗。如果只係改咗標題，請再揀一次版面。 |"
+      ],
+      [
+       "add",
+       null,
+       11,
+       "| `warnings.layout_dropped` | layout-override fix | 「{text}」：之前揀嘅版面放唔落呢張投影片而家嘅內容，改返用預設版面。 |"
+      ],
+      [
+       "add",
+       null,
+       12,
+       ""
+      ],
+      [
+       "add",
+       null,
+       13,
+       "When to expect the two new notes:"
+      ],
+      [
+       "add",
+       null,
+       14,
+       "- `layout_gone` shows once, after the edit that deletes the overridden slide or changes its title or kind."
+      ],
+      [
+       "add",
+       null,
+       15,
+       "- `layout_dropped` shows while the slide's content no longer fits the layout picked for it. One example: a subtitle line added under a cover that was set to Title Only."
+      ]
+     ]
+    }
+   ],
+   "added": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "removed": []
+  },
+  {
    "path": "qa/c5/allowlist.json",
    "class": "test",
    "add": 1,
@@ -26771,7 +27014,7 @@
   {
    "path": "qa/codex1/fixes/F10-after.txt",
    "class": "test",
-   "add": 8,
+   "add": 9,
    "del": 0,
    "hunks": [
     {
@@ -26781,49 +27024,55 @@
        "add",
        null,
        1,
-       "tested commit ea1513141d46 (dirty)"
+       "# privacy_proof.py on qa/e2e/c9-report.json from the final rerun (tests/e2e/c9_privacy.mjs 25 of 25 at e85ebd9); src, docs and tests unchanged since. The earlier file in 72fb67e was a mid-fix run at ea15131 on a dirty tree."
       ],
       [
        "add",
        null,
        2,
-       "session 36 s; 22 browser requests, 19 server hits"
+       "tested commit e85ebd92806b"
       ],
       [
        "add",
        null,
        3,
-       "idle after the last download: 30.0 s"
+       "session 36 s; 22 browser requests, 19 server hits"
       ],
       [
        "add",
        null,
        4,
-       "before ready: 19 requests, 0 to another origin"
+       "idle after the last download: 30.0 s"
       ],
       [
        "add",
        null,
        5,
-       "after ready: 3 browser requests, of which 3 are clicked link-outs (https://gemini.google.com/app, https://github.com/marcoaiwithfefe-hub/ppt-template, https://mentron.hk/)"
+       "before ready: 19 requests, 0 to another origin"
       ],
       [
        "add",
        null,
        6,
-       "after ready: 0 page requests, 0 server hits, 0 blocked attempts"
+       "after ready: 3 browser requests, of which 3 are clicked link-outs (https://gemini.google.com/app, https://github.com/marcoaiwithfefe-hub/ppt-template, https://mentron.hk/)"
       ],
       [
        "add",
        null,
        7,
-       "fills after ready: 2 with downloads, plus one offline"
+       "after ready: 0 page requests, 0 server hits, 0 blocked attempts"
       ],
       [
        "add",
        null,
        8,
-       "FAIL"
+       "fills after ready: 2 with downloads, plus one offline"
+      ],
+      [
+       "add",
+       null,
+       9,
+       "PASS: zero page requests after ready"
       ]
      ]
     }
@@ -26836,7 +27085,8 @@
     5,
     6,
     7,
-    8
+    8,
+    9
    ],
    "removed": []
   },
@@ -30239,7 +30489,7 @@
        "add",
        null,
        3,
-       "  \"commit\": \"e85ebd92806b1210a1a544ee7d05d8745a9a810d\","
+       "  \"commit\": \"247fa54a879680bf5246d50686d427aa2a28645e\","
       ],
       [
        "add",
@@ -30269,13 +30519,13 @@
        "add",
        null,
        8,
-       "   \"qa/e2e/c10-wui-tung.pptx\": \"13ece8b771487ce87ac4f3aef6e83c2f6d7922e729e1ffbeeed5e5ed173bcc5b\","
+       "   \"qa/e2e/c10-wui-tung.pptx\": \"fe17bc467998f2ed3eb6a8245509f074660ba0b1094d3ac26ef05afb46d60089\","
       ],
       [
        "add",
        null,
        9,
-       "   \"qa/e2e/c10-typed-override.pptx\": \"098425c46b7869517508341dc5383c0d90098be40708181dade37c6a81818eea\""
+       "   \"qa/e2e/c10-typed-override.pptx\": \"e9fc45c43a5a37bee2128e196e036e579ecfc5179f9c43d20da9190264845a65\""
       ],
       [
        "add",
@@ -30293,7 +30543,7 @@
        "add",
        null,
        12,
-       " \"browser_run\": \"e85ebd92806b1210a1a544ee7d05d8745a9a810d\","
+       " \"browser_run\": \"247fa54a879680bf5246d50686d427aa2a28645e\","
       ],
       [
        "add",
@@ -30910,7 +31160,7 @@
        "add",
        null,
        22,
-       "   \"name\": \"warm ready 5.0 s, 9.60 MB transferred (bar 5 s)\","
+       "   \"name\": \"warm ready 4.9 s, 9.60 MB transferred (bar 5 s)\","
       ],
       [
        "add",
@@ -30934,7 +31184,7 @@
        "add",
        null,
        26,
-       "   \"name\": \"longest task on G0 templates and fixtures 2.66 s, hkust-template14.potx (bar 3)\","
+       "   \"name\": \"longest task on G0 templates and fixtures 2.60 s, hkust-template14.potx (bar 3)\","
       ],
       [
        "add",
@@ -30958,7 +31208,7 @@
        "add",
        null,
        30,
-       "   \"name\": \"slowest click response after a step 36 ms (bar 500)\","
+       "   \"name\": \"slowest click response after a step 45 ms (bar 500)\","
       ],
       [
        "add",
@@ -30982,7 +31232,7 @@
        "add",
        null,
        34,
-       "   \"name\": \"worst case longest task 5.15 s (bar 10); read 807 plan 362 fill 5148 ms\","
+       "   \"name\": \"worst case longest task 4.96 s (bar 10); read 820 plan 346 fill 4965 ms\","
       ],
       [
        "add",
@@ -31012,7 +31262,7 @@
        "add",
        null,
        39,
-       "   \"name\": \"worst case click response 35 ms (bar 500)\","
+       "   \"name\": \"worst case click response 39 ms (bar 500)\","
       ],
       [
        "add",
@@ -31072,7 +31322,7 @@
        "add",
        null,
        49,
-       "   \"detail\": \"{\\\"frames\\\":10,\\\"taskMs\\\":5148,\\\"frameBeforeTaskMs\\\":10,\\\"overlayPixel\\\":255}\""
+       "   \"detail\": \"{\\\"frames\\\":10,\\\"taskMs\\\":4965,\\\"frameBeforeTaskMs\\\":11,\\\"overlayPixel\\\":255}\""
       ],
       [
        "add",
@@ -31090,19 +31340,19 @@
        "add",
        null,
        52,
-       " \"coldReadyS\": 8.501,"
+       " \"coldReadyS\": 8.47,"
       ],
       [
        "add",
        null,
        53,
-       " \"coldTransferMB\": 17.889511,"
+       " \"coldTransferMB\": 17.893133,"
       ],
       [
        "add",
        null,
        54,
-       " \"warmReadyS\": 4.951,"
+       " \"warmReadyS\": 4.918,"
       ],
       [
        "add",
@@ -31132,13 +31382,13 @@
        "add",
        null,
        59,
-       "   \"readMs\": 119,"
+       "   \"readMs\": 115,"
       ],
       [
        "add",
        null,
        60,
-       "   \"clickAfterReadMs\": 36,"
+       "   \"clickAfterReadMs\": 24,"
       ],
       [
        "add",
@@ -31156,19 +31406,19 @@
        "add",
        null,
        63,
-       "   \"clickAfterPlanMs\": 36,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
        null,
        64,
-       "   \"fillMs\": 234,"
+       "   \"fillMs\": 228,"
       ],
       [
        "add",
        null,
        65,
-       "   \"clickAfterFillMs\": 28"
+       "   \"clickAfterFillMs\": 35"
       ],
       [
        "add",
@@ -31192,13 +31442,13 @@
        "add",
        null,
        69,
-       "   \"readMs\": 834,"
+       "   \"readMs\": 848,"
       ],
       [
        "add",
        null,
        70,
-       "   \"clickAfterReadMs\": 31,"
+       "   \"clickAfterReadMs\": 37,"
       ],
       [
        "add",
@@ -31216,19 +31466,19 @@
        "add",
        null,
        73,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
        null,
        74,
-       "   \"fillMs\": 1587,"
+       "   \"fillMs\": 1567,"
       ],
       [
        "add",
        null,
        75,
-       "   \"clickAfterFillMs\": 27"
+       "   \"clickAfterFillMs\": 30"
       ],
       [
        "add",
@@ -31252,13 +31502,13 @@
        "add",
        null,
        79,
-       "   \"readMs\": 274,"
+       "   \"readMs\": 287,"
       ],
       [
        "add",
        null,
        80,
-       "   \"clickAfterReadMs\": 27,"
+       "   \"clickAfterReadMs\": 30,"
       ],
       [
        "add",
@@ -31276,19 +31526,19 @@
        "add",
        null,
        83,
-       "   \"clickAfterPlanMs\": 35,"
+       "   \"clickAfterPlanMs\": 26,"
       ],
       [
        "add",
        null,
        84,
-       "   \"fillMs\": 2661,"
+       "   \"fillMs\": 2604,"
       ],
       [
        "add",
        null,
        85,
-       "   \"clickAfterFillMs\": 29"
+       "   \"clickAfterFillMs\": 24"
       ],
       [
        "add",
@@ -31312,13 +31562,13 @@
        "add",
        null,
        89,
-       "   \"readMs\": 52,"
+       "   \"readMs\": 51,"
       ],
       [
        "add",
        null,
        90,
-       "   \"clickAfterReadMs\": 32,"
+       "   \"clickAfterReadMs\": 33,"
       ],
       [
        "add",
@@ -31348,13 +31598,13 @@
        "add",
        null,
        95,
-       "   \"readMs\": 69,"
+       "   \"readMs\": 67,"
       ],
       [
        "add",
        null,
        96,
-       "   \"clickAfterReadMs\": 31,"
+       "   \"clickAfterReadMs\": 32,"
       ],
       [
        "add",
@@ -31372,19 +31622,19 @@
        "add",
        null,
        99,
-       "   \"clickAfterPlanMs\": 35,"
+       "   \"clickAfterPlanMs\": 34,"
       ],
       [
        "add",
        null,
        100,
-       "   \"fillMs\": 81,"
+       "   \"fillMs\": 73,"
       ],
       [
        "add",
        null,
        101,
-       "   \"clickAfterFillMs\": 35"
+       "   \"clickAfterFillMs\": 27"
       ],
       [
        "add",
@@ -31414,7 +31664,7 @@
        "add",
        null,
        106,
-       "   \"clickAfterReadMs\": 35,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -31432,7 +31682,7 @@
        "add",
        null,
        109,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -31474,7 +31724,7 @@
        "add",
        null,
        116,
-       "   \"clickAfterReadMs\": 36,"
+       "   \"clickAfterReadMs\": 33,"
       ],
       [
        "add",
@@ -31552,7 +31802,7 @@
        "add",
        null,
        129,
-       "   \"clickAfterPlanMs\": 35,"
+       "   \"clickAfterPlanMs\": 45,"
       ],
       [
        "add",
@@ -31564,7 +31814,7 @@
        "add",
        null,
        131,
-       "   \"clickAfterFillMs\": 25"
+       "   \"clickAfterFillMs\": 26"
       ],
       [
        "add",
@@ -31612,7 +31862,7 @@
        "add",
        null,
        139,
-       "   \"clickAfterPlanMs\": 31,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -31624,7 +31874,7 @@
        "add",
        null,
        141,
-       "   \"clickAfterFillMs\": 23"
+       "   \"clickAfterFillMs\": 21"
       ],
       [
        "add",
@@ -31672,7 +31922,7 @@
        "add",
        null,
        149,
-       "   \"clickAfterPlanMs\": 33,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -31714,7 +31964,7 @@
        "add",
        null,
        156,
-       "   \"clickAfterReadMs\": 35,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -31732,7 +31982,7 @@
        "add",
        null,
        159,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 33,"
       ],
       [
        "add",
@@ -31744,7 +31994,7 @@
        "add",
        null,
        161,
-       "   \"clickAfterFillMs\": 22"
+       "   \"clickAfterFillMs\": 35"
       ],
       [
        "add",
@@ -31774,7 +32024,7 @@
        "add",
        null,
        166,
-       "   \"clickAfterReadMs\": 24,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -31792,7 +32042,7 @@
        "add",
        null,
        169,
-       "   \"clickAfterPlanMs\": 33,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -31804,7 +32054,7 @@
        "add",
        null,
        171,
-       "   \"clickAfterFillMs\": 25"
+       "   \"clickAfterFillMs\": 23"
       ],
       [
        "add",
@@ -31852,7 +32102,7 @@
        "add",
        null,
        179,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -31864,7 +32114,7 @@
        "add",
        null,
        181,
-       "   \"clickAfterFillMs\": 27"
+       "   \"clickAfterFillMs\": 28"
       ],
       [
        "add",
@@ -31924,7 +32174,7 @@
        "add",
        null,
        191,
-       "   \"clickAfterFillMs\": 33"
+       "   \"clickAfterFillMs\": 30"
       ],
       [
        "add",
@@ -31954,7 +32204,7 @@
        "add",
        null,
        196,
-       "   \"clickAfterReadMs\": 34,"
+       "   \"clickAfterReadMs\": 35,"
       ],
       [
        "add",
@@ -31984,7 +32234,7 @@
        "add",
        null,
        201,
-       "   \"clickAfterFillMs\": 33"
+       "   \"clickAfterFillMs\": 30"
       ],
       [
        "add",
@@ -32032,7 +32282,7 @@
        "add",
        null,
        209,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -32044,7 +32294,7 @@
        "add",
        null,
        211,
-       "   \"clickAfterFillMs\": 28"
+       "   \"clickAfterFillMs\": 31"
       ],
       [
        "add",
@@ -32074,7 +32324,7 @@
        "add",
        null,
        216,
-       "   \"clickAfterReadMs\": 34,"
+       "   \"clickAfterReadMs\": 35,"
       ],
       [
        "add",
@@ -32092,7 +32342,7 @@
        "add",
        null,
        219,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -32104,7 +32354,7 @@
        "add",
        null,
        221,
-       "   \"clickAfterFillMs\": 27"
+       "   \"clickAfterFillMs\": 28"
       ],
       [
        "add",
@@ -32134,7 +32384,7 @@
        "add",
        null,
        226,
-       "   \"clickAfterReadMs\": 35,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -32152,7 +32402,7 @@
        "add",
        null,
        229,
-       "   \"clickAfterPlanMs\": 33,"
+       "   \"clickAfterPlanMs\": 34,"
       ],
       [
        "add",
@@ -32164,7 +32414,7 @@
        "add",
        null,
        231,
-       "   \"clickAfterFillMs\": 23"
+       "   \"clickAfterFillMs\": 35"
       ],
       [
        "add",
@@ -32194,7 +32444,7 @@
        "add",
        null,
        236,
-       "   \"clickAfterReadMs\": 34,"
+       "   \"clickAfterReadMs\": 35,"
       ],
       [
        "add",
@@ -32212,7 +32462,7 @@
        "add",
        null,
        239,
-       "   \"clickAfterPlanMs\": 35,"
+       "   \"clickAfterPlanMs\": 36,"
       ],
       [
        "add",
@@ -32224,7 +32474,7 @@
        "add",
        null,
        241,
-       "   \"clickAfterFillMs\": 23"
+       "   \"clickAfterFillMs\": 24"
       ],
       [
        "add",
@@ -32272,7 +32522,7 @@
        "add",
        null,
        249,
-       "   \"clickAfterPlanMs\": 33,"
+       "   \"clickAfterPlanMs\": 34,"
       ],
       [
        "add",
@@ -32332,7 +32582,7 @@
        "add",
        null,
        259,
-       "   \"clickAfterPlanMs\": 35,"
+       "   \"clickAfterPlanMs\": 34,"
       ],
       [
        "add",
@@ -32344,7 +32594,7 @@
        "add",
        null,
        261,
-       "   \"clickAfterFillMs\": 26"
+       "   \"clickAfterFillMs\": 34"
       ],
       [
        "add",
@@ -32392,7 +32642,7 @@
        "add",
        null,
        269,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -32404,7 +32654,7 @@
        "add",
        null,
        271,
-       "   \"clickAfterFillMs\": 26"
+       "   \"clickAfterFillMs\": 28"
       ],
       [
        "add",
@@ -32452,7 +32702,7 @@
        "add",
        null,
        279,
-       "   \"clickAfterPlanMs\": 35,"
+       "   \"clickAfterPlanMs\": 33,"
       ],
       [
        "add",
@@ -32512,7 +32762,7 @@
        "add",
        null,
        289,
-       "   \"clickAfterPlanMs\": 34,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -32584,7 +32834,7 @@
        "add",
        null,
        301,
-       "   \"clickAfterFillMs\": 28"
+       "   \"clickAfterFillMs\": 33"
       ],
       [
        "add",
@@ -32614,7 +32864,7 @@
        "add",
        null,
        306,
-       "   \"clickAfterReadMs\": 33,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -32644,7 +32894,7 @@
        "add",
        null,
        311,
-       "   \"clickAfterFillMs\": 27"
+       "   \"clickAfterFillMs\": 33"
       ],
       [
        "add",
@@ -32674,7 +32924,7 @@
        "add",
        null,
        316,
-       "   \"clickAfterReadMs\": 33,"
+       "   \"clickAfterReadMs\": 36,"
       ],
       [
        "add",
@@ -32692,7 +32942,7 @@
        "add",
        null,
        319,
-       "   \"clickAfterPlanMs\": 27,"
+       "   \"clickAfterPlanMs\": 35,"
       ],
       [
        "add",
@@ -32704,7 +32954,7 @@
        "add",
        null,
        321,
-       "   \"clickAfterFillMs\": 26"
+       "   \"clickAfterFillMs\": 22"
       ],
       [
        "add",
@@ -32734,7 +32984,7 @@
        "add",
        null,
        326,
-       "   \"clickAfterReadMs\": 35,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -32770,7 +33020,7 @@
        "add",
        null,
        332,
-       "   \"clickAfterReadMs\": 34,"
+       "   \"clickAfterReadMs\": 35,"
       ],
       [
        "add",
@@ -32806,7 +33056,7 @@
        "add",
        null,
        338,
-       "   \"clickAfterReadMs\": 34,"
+       "   \"clickAfterReadMs\": 33,"
       ],
       [
        "add",
@@ -32914,7 +33164,7 @@
        "add",
        null,
        356,
-       "   \"clickAfterReadMs\": 35,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -32950,7 +33200,7 @@
        "add",
        null,
        362,
-       "   \"clickAfterReadMs\": 33,"
+       "   \"clickAfterReadMs\": 34,"
       ],
       [
        "add",
@@ -32986,7 +33236,7 @@
        "add",
        null,
        368,
-       "   \"clickAfterReadMs\": 35,"
+       "   \"clickAfterReadMs\": 33,"
       ],
       [
        "add",
@@ -33088,7 +33338,7 @@
        "add",
        null,
        385,
-       "  \"fileMB\": 104.358192,"
+       "  \"fileMB\": 104.358194,"
       ],
       [
        "add",
@@ -33100,13 +33350,13 @@
        "add",
        null,
        387,
-       "  \"readMs\": 807,"
+       "  \"readMs\": 820,"
       ],
       [
        "add",
        null,
        388,
-       "  \"clickAfterReadMs\": 27,"
+       "  \"clickAfterReadMs\": 31,"
       ],
       [
        "add",
@@ -33118,19 +33368,19 @@
        "add",
        null,
        390,
-       "  \"planMs\": 362,"
+       "  \"planMs\": 346,"
       ],
       [
        "add",
        null,
        391,
-       "  \"clickAfterPlanMs\": 35,"
+       "  \"clickAfterPlanMs\": 39,"
       ],
       [
        "add",
        null,
        392,
-       "  \"fillMs\": 5148,"
+       "  \"fillMs\": 4965,"
       ],
       [
        "add",
@@ -33148,13 +33398,13 @@
        "add",
        null,
        395,
-       "   \"taskMs\": 5148,"
+       "   \"taskMs\": 4965,"
       ],
       [
        "add",
        null,
        396,
-       "   \"frameBeforeTaskMs\": 10,"
+       "   \"frameBeforeTaskMs\": 11,"
       ],
       [
        "add",
@@ -33178,7 +33428,7 @@
        "add",
        null,
        400,
-       "  \"clickAfterFillMs\": 19,"
+       "  \"clickAfterFillMs\": 20,"
       ],
       [
        "add",
@@ -33658,7 +33908,7 @@
        "add",
        null,
        3,
-       "  \"commit\": \"e85ebd92806b1210a1a544ee7d05d8745a9a810d\","
+       "  \"commit\": \"247fa54a879680bf5246d50686d427aa2a28645e\","
       ],
       [
        "add",
@@ -33706,13 +33956,13 @@
        "add",
        null,
        11,
-       "   \"qa/e2e/c10-wui-tung.pptx\": \"13ece8b771487ce87ac4f3aef6e83c2f6d7922e729e1ffbeeed5e5ed173bcc5b\","
+       "   \"qa/e2e/c10-wui-tung.pptx\": \"fe17bc467998f2ed3eb6a8245509f074660ba0b1094d3ac26ef05afb46d60089\","
       ],
       [
        "add",
        null,
        12,
-       "   \"qa/e2e/c10-typed-override.pptx\": \"098425c46b7869517508341dc5383c0d90098be40708181dade37c6a81818eea\""
+       "   \"qa/e2e/c10-typed-override.pptx\": \"e9fc45c43a5a37bee2128e196e036e579ecfc5179f9c43d20da9190264845a65\""
       ],
       [
        "add",
@@ -34372,7 +34622,7 @@
        "add",
        null,
        122,
-       "   \"detail\": \"呢個檔案有密碼。請喺 PowerPoint 移除密碼，另存一份再拖入嚟。 | download hidden true | 4 ms\""
+       "   \"detail\": \"呢個檔案有密碼。請喺 PowerPoint 移除密碼，另存一份再拖入嚟。 | download hidden true | 7 ms\""
       ],
       [
        "add",
@@ -34444,7 +34694,7 @@
        "add",
        null,
        134,
-       "   \"detail\": \"呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 4 ms\""
+       "   \"detail\": \"呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 3 ms\""
       ],
       [
        "add",
@@ -34480,7 +34730,7 @@
        "add",
        null,
        140,
-       "   \"detail\": \"檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走 | download hidden true | 12 ms\""
+       "   \"detail\": \"檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走 | download hidden true | 2 ms\""
       ],
       [
        "add",
@@ -34552,7 +34802,7 @@
        "add",
        null,
        152,
-       "   \"detail\": \"呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 1 ms\""
+       "   \"detail\": \"呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 4 ms\""
       ],
       [
        "add",
@@ -34588,7 +34838,7 @@
        "add",
        null,
        158,
-       "   \"detail\": \"呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本 | download hidden true | 5 ms\""
+       "   \"detail\": \"呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本 | download hidden true | 2 ms\""
       ],
       [
        "add",
@@ -34648,19 +34898,19 @@
        "add",
        null,
        168,
-       "  \"tReady\": 1793284406998,"
+       "  \"tReady\": 1793285590291,"
       ],
       [
        "add",
        null,
        169,
-       "  \"tLastDownload\": 1793284408949,"
+       "  \"tLastDownload\": 1793285592234,"
       ],
       [
        "add",
        null,
        170,
-       "  \"tIdleEnd\": 1793284438984,"
+       "  \"tIdleEnd\": 1793285622273,"
       ],
       [
        "add",
@@ -34786,7 +35036,7 @@
        "add",
        null,
        191,
-       "    \"t\": 1793284440020,"
+       "    \"t\": 1793285623311,"
       ],
       [
        "add",
@@ -34816,7 +35066,7 @@
        "add",
        null,
        196,
-       "    \"t\": 1793284440827,"
+       "    \"t\": 1793285624116,"
       ],
       [
        "add",
@@ -34846,7 +35096,7 @@
        "add",
        null,
        201,
-       "    \"t\": 1793284441628,"
+       "    \"t\": 1793285624919,"
       ],
       [
        "add",
@@ -35026,13 +35276,13 @@
        "add",
        null,
        231,
-       "    \"t\": 1793284405752,"
+       "    \"t\": 1793285589096,"
       ],
       [
        "add",
        null,
        232,
-       "    \"url\": \"http://127.0.0.1:50358/\","
+       "    \"url\": \"http://127.0.0.1:51759/\","
       ],
       [
        "add",
@@ -35056,13 +35306,13 @@
        "add",
        null,
        236,
-       "    \"t\": 1793284405771,"
+       "    \"t\": 1793285589103,"
       ],
       [
        "add",
        null,
        237,
-       "    \"url\": \"http://127.0.0.1:50358/style.css\","
+       "    \"url\": \"http://127.0.0.1:51759/style.css\","
       ],
       [
        "add",
@@ -35086,13 +35336,13 @@
        "add",
        null,
        241,
-       "    \"t\": 1793284405771,"
+       "    \"t\": 1793285589103,"
       ],
       [
        "add",
        null,
        242,
-       "    \"url\": \"http://127.0.0.1:50358/app.js\","
+       "    \"url\": \"http://127.0.0.1:51759/app.js\","
       ],
       [
        "add",
@@ -35116,13 +35366,13 @@
        "add",
        null,
        246,
-       "    \"t\": 1793284405790,"
+       "    \"t\": 1793285589115,"
       ],
       [
        "add",
        null,
        247,
-       "    \"url\": \"http://127.0.0.1:50358/fonts/mentron-serif-var.woff2\","
+       "    \"url\": \"http://127.0.0.1:51759/fonts/mentron-serif-var.woff2\","
       ],
       [
        "add",
@@ -35146,13 +35396,13 @@
        "add",
        null,
        251,
-       "    \"t\": 1793284405790,"
+       "    \"t\": 1793285589116,"
       ],
       [
        "add",
        null,
        252,
-       "    \"url\": \"http://127.0.0.1:50358/fonts/newsreader-latin.woff2\","
+       "    \"url\": \"http://127.0.0.1:51759/fonts/newsreader-latin.woff2\","
       ],
       [
        "add",
@@ -35176,13 +35426,13 @@
        "add",
        null,
        256,
-       "    \"t\": 1793284405790,"
+       "    \"t\": 1793285589116,"
       ],
       [
        "add",
        null,
        257,
-       "    \"url\": \"http://127.0.0.1:50358/copy.js\","
+       "    \"url\": \"http://127.0.0.1:51759/copy.js\","
       ],
       [
        "add",
@@ -35206,13 +35456,13 @@
        "add",
        null,
        261,
-       "    \"t\": 1793284405794,"
+       "    \"t\": 1793285589119,"
       ],
       [
        "add",
        null,
        262,
-       "    \"url\": \"http://127.0.0.1:50358/prompt.txt\","
+       "    \"url\": \"http://127.0.0.1:51759/prompt.txt\","
       ],
       [
        "add",
@@ -35236,13 +35486,13 @@
        "add",
        null,
        266,
-       "    \"t\": 1793284405800,"
+       "    \"t\": 1793285589124,"
       ],
       [
        "add",
        null,
        267,
-       "    \"url\": \"http://127.0.0.1:50358/fonts/noto-serif-tc-page.woff2\","
+       "    \"url\": \"http://127.0.0.1:51759/fonts/noto-serif-tc-page.woff2\","
       ],
       [
        "add",
@@ -35266,13 +35516,13 @@
        "add",
        null,
        271,
-       "    \"t\": 1793284405808,"
+       "    \"t\": 1793285589125,"
       ],
       [
        "add",
        null,
        272,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/pyodide.mjs\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/pyodide.mjs\","
       ],
       [
        "add",
@@ -35296,13 +35546,13 @@
        "add",
        null,
        276,
-       "    \"t\": 1793284405813,"
+       "    \"t\": 1793285589131,"
       ],
       [
        "add",
        null,
        277,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/pyodide-lock.json\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/pyodide-lock.json\","
       ],
       [
        "add",
@@ -35326,13 +35576,13 @@
        "add",
        null,
        281,
-       "    \"t\": 1793284405814,"
+       "    \"t\": 1793285589131,"
       ],
       [
        "add",
        null,
        282,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/python_stdlib.zip\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/python_stdlib.zip\","
       ],
       [
        "add",
@@ -35356,13 +35606,13 @@
        "add",
        null,
        286,
-       "    \"t\": 1793284405814,"
+       "    \"t\": 1793285589131,"
       ],
       [
        "add",
        null,
        287,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/pyodide.asm.wasm\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/pyodide.asm.wasm\","
       ],
       [
        "add",
@@ -35386,13 +35636,13 @@
        "add",
        null,
        291,
-       "    \"t\": 1793284405814,"
+       "    \"t\": 1793285589131,"
       ],
       [
        "add",
        null,
        292,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/pyodide.asm.mjs\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/pyodide.asm.mjs\","
       ],
       [
        "add",
@@ -35416,13 +35666,13 @@
        "add",
        null,
        296,
-       "    \"t\": 1793284406553,"
+       "    \"t\": 1793285589870,"
       ],
       [
        "add",
        null,
        297,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl\","
       ],
       [
        "add",
@@ -35446,13 +35696,13 @@
        "add",
        null,
        301,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589870,"
       ],
       [
        "add",
        null,
        302,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl\","
       ],
       [
        "add",
@@ -35476,13 +35726,13 @@
        "add",
        null,
        306,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589870,"
       ],
       [
        "add",
        null,
        307,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl\","
       ],
       [
        "add",
@@ -35506,13 +35756,13 @@
        "add",
        null,
        311,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589870,"
       ],
       [
        "add",
        null,
        312,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl\","
       ],
       [
        "add",
@@ -35536,13 +35786,13 @@
        "add",
        null,
        316,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589870,"
       ],
       [
        "add",
        null,
        317,
-       "    \"url\": \"http://127.0.0.1:50358/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl\","
+       "    \"url\": \"http://127.0.0.1:51759/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl\","
       ],
       [
        "add",
@@ -35566,13 +35816,13 @@
        "add",
        null,
        321,
-       "    \"t\": 1793284406696,"
+       "    \"t\": 1793285589999,"
       ],
       [
        "add",
        null,
        322,
-       "    \"url\": \"http://127.0.0.1:50358/py/deckfill.zip\","
+       "    \"url\": \"http://127.0.0.1:51759/py/deckfill.zip\","
       ],
       [
        "add",
@@ -35596,7 +35846,7 @@
        "add",
        null,
        326,
-       "    \"t\": 1793284440020,"
+       "    \"t\": 1793285623311,"
       ],
       [
        "add",
@@ -35626,7 +35876,7 @@
        "add",
        null,
        331,
-       "    \"t\": 1793284440827,"
+       "    \"t\": 1793285624116,"
       ],
       [
        "add",
@@ -35656,7 +35906,7 @@
        "add",
        null,
        336,
-       "    \"t\": 1793284441628,"
+       "    \"t\": 1793285624919,"
       ],
       [
        "add",
@@ -35698,7 +35948,7 @@
        "add",
        null,
        343,
-       "    \"t\": 1793284405756,"
+       "    \"t\": 1793285589098,"
       ],
       [
        "add",
@@ -35728,7 +35978,7 @@
        "add",
        null,
        348,
-       "    \"t\": 1793284405771,"
+       "    \"t\": 1793285589104,"
       ],
       [
        "add",
@@ -35758,7 +36008,7 @@
        "add",
        null,
        353,
-       "    \"t\": 1793284405772,"
+       "    \"t\": 1793285589104,"
       ],
       [
        "add",
@@ -35788,7 +36038,7 @@
        "add",
        null,
        358,
-       "    \"t\": 1793284405790,"
+       "    \"t\": 1793285589116,"
       ],
       [
        "add",
@@ -35818,7 +36068,7 @@
        "add",
        null,
        363,
-       "    \"t\": 1793284405791,"
+       "    \"t\": 1793285589116,"
       ],
       [
        "add",
@@ -35848,7 +36098,7 @@
        "add",
        null,
        368,
-       "    \"t\": 1793284405791,"
+       "    \"t\": 1793285589117,"
       ],
       [
        "add",
@@ -35878,7 +36128,7 @@
        "add",
        null,
        373,
-       "    \"t\": 1793284405795,"
+       "    \"t\": 1793285589120,"
       ],
       [
        "add",
@@ -35908,7 +36158,7 @@
        "add",
        null,
        378,
-       "    \"t\": 1793284405801,"
+       "    \"t\": 1793285589126,"
       ],
       [
        "add",
@@ -35938,7 +36188,7 @@
        "add",
        null,
        383,
-       "    \"t\": 1793284405808,"
+       "    \"t\": 1793285589126,"
       ],
       [
        "add",
@@ -35968,7 +36218,7 @@
        "add",
        null,
        388,
-       "    \"t\": 1793284405814,"
+       "    \"t\": 1793285589132,"
       ],
       [
        "add",
@@ -35998,7 +36248,7 @@
        "add",
        null,
        393,
-       "    \"t\": 1793284405814,"
+       "    \"t\": 1793285589132,"
       ],
       [
        "add",
@@ -36028,7 +36278,7 @@
        "add",
        null,
        398,
-       "    \"t\": 1793284405814,"
+       "    \"t\": 1793285589132,"
       ],
       [
        "add",
@@ -36058,7 +36308,7 @@
        "add",
        null,
        403,
-       "    \"t\": 1793284405815,"
+       "    \"t\": 1793285589132,"
       ],
       [
        "add",
@@ -36088,7 +36338,7 @@
        "add",
        null,
        408,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589871,"
       ],
       [
        "add",
@@ -36118,7 +36368,7 @@
        "add",
        null,
        413,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589871,"
       ],
       [
        "add",
@@ -36148,7 +36398,7 @@
        "add",
        null,
        418,
-       "    \"t\": 1793284406554,"
+       "    \"t\": 1793285589871,"
       ],
       [
        "add",
@@ -36178,7 +36428,7 @@
        "add",
        null,
        423,
-       "    \"t\": 1793284406555,"
+       "    \"t\": 1793285589871,"
       ],
       [
        "add",
@@ -36208,7 +36458,7 @@
        "add",
        null,
        428,
-       "    \"t\": 1793284406555,"
+       "    \"t\": 1793285589871,"
       ],
       [
        "add",
@@ -36238,7 +36488,7 @@
        "add",
        null,
        433,
-       "    \"t\": 1793284406697,"
+       "    \"t\": 1793285590000,"
       ],
       [
        "add",
@@ -37126,7 +37376,7 @@
        "add",
        null,
        4,
-       "22 passed in 0.32s"
+       "22 passed in 0.30s"
       ]
      ]
     }
@@ -37278,7 +37528,7 @@
        "add",
        null,
        22,
-       "18 failed, 4 passed in 0.35s"
+       "18 failed, 4 passed in 0.33s"
       ]
      ]
     }
@@ -37340,7 +37590,7 @@
        "add",
        null,
        4,
-       "17 passed in 0.17s"
+       "19 passed in 0.20s"
       ]
      ]
     }
@@ -37390,7 +37640,7 @@
        "add",
        null,
        5,
-       "1 failed, 16 passed in 0.19s"
+       "1 failed, 18 passed in 0.19s"
       ]
      ]
     }
@@ -52252,6 +52502,315 @@
    "removed": []
   },
   {
+   "path": "qa/override-fix/cpython-after.txt",
+   "class": "test",
+   "add": 2,
+   "del": 0,
+   "hunks": [
+    {
+     "header": "",
+     "lines": [
+      [
+       "add",
+       null,
+       1,
+       "# after the fix: code and tests at 247fa54"
+      ],
+      [
+       "add",
+       null,
+       2,
+       "28 passed in 0.22s"
+      ]
+     ]
+    }
+   ],
+   "added": [
+    1,
+    2
+   ],
+   "removed": []
+  },
+  {
+   "path": "qa/override-fix/cpython-before.txt",
+   "class": "test",
+   "add": 9,
+   "del": 0,
+   "hunks": [
+    {
+     "header": "",
+     "lines": [
+      [
+       "add",
+       null,
+       1,
+       "# before the fix: tests at the working tree, code at c49de09"
+      ],
+      [
+       "add",
+       null,
+       2,
+       "FAILED tests/test_c2_layouts.py::test_incompatible_override_falls_back_to_the_default_with_a_warning"
+      ],
+      [
+       "add",
+       null,
+       3,
+       "FAILED tests/test_c2_layouts.py::test_out_of_range_override_is_dropped_with_a_warning"
+      ],
+      [
+       "add",
+       null,
+       4,
+       "FAILED tests/test_web_bridge.py::test_override_goes_through_plan_deck - KeyEr..."
+      ],
+      [
+       "add",
+       null,
+       5,
+       "FAILED tests/test_web_bridge.py::test_override_follows_its_slide_after_an_insert"
+      ],
+      [
+       "add",
+       null,
+       6,
+       "FAILED tests/test_web_bridge.py::test_override_on_a_repeated_title_stays_on_its_slide"
+      ],
+      [
+       "add",
+       null,
+       7,
+       "FAILED tests/test_web_bridge.py::test_override_for_a_deleted_slide_is_dropped_with_a_note"
+      ],
+      [
+       "add",
+       null,
+       8,
+       "FAILED tests/test_web_bridge.py::test_override_the_slide_no_longer_fits_is_dropped_with_a_note"
+      ],
+      [
+       "add",
+       null,
+       9,
+       "7 failed, 21 passed in 0.34s"
+      ]
+     ]
+    }
+   ],
+   "added": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "removed": []
+  },
+  {
+   "path": "qa/override-fix/page-after.txt",
+   "class": "test",
+   "add": 12,
+   "del": 0,
+   "hunks": [
+    {
+     "header": "",
+     "lines": [
+      [
+       "add",
+       null,
+       1,
+       "# after the fix: page test at 247fa54"
+      ],
+      [
+       "add",
+       null,
+       2,
+       "PASS override the pick is shown on 乙 "
+      ],
+      [
+       "add",
+       null,
+       3,
+       "PASS override after an insert above, 乙 keeps its layout "
+      ],
+      [
+       "add",
+       null,
+       4,
+       "PASS override after an insert above, 甲 (now at 乙's old place) keeps its default "
+      ],
+      [
+       "add",
+       null,
+       5,
+       "PASS override the download puts 乙 on the picked layout "
+      ],
+      [
+       "add",
+       null,
+       6,
+       "PASS override the download keeps 甲 on its default "
+      ],
+      [
+       "add",
+       null,
+       7,
+       "PASS override after 乙 is deleted, no slide takes its layout "
+      ],
+      [
+       "add",
+       null,
+       8,
+       "PASS override after 乙 is deleted, 甲 keeps its default "
+      ],
+      [
+       "add",
+       null,
+       9,
+       "PASS override a one-line note says the layout for 乙 was dropped "
+      ],
+      [
+       "add",
+       null,
+       10,
+       "PASS override the note goes with the next edit "
+      ],
+      [
+       "add",
+       null,
+       11,
+       "PASS override 甲 still keeps its default "
+      ],
+      [
+       "add",
+       null,
+       12,
+       "10 passed, 0 failed"
+      ]
+     ]
+    }
+   ],
+   "added": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "removed": []
+  },
+  {
+   "path": "qa/override-fix/page-before.txt",
+   "class": "test",
+   "add": 12,
+   "del": 0,
+   "hunks": [
+    {
+     "header": "",
+     "lines": [
+      [
+       "add",
+       null,
+       1,
+       "# before the fix: page test at code c49de09"
+      ],
+      [
+       "add",
+       null,
+       2,
+       "PASS override the pick is shown on 乙 "
+      ],
+      [
+       "add",
+       null,
+       3,
+       "FAIL override after an insert above, 乙 keeps its layout -- {\"封面\":[\"/ppt/slideLayouts/slideLayout1.xml\",\"Title Slide\"],\"新\":[\"/ppt/slideLayouts/slideLayout2.xml\",\"Title and Content\"],\"甲\":[\"/ppt/slideLayouts/slideLayout3.xml\",\"Section Header\"],\"乙\":[\"/ppt/slideLayouts/slideLayout2.xml\",\"Title and Content\"]}"
+      ],
+      [
+       "add",
+       null,
+       4,
+       "FAIL override after an insert above, 甲 (now at 乙's old place) keeps its default -- {\"封面\":[\"/ppt/slideLayouts/slideLayout1.xml\",\"Title Slide\"],\"新\":[\"/ppt/slideLayouts/slideLayout2.xml\",\"Title and Content\"],\"甲\":[\"/ppt/slideLayouts/slideLayout3.xml\",\"Section Header\"],\"乙\":[\"/ppt/slideLayouts/slideLayout2.xml\",\"Title and Content\"]}"
+      ],
+      [
+       "add",
+       null,
+       5,
+       "FAIL override the download puts 乙 on the picked layout -- {\"封面\":\"Title Slide\",\"新\":\"Title and Content\",\"甲\":\"Section Header\",\"乙\":\"Title and Content\"}"
+      ],
+      [
+       "add",
+       null,
+       6,
+       "FAIL override the download keeps 甲 on its default -- {\"封面\":\"Title Slide\",\"新\":\"Title and Content\",\"甲\":\"Section Header\",\"乙\":\"Title and Content\"}"
+      ],
+      [
+       "add",
+       null,
+       7,
+       "FAIL override after 乙 is deleted, no slide takes its layout -- {\"封面\":[\"/ppt/slideLayouts/slideLayout1.xml\",\"Title Slide\"],\"新\":[\"/ppt/slideLayouts/slideLayout2.xml\",\"Title and Content\"],\"甲\":[\"/ppt/slideLayouts/slideLayout3.xml\",\"Section Header\"]}"
+      ],
+      [
+       "add",
+       null,
+       8,
+       "FAIL override after 乙 is deleted, 甲 keeps its default -- {\"封面\":[\"/ppt/slideLayouts/slideLayout1.xml\",\"Title Slide\"],\"新\":[\"/ppt/slideLayouts/slideLayout2.xml\",\"Title and Content\"],\"甲\":[\"/ppt/slideLayouts/slideLayout3.xml\",\"Section Header\"]}"
+      ],
+      [
+       "add",
+       null,
+       9,
+       "FAIL override a one-line note says the layout for 乙 was dropped -- []"
+      ],
+      [
+       "add",
+       null,
+       10,
+       "FAIL override the note goes with the next edit -- []"
+      ],
+      [
+       "add",
+       null,
+       11,
+       "FAIL override 甲 still keeps its default -- "
+      ],
+      [
+       "add",
+       null,
+       12,
+       "1 passed, 9 failed"
+      ]
+     ]
+    }
+   ],
+   "added": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "removed": []
+  },
+  {
    "path": "qa/provenance.py",
    "class": "test",
    "add": 30,
@@ -52801,7 +53360,7 @@
   {
    "path": "qa/walkthrough/collect.json",
    "class": "generated",
-   "add": 74829,
+   "add": 84908,
    "del": 0,
    "hunks": [],
    "added": [],
@@ -52810,7 +53369,7 @@
   {
    "path": "qa/walkthrough/walkthrough.html",
    "class": "generated",
-   "add": 207,
+   "add": 210,
    "del": 0,
    "hunks": [],
    "added": [],
@@ -52819,7 +53378,7 @@
   {
    "path": "qa/walkthrough/walkthrough.json",
    "class": "generated",
-   "add": 68,
+   "add": 108,
    "del": 0,
    "hunks": [],
    "added": [],
@@ -60194,7 +60753,7 @@
   {
    "path": "src/deckfill/plan.py",
    "class": "source",
-   "add": 287,
+   "add": 293,
    "del": 0,
    "hunks": [
     {
@@ -61536,390 +62095,426 @@
        "add",
        null,
        223,
-       "    for k, v in overrides.items():"
-      ],
-      [
-       "add",
-       null,
-       224,
-       "        if not (0 <= k < len(outline.slides)):"
-      ],
-      [
-       "add",
-       null,
-       225,
-       "            raise PlanError(\"unknown_layout\", f\"slide {k}\")"
-      ],
-      [
-       "add",
-       null,
-       226,
-       "        if v not in ids:"
-      ],
-      [
-       "add",
-       null,
-       227,
-       "            raise PlanError(\"unknown_layout\", v)"
-      ],
-      [
-       "add",
-       null,
-       228,
-       "    deck_has_subtitle = any(s.kind == \"title\" and s.subtitle for s in outline.slides)"
-      ],
-      [
-       "add",
-       null,
-       229,
-       "    out: list[PlannedSlide] = []"
-      ],
-      [
-       "add",
-       null,
-       230,
-       "    chosen: list[str] = []"
-      ],
-      [
-       "add",
-       null,
-       231,
-       "    compatible: list[tuple[str, ...]] = []"
-      ],
-      [
-       "add",
-       null,
-       232,
        "    warnings: list[Warning] = list(outline.warnings)"
       ],
       [
        "add",
        null,
+       224,
+       "    for k, v in overrides.items():"
+      ],
+      [
+       "add",
+       null,
+       225,
+       "        if v not in ids:"
+      ],
+      [
+       "add",
+       null,
+       226,
+       "            raise PlanError(\"unknown_layout\", v)"
+      ],
+      [
+       "add",
+       null,
+       227,
+       "        if not (0 <= k < len(outline.slides)):"
+      ],
+      [
+       "add",
+       null,
+       228,
+       "            # its slide is gone: dropped with a warning, no title to name (the page's bridge"
+      ],
+      [
+       "add",
+       null,
+       229,
+       "            # names it when it drops an override itself)"
+      ],
+      [
+       "add",
+       null,
+       230,
+       "            warnings.append(Warning(0, \"layout_gone\", \"\"))"
+      ],
+      [
+       "add",
+       null,
+       231,
+       "    deck_has_subtitle = any(s.kind == \"title\" and s.subtitle for s in outline.slides)"
+      ],
+      [
+       "add",
+       null,
+       232,
+       "    out: list[PlannedSlide] = []"
+      ],
+      [
+       "add",
+       null,
        233,
-       "    for i, s in enumerate(outline.slides):"
+       "    chosen: list[str] = []"
       ],
       [
        "add",
        null,
        234,
-       "        need = need_of(s)"
+       "    compatible: list[tuple[str, ...]] = []"
       ],
       [
        "add",
        null,
        235,
-       "        compatible.append(tuple(lay.id for lay in info.layouts if destination(lay, need)))"
+       "    for i, s in enumerate(outline.slides):"
       ],
       [
        "add",
        null,
        236,
-       "        lid = overrides.get(i) or default_layout(info, s, deck_has_subtitle)"
+       "        need = need_of(s)"
       ],
       [
        "add",
        null,
        237,
-       "        lay = info.layout(lid)"
+       "        compatible.append(tuple(lay.id for lay in info.layouts if destination(lay, need)))"
       ],
       [
        "add",
        null,
        238,
-       "        dest = destination(lay, need)"
+       "        lid = overrides.get(i)"
       ],
       [
        "add",
        null,
        239,
-       "        if dest is None:"
+       "        dest = destination(info.layout(lid), need) if lid else None"
       ],
       [
        "add",
        null,
        240,
-       "            raise PlanError(\"incompatible_layout\", f\"slide {i} on {lid}\")"
+       "        if lid and dest is None:"
       ],
       [
        "add",
        null,
        241,
-       "        chosen.append(lid)"
+       "            # the slide no longer fits the layout picked for it: its default, with a warning"
       ],
       [
        "add",
        null,
        242,
-       "        if dest.merged:"
+       "            warnings.append(Warning(s.line, \"layout_dropped\", s.title))"
       ],
       [
        "add",
        null,
        243,
-       "            warnings.append(Warning(s.line, \"columns_merged\", s.title))"
+       "        if dest is None:"
       ],
       [
        "add",
        null,
        244,
-       "        if s.kind in (\"title\", \"section\"):"
+       "            lid = default_layout(info, s, deck_has_subtitle)"
       ],
       [
        "add",
        null,
        245,
-       "            status = FITS"
+       "            dest = destination(info.layout(lid), need)"
       ],
       [
        "add",
        null,
        246,
-       "            if dest.subtitle and dest.subtitle[0] == \"body\" and s.subtitle:"
+       "        lay = info.layout(lid)"
       ],
       [
        "add",
        null,
        247,
-       "                # the subtitle fills a content body (D3 step 4 fallback or an override): estimate it (F7)"
+       "        chosen.append(lid)"
       ],
       [
        "add",
        null,
        248,
-       "                fit = lay.body(dest.subtitle[1]).fit"
-      ],
-      [
-       "add",
-       null,
-       249,
-       "                if fit is None:"
-      ],
-      [
-       "add",
-       null,
-       250,
-       "                    status = CHECK"
-      ],
-      [
-       "add",
-       null,
-       251,
-       "                    warnings.append(Warning(s.line, \"fit_check\", s.title))"
-      ],
-      [
-       "add",
-       null,
-       252,
-       "                elif height(tuple(Item(1, t) for t in s.subtitle), fit) > fit.height:"
-      ],
-      [
-       "add",
-       null,
-       253,
-       "                    status = WARNED"
-      ],
-      [
-       "add",
-       null,
-       254,
-       "                    warnings.append(Warning(s.line, \"fit_warn\", s.title))"
-      ],
-      [
-       "add",
-       null,
-       255,
-       "            out.append(PlannedSlide(i, 0, lid, s.kind, s.title, s.subtitle, (), dest, status))"
-      ],
-      [
-       "add",
-       null,
-       256,
-       "            continue"
-      ],
-      [
-       "add",
-       null,
-       257,
-       "        cols = s.columns"
-      ],
-      [
-       "add",
-       null,
-       258,
        "        if dest.merged:"
       ],
       [
        "add",
        null,
+       249,
+       "            warnings.append(Warning(s.line, \"columns_merged\", s.title))"
+      ],
+      [
+       "add",
+       null,
+       250,
+       "        if s.kind in (\"title\", \"section\"):"
+      ],
+      [
+       "add",
+       null,
+       251,
+       "            status = FITS"
+      ],
+      [
+       "add",
+       null,
+       252,
+       "            if dest.subtitle and dest.subtitle[0] == \"body\" and s.subtitle:"
+      ],
+      [
+       "add",
+       null,
+       253,
+       "                # the subtitle fills a content body (D3 step 4 fallback or an override): estimate it (F7)"
+      ],
+      [
+       "add",
+       null,
+       254,
+       "                fit = lay.body(dest.subtitle[1]).fit"
+      ],
+      [
+       "add",
+       null,
+       255,
+       "                if fit is None:"
+      ],
+      [
+       "add",
+       null,
+       256,
+       "                    status = CHECK"
+      ],
+      [
+       "add",
+       null,
+       257,
+       "                    warnings.append(Warning(s.line, \"fit_check\", s.title))"
+      ],
+      [
+       "add",
+       null,
+       258,
+       "                elif height(tuple(Item(1, t) for t in s.subtitle), fit) > fit.height:"
+      ],
+      [
+       "add",
+       null,
        259,
-       "            cols = (cols[0] + cols[1],)"
+       "                    status = WARNED"
       ],
       [
        "add",
        null,
        260,
-       "        fits = [lay.body(idx).fit for idx in dest.bodies]"
+       "                    warnings.append(Warning(s.line, \"fit_warn\", s.title))"
       ],
       [
        "add",
        null,
        261,
-       "        per_col = [chunk(c, f) for c, f in zip(cols, fits)]"
+       "            out.append(PlannedSlide(i, 0, lid, s.kind, s.title, s.subtitle, (), dest, status))"
       ],
       [
        "add",
        null,
        262,
-       "        n = max(len(chunks) for chunks, _ in per_col)"
+       "            continue"
       ],
       [
        "add",
        null,
        263,
-       "        status = FITS"
+       "        cols = s.columns"
       ],
       [
        "add",
        null,
        264,
-       "        if n > 1:"
+       "        if dest.merged:"
       ],
       [
        "add",
        null,
        265,
-       "            status = SPLIT"
+       "            cols = (cols[0] + cols[1],)"
       ],
       [
        "add",
        null,
        266,
-       "        if any(w for _, w in per_col):"
+       "        fits = [lay.body(idx).fit for idx in dest.bodies]"
       ],
       [
        "add",
        null,
        267,
-       "            status = WARNED"
+       "        per_col = [chunk(c, f) for c, f in zip(cols, fits)]"
       ],
       [
        "add",
        null,
        268,
-       "            warnings.append(Warning(s.line, \"fit_warn\", s.title))"
+       "        n = max(len(chunks) for chunks, _ in per_col)"
       ],
       [
        "add",
        null,
        269,
-       "        if any(f is None for f in fits):"
+       "        status = FITS"
       ],
       [
        "add",
        null,
        270,
-       "            status = CHECK"
+       "        if n > 1:"
       ],
       [
        "add",
        null,
        271,
-       "            warnings.append(Warning(s.line, \"fit_check\", s.title))"
+       "            status = SPLIT"
       ],
       [
        "add",
        null,
        272,
-       "        for part in range(n):"
+       "        if any(w for _, w in per_col):"
       ],
       [
        "add",
        null,
        273,
-       "            pcols = tuple(chunks[part] if part < len(chunks) else () for chunks, _ in per_col)"
+       "            status = WARNED"
       ],
       [
        "add",
        null,
        274,
-       "            title = s.title if part == 0 else cont_title(s.title)"
+       "            warnings.append(Warning(s.line, \"fit_warn\", s.title))"
       ],
       [
        "add",
        null,
        275,
-       "            out.append(PlannedSlide(i, part, lid, s.kind, title, (), pcols, dest, status))"
+       "        if any(f is None for f in fits):"
       ],
       [
        "add",
        null,
        276,
-       "        if len(out) > MAX_SLIDES:"
+       "            status = CHECK"
       ],
       [
        "add",
        null,
        277,
-       "            raise PlanError(\"too_many_slides\", f\"over {MAX_SLIDES}\")"
+       "            warnings.append(Warning(s.line, \"fit_check\", s.title))"
       ],
       [
        "add",
        null,
        278,
-       "    if len(out) > MAX_SLIDES:"
+       "        for part in range(n):"
       ],
       [
        "add",
        null,
        279,
-       "        raise PlanError(\"too_many_slides\", f\"over {MAX_SLIDES}\")"
+       "            pcols = tuple(chunks[part] if part < len(chunks) else () for chunks, _ in per_col)"
       ],
       [
        "add",
        null,
        280,
-       "    return Plan("
+       "            title = s.title if part == 0 else cont_title(s.title)"
       ],
       [
        "add",
        null,
        281,
-       "        outline=outline,"
+       "            out.append(PlannedSlide(i, part, lid, s.kind, title, (), pcols, dest, status))"
       ],
       [
        "add",
        null,
        282,
-       "        overrides=tuple(sorted(overrides.items())),"
+       "        if len(out) > MAX_SLIDES:"
       ],
       [
        "add",
        null,
        283,
-       "        slides=tuple(out),"
+       "            raise PlanError(\"too_many_slides\", f\"over {MAX_SLIDES}\")"
       ],
       [
        "add",
        null,
        284,
-       "        chosen=tuple(chosen),"
+       "    if len(out) > MAX_SLIDES:"
       ],
       [
        "add",
        null,
        285,
-       "        compatible=tuple(compatible),"
+       "        raise PlanError(\"too_many_slides\", f\"over {MAX_SLIDES}\")"
       ],
       [
        "add",
        null,
        286,
-       "        warnings=tuple(warnings),"
+       "    return Plan("
       ],
       [
        "add",
        null,
        287,
+       "        outline=outline,"
+      ],
+      [
+       "add",
+       null,
+       288,
+       "        overrides=tuple(sorted(overrides.items())),"
+      ],
+      [
+       "add",
+       null,
+       289,
+       "        slides=tuple(out),"
+      ],
+      [
+       "add",
+       null,
+       290,
+       "        chosen=tuple(chosen),"
+      ],
+      [
+       "add",
+       null,
+       291,
+       "        compatible=tuple(compatible),"
+      ],
+      [
+       "add",
+       null,
+       292,
+       "        warnings=tuple(warnings),"
+      ],
+      [
+       "add",
+       null,
+       293,
        "    )"
       ]
      ]
@@ -62212,7 +62807,13 @@
     284,
     285,
     286,
-    287
+    287,
+    288,
+    289,
+    290,
+    291,
+    292,
+    293
    ],
    "removed": []
   },
@@ -65147,7 +65748,7 @@
   {
    "path": "src/deckfill/web.py",
    "class": "source",
-   "add": 89,
+   "add": 140,
    "del": 0,
    "hunks": [
     {
@@ -65277,414 +65878,720 @@
        "add",
        null,
        21,
-       "def file_name(title: str) -> str:"
+       "def place_overrides(outline, remembered: list[dict]) -> tuple[dict[int, str], list[dict]]:"
       ],
       [
        "add",
        null,
        22,
-       "    \"\"\"The download's name without extension: the deck title, made safe for Windows.\"\"\""
+       "    \"\"\"The page remembers each override as the title and kind of its slide and which of the"
       ],
       [
        "add",
        null,
        23,
-       "    name = \" \".join(_UNSAFE_NAME.sub(\" \", title).split()).strip(\".\")"
+       "    slides with that title and kind it was (nth), so an override follows its slide when slides"
       ],
       [
        "add",
        null,
        24,
-       "    return name[:80].strip() or \"簡報\""
+       "    are added or removed around it. Returns the overrides by slide index and the remembered"
       ],
       [
        "add",
        null,
        25,
-       ""
+       "    overrides whose slide is gone.\"\"\""
       ],
       [
        "add",
        null,
        26,
-       ""
+       "    where: dict[tuple[str, str], list[int]] = {}"
       ],
       [
        "add",
        null,
        27,
-       "class Session:"
+       "    for i, s in enumerate(outline.slides):"
       ],
       [
        "add",
        null,
        28,
-       "    def __init__(self) -> None:"
+       "        where.setdefault((s.title, s.kind), []).append(i)"
       ],
       [
        "add",
        null,
        29,
-       "        self.data: bytes | None = None"
+       "    by_index: dict[int, str] = {}"
       ],
       [
        "add",
        null,
        30,
-       "        self.filename = \"\""
+       "    gone: list[dict] = []"
       ],
       [
        "add",
        null,
        31,
-       "        self.info = None"
+       "    for r in remembered:"
       ],
       [
        "add",
        null,
        32,
-       "        self.plan_ = None"
+       "        hits = where.get((r[\"title\"], r[\"kind\"]), [])"
       ],
       [
        "add",
        null,
        33,
-       "        self.fill_name = \"\""
+       "        if 0 <= r[\"nth\"] < len(hits):"
       ],
       [
        "add",
        null,
        34,
-       ""
+       "            by_index[hits[r[\"nth\"]]] = r[\"layout\"]"
       ],
       [
        "add",
        null,
        35,
-       "    def read(self, data: bytes, filename: str) -> str:"
+       "        else:"
       ],
       [
        "add",
        null,
        36,
-       "        self.data, self.filename, self.info, self.plan_ = None, \"\", None, None"
+       "            gone.append(r)"
       ],
       [
        "add",
        null,
        37,
-       "        try:"
+       "    return by_index, gone"
       ],
       [
        "add",
        null,
        38,
-       "            info = read_template(bytes(data), filename)"
+       ""
       ],
       [
        "add",
        null,
        39,
-       "        except DeckfillError as e:"
+       ""
       ],
       [
        "add",
        null,
        40,
-       "            return json.dumps({\"ok\": False, \"code\": e.code})"
+       "def nths(outline) -> list[int]:"
       ],
       [
        "add",
        null,
        41,
-       "        self.data, self.filename, self.info = bytes(data), filename, info"
+       "    \"\"\"For each slide, how many earlier slides share its title and kind.\"\"\""
       ],
       [
        "add",
        null,
        42,
-       "        return json.dumps("
+       "    seen: dict[tuple[str, str], int] = {}"
       ],
       [
        "add",
        null,
        43,
-       "            {"
+       "    out = []"
       ],
       [
        "add",
        null,
        44,
-       "                \"ok\": True,"
+       "    for s in outline.slides:"
       ],
       [
        "add",
        null,
        45,
-       "                \"masters\": len(info.masters),"
+       "        key = (s.title, s.kind)"
       ],
       [
        "add",
        null,
        46,
-       "                \"layouts\": ["
+       "        out.append(seen.get(key, 0))"
       ],
       [
        "add",
        null,
        47,
-       "                    {\"id\": lay.id, \"name\": lay.name, \"master\": lay.master, \"cls\": lay.cls} for lay in info.layouts"
+       "        seen[key] = out[-1] + 1"
       ],
       [
        "add",
        null,
        48,
-       "                ],"
+       "    return out"
       ],
       [
        "add",
        null,
        49,
-       "                \"defaults\": {cls: lid for cls, lid in info.defaults if lid},"
+       ""
       ],
       [
        "add",
        null,
        50,
-       "            },"
+       ""
       ],
       [
        "add",
        null,
        51,
-       "            ensure_ascii=False,"
+       "def file_name(title: str) -> str:"
       ],
       [
        "add",
        null,
        52,
-       "        )"
+       "    \"\"\"The download's name without extension: the deck title, made safe for Windows.\"\"\""
       ],
       [
        "add",
        null,
        53,
-       ""
+       "    name = \" \".join(_UNSAFE_NAME.sub(\" \", title).split()).strip(\".\")"
       ],
       [
        "add",
        null,
        54,
-       "    def plan(self, text: str, overrides_json: str = \"{}\") -> str:"
+       "    return name[:80].strip() or \"簡報\""
       ],
       [
        "add",
        null,
        55,
-       "        self.plan_ = None"
-      ],
-      [
-       "add",
-       null,
-       56,
-       "        overrides = {int(k): v for k, v in json.loads(overrides_json).items()}"
-      ],
-      [
-       "add",
-       null,
-       57,
-       "        try:"
-      ],
-      [
-       "add",
-       null,
-       58,
-       "            outline = parse_outline(text)"
-      ],
-      [
-       "add",
-       null,
-       59,
-       "            plan = plan_deck(self.info, outline, overrides or None)"
-      ],
-      [
-       "add",
-       null,
-       60,
-       "        except DeckfillError as e:"
-      ],
-      [
-       "add",
-       null,
-       61,
-       "            return json.dumps({\"ok\": False, \"code\": e.code})"
-      ],
-      [
-       "add",
-       null,
-       62,
-       "        self.plan_ = plan"
-      ],
-      [
-       "add",
-       null,
-       63,
-       "        sources = ["
-      ],
-      [
-       "add",
-       null,
-       64,
-       "            {\"line\": s.line, \"title\": s.title, \"chosen\": plan.chosen[i], \"compatible\": list(plan.compatible[i])}"
-      ],
-      [
-       "add",
-       null,
-       65,
-       "            for i, s in enumerate(outline.slides)"
-      ],
-      [
-       "add",
-       null,
-       66,
-       "        ]"
-      ],
-      [
-       "add",
-       null,
-       67,
-       "        return json.dumps("
-      ],
-      [
-       "add",
-       null,
-       68,
-       "            {"
-      ],
-      [
-       "add",
-       null,
-       69,
-       "                \"ok\": True,"
-      ],
-      [
-       "add",
-       null,
-       70,
-       "                \"name\": file_name(outline.title),"
-      ],
-      [
-       "add",
-       null,
-       71,
-       "                \"sources\": sources,"
-      ],
-      [
-       "add",
-       null,
-       72,
-       "                \"slides\": ["
-      ],
-      [
-       "add",
-       null,
-       73,
-       "                    {\"source\": s.source, \"part\": s.part, \"layout\": s.layout, \"title\": s.title, \"fit\": s.fit}"
-      ],
-      [
-       "add",
-       null,
-       74,
-       "                    for s in plan.slides"
-      ],
-      [
-       "add",
-       null,
-       75,
-       "                ],"
-      ],
-      [
-       "add",
-       null,
-       76,
-       "                \"warnings\": [{\"line\": w.line, \"code\": w.code, \"text\": w.text} for w in plan.warnings],"
-      ],
-      [
-       "add",
-       null,
-       77,
-       "            },"
-      ],
-      [
-       "add",
-       null,
-       78,
-       "            ensure_ascii=False,"
-      ],
-      [
-       "add",
-       null,
-       79,
-       "        )"
-      ],
-      [
-       "add",
-       null,
-       80,
        ""
       ],
       [
        "add",
        null,
+       56,
+       ""
+      ],
+      [
+       "add",
+       null,
+       57,
+       "class Session:"
+      ],
+      [
+       "add",
+       null,
+       58,
+       "    def __init__(self) -> None:"
+      ],
+      [
+       "add",
+       null,
+       59,
+       "        self.data: bytes | None = None"
+      ],
+      [
+       "add",
+       null,
+       60,
+       "        self.filename = \"\""
+      ],
+      [
+       "add",
+       null,
+       61,
+       "        self.info = None"
+      ],
+      [
+       "add",
+       null,
+       62,
+       "        self.plan_ = None"
+      ],
+      [
+       "add",
+       null,
+       63,
+       "        self.fill_name = \"\""
+      ],
+      [
+       "add",
+       null,
+       64,
+       ""
+      ],
+      [
+       "add",
+       null,
+       65,
+       "    def read(self, data: bytes, filename: str) -> str:"
+      ],
+      [
+       "add",
+       null,
+       66,
+       "        self.data, self.filename, self.info, self.plan_ = None, \"\", None, None"
+      ],
+      [
+       "add",
+       null,
+       67,
+       "        try:"
+      ],
+      [
+       "add",
+       null,
+       68,
+       "            info = read_template(bytes(data), filename)"
+      ],
+      [
+       "add",
+       null,
+       69,
+       "        except DeckfillError as e:"
+      ],
+      [
+       "add",
+       null,
+       70,
+       "            return json.dumps({\"ok\": False, \"code\": e.code})"
+      ],
+      [
+       "add",
+       null,
+       71,
+       "        self.data, self.filename, self.info = bytes(data), filename, info"
+      ],
+      [
+       "add",
+       null,
+       72,
+       "        return json.dumps("
+      ],
+      [
+       "add",
+       null,
+       73,
+       "            {"
+      ],
+      [
+       "add",
+       null,
+       74,
+       "                \"ok\": True,"
+      ],
+      [
+       "add",
+       null,
+       75,
+       "                \"masters\": len(info.masters),"
+      ],
+      [
+       "add",
+       null,
+       76,
+       "                \"layouts\": ["
+      ],
+      [
+       "add",
+       null,
+       77,
+       "                    {\"id\": lay.id, \"name\": lay.name, \"master\": lay.master, \"cls\": lay.cls} for lay in info.layouts"
+      ],
+      [
+       "add",
+       null,
+       78,
+       "                ],"
+      ],
+      [
+       "add",
+       null,
+       79,
+       "                \"defaults\": {cls: lid for cls, lid in info.defaults if lid},"
+      ],
+      [
+       "add",
+       null,
+       80,
+       "            },"
+      ],
+      [
+       "add",
+       null,
        81,
-       "    def fill(self, text: str, overrides_json: str = \"{}\") -> bytes:"
+       "            ensure_ascii=False,"
       ],
       [
        "add",
        null,
        82,
-       "        \"\"\"Plan from the outline and overrides the page reads at the click, then fill, in one"
+       "        )"
       ],
       [
        "add",
        null,
        83,
-       "        call, so a download can never use a plan made from older text (Codex round 1, F1)."
+       ""
       ],
       [
        "add",
        null,
        84,
-       "        Sets fill_name to the download's name for that same outline.\"\"\""
+       "    def plan(self, text: str, overrides_json: str = \"[]\") -> str:"
       ],
       [
        "add",
        null,
        85,
-       "        overrides = {int(k): v for k, v in json.loads(overrides_json).items()}"
+       "        \"\"\"overrides_json: the page's remembered overrides, a list of {title, kind, nth, layout}."
       ],
       [
        "add",
        null,
        86,
-       "        outline = parse_outline(text)"
+       "        The reply's overrides are the ones still in use; a dropped one comes back as a warning.\"\"\""
       ],
       [
        "add",
        null,
        87,
-       "        plan = plan_deck(self.info, outline, overrides or None)"
+       "        self.plan_ = None"
       ],
       [
        "add",
        null,
        88,
-       "        self.fill_name = file_name(outline.title)"
+       "        remembered = json.loads(overrides_json)"
       ],
       [
        "add",
        null,
        89,
+       "        try:"
+      ],
+      [
+       "add",
+       null,
+       90,
+       "            outline = parse_outline(text)"
+      ],
+      [
+       "add",
+       null,
+       91,
+       "            by_index, gone = place_overrides(outline, remembered)"
+      ],
+      [
+       "add",
+       null,
+       92,
+       "            plan = plan_deck(self.info, outline, by_index or None)"
+      ],
+      [
+       "add",
+       null,
+       93,
+       "        except DeckfillError as e:"
+      ],
+      [
+       "add",
+       null,
+       94,
+       "            return json.dumps({\"ok\": False, \"code\": e.code})"
+      ],
+      [
+       "add",
+       null,
+       95,
+       "        self.plan_ = plan"
+      ],
+      [
+       "add",
+       null,
+       96,
+       "        nth = nths(outline)"
+      ],
+      [
+       "add",
+       null,
+       97,
+       "        sources = ["
+      ],
+      [
+       "add",
+       null,
+       98,
+       "            {"
+      ],
+      [
+       "add",
+       null,
+       99,
+       "                \"line\": s.line,"
+      ],
+      [
+       "add",
+       null,
+       100,
+       "                \"title\": s.title,"
+      ],
+      [
+       "add",
+       null,
+       101,
+       "                \"kind\": s.kind,"
+      ],
+      [
+       "add",
+       null,
+       102,
+       "                \"nth\": nth[i],"
+      ],
+      [
+       "add",
+       null,
+       103,
+       "                \"chosen\": plan.chosen[i],"
+      ],
+      [
+       "add",
+       null,
+       104,
+       "                \"compatible\": list(plan.compatible[i]),"
+      ],
+      [
+       "add",
+       null,
+       105,
+       "            }"
+      ],
+      [
+       "add",
+       null,
+       106,
+       "            for i, s in enumerate(outline.slides)"
+      ],
+      [
+       "add",
+       null,
+       107,
+       "        ]"
+      ],
+      [
+       "add",
+       null,
+       108,
+       "        # an override the plan dropped (the slide no longer fits it) is not kept either"
+      ],
+      [
+       "add",
+       null,
+       109,
+       "        kept = ["
+      ],
+      [
+       "add",
+       null,
+       110,
+       "            {\"title\": s[\"title\"], \"kind\": s[\"kind\"], \"nth\": s[\"nth\"], \"layout\": by_index[i]}"
+      ],
+      [
+       "add",
+       null,
+       111,
+       "            for i, s in enumerate(sources)"
+      ],
+      [
+       "add",
+       null,
+       112,
+       "            if i in by_index and s[\"chosen\"] == by_index[i]"
+      ],
+      [
+       "add",
+       null,
+       113,
+       "        ]"
+      ],
+      [
+       "add",
+       null,
+       114,
+       "        warnings = [{\"line\": 0, \"code\": \"layout_gone\", \"text\": r[\"title\"]} for r in gone]"
+      ],
+      [
+       "add",
+       null,
+       115,
+       "        warnings += [{\"line\": w.line, \"code\": w.code, \"text\": w.text} for w in plan.warnings]"
+      ],
+      [
+       "add",
+       null,
+       116,
+       "        return json.dumps("
+      ],
+      [
+       "add",
+       null,
+       117,
+       "            {"
+      ],
+      [
+       "add",
+       null,
+       118,
+       "                \"ok\": True,"
+      ],
+      [
+       "add",
+       null,
+       119,
+       "                \"name\": file_name(outline.title),"
+      ],
+      [
+       "add",
+       null,
+       120,
+       "                \"sources\": sources,"
+      ],
+      [
+       "add",
+       null,
+       121,
+       "                \"slides\": ["
+      ],
+      [
+       "add",
+       null,
+       122,
+       "                    {\"source\": s.source, \"part\": s.part, \"layout\": s.layout, \"title\": s.title, \"fit\": s.fit}"
+      ],
+      [
+       "add",
+       null,
+       123,
+       "                    for s in plan.slides"
+      ],
+      [
+       "add",
+       null,
+       124,
+       "                ],"
+      ],
+      [
+       "add",
+       null,
+       125,
+       "                \"warnings\": warnings,"
+      ],
+      [
+       "add",
+       null,
+       126,
+       "                \"overrides\": kept,"
+      ],
+      [
+       "add",
+       null,
+       127,
+       "            },"
+      ],
+      [
+       "add",
+       null,
+       128,
+       "            ensure_ascii=False,"
+      ],
+      [
+       "add",
+       null,
+       129,
+       "        )"
+      ],
+      [
+       "add",
+       null,
+       130,
+       ""
+      ],
+      [
+       "add",
+       null,
+       131,
+       "    def fill(self, text: str, overrides_json: str = \"[]\") -> bytes:"
+      ],
+      [
+       "add",
+       null,
+       132,
+       "        \"\"\"Plan from the outline and overrides the page reads at the click, then fill, in one"
+      ],
+      [
+       "add",
+       null,
+       133,
+       "        call, so a download can never use a plan made from older text (Codex round 1, F1)."
+      ],
+      [
+       "add",
+       null,
+       134,
+       "        The overrides are placed on that outline the same way plan places them."
+      ],
+      [
+       "add",
+       null,
+       135,
+       "        Sets fill_name to the download's name for that same outline.\"\"\""
+      ],
+      [
+       "add",
+       null,
+       136,
+       "        outline = parse_outline(text)"
+      ],
+      [
+       "add",
+       null,
+       137,
+       "        by_index, _ = place_overrides(outline, json.loads(overrides_json))"
+      ],
+      [
+       "add",
+       null,
+       138,
+       "        plan = plan_deck(self.info, outline, by_index or None)"
+      ],
+      [
+       "add",
+       null,
+       139,
+       "        self.fill_name = file_name(outline.title)"
+      ],
+      [
+       "add",
+       null,
+       140,
        "        return fill(self.data, self.filename, plan)"
       ]
      ]
@@ -65779,7 +66686,58 @@
     86,
     87,
     88,
-    89
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140
    ],
    "removed": []
   },
@@ -71252,6 +72210,827 @@
     53,
     54,
     55
+   ],
+   "removed": []
+  },
+  {
+   "path": "tests/e2e/override_follow.mjs",
+   "class": "test",
+   "add": 115,
+   "del": 0,
+   "hunks": [
+    {
+     "header": "",
+     "lines": [
+      [
+       "add",
+       null,
+       1,
+       "// Layout-override fix on the page: a layout picked for one slide follows that slide when the"
+      ],
+      [
+       "add",
+       null,
+       2,
+       "// outline gains or loses a slide above it, and an override whose slide is gone is dropped with a"
+      ],
+      [
+       "add",
+       null,
+       3,
+       "// one-line note instead of landing on whatever slide now sits at its old position."
+      ],
+      [
+       "add",
+       null,
+       4,
+       "// Run: node tests/e2e/override_follow.mjs   (exit 1 on failure)"
+      ],
+      [
+       "add",
+       null,
+       5,
+       "import { chromium } from \"playwright-core\";"
+      ],
+      [
+       "add",
+       null,
+       6,
+       "import { spawnSync } from \"node:child_process\";"
+      ],
+      [
+       "add",
+       null,
+       7,
+       "import { mkdir } from \"node:fs/promises\";"
+      ],
+      [
+       "add",
+       null,
+       8,
+       "import path from \"node:path\";"
+      ],
+      [
+       "add",
+       null,
+       9,
+       "import { fileURLToPath } from \"node:url\";"
+      ],
+      [
+       "add",
+       null,
+       10,
+       "import { COPY } from \"../../docs/copy.js\";"
+      ],
+      [
+       "add",
+       null,
+       11,
+       "import { startServer } from \"./server.mjs\";"
+      ],
+      [
+       "add",
+       null,
+       12,
+       ""
+      ],
+      [
+       "add",
+       null,
+       13,
+       "const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), \"../..\");"
+      ],
+      [
+       "add",
+       null,
+       14,
+       "const OUT = path.join(ROOT, \"qa\", \"e2e\");"
+      ],
+      [
+       "add",
+       null,
+       15,
+       "const EXE = process.env.CHROME || `${process.env.HOME}/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell`;"
+      ],
+      [
+       "add",
+       null,
+       16,
+       "const THREE = \"# 封面\\n\\n## 甲\\n- 一\\n\\n## 乙\\n- 二\\n\";"
+      ],
+      [
+       "add",
+       null,
+       17,
+       "const INSERTED = \"# 封面\\n\\n## 新\\n- 新\\n\\n## 甲\\n- 一\\n\\n## 乙\\n- 二\\n\";"
+      ],
+      [
+       "add",
+       null,
+       18,
+       "const DELETED = \"# 封面\\n\\n## 新\\n- 新\\n\\n## 甲\\n- 一\\n\";"
+      ],
+      [
+       "add",
+       null,
+       19,
+       ""
+      ],
+      [
+       "add",
+       null,
+       20,
+       "// title and layout name of every slide in the deck, through the reader the CPython tests use"
+      ],
+      [
+       "add",
+       null,
+       21,
+       "function deckLayouts(file) {"
+      ],
+      [
+       "add",
+       null,
+       22,
+       "  const r = spawnSync(path.join(ROOT, \".venv\", \"bin\", \"python\"), [\"-c\", `"
+      ],
+      [
+       "add",
+       null,
+       23,
+       "import sys; sys.path[:0] = [\"${ROOT}/tests\", \"${ROOT}/src\"]"
+      ],
+      [
+       "add",
+       null,
+       24,
+       "from oracle import read_deck"
+      ],
+      [
+       "add",
+       null,
+       25,
+       "for s in read_deck(open(sys.argv[1], \"rb\").read()):"
+      ],
+      [
+       "add",
+       null,
+       26,
+       "    print(f\"{s.title}\\\\t{s.layout_name}\")"
+      ],
+      [
+       "add",
+       null,
+       27,
+       "`, file], { encoding: \"utf8\" });"
+      ],
+      [
+       "add",
+       null,
+       28,
+       "  return Object.fromEntries(r.stdout.trim().split(\"\\n\").map((l) => l.split(\"\\t\")));"
+      ],
+      [
+       "add",
+       null,
+       29,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       30,
+       ""
+      ],
+      [
+       "add",
+       null,
+       31,
+       "const checks = [];"
+      ],
+      [
+       "add",
+       null,
+       32,
+       "const check = (name, ok, detail = \"\") => checks.push({ name, ok: !!ok, detail });"
+      ],
+      [
+       "add",
+       null,
+       33,
+       ""
+      ],
+      [
+       "add",
+       null,
+       34,
+       "const waitForPlan = (page, selects) =>"
+      ],
+      [
+       "add",
+       null,
+       35,
+       "  page.waitForFunction("
+      ],
+      [
+       "add",
+       null,
+       36,
+       "    (n) => !document.getElementById(\"download\").disabled && document.querySelectorAll(\"#slides select\").length === n,"
+      ],
+      [
+       "add",
+       null,
+       37,
+       "    selects,"
+      ],
+      [
+       "add",
+       null,
+       38,
+       "    { timeout: 60000 },"
+      ],
+      [
+       "add",
+       null,
+       39,
+       "  );"
+      ],
+      [
+       "add",
+       null,
+       40,
+       "// title -> [value, option text] for every slide row with a layout picker"
+      ],
+      [
+       "add",
+       null,
+       41,
+       "const pickers = (page) =>"
+      ],
+      [
+       "add",
+       null,
+       42,
+       "  page.evaluate(() =>"
+      ],
+      [
+       "add",
+       null,
+       43,
+       "    Object.fromEntries("
+      ],
+      [
+       "add",
+       null,
+       44,
+       "      [...document.querySelectorAll(\"#slides tr\")]"
+      ],
+      [
+       "add",
+       null,
+       45,
+       "        .filter((tr) => tr.querySelector(\"select\"))"
+      ],
+      [
+       "add",
+       null,
+       46,
+       "        .map((tr) => {"
+      ],
+      [
+       "add",
+       null,
+       47,
+       "          const sel = tr.querySelector(\"select\");"
+      ],
+      [
+       "add",
+       null,
+       48,
+       "          return [tr.querySelector(\"td.title\").textContent, [sel.value, sel.selectedOptions[0].textContent]];"
+      ],
+      [
+       "add",
+       null,
+       49,
+       "        }),"
+      ],
+      [
+       "add",
+       null,
+       50,
+       "    ),"
+      ],
+      [
+       "add",
+       null,
+       51,
+       "  );"
+      ],
+      [
+       "add",
+       null,
+       52,
+       "const notes = (page) =>"
+      ],
+      [
+       "add",
+       null,
+       53,
+       "  page.evaluate(() => (document.getElementById(\"warnings\").hidden ? [] : [...document.querySelectorAll(\"#warnings-list li\")].map((li) => li.textContent)));"
+      ],
+      [
+       "add",
+       null,
+       54,
+       ""
+      ],
+      [
+       "add",
+       null,
+       55,
+       "await mkdir(OUT, { recursive: true });"
+      ],
+      [
+       "add",
+       null,
+       56,
+       "const { server, port } = await startServer();"
+      ],
+      [
+       "add",
+       null,
+       57,
+       "const browser = await chromium.launch({ executablePath: EXE });"
+      ],
+      [
+       "add",
+       null,
+       58,
+       "try {"
+      ],
+      [
+       "add",
+       null,
+       59,
+       "  const page = await (await browser.newContext({ acceptDownloads: true })).newPage();"
+      ],
+      [
+       "add",
+       null,
+       60,
+       "  await page.goto(`http://127.0.0.1:${port}/`);"
+      ],
+      [
+       "add",
+       null,
+       61,
+       "  await page.waitForFunction(() => document.getElementById(\"status\").dataset.state === \"ready\", null, { timeout: 120000 });"
+      ],
+      [
+       "add",
+       null,
+       62,
+       "  await page.setInputFiles(\"#file\", path.join(ROOT, \"fixtures\", \"out\", \"typed.pptx\"));"
+      ],
+      [
+       "add",
+       null,
+       63,
+       "  await page.waitForSelector(\"#layouts:not([hidden])\");"
+      ],
+      [
+       "add",
+       null,
+       64,
+       "  await page.fill(\"#outline\", THREE);"
+      ],
+      [
+       "add",
+       null,
+       65,
+       "  await waitForPlan(page, 3);"
+      ],
+      [
+       "add",
+       null,
+       66,
+       "  const start = await pickers(page);"
+      ],
+      [
+       "add",
+       null,
+       67,
+       "  const [jiaDefault, jiaDefaultName] = start[\"甲\"];"
+      ],
+      [
+       "add",
+       null,
+       68,
+       ""
+      ],
+      [
+       "add",
+       null,
+       69,
+       "  // pick a layout other than the default for 乙"
+      ],
+      [
+       "add",
+       null,
+       70,
+       "  const yi = page.locator(\"#slides tr\", { has: page.locator(\"td.title\", { hasText: /^乙$/ }) }).locator(\"select\");"
+      ],
+      [
+       "add",
+       null,
+       71,
+       "  const [other, otherName] = await yi.evaluate((sel) => {"
+      ],
+      [
+       "add",
+       null,
+       72,
+       "    const o = [...sel.options].find((x) => x.value !== sel.value);"
+      ],
+      [
+       "add",
+       null,
+       73,
+       "    return [o.value, o.textContent];"
+      ],
+      [
+       "add",
+       null,
+       74,
+       "  });"
+      ],
+      [
+       "add",
+       null,
+       75,
+       "  await yi.selectOption(other);"
+      ],
+      [
+       "add",
+       null,
+       76,
+       "  await waitForPlan(page, 3);"
+      ],
+      [
+       "add",
+       null,
+       77,
+       "  check(\"the pick is shown on 乙\", (await pickers(page))[\"乙\"][0] === other);"
+      ],
+      [
+       "add",
+       null,
+       78,
+       ""
+      ],
+      [
+       "add",
+       null,
+       79,
+       "  // 1: a slide inserted above both"
+      ],
+      [
+       "add",
+       null,
+       80,
+       "  await page.fill(\"#outline\", INSERTED);"
+      ],
+      [
+       "add",
+       null,
+       81,
+       "  await waitForPlan(page, 4);"
+      ],
+      [
+       "add",
+       null,
+       82,
+       "  const after = await pickers(page);"
+      ],
+      [
+       "add",
+       null,
+       83,
+       "  check(\"after an insert above, 乙 keeps its layout\", after[\"乙\"][0] === other, JSON.stringify(after));"
+      ],
+      [
+       "add",
+       null,
+       84,
+       "  check(\"after an insert above, 甲 (now at 乙's old place) keeps its default\", after[\"甲\"][0] === jiaDefault, JSON.stringify(after));"
+      ],
+      [
+       "add",
+       null,
+       85,
+       "  const [dl] = await Promise.all([page.waitForEvent(\"download\", { timeout: 60000 }), page.click(\"#download\")]);"
+      ],
+      [
+       "add",
+       null,
+       86,
+       "  const file = path.join(OUT, \"override-follow.pptx\");"
+      ],
+      [
+       "add",
+       null,
+       87,
+       "  await dl.saveAs(file);"
+      ],
+      [
+       "add",
+       null,
+       88,
+       "  const deck = deckLayouts(file);"
+      ],
+      [
+       "add",
+       null,
+       89,
+       "  check(\"the download puts 乙 on the picked layout\", deck[\"乙\"] === otherName, JSON.stringify(deck));"
+      ],
+      [
+       "add",
+       null,
+       90,
+       "  check(\"the download keeps 甲 on its default\", deck[\"甲\"] === jiaDefaultName, JSON.stringify(deck));"
+      ],
+      [
+       "add",
+       null,
+       91,
+       ""
+      ],
+      [
+       "add",
+       null,
+       92,
+       "  // 2: the overridden slide deleted"
+      ],
+      [
+       "add",
+       null,
+       93,
+       "  await page.fill(\"#outline\", DELETED);"
+      ],
+      [
+       "add",
+       null,
+       94,
+       "  await waitForPlan(page, 3);"
+      ],
+      [
+       "add",
+       null,
+       95,
+       "  const gone = await pickers(page);"
+      ],
+      [
+       "add",
+       null,
+       96,
+       "  const note = COPY.warnings.layout_gone ? COPY.warnings.layout_gone.replace(\"{text}\", \"乙\") : null;"
+      ],
+      [
+       "add",
+       null,
+       97,
+       "  check(\"after 乙 is deleted, no slide takes its layout\", Object.values(gone).every(([v]) => v !== other), JSON.stringify(gone));"
+      ],
+      [
+       "add",
+       null,
+       98,
+       "  check(\"after 乙 is deleted, 甲 keeps its default\", gone[\"甲\"][0] === jiaDefault, JSON.stringify(gone));"
+      ],
+      [
+       "add",
+       null,
+       99,
+       "  const shown = await notes(page);"
+      ],
+      [
+       "add",
+       null,
+       100,
+       "  check(\"a one-line note says the layout for 乙 was dropped\", note && shown.includes(note), JSON.stringify(shown));"
+      ],
+      [
+       "add",
+       null,
+       101,
+       ""
+      ],
+      [
+       "add",
+       null,
+       102,
+       "  // 3: the next edit: the note has done its job and the override is forgotten"
+      ],
+      [
+       "add",
+       null,
+       103,
+       "  await page.fill(\"#outline\", DELETED + \"- 二\\n\");"
+      ],
+      [
+       "add",
+       null,
+       104,
+       "  await waitForPlan(page, 3);"
+      ],
+      [
+       "add",
+       null,
+       105,
+       "  const later = await notes(page);"
+      ],
+      [
+       "add",
+       null,
+       106,
+       "  check(\"the note goes with the next edit\", note && !later.includes(note), JSON.stringify(later));"
+      ],
+      [
+       "add",
+       null,
+       107,
+       "  check(\"甲 still keeps its default\", (await pickers(page))[\"甲\"][0] === jiaDefault);"
+      ],
+      [
+       "add",
+       null,
+       108,
+       "} finally {"
+      ],
+      [
+       "add",
+       null,
+       109,
+       "  await browser.close();"
+      ],
+      [
+       "add",
+       null,
+       110,
+       "  server.close();"
+      ],
+      [
+       "add",
+       null,
+       111,
+       "}"
+      ],
+      [
+       "add",
+       null,
+       112,
+       "for (const c of checks) console.log(c.ok ? \"PASS\" : \"FAIL\", \"override\", c.name, c.ok ? \"\" : `-- ${c.detail}`);"
+      ],
+      [
+       "add",
+       null,
+       113,
+       "const failed = checks.filter((c) => !c.ok).length;"
+      ],
+      [
+       "add",
+       null,
+       114,
+       "console.log(`${checks.length - failed} passed, ${failed} failed`);"
+      ],
+      [
+       "add",
+       null,
+       115,
+       "process.exit(failed ? 1 : 0);"
+      ]
+     ]
+    }
+   ],
+   "added": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115
    ],
    "removed": []
   },
@@ -77238,7 +79017,7 @@
   {
    "path": "tests/test_c2_layouts.py",
    "class": "test",
-   "add": 156,
+   "add": 176,
    "del": 0,
    "hunks": [
     {
@@ -77296,7 +79075,7 @@
        "add",
        null,
        9,
-       "from deckfill import PlanError, TemplateError, fill, parse_outline, plan_deck, read_template"
+       "from deckfill import PlanError, TemplateError, Warning, fill, parse_outline, plan_deck, read_template"
       ],
       [
        "add",
@@ -77878,306 +79657,426 @@
        "add",
        null,
        106,
-       "def test_bullet_slide_on_title_only_is_refused_by_plan_and_fill(tpl):"
+       "def test_incompatible_override_falls_back_to_the_default_with_a_warning(tpl):"
       ],
       [
        "add",
        null,
        107,
-       "    data = tpl(\"typed.pptx\")"
+       "    \"\"\"Layout-override fix: a bullet slide overridden onto Title Only gets its default layout and"
       ],
       [
        "add",
        null,
        108,
-       "    info = read_template(data, \"t.pptx\")"
+       "    a layout_dropped warning, and the deck fills, instead of the plan failing.\"\"\""
       ],
       [
        "add",
        null,
        109,
-       "    outline = parse_outline(outline_text(\"reference\"))"
-      ],
-      [
-       "add",
-       null,
-       110,
-       "    title_only = next(x.id for x in info.layouts if x.name == \"Title Only\")"
-      ],
-      [
-       "add",
-       null,
-       111,
-       "    with pytest.raises(PlanError) as e:"
-      ],
-      [
-       "add",
-       null,
-       112,
-       "        plan_deck(info, outline, {1: title_only})"
-      ],
-      [
-       "add",
-       null,
-       113,
-       "    assert e.value.code == \"incompatible_layout\""
-      ],
-      [
-       "add",
-       null,
-       114,
-       "    # a plan hand-built with that layout is refused by fill"
-      ],
-      [
-       "add",
-       null,
-       115,
-       "    good = plan_deck(info, outline)"
-      ],
-      [
-       "add",
-       null,
-       116,
-       "    bad_slide = dataclasses.replace(good.slides[1], layout=title_only)"
-      ],
-      [
-       "add",
-       null,
-       117,
-       "    bad = dataclasses.replace(good, slides=good.slides[:1] + (bad_slide,) + good.slides[2:])"
-      ],
-      [
-       "add",
-       null,
-       118,
-       "    with pytest.raises(PlanError) as e:"
-      ],
-      [
-       "add",
-       null,
-       119,
-       "        fill(data, \"t.pptx\", bad)"
-      ],
-      [
-       "add",
-       null,
-       120,
-       "    assert e.value.code == \"stale_plan\""
-      ],
-      [
-       "add",
-       null,
-       121,
-       ""
-      ],
-      [
-       "add",
-       null,
-       122,
-       ""
-      ],
-      [
-       "add",
-       null,
-       123,
-       "@pytest.mark.parametrize("
-      ],
-      [
-       "add",
-       null,
-       124,
-       "    \"edit\","
-      ],
-      [
-       "add",
-       null,
-       125,
-       "    ["
-      ],
-      [
-       "add",
-       null,
-       126,
-       "        lambda p: dataclasses.replace(p, slides=p.slides[:-1]),  # a slide dropped"
-      ],
-      [
-       "add",
-       null,
-       127,
-       "        lambda p: dataclasses.replace(p, slides=tuple(dataclasses.replace(s, fit=\"fits\") for s in p.slides)),"
-      ],
-      [
-       "add",
-       null,
-       128,
-       "        lambda p: dataclasses.replace(p, overrides=((1, L % 4),)),  # overrides without recompute"
-      ],
-      [
-       "add",
-       null,
-       129,
-       "    ],"
-      ],
-      [
-       "add",
-       null,
-       130,
-       ")"
-      ],
-      [
-       "add",
-       null,
-       131,
-       "def test_fill_refuses_hand_edited_plan(edit, tpl):"
-      ],
-      [
-       "add",
-       null,
-       132,
        "    data = tpl(\"typed.pptx\")"
       ],
       [
        "add",
        null,
-       133,
+       110,
        "    info = read_template(data, \"t.pptx\")"
       ],
       [
        "add",
        null,
+       111,
+       "    outline = parse_outline(outline_text(\"reference\"))"
+      ],
+      [
+       "add",
+       null,
+       112,
+       "    title_only = next(x.id for x in info.layouts if x.name == \"Title Only\")"
+      ],
+      [
+       "add",
+       null,
+       113,
+       "    plan = plan_deck(info, outline, {1: title_only})"
+      ],
+      [
+       "add",
+       null,
+       114,
+       "    assert plan.chosen[1] == L % 2"
+      ],
+      [
+       "add",
+       null,
+       115,
+       "    assert Warning(4, \"layout_dropped\", \"三個目標\") in plan.warnings"
+      ],
+      [
+       "add",
+       null,
+       116,
+       "    assert read_deck(fill(data, \"t.pptx\", plan))[1].layout_name == \"Title and Content\""
+      ],
+      [
+       "add",
+       null,
+       117,
+       ""
+      ],
+      [
+       "add",
+       null,
+       118,
+       ""
+      ],
+      [
+       "add",
+       null,
+       119,
+       "def test_out_of_range_override_is_dropped_with_a_warning(tpl):"
+      ],
+      [
+       "add",
+       null,
+       120,
+       "    data = tpl(\"typed.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       121,
+       "    info = read_template(data, \"t.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       122,
+       "    outline = parse_outline(outline_text(\"reference\"))"
+      ],
+      [
+       "add",
+       null,
+       123,
+       "    plan = plan_deck(info, outline, {99: L % 2})"
+      ],
+      [
+       "add",
+       null,
+       124,
+       "    assert plan.chosen == plan_deck(info, outline).chosen"
+      ],
+      [
+       "add",
+       null,
+       125,
+       "    assert Warning(0, \"layout_gone\", \"\") in plan.warnings"
+      ],
+      [
+       "add",
+       null,
+       126,
+       "    assert len(read_deck(fill(data, \"t.pptx\", plan))) == len(plan.slides)"
+      ],
+      [
+       "add",
+       null,
+       127,
+       ""
+      ],
+      [
+       "add",
+       null,
+       128,
+       ""
+      ],
+      [
+       "add",
+       null,
+       129,
+       "def test_bullet_slide_on_title_only_is_refused_by_fill(tpl):"
+      ],
+      [
+       "add",
+       null,
+       130,
+       "    data = tpl(\"typed.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       131,
+       "    info = read_template(data, \"t.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       132,
+       "    outline = parse_outline(outline_text(\"reference\"))"
+      ],
+      [
+       "add",
+       null,
+       133,
+       "    title_only = next(x.id for x in info.layouts if x.name == \"Title Only\")"
+      ],
+      [
+       "add",
+       null,
        134,
-       "    plan = plan_deck(info, parse_outline(outline_text(\"reference\")))"
+       "    # a plan hand-built with that layout is refused by fill"
       ],
       [
        "add",
        null,
        135,
-       "    with pytest.raises(PlanError) as e:"
+       "    good = plan_deck(info, outline)"
       ],
       [
        "add",
        null,
        136,
-       "        fill(data, \"t.pptx\", edit(plan))"
+       "    bad_slide = dataclasses.replace(good.slides[1], layout=title_only)"
       ],
       [
        "add",
        null,
        137,
-       "    assert e.value.code == \"stale_plan\""
+       "    bad = dataclasses.replace(good, slides=good.slides[:1] + (bad_slide,) + good.slides[2:])"
       ],
       [
        "add",
        null,
        138,
-       ""
+       "    with pytest.raises(PlanError) as e:"
       ],
       [
        "add",
        null,
        139,
-       ""
+       "        fill(data, \"t.pptx\", bad)"
       ],
       [
        "add",
        null,
        140,
-       "@pytest.mark.parametrize("
+       "    assert e.value.code == \"stale_plan\""
       ],
       [
        "add",
        null,
        141,
-       "    \"template,expect\","
+       ""
       ],
       [
        "add",
        null,
        142,
-       "    ["
+       ""
       ],
       [
        "add",
        null,
        143,
-       "        (\"no-two.pptx\", {3: \"content\"}),"
+       "@pytest.mark.parametrize("
       ],
       [
        "add",
        null,
        144,
-       "        (\"no-section.pptx\", {5: \"title\"}),"
+       "    \"edit\","
       ],
       [
        "add",
        null,
        145,
-       "        (\"no-title.pptx\", {0: \"content\"}),"
+       "    ["
       ],
       [
        "add",
        null,
        146,
-       "        (\"only-content.pptx\", {0: \"content\", 3: \"content\", 5: \"content\"}),"
+       "        lambda p: dataclasses.replace(p, slides=p.slides[:-1]),  # a slide dropped"
       ],
       [
        "add",
        null,
        147,
-       "    ],"
+       "        lambda p: dataclasses.replace(p, slides=tuple(dataclasses.replace(s, fit=\"fits\") for s in p.slides)),"
       ],
       [
        "add",
        null,
        148,
-       ")"
+       "        lambda p: dataclasses.replace(p, overrides=((1, L % 4),)),  # overrides without recompute"
       ],
       [
        "add",
        null,
        149,
-       "def test_fallback_layout_classes(template, expect, tpl):"
+       "    ],"
       ],
       [
        "add",
        null,
        150,
-       "    data = tpl(template)"
+       ")"
       ],
       [
        "add",
        null,
        151,
-       "    info = read_template(data, template)"
+       "def test_fill_refuses_hand_edited_plan(edit, tpl):"
       ],
       [
        "add",
        null,
        152,
-       "    plan = plan_deck(info, parse_outline(outline_text(\"reference\")))"
+       "    data = tpl(\"typed.pptx\")"
       ],
       [
        "add",
        null,
        153,
-       "    for i, cls in expect.items():"
+       "    info = read_template(data, \"t.pptx\")"
       ],
       [
        "add",
        null,
        154,
-       "        assert info.layout(plan.chosen[i]).cls == cls"
+       "    plan = plan_deck(info, parse_outline(outline_text(\"reference\")))"
       ],
       [
        "add",
        null,
        155,
-       "    # the C1 assertion for these runs lives in test_c1_text (golden per fallback)"
+       "    with pytest.raises(PlanError) as e:"
       ],
       [
        "add",
        null,
        156,
+       "        fill(data, \"t.pptx\", edit(plan))"
+      ],
+      [
+       "add",
+       null,
+       157,
+       "    assert e.value.code == \"stale_plan\""
+      ],
+      [
+       "add",
+       null,
+       158,
+       ""
+      ],
+      [
+       "add",
+       null,
+       159,
+       ""
+      ],
+      [
+       "add",
+       null,
+       160,
+       "@pytest.mark.parametrize("
+      ],
+      [
+       "add",
+       null,
+       161,
+       "    \"template,expect\","
+      ],
+      [
+       "add",
+       null,
+       162,
+       "    ["
+      ],
+      [
+       "add",
+       null,
+       163,
+       "        (\"no-two.pptx\", {3: \"content\"}),"
+      ],
+      [
+       "add",
+       null,
+       164,
+       "        (\"no-section.pptx\", {5: \"title\"}),"
+      ],
+      [
+       "add",
+       null,
+       165,
+       "        (\"no-title.pptx\", {0: \"content\"}),"
+      ],
+      [
+       "add",
+       null,
+       166,
+       "        (\"only-content.pptx\", {0: \"content\", 3: \"content\", 5: \"content\"}),"
+      ],
+      [
+       "add",
+       null,
+       167,
+       "    ],"
+      ],
+      [
+       "add",
+       null,
+       168,
+       ")"
+      ],
+      [
+       "add",
+       null,
+       169,
+       "def test_fallback_layout_classes(template, expect, tpl):"
+      ],
+      [
+       "add",
+       null,
+       170,
+       "    data = tpl(template)"
+      ],
+      [
+       "add",
+       null,
+       171,
+       "    info = read_template(data, template)"
+      ],
+      [
+       "add",
+       null,
+       172,
+       "    plan = plan_deck(info, parse_outline(outline_text(\"reference\")))"
+      ],
+      [
+       "add",
+       null,
+       173,
+       "    for i, cls in expect.items():"
+      ],
+      [
+       "add",
+       null,
+       174,
+       "        assert info.layout(plan.chosen[i]).cls == cls"
+      ],
+      [
+       "add",
+       null,
+       175,
+       "    # the C1 assertion for these runs lives in test_c1_text (golden per fallback)"
+      ],
+      [
+       "add",
+       null,
+       176,
        "    assert deck_lines(read_deck(fill(data, template, plan)))"
       ]
      ]
@@ -78339,7 +80238,27 @@
     153,
     154,
     155,
-    156
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    174,
+    175,
+    176
    ],
    "removed": []
   },
@@ -83592,7 +85511,7 @@
   {
    "path": "tests/test_web_bridge.py",
    "class": "test",
-   "add": 55,
+   "add": 131,
    "del": 0,
    "hunks": [
     {
@@ -83800,132 +85719,588 @@
        "add",
        null,
        34,
-       "def test_override_goes_through_plan_deck(tpl):"
+       "def remember(src, layout):"
       ],
       [
        "add",
        null,
        35,
-       "    s = Session()"
+       "    \"\"\"What the page keeps for an override: the slide's title, kind and which of the slides with"
       ],
       [
        "add",
        null,
        36,
-       "    s.read(tpl(\"typed.pptx\"), \"typed.pptx\")"
+       "    that title it is, plus the layout.\"\"\""
       ],
       [
        "add",
        null,
        37,
-       "    first = json.loads(s.plan(outline_text(\"reference\")))"
+       "    return {\"title\": src[\"title\"], \"kind\": src[\"kind\"], \"nth\": src[\"nth\"], \"layout\": layout}"
       ],
       [
        "add",
        null,
        38,
-       "    src = first[\"sources\"][1]"
+       ""
       ],
       [
        "add",
        null,
        39,
-       "    other = next(lid for lid in src[\"compatible\"] if lid != src[\"chosen\"])"
+       ""
       ],
       [
        "add",
        null,
        40,
-       "    again = json.loads(s.plan(outline_text(\"reference\"), json.dumps({\"1\": other})))"
+       "def other_than_chosen(src):"
       ],
       [
        "add",
        null,
        41,
-       "    assert again[\"sources\"][1][\"chosen\"] == other"
+       "    return next(lid for lid in src[\"compatible\"] if lid != src[\"chosen\"])"
       ],
       [
        "add",
        null,
        42,
-       "    parts = [x[\"layout\"] for x in again[\"slides\"] if x[\"source\"] == 1]"
+       ""
       ],
       [
        "add",
        null,
        43,
-       "    assert parts and set(parts) == {other}  # continuation slides follow their source slide"
+       ""
       ],
       [
        "add",
        null,
        44,
-       ""
+       "def test_override_goes_through_plan_deck(tpl):"
       ],
       [
        "add",
        null,
        45,
-       ""
-      ],
-      [
-       "add",
-       null,
-       46,
-       "def test_errors_come_back_as_codes(tpl):"
-      ],
-      [
-       "add",
-       null,
-       47,
        "    s = Session()"
       ],
       [
        "add",
        null,
-       48,
-       "    assert json.loads(s.read(tpl(\"no-body.pptx\"), \"n.pptx\")) == {\"ok\": False, \"code\": \"no_text_layout\"}"
-      ],
-      [
-       "add",
-       null,
-       49,
+       46,
        "    s.read(tpl(\"typed.pptx\"), \"typed.pptx\")"
       ],
       [
        "add",
        null,
+       47,
+       "    first = json.loads(s.plan(outline_text(\"reference\")))"
+      ],
+      [
+       "add",
+       null,
+       48,
+       "    src = first[\"sources\"][1]"
+      ],
+      [
+       "add",
+       null,
+       49,
+       "    other = other_than_chosen(src)"
+      ],
+      [
+       "add",
+       null,
        50,
-       "    assert json.loads(s.plan(\"plain text, no slides\"))[\"code\"] == \"no_slides\""
+       "    again = json.loads(s.plan(outline_text(\"reference\"), json.dumps([remember(src, other)])))"
       ],
       [
        "add",
        null,
        51,
-       ""
+       "    assert again[\"sources\"][1][\"chosen\"] == other"
       ],
       [
        "add",
        null,
        52,
-       ""
+       "    parts = [x[\"layout\"] for x in again[\"slides\"] if x[\"source\"] == 1]"
       ],
       [
        "add",
        null,
        53,
-       "def test_file_name_is_windows_safe():"
+       "    assert parts and set(parts) == {other}  # continuation slides follow their source slide"
       ],
       [
        "add",
        null,
        54,
-       "    assert file_name('季度/報告: \"草稿\"?') == \"季度 報告 草稿\""
+       "    assert again[\"overrides\"] == [remember(src, other)]"
       ],
       [
        "add",
        null,
        55,
+       ""
+      ],
+      [
+       "add",
+       null,
+       56,
+       ""
+      ],
+      [
+       "add",
+       null,
+       57,
+       "THREE = \"# 封面\\n\\n## 甲\\n- 一\\n\\n## 乙\\n- 二\\n\""
+      ],
+      [
+       "add",
+       null,
+       58,
+       "INSERTED = \"# 封面\\n\\n## 新\\n- 新\\n\\n## 甲\\n- 一\\n\\n## 乙\\n- 二\\n\""
+      ],
+      [
+       "add",
+       null,
+       59,
+       ""
+      ],
+      [
+       "add",
+       null,
+       60,
+       ""
+      ],
+      [
+       "add",
+       null,
+       61,
+       "def test_override_follows_its_slide_after_an_insert(tpl):"
+      ],
+      [
+       "add",
+       null,
+       62,
+       "    \"\"\"Layout-override fix: a slide inserted above an overridden one must not move the layout"
+      ],
+      [
+       "add",
+       null,
+       63,
+       "    onto the slide that now sits at the old position.\"\"\""
+      ],
+      [
+       "add",
+       null,
+       64,
+       "    s = Session()"
+      ],
+      [
+       "add",
+       null,
+       65,
+       "    s.read(tpl(\"typed.pptx\"), \"typed.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       66,
+       "    first = json.loads(s.plan(THREE))"
+      ],
+      [
+       "add",
+       null,
+       67,
+       "    src = first[\"sources\"][2]"
+      ],
+      [
+       "add",
+       null,
+       68,
+       "    other = other_than_chosen(src)"
+      ],
+      [
+       "add",
+       null,
+       69,
+       "    kept = [remember(src, other)]"
+      ],
+      [
+       "add",
+       null,
+       70,
+       "    again = json.loads(s.plan(INSERTED, json.dumps(kept)))"
+      ],
+      [
+       "add",
+       null,
+       71,
+       "    by_title = {x[\"title\"]: x[\"chosen\"] for x in again[\"sources\"]}"
+      ],
+      [
+       "add",
+       null,
+       72,
+       "    assert by_title[\"乙\"] == other"
+      ],
+      [
+       "add",
+       null,
+       73,
+       "    assert by_title[\"甲\"] == src[\"chosen\"]  # the slide now at index 2 keeps its default"
+      ],
+      [
+       "add",
+       null,
+       74,
+       "    assert again[\"overrides\"] == kept"
+      ],
+      [
+       "add",
+       null,
+       75,
+       "    deck = read_deck(s.fill(INSERTED, json.dumps(kept)))"
+      ],
+      [
+       "add",
+       null,
+       76,
+       "    names = {x[\"id\"]: x[\"name\"] for x in json.loads(s.read(tpl(\"typed.pptx\"), \"typed.pptx\"))[\"layouts\"]}"
+      ],
+      [
+       "add",
+       null,
+       77,
+       "    assert [d.layout_name for d in deck if d.title == \"乙\"] == [names[other]]"
+      ],
+      [
+       "add",
+       null,
+       78,
+       ""
+      ],
+      [
+       "add",
+       null,
+       79,
+       ""
+      ],
+      [
+       "add",
+       null,
+       80,
+       "def test_override_on_a_repeated_title_stays_on_its_slide(tpl):"
+      ],
+      [
+       "add",
+       null,
+       81,
+       "    s = Session()"
+      ],
+      [
+       "add",
+       null,
+       82,
+       "    s.read(tpl(\"typed.pptx\"), \"typed.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       83,
+       "    text = \"# 封面\\n\\n## 重複\\n- a\\n\\n## 重複\\n- b\\n\""
+      ],
+      [
+       "add",
+       null,
+       84,
+       "    first = json.loads(s.plan(text))"
+      ],
+      [
+       "add",
+       null,
+       85,
+       "    src = first[\"sources\"][2]"
+      ],
+      [
+       "add",
+       null,
+       86,
+       "    assert src[\"nth\"] == 1"
+      ],
+      [
+       "add",
+       null,
+       87,
+       "    other = other_than_chosen(src)"
+      ],
+      [
+       "add",
+       null,
+       88,
+       "    kept = [remember(src, other)]"
+      ],
+      [
+       "add",
+       null,
+       89,
+       "    same = json.loads(s.plan(text, json.dumps(kept)))"
+      ],
+      [
+       "add",
+       null,
+       90,
+       "    assert [x[\"chosen\"] for x in same[\"sources\"]][1:] == [first[\"sources\"][1][\"chosen\"], other]"
+      ],
+      [
+       "add",
+       null,
+       91,
+       "    moved = json.loads(s.plan(\"# 封面\\n\\n## 新\\n- 新\\n\\n\" + text.split(\"\\n\\n\", 1)[1], json.dumps(kept)))"
+      ],
+      [
+       "add",
+       null,
+       92,
+       "    assert [x[\"chosen\"] for x in moved[\"sources\"]][2:] == [first[\"sources\"][1][\"chosen\"], other]"
+      ],
+      [
+       "add",
+       null,
+       93,
+       ""
+      ],
+      [
+       "add",
+       null,
+       94,
+       ""
+      ],
+      [
+       "add",
+       null,
+       95,
+       "def test_override_for_a_deleted_slide_is_dropped_with_a_note(tpl):"
+      ],
+      [
+       "add",
+       null,
+       96,
+       "    s = Session()"
+      ],
+      [
+       "add",
+       null,
+       97,
+       "    s.read(tpl(\"typed.pptx\"), \"typed.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       98,
+       "    first = json.loads(s.plan(THREE))"
+      ],
+      [
+       "add",
+       null,
+       99,
+       "    src = first[\"sources\"][2]"
+      ],
+      [
+       "add",
+       null,
+       100,
+       "    other = other_than_chosen(src)"
+      ],
+      [
+       "add",
+       null,
+       101,
+       "    gone = json.loads(s.plan(\"# 封面\\n\\n## 甲\\n- 一\\n\", json.dumps([remember(src, other)])))"
+      ],
+      [
+       "add",
+       null,
+       102,
+       "    assert gone[\"ok\"] and gone[\"overrides\"] == []"
+      ],
+      [
+       "add",
+       null,
+       103,
+       "    assert gone[\"warnings\"][0] == {\"line\": 0, \"code\": \"layout_gone\", \"text\": \"乙\"}"
+      ],
+      [
+       "add",
+       null,
+       104,
+       "    assert [x[\"chosen\"] for x in gone[\"sources\"]] == [x[\"chosen\"] for x in first[\"sources\"][:2]]"
+      ],
+      [
+       "add",
+       null,
+       105,
+       ""
+      ],
+      [
+       "add",
+       null,
+       106,
+       ""
+      ],
+      [
+       "add",
+       null,
+       107,
+       "def test_override_the_slide_no_longer_fits_is_dropped_with_a_note(tpl):"
+      ],
+      [
+       "add",
+       null,
+       108,
+       "    s = Session()"
+      ],
+      [
+       "add",
+       null,
+       109,
+       "    info = json.loads(s.read(tpl(\"typed.pptx\"), \"typed.pptx\"))"
+      ],
+      [
+       "add",
+       null,
+       110,
+       "    title_only = next(x[\"id\"] for x in info[\"layouts\"] if x[\"name\"] == \"Title Only\")"
+      ],
+      [
+       "add",
+       null,
+       111,
+       "    src = json.loads(s.plan(\"# 封面\\n\\n## 一\\n- x\\n\"))[\"sources\"][0]"
+      ],
+      [
+       "add",
+       null,
+       112,
+       "    assert title_only in src[\"compatible\"]"
+      ],
+      [
+       "add",
+       null,
+       113,
+       "    kept = [remember(src, title_only)]"
+      ],
+      [
+       "add",
+       null,
+       114,
+       "    assert json.loads(s.plan(\"# 封面\\n\\n## 一\\n- x\\n\", json.dumps(kept)))[\"overrides\"] == kept"
+      ],
+      [
+       "add",
+       null,
+       115,
+       "    # a subtitle line makes the cover need a subtitle box, which Title Only does not have"
+      ],
+      [
+       "add",
+       null,
+       116,
+       "    after = json.loads(s.plan(\"# 封面\\n副題\\n\\n## 一\\n- x\\n\", json.dumps(kept)))"
+      ],
+      [
+       "add",
+       null,
+       117,
+       "    assert after[\"ok\"] and after[\"overrides\"] == []"
+      ],
+      [
+       "add",
+       null,
+       118,
+       "    assert after[\"sources\"][0][\"chosen\"] != title_only"
+      ],
+      [
+       "add",
+       null,
+       119,
+       "    assert {\"line\": 1, \"code\": \"layout_dropped\", \"text\": \"封面\"} in after[\"warnings\"]"
+      ],
+      [
+       "add",
+       null,
+       120,
+       ""
+      ],
+      [
+       "add",
+       null,
+       121,
+       ""
+      ],
+      [
+       "add",
+       null,
+       122,
+       "def test_errors_come_back_as_codes(tpl):"
+      ],
+      [
+       "add",
+       null,
+       123,
+       "    s = Session()"
+      ],
+      [
+       "add",
+       null,
+       124,
+       "    assert json.loads(s.read(tpl(\"no-body.pptx\"), \"n.pptx\")) == {\"ok\": False, \"code\": \"no_text_layout\"}"
+      ],
+      [
+       "add",
+       null,
+       125,
+       "    s.read(tpl(\"typed.pptx\"), \"typed.pptx\")"
+      ],
+      [
+       "add",
+       null,
+       126,
+       "    assert json.loads(s.plan(\"plain text, no slides\"))[\"code\"] == \"no_slides\""
+      ],
+      [
+       "add",
+       null,
+       127,
+       ""
+      ],
+      [
+       "add",
+       null,
+       128,
+       ""
+      ],
+      [
+       "add",
+       null,
+       129,
+       "def test_file_name_is_windows_safe():"
+      ],
+      [
+       "add",
+       null,
+       130,
+       "    assert file_name('季度/報告: \"草稿\"?') == \"季度 報告 草稿\""
+      ],
+      [
+       "add",
+       null,
+       131,
        "    assert file_name(\"   \") == \"簡報\""
       ]
      ]
@@ -83986,7 +86361,83 @@
     52,
     53,
     54,
-    55
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131
    ],
    "removed": []
   },
@@ -84903,6 +87354,38 @@
    "Codex round 1: absent cases were skipped, 14 passed inside 114, and FAIL still exited 0",
    "tests/test_qa_runners.py::test_f14_*",
    "fixed; the three saved Gemini outputs still pass"
+  ],
+  [
+   "2026-10-29T14:53:27Z",
+   "override-fix",
+   "Layout overrides are remembered as the slide's title, kind and nth (which slide with that title and kind); the bridge places them on the outline it is given, in plan and in fill",
+   "Index-keyed overrides moved onto the wrong slide after a slide was added or removed above (follow-up to Codex round 1, rated MAJOR by ai-brain-52). nth keeps two slides with one title apart; plain first unused match would swap them on every replan. Agreed by ai-brain-52",
+   "tests/e2e/override_follow.mjs 9 FAIL before (qa/override-fix/page-before.txt); tests/test_web_bridge.py",
+   "built in 247fa54"
+  ],
+  [
+   "2026-10-29T14:53:27Z",
+   "override-fix",
+   "plan_deck drops an out-of-range or incompatible override, uses the slide's default and warns (layout_gone, layout_dropped); an unknown layout id still raises unknown_layout",
+   "ai-brain-52's spec for the fix. An unknown id cannot come from the page: a template change clears the overrides",
+   "tests/test_c2_layouts.py::test_incompatible_override_falls_back_to_the_default_with_a_warning, ::test_out_of_range_override_is_dropped_with_a_warning",
+   "built in 247fa54"
+  ],
+  [
+   "2026-10-29T14:53:27Z",
+   "override-fix",
+   "Plan.overrides keeps the overrides as requested, dropped ones included",
+   "fill re-runs plan_deck from plan.overrides and compares the result; keeping only the applied ones would lose the drop warnings and refuse the plan as stale_plan",
+   "the incompatible-override test fills its plan",
+   "built in 247fa54"
+  ],
+  [
+   "2026-10-29T14:53:27Z",
+   "override-fix",
+   "A dropped override is forgotten after the plan that dropped it: its note shows once. Editing an overridden slide's title drops it with the note",
+   "Guessing which slide a renamed title became would bring back the wrong-slide case (ai-brain-52)",
+   "tests/e2e/override_follow.mjs steps 2 and 3",
+   "built in 247fa54"
   ]
  ]
 }

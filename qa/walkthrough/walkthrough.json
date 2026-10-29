@@ -1,5 +1,5 @@
 {
- "title": "PPT template gift after Codex round 1: notes to a deck in the company's own template, inside the browser",
+ "title": "PPT template gift after Codex round 1 and the layout-override fix: notes to a deck in the company's own template, inside the browser",
  "plain": "A web page takes a company PowerPoint template and a plain-text outline and gives back an editable deck in that template, and after it has loaded it cannot send anything anywhere.",
  "what_why": "The page in docs/ loads Python (Pyodide, python-pptx and the deckfill package) from its own folder. It then adds a second Content Security Policy that blocks fetch, XHR, beacons, image requests and new workers. From then on, the user's template, outline and deck stay in the tab.\n\nThe deckfill package does the work in three calls the page makes one at a time:\n- read: check the template's size and package graph, then sort its layouts into title, content, two, section and other\n- plan: turn the outline into slides, choose a layout for each, and split slides the fit estimate says are too full\n- fill: remove the template's sample slides, add the planned slides into the layouts' own boxes, copy footers the template shows, and put the template's own bytes back for every part the fill did not mean to change\n\nThe same package runs under CPython in the tests, and the browser's download is byte for byte the CPython output (C10).",
  "requirements": [
@@ -30,8 +30,8 @@
   ]
  },
  "call_path": {
-  "text": "Everything is new in this build. Changed in fix round 1: the boot order (prompt before engine), the stale-plan guard around download, and the engine checks marked in steps 2 to 4. Boxes link to the steps below.",
-  "diagram": "flowchart TD\n  A[\"Page opens\"] --> P[\"Prompt loads, or retry state\"]\n  P --> B[\"Load Python from own folder\"]\n  B --> C[\"Lock the network\"]\n  C --> D[\"Drop template\"]\n  D --> E[\"Read: preflight, caps, integrity, classes\"]\n  E --> F[\"Type or paste outline\"]\n  F --> S[\"Download off until replanned\"]\n  S --> G[\"Plan: layouts, splits, fit\"]\n  G --> H[\"Click: plan from current text, fill\"]\n  H --> I[\"Template bytes back, integrity\"]\n  I --> J[\"Blob download\"]\n  class A,B,C,D,E,F,G,I,J new\n  class P,S,H changed\n  click P href \"#step-1\"\n  click C href \"#step-1\"\n  click E href \"#step-2\"\n  click G href \"#step-3\"\n  click I href \"#step-4\"\n  click S href \"#step-5\"\n  click H href \"#step-5\""
+  "text": "Everything is new in this build. Changed in fix round 1: the boot order (prompt before engine), the stale-plan guard around download, and the engine checks marked in steps 2 to 4. Changed in the layout-override fix: a pick is placed on its slide by title, kind and nth (step 6). Boxes link to the steps below.",
+  "diagram": "flowchart TD\n  A[\"Page opens\"] --> P[\"Prompt loads, or retry state\"]\n  P --> B[\"Load Python from own folder\"]\n  B --> C[\"Lock the network\"]\n  C --> D[\"Drop template\"]\n  D --> E[\"Read: preflight, caps, integrity, classes\"]\n  E --> F[\"Type or paste outline\"]\n  F --> S[\"Download off until replanned\"]\n  S --> O[\"Picks placed by title, kind, nth\"]\n  O --> G[\"Plan: layouts, splits, fit\"]\n  G --> H[\"Click: plan from current text, fill\"]\n  H --> I[\"Template bytes back, integrity\"]\n  I --> J[\"Blob download\"]\n  class A,B,C,D,E,F,G,I,J new\n  class P,S,H,O changed\n  click P href \"#step-1\"\n  click C href \"#step-1\"\n  click E href \"#step-2\"\n  click G href \"#step-3\"\n  click I href \"#step-4\"\n  click S href \"#step-5\"\n  click H href \"#step-5\"\n  click O href \"#step-6\""
  },
  "implementation": [
   {
@@ -39,8 +39,8 @@
    "text": "boot loads prompt.txt and checks the HTTP status before anything else; a failure sets the retry state and stops, and retry runs boot again, so Copy is never enabled with no prompt behind it ([loadPromptText](docs/app.js#L129-L138)). Only then does loadEngine load Pyodide, the wheels and deckfill.zip (zipped from src/deckfill by [build_docs](scripts/build_docs.py#L1-L25)) from the page's own folder, import every module and append the lockdown policy ([lockdown](docs/app.js#L113-L118)). The base policy is the first meta in the head ([CSP](docs/index.html#L5-L5)); the only links out are three fixed anchors ([anchors](docs/index.html#L15-L16)); at 760 px or less the page shows the explainer and the copy-link button and skips the engine ([phone CSS](docs/style.css#L248-L268)). Fonts are self-hosted: [build_fonts](scripts/build_fonts.py#L1-L66) subsets Noto Serif TC to the glyphs the page's own strings use and Newsreader to Latin, and copies Mentron Serif. Every page string, the example outline included, sits in one copy file ([copy](docs/copy.js#L1-L126)); the prompt text ([prompt](docs/prompt.txt#L1-L29)) is the same text as [PROMPT.md](PROMPT.md#L1-L35) and the skill body ([skill](skill/ppt-outline/SKILL.md#L1-L34)), checked by [C14](tests/test_c14_copy.py#L1-L62); the [README](README.md#L1-L25) points to the page.",
    "peek": {
     "path": "docs/app.js",
-    "start": 452,
-    "end": 468,
+    "start": 456,
+    "end": 472,
     "side": "head"
    }
   },
@@ -56,11 +56,11 @@
   },
   {
    "title": "Plan: every body estimated, subtitles included",
-   "text": "parse_outline refuses text over the character cap as too_long, normalises line ends and a BOM, then reads the # deck title, ## slides and indented bullets into slides with line-numbered warnings ([parse_outline](src/deckfill/outline.py#L63-L145)). plan_deck lists the compatible layouts per outline slide, takes the override or the default, and splits bodies by the fit estimate. A title slide whose subtitle goes into a content body (the no-title-layout fallback, or an override) now gets that body's estimate: warned when it overflows, check when the box is not modelled. The wrap estimate counts a long word's lines with one division instead of one subtraction per line ([text_lines](src/deckfill/plan.py#L133-L170)).",
+   "text": "parse_outline refuses text over the character cap as too_long, normalises line ends and a BOM, then reads the # deck title, ## slides and indented bullets into slides with line-numbered warnings ([parse_outline](src/deckfill/outline.py#L63-L145)). plan_deck lists the compatible layouts per outline slide, takes the override when the slide fits it and the default otherwise ([fallback](src/deckfill/plan.py#L218-L247)), and splits bodies by the fit estimate. A title slide whose subtitle goes into a content body (the no-title-layout fallback, or an override) now gets that body's estimate: warned when it overflows, check when the box is not modelled. The wrap estimate counts a long word's lines with one division instead of one subtraction per line ([text_lines](src/deckfill/plan.py#L133-L170)).",
    "peek": {
     "path": "src/deckfill/plan.py",
-    "start": 243,
-    "end": 257,
+    "start": 249,
+    "end": 263,
     "side": "head"
    }
   },
@@ -76,17 +76,27 @@
   },
   {
    "title": "Page state: no download from an older plan",
-   "text": "Any change to the outline, a layout or the template calls staleNow: Download is disabled at once and the generation counter moves, so a plan that finishes for older input is dropped ([staleNow](docs/app.js#L241-L251), [gen check](docs/app.js#L272-L272)). On click, download reads the outline and the overrides and Session.fill plans and fills from exactly those in one Python call ([bridge](src/deckfill/web.py#L81-L89)), so even a click that lands mid-edit ships the text on screen.",
+   "text": "Any change to the outline, a layout or the template calls staleNow: Download is disabled at once and the generation counter moves, so a plan that finishes for older input is dropped ([staleNow](docs/app.js#L241-L251), [gen check](docs/app.js#L272-L272)). On click, download reads the outline and the overrides and Session.fill plans and fills from exactly those in one Python call ([bridge](src/deckfill/web.py#L131-L140)), so even a click that lands mid-edit ships the text on screen.",
    "peek": {
     "path": "docs/app.js",
-    "start": 353,
-    "end": 372,
+    "start": 357,
+    "end": 376,
+    "side": "head"
+   }
+  },
+  {
+   "title": "Layout picks follow their slide",
+   "text": "A pick in the layout list is stored as the slide's title, kind and nth: which of the slides with that title and kind it is ([remember](docs/app.js#L324-L327)). The bridge computes nth for every slide ([nths](src/deckfill/web.py#L40-L48)). On every plan and every fill, place_overrides finds the nth slide with that title and kind in the outline it was given, so a slide added or removed above does not move the pick. A pick whose slide is gone, renamed or of another kind comes back as a layout_gone warning naming the old title. plan_deck itself drops a pick the slide no longer fits, uses the default and adds layout_dropped; it also drops an index past the end with a blank layout_gone, which the page cannot send. The reply lists only the picks still in use ([kept](src/deckfill/web.py#L108-L115)), and the page replaces its own list with it, so a dropped pick's note shows once ([page](docs/app.js#L282-L282)). Before this, picks were keyed by slide index: after an insert above, the picked layout landed on the slide now at that index with no message (qa/override-fix/page-before.txt).",
+   "peek": {
+    "path": "src/deckfill/web.py",
+    "start": 21,
+    "end": 37,
     "side": "head"
    }
   },
   {
    "title": "QA tooling: what each check proves",
-   "text": "C9 runs one session through the real page on a local server ([server](tests/e2e/server.mjs#L1-L41)): two fills, reset, a measured 30 s idle, probes, an offline fill, then all three link-outs, each answered 204 so the page stays; the report records the commit and sha256 of every input and download, and [privacy_proof](qa/e2e/privacy_proof.py#L1-L50) fails on any request after ready, idle under 30 s or a changed tree. [C10](qa/e2e/c10_compare.py#L1-L48) compares the downloads part by part with CPython; [C1 page](tests/e2e/c1_edit_download.mjs#L1-L78) and [F9](tests/e2e/f9_prompt_load.mjs#L1-L55) drive the two page fixes. [C12](tests/e2e/c12_load.mjs#L1-L192) throttles the network, reads Long Tasks and the wasm heap on the worst case [make_worst](qa/c12/make_worst.py#L1-L147) builds at both caps. [G0](qa/g0/run_g0.py#L1-L184) now gates on text outside placeholders through the [oracle](tests/oracle.py#L159-L177), whose C3 check takes out only the authorised link edits ([kept parts](tests/oracle.py#L265-L310)); goldens and fixtures come from [C1 tests](tests/test_c1_text.py#L1-L80) and [conftest](tests/conftest.py#L1-L32). [C15](qa/gemini/check_c15.py#L1-L91) needs all three cases and whole-number matches; the [validator runner](qa/c5/run_validator.py#L1-L104) needs every output in its [manifest](qa/c5/manifest.json#L1-L28) before it runs the [SDK tool](tools/validate/Program.cs#L1-L29); [D10](qa/demo/make_demo.py#L1-L69) builds the demo deck; [provenance](qa/provenance.py#L1-L30) stamps reports; [run_demos](qa/failure-demos/run_demos.py#L1-L107) mutates code and shows each check failing, its C9 runs in their own folders; [runner tests](tests/test_qa_runners.py#L1-L48).",
+   "text": "C9 runs one session through the real page on a local server ([server](tests/e2e/server.mjs#L1-L41)): two fills, reset, a measured 30 s idle, probes, an offline fill, then all three link-outs, each answered 204 so the page stays; the report records the commit and sha256 of every input and download, and [privacy_proof](qa/e2e/privacy_proof.py#L1-L50) fails on any request after ready, idle under 30 s or a changed tree. [C10](qa/e2e/c10_compare.py#L1-L48) compares the downloads part by part with CPython; [C1 page](tests/e2e/c1_edit_download.mjs#L1-L78), [F9](tests/e2e/f9_prompt_load.mjs#L1-L55) and [override](tests/e2e/override_follow.mjs#L1-L115) drive the three page fixes. [C12](tests/e2e/c12_load.mjs#L1-L192) throttles the network, reads Long Tasks and the wasm heap on the worst case [make_worst](qa/c12/make_worst.py#L1-L147) builds at both caps. [G0](qa/g0/run_g0.py#L1-L184) now gates on text outside placeholders through the [oracle](tests/oracle.py#L159-L177), whose C3 check takes out only the authorised link edits ([kept parts](tests/oracle.py#L265-L310)); goldens and fixtures come from [C1 tests](tests/test_c1_text.py#L1-L80) and [conftest](tests/conftest.py#L1-L32). [C15](qa/gemini/check_c15.py#L1-L91) needs all three cases and whole-number matches; the [validator runner](qa/c5/run_validator.py#L1-L104) needs every output in its [manifest](qa/c5/manifest.json#L1-L28) before it runs the [SDK tool](tools/validate/Program.cs#L1-L29); [D10](qa/demo/make_demo.py#L1-L69) builds the demo deck; [provenance](qa/provenance.py#L1-L30) stamps reports; [run_demos](qa/failure-demos/run_demos.py#L1-L107) mutates code and shows each check failing, its C9 runs in their own folders; [runner tests](tests/test_qa_runners.py#L1-L48).",
    "peek": {
     "path": "tests/e2e/c9_privacy.mjs",
     "start": 160,
@@ -100,9 +110,9 @@
   "G0 is 4 of 5 clean on every part except the validator; HKUST 15 is refused by D3 step 5 as written; HKUST 14 outside the five fills clean, every slide on its cover layout.",
   "MAX_TOTAL is 130 MB, below rev 5's 150, for the 1.5 GB heap bar (decisions.tsv).",
   "Codex round 1 findings F1 to F14 each have a failing-first test; before and after runs in qa/codex1/fixes/.",
-  "Pending eye and deploy rows: C13 by Fable, C16 real Gemini app, C17 desktop PowerPoint on Windows, C18 the page beside mentron.hk, C19 Marco's Rule 25 proof of docs/copy.js and README.md (changed since the last proof: too_big now says 上限 100 MB, the no_text_layout wording, the exampleOutline), C21 test chain and audit.",
+  "Layout-override fix (after Codex round 1, rated MAJOR by ai-brain-52): tests fail before the fix at b5db511 (qa/override-fix/*-before.txt) and pass after; Codex round 3 reviews it. Editing an overridden slide's title drops its pick with the layout_gone note, by design.",
+  "Pending eye and deploy rows: C13 by Fable, C16 real Gemini app, C17 desktop PowerPoint on Windows, C18 the page beside mentron.hk, C19 Marco's Rule 25 proof of docs/copy.js and README.md; the changed strings, the two new override notes included, are listed in qa/c19/PROOF-LIST.md, C21 test chain and audit.",
   "GitHub Pages MIME types for .wasm and .mjs are untested locally (deploy gate).",
-  "Follow-up outside F1 to F14, not built: layout overrides are keyed by outline slide index, so an outline edit that inserts or removes a slide can leave an override on the wrong slide; the fill then refuses it with the generic error, never silently.",
   "Not walked through, with the reason: fixtures/make_fixtures.py and fixtures/make_template.py (fixtures by script, exercised by every C test), fixtures/wui-tung-template.pptx (generated), tools/validate/validate.csproj (the SDK project file), package.json (test tooling), src/deckfill/__init__.py (exports only), .gitignore and decisions.tsv (housekeeping and the decision log below)."
  ]
 }
