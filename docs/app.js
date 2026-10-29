@@ -3,7 +3,7 @@
 import { COPY } from "./copy.js";
 
 const PPTX_TYPE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-const MAX_FILE = 50 * 1024 * 1024; // D1b; Python enforces it too
+const MAX_FILE = 100 * 1024 * 1024; // D1b; Python enforces it too
 const WHEELS = [
   "python_pptx-1.0.2-py3-none-any.whl",
   "xlsxwriter-3.2.9-py3-none-any.whl",

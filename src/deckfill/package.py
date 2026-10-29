@@ -15,9 +15,9 @@ from urllib.parse import unquote, urlsplit
 from .errors import TemplateError
 from .xmlsafe import NS, R_NS, parse, q
 
-MAX_FILE = 50 * 1024 * 1024
+MAX_FILE = 100 * 1024 * 1024
 MAX_MEMBERS = 2000
-MAX_TOTAL = 300 * 1024 * 1024
+MAX_TOTAL = 130 * 1024 * 1024
 MAX_XML_TOTAL = 30 * 1024 * 1024
 MAX_XML_PART = 5 * 1024 * 1024
 MAX_RATIO = 100

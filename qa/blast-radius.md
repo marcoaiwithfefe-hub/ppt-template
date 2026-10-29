@@ -27,7 +27,7 @@ It also fails when it should. The two C9 mutations (a same-origin fetch one seco
 
 ## Risks
 
-- **Memory at the input caps.** At the D1b worst case (49.8 MB file, 284 MB uncompressed), the wasm heap reached 2.39 GB, and wasm memory never shrinks. On a low-memory office laptop the tab could crash. The cost is a lost session, not a leak. Likelihood is low: real templates in G0 were 0.3 to 15 MB, and HKUST template 14 (73.7 MB) took the heap from 45 to 471 MB to read. Check: `node tests/e2e/c12_load.mjs` prints `wasmHeapMB`. Evidence: `qa/e2e/c12-report.json`.
+- **Memory at the input caps.** Spec rev 5 set a bar: wasm heap 1.5 GB or less at the D1b worst case. At the rev 5 caps (100 MB file, 150 MB uncompressed) the worst case reached 1,674 MB, so the seat lowered the uncompressed cap to 130 MB. There it reaches 1,384 MB (99.5 MiB file, 129.5 MiB uncompressed); at the old rev 4 caps it reached 2.39 GB. Wasm memory never shrinks, so a long session with many large templates stays at its high point. HKUST template 14 (73.7 MB) fills within the bars. Check: `node tests/e2e/c12_load.mjs` (bar `worstHeapMB`). Evidence: `qa/e2e/c12-report.json`, `decisions.tsv`.
 - **GitHub Pages MIME types and headers.** Not proven locally. The page needs `application/wasm` for `pyodide.asm.wasm` and a JavaScript type for `.mjs`. Check at the deploy gate: Fable's real-Chrome run on the Pages URL (root Rule 127). Likelihood low (Pages serves both types), cost high (page never reaches ready, so it fails closed, with no leak).
 - **Warm load sits on its bar.** The second visit took 5.0 s against 5 s, because the headless test profile's memory cache does not keep the 9.6 MB wasm. A real Chrome profile has a disk cache. Check in real Chrome at the deploy gate.
 

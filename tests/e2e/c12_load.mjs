@@ -1,9 +1,8 @@
 // C12 load and responsiveness, in headless Chromium on the local static server.
 // Cold load (empty cache) and warm reload at 20 Mbps down, 40 ms latency; Long Tasks across read,
 // plan and fill for every G0 template and fixture and for the D1b worst case; a screenshot taken
-// during the longest task; click response after each step. Numbers in qa/e2e/c12-report.json.
-// SCRATCH=hkust14 adds Fable's one-off: read hkust-template14 (73.7 MB) with the file cap raised
-// in Python for that run only (the shipped cap stays 50 MB).
+// during the longest task; click response after each step; wasm heap at the worst case, measured
+// on its own fresh page because wasm memory never shrinks. Numbers in qa/e2e/c12-report.json.
 // Run: node tests/e2e/c12_load.mjs   (needs .venv/bin/python qa/c12/make_worst.py first)
 import { chromium } from "playwright-core";
 import { readFile, writeFile, readdir, stat } from "node:fs/promises";
@@ -16,7 +15,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const OUT = path.join(ROOT, "qa", "e2e");
 const EXE = process.env.CHROME || `${process.env.HOME}/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell`;
 const NET = { offline: false, latency: 40, downloadThroughput: (20e6 / 8), uploadThroughput: (20e6 / 8) };
-const BARS = { coldS: 15, coldMB: 25, warmS: 5, taskS: 3, worstTaskS: 10, clickMs: 500 };
+const BARS = { coldS: 15, coldMB: 25, warmS: 5, taskS: 3, worstTaskS: 10, clickMs: 500, worstHeapMB: 1500 };
 const FILLABLE = [
   "typed.pptx", "custom.pptx", "contradict.pptx", "two-masters.pptx", "no-two.pptx", "no-section.pptx",
   "no-title.pptx", "only-content.pptx", "small-body.pptx", "small-body-insets.pptx", "nowrap.pptx",
@@ -160,57 +159,31 @@ async function main() {
   check(`longest task on G0 templates and fixtures ${(worstOrd / 1000).toFixed(2)} s, ${worstRun?.file} (bar ${BARS.taskS})`, Math.max(...ordinary) <= BARS.taskS * 1000);
   check(`slowest click response after a step ${Math.max(...clicks)} ms (bar ${BARS.clickMs})`, Math.max(...clicks) <= BARS.clickMs);
 
-  // worst case the D1b caps allow
+  // worst case the D1b caps allow, on a fresh page so the heap is its own
+  const wctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
+  await wctx.addInitScript(INIT);
+  const wpage = await wctx.newPage();
+  await wpage.goto(url);
+  await waitReady(wpage);
+  const heapAtReady = await wpage.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6);
   const worstFile = path.join(ROOT, "qa", "c12", "worst-case.pptx");
   const worstOutline = await readFile(path.join(ROOT, "qa", "c12", "worst-outline.md"), "utf8");
-  report.worst = { fileMB: (await stat(worstFile)).size / 1e6, ...(await runOne(page, worstFile, worstOutline, true)) };
-  report.worst.wasmHeapMB = await page.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6);
+  report.worst = { fileMB: (await stat(worstFile)).size / 1e6, ...(await runOne(wpage, worstFile, worstOutline, true)) };
+  report.worst.wasmHeapAtReadyMB = heapAtReady;
+  report.worst.wasmHeapMB = await wpage.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6);
+  await wctx.close();
   const w = report.worst;
   const wMax = Math.max(w.readMs || 0, w.planMs || 0, w.fillMs || 0);
   check(`worst case longest task ${(wMax / 1000).toFixed(2)} s (bar ${BARS.worstTaskS}); read ${w.readMs} plan ${w.planMs} fill ${w.fillMs} ms`, !w.refused && wMax <= BARS.worstTaskS * 1000, w.refused || "");
   check(`worst case click response ${Math.max(w.clickAfterReadMs, w.clickAfterPlanMs || 0, w.clickAfterFillMs || 0)} ms (bar ${BARS.clickMs})`,
     Math.max(w.clickAfterReadMs, w.clickAfterPlanMs || 0, w.clickAfterFillMs || 0) <= BARS.clickMs);
+  check(`worst case wasm heap ${w.wasmHeapMB.toFixed(0)} MB, ${w.wasmHeapAtReadyMB.toFixed(0)} MB at ready (bar ${BARS.worstHeapMB})`, w.wasmHeapMB <= BARS.worstHeapMB);
   check(`working state on screen during the longest task (qa/e2e/c12-working-during-longest-task.png)`, w.shotWhileWorking === true, JSON.stringify(w.shot));
-
-  if (process.env.SCRATCH === "hkust14") {
-    // Fable's one-off: the 73.7 MB HKUST template with the file cap raised in Python, this run only,
-    // on a fresh page so its memory is its own
-    const sctx = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
-    await sctx.addInitScript(INIT);
-    const page = await sctx.newPage();
-    await page.goto(url);
-    await waitReady(page);
-    const f = path.join(ROOT, "qa", "real-templates", "hkust-template14.potx");
-    await page.setInputFiles("#file", f); // the page refuses it (too_big); the file stays on the input
-    await idle(page);
-    const heapBefore = await page.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6);
-    const t0 = await now(page);
-    const res = await page.evaluate(async () => {
-      const file = document.getElementById("file").files[0];
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      const py = window.__e2e.py;
-      py.runPython("import deckfill.package as P; P.MAX_FILE = 100 * 1024 * 1024; P.MAX_TOTAL = 600 * 1024 * 1024");
-      const pb = py.toPy(bytes);
-      const t = performance.now();
-      const out = py.globals.get("session").read(pb, file.name);
-      const ms = performance.now() - t;
-      pb.destroy();
-      py.runPython("import deckfill.package as P; P.MAX_FILE = 50 * 1024 * 1024; P.MAX_TOTAL = 300 * 1024 * 1024");
-      return { ms, out: out.slice(0, 120) };
-    });
-    report.scratchHkust14 = {
-      note: "scratch run only: Python caps raised for this read, shipped cap is 50 MB",
-      readCallMs: Math.round(res.ms), longestTaskMs: await longest(page, t0), result: res.out,
-      wasmHeapBeforeMB: heapBefore, wasmHeapAfterMB: await page.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6),
-    };
-    await sctx.close();
-  }
 
   await browser.close();
   server.close();
   await writeFile(path.join(OUT, "c12-report.json"), JSON.stringify(report, null, 1));
   for (const c of report.checks) console.log(c.ok ? "PASS" : "FAIL", "C12", c.name, c.detail ? `-- ${c.detail}` : "");
-  if (report.scratchHkust14) console.log("SCRATCH hkust14", JSON.stringify(report.scratchHkust14));
   const failed = report.checks.filter((c) => !c.ok).length;
   console.log(`${report.checks.length - failed} passed, ${failed} failed`);
   process.exit(failed ? 1 : 0);

@@ -1,15 +1,19 @@
 """C8: unusable files raise their code without exhausting memory; outline caps."""
 
+import io
 import json
+import random
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 import pytest
 
-from deckfill import OutlineError, PlanError, TemplateError, parse_outline, plan_deck, read_template
+from deckfill import OutlineError, PlanError, TemplateError, package, parse_outline, plan_deck, read_template
 
 ROOT = Path(__file__).resolve().parent.parent
+FIX = ROOT / "fixtures" / "out"
 
 CASES = [
     ("legacy.pptx", "legacy_ppt"),
@@ -37,9 +41,31 @@ def test_not_a_zip_at_all():
     assert e.value.code == "not_pptx"
 
 
-def test_over_50_mb_is_too_big():
+def test_over_the_file_cap_is_too_big():
+    assert package.MAX_FILE == 100 * 1024 * 1024  # D1b rev 5
     with pytest.raises(TemplateError) as e:
-        read_template(b"PK\x03\x04" + bytes(50 * 1024 * 1024), "big.pptx")
+        read_template(b"PK\x03\x04" + bytes(package.MAX_FILE), "big.pptx")
+    assert e.value.code == "too_big"
+
+
+def test_uncompressed_total_cap(tmp_path):
+    """D1b rev 5: 150 MB in the spec, lowered by the seat to 130 MB to hold C12's 1.5 GB heap bar
+    (decisions.tsv). A template declaring 160 MB uncompressed is too_big, at a ratio and file size
+    well inside their own caps."""
+    assert package.MAX_TOTAL == 130 * 1024 * 1024
+    src = zipfile.ZipFile(io.BytesIO(open(FIX / "wui-tung.pptx", "rb").read()))
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for n in src.namelist():
+            z.writestr(n, src.read(n))
+        rnd = random.Random(1)
+        for k in range(4):  # 4 x 40 MB, each about 20:1
+            data = bytearray(40 * 1024 * 1024)
+            for i in range(0, len(data), 12):
+                data[i] = rnd.randrange(256)
+            z.writestr(f"ppt/media/big{k}.bin", bytes(data))
+    with pytest.raises(TemplateError) as e:
+        read_template(buf.getvalue(), "total.pptx")
     assert e.value.code == "too_big"
 
 

@@ -12,7 +12,15 @@ Verdict: **4 of 5 clean on every G0 part that could run. The C5 validator part i
 | `usc-substitute-fonts-wide.potx` | clean | pass | pass | pass | NOT RUN | pass | same; logo on every slide |
 | `hkust-template15.potx` | refused `no_text_layout` | n/a | n/a | n/a | n/a | n/a | none |
 
-Outside the five: `hkust-template14.potx` (73.7 MB) is refused `too_big` by the D1b 50 MB cap. HKUST's template 16 is 58.7 MB, also over the cap.
+## Outside the five: HKUST template 14 (spec rev 5)
+
+Rev 5 raised the file cap to 100 MB (2026-10-30), so `hkust-template14.potx` (73.7 MB) now reads. It is reported apart from the five, whose verdict stays as above.
+
+| template | result | C1 text round trip | C3 kept parts | C5 integrity | C5 validator | C6 empty boxes | renders (eye) |
+|---|---|---|---|---|---|---|---|
+| `hkust-template14.potx` | clean | pass | pass | pass | NOT RUN | pass | decoration on every slide (campus photo, green bands), no text past an edge or over another block; every slide uses the cover look |
+
+Its content layouts have the same shape as template 15: their title boxes are body placeholders, so all 8 of them, plus `blank page`, are `other`. The only layout with a `title` placeholder is `Cover` (master 2), so the D3 fallback put every slide on `Cover`: titles in its title box, bullets in its body, and the two columns merged with the `columns_merged` warning. The deck is complete and readable, but it is not the content look a person would pick. In the browser its fill is the slowest real-template step in C12, at 2.66 s against the 3 s bar. HKUST's template 16 (58.7 MB) was not downloaded.
 
 ## Class picks
 
@@ -44,4 +52,5 @@ Local only. They carry third-party branding and the repo goes public, so they ar
 - `qa/g0/elderly-gov-diy/elderly-gov-diy-sheet.png`
 - `qa/g0/ms-business-proposal/ms-business-proposal-sheet.png`
 - `qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-sheet.png`
+- `qa/g0/hkust-template14/hkust-template14-sheet.png` (outside the five)
 - per slide: `qa/g0/<template>/renders/slideNN.pptx.png`

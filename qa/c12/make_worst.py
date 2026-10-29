@@ -1,8 +1,10 @@
 """C12 worst case: the largest template and outline the D1b caps allow.
 
-Template, from wui-tung.pptx: 2,000 members, 50 MB file, about 300 MB uncompressed, 30 MB of XML
-with parts just under 5 MB, every member under the 100:1 ratio. The big parts are reachable from
-the master, so python-pptx loads, copies and saves them. Outline: 50,000 characters that plan to
+Template, from wui-tung.pptx, at the rev 5 caps: 2,000 members, a file just under 100 MB, just
+under 150 MB uncompressed, 30 MB of XML with parts just under 5 MB, every member under the 100:1
+ratio. Both size caps bind at once: random filler fills the file, compressible media fills the
+uncompressed total. The big parts are reachable from the master, so python-pptx loads, copies
+and saves them. Outline: 50,000 characters that plan to
 200 slides. Writes qa/c12/worst-case.pptx (gitignored) and qa/c12/worst-outline.md.
 
 Run: .venv/bin/python qa/c12/make_worst.py
@@ -62,23 +64,17 @@ def main() -> None:
     sizes = [xml_each] * int(left // xml_each) + [int(left % xml_each)]
     big_xml = {f"customXml/c12-{k}.xml": xml_part(n, k) for k, n in enumerate(sizes) if n > 1024}
 
-    # compressible media: as much uncompressed size as the 300 MB total allows, ratio under 100:1
-    # leave room for the random filler that brings the file to 50 MB (about 30 MB)
-    room = package.MAX_TOTAL - sum(len(v) for v in base.values()) - sum(len(v) for v in big_xml.values()) - 36 * MB
-    n_media = 3
-    media = {}
-    for k in range(n_media):
-        data = compressible(room // n_media, 90)
-        ratio = len(data) / len(zlib.compress(data, 6))
-        assert ratio < package.MAX_RATIO, ratio
-        media[f"ppt/media/c12-{k}.bin"] = data
+    # media names are fixed now; their sizes are solved below, once the rest is zipped
+    n_media = 2
+    media = {f"ppt/media/c12-{k}.bin": b"" for k in range(n_media)}
 
     rels_name = "ppt/slideMasters/_rels/slideMaster1.xml.rels"
     rels = base[rels_name].decode()
     extra = "".join(
         f'<Relationship Id="rIdC12x{k}" Type="{RT_CUSTOM}" Target="../../{n}"/>' for k, n in enumerate(big_xml)
     ) + "".join(
-        f'<Relationship Id="rIdC12m{k}" Type="{RT_IMAGE}" Target="../media/{Path(n).name}"/>' for k, n in enumerate(media)
+        f'<Relationship Id="rIdC12m{k}" Type="{RT_IMAGE}" Target="../media/{Path(n).name}"/>'
+        for k, n in enumerate([*media, "ppt/media/c12-filler.bin"])
     )
     base[rels_name] = rels.replace("</Relationships>", extra + "</Relationships>").encode()
     ct = base["[Content_Types].xml"].decode()
@@ -86,18 +82,33 @@ def main() -> None:
         ct = ct.replace("<Default ", '<Default Extension="bin" ContentType="application/octet-stream"/><Default ', 1)
     base["[Content_Types].xml"] = ct.encode()
 
-    members = dict(base) | big_xml | media
-    # small members up to the member cap, then random filler up to the file cap
-    n_small = package.MAX_MEMBERS - len(members) - 1
+    members = dict(base) | big_xml
+    # small members up to the member cap (the media and the filler take the last three)
+    n_small = package.MAX_MEMBERS - len(members) - n_media - 1
     for k in range(n_small):
         members[f"ppt/c12-small/{k}.bin"] = os.urandom(16)
     path = OUT / "worst-case.pptx"
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
         for n, v in members.items():
             z.writestr(n, v)
-    filler = package.MAX_FILE - path.stat().st_size - 256 * 1024
+    size_now = path.stat().st_size
+    total_now = sum(len(v) for v in members.values())
+
+    # Solve filler F (random: F in the file, F in the total) and media M (ratio r: M / r in the
+    # file, M in the total) so that both caps are reached, with a margin under each:
+    #   total_now + F + M = MAX_TOTAL - margin,  size_now + F + M / r = MAX_FILE - margin
+    sample = compressible(4 * MB, 90)
+    r = len(sample) / len(zlib.compress(sample, 6))
+    assert r < package.MAX_RATIO, r
+    margin = 512 * 1024
+    t_left = package.MAX_TOTAL - margin - total_now
+    f_left = package.MAX_FILE - margin - size_now
+    m = max(0, int((t_left - f_left) / (1 - 1 / r)))
+    f = max(0, t_left - m)
     with zipfile.ZipFile(path, "a", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("ppt/media/c12-filler.bin", os.urandom(max(filler, 0)))
+        for name in media:
+            z.writestr(name, compressible(m // n_media, 90))
+        z.writestr("ppt/media/c12-filler.bin", os.urandom(f))
 
     with zipfile.ZipFile(path) as z:
         infos = z.infolist()

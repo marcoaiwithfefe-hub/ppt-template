@@ -609,7 +609,7 @@
  {
   "template": "elderly-gov-diy.pptx",
   "bytes": 14836949,
-  "seconds": 1.03,
+  "seconds": 1.08,
   "layouts": [
    {
     "name": "Cover slide layout",
@@ -798,9 +798,118 @@
  {
   "template": "hkust-template14.potx",
   "bytes": 73689269,
-  "result": "refused",
-  "code": "too_big",
-  "detail": "73689269 bytes"
+  "seconds": 2.1,
+  "layouts": [
+   {
+    "name": "Title & Content Slide 1",
+    "master": 0,
+    "class": "other",
+    "bodies": 7,
+    "unmodelled": []
+   },
+   {
+    "name": "Title and Content 2",
+    "master": 0,
+    "class": "other",
+    "bodies": 3,
+    "unmodelled": []
+   },
+   {
+    "name": "Divider-01 ",
+    "master": 0,
+    "class": "other",
+    "bodies": 2,
+    "unmodelled": []
+   },
+   {
+    "name": "1_Divider-02 ",
+    "master": 0,
+    "class": "other",
+    "bodies": 2,
+    "unmodelled": []
+   },
+   {
+    "name": "Title & Content 3",
+    "master": 0,
+    "class": "other",
+    "bodies": 3,
+    "unmodelled": []
+   },
+   {
+    "name": "Blank-1",
+    "master": 0,
+    "class": "other",
+    "bodies": 8,
+    "unmodelled": []
+   },
+   {
+    "name": "Blank-2",
+    "master": 0,
+    "class": "other",
+    "bodies": 4,
+    "unmodelled": []
+   },
+   {
+    "name": "1_Blank-2",
+    "master": 0,
+    "class": "other",
+    "bodies": 2,
+    "unmodelled": []
+   },
+   {
+    "name": "Cover",
+    "master": 1,
+    "class": "title",
+    "bodies": 1,
+    "unmodelled": []
+   },
+   {
+    "name": "blank page",
+    "master": 1,
+    "class": "other",
+    "bodies": 2,
+    "unmodelled": []
+   }
+  ],
+  "defaults": {
+   "title": "Cover [title]",
+   "content": null,
+   "two": null,
+   "section": null
+  },
+  "picks": [
+   "匯通物流 2027 年度計劃 -> Cover [title] (fits)",
+   "三個目標 -> Cover [title] (fits)",
+   "時間表 -> Cover [title] (split)",
+   "時間表（續） -> Cover [title] (split)",
+   "預算 港幣 800 萬 -> Cover [title] (split)",
+   "預算 港幣 800 萬（續） -> Cover [title] (split)",
+   "八項行動 -> Cover [title] (split)",
+   "八項行動（續） -> Cover [title] (split)",
+   "問答 -> Cover [title] (fits)"
+  ],
+  "warnings": [
+   "18 columns_merged"
+  ],
+  "c1_round_trip": true,
+  "c3_kept_problems": [],
+  "c3_unexpected_new_parts": [],
+  "c5_integrity": [],
+  "c6_empty_placeholders": [],
+  "text_in_placeholders_only": true,
+  "renders": [
+   "qa/g0/hkust-template14/renders/slide01.pptx.png",
+   "qa/g0/hkust-template14/renders/slide02.pptx.png",
+   "qa/g0/hkust-template14/renders/slide03.pptx.png",
+   "qa/g0/hkust-template14/renders/slide04.pptx.png",
+   "qa/g0/hkust-template14/renders/slide05.pptx.png",
+   "qa/g0/hkust-template14/renders/slide06.pptx.png",
+   "qa/g0/hkust-template14/renders/slide07.pptx.png",
+   "qa/g0/hkust-template14/renders/slide08.pptx.png",
+   "qa/g0/hkust-template14/renders/slide09.pptx.png"
+  ],
+  "sheet": "qa/g0/hkust-template14/hkust-template14-sheet.png",
+  "script_clean": true
  },
  {
   "template": "hkust-template15.potx",
@@ -922,7 +1031,7 @@
  {
   "template": "usc-substitute-fonts-wide.potx",
   "bytes": 259046,
-  "seconds": 0.02,
+  "seconds": 0.03,
   "layouts": [
    {
     "name": "Title Slide",
