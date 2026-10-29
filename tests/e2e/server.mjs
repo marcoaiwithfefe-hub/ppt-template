@@ -17,6 +17,11 @@ export function startServer(port = 0) {
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, "http://x");
     log.push({ t: Date.now(), method: req.method, path: url.pathname });
+    if (url.pathname === "/__probe-worker.js") {
+      // test-only: a worker script that would run if the page's policy let it (C9 probe)
+      res.writeHead(200, { "content-type": "text/javascript" });
+      return res.end("postMessage(1);");
+    }
     if (url.pathname === "/__blank") {
       res.writeHead(200, { "content-type": "text/html" });
       return res.end("<!doctype html><title>blank</title>");

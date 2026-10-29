@@ -8,6 +8,7 @@ Run: .venv/bin/python qa/failure-demos/run_demos.py [id ...]
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -51,10 +52,30 @@ DEMOS = {
         "if False:",
         ["tests/test_c3_c6_package.py", "-k", "c5"],
     ),
+    "c9-fetch-after-download": (
+        "the page fetches a same-origin file one second after each download",
+        "docs/app.js",
+        '  $("downloaded").hidden = false;\n}',
+        '  $("downloaded").hidden = false;\n  setTimeout(() => fetch("./copy.js").catch(() => {}), 1000);\n}',
+        ["node", "tests/e2e/c9_privacy.mjs"],
+    ),
+    "c9-outline-in-link": (
+        "the Gemini link carries the start of the outline in its URL",
+        "docs/app.js",
+        '  $("download-label").textContent = fmt(COPY.download, { name: p.name });',
+        '  $("download-label").textContent = fmt(COPY.download, { name: p.name });\n'
+        '  document.querySelector(\'a[href^="https://gemini"]\').href =\n'
+        '    "https://gemini.google.com/app?q=" + encodeURIComponent($("outline").value.slice(0, 60));',
+        ["node", "tests/e2e/c9_privacy.mjs"],
+    ),
 }
 
 
 def pytest(args: list[str]) -> str:
+    if args[0] == "node":  # end-to-end check (C9): FAIL lines and the summary
+        run = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, env={**os.environ, "IDLE_MS": "3000"})
+        lines = (run.stdout + run.stderr).strip().splitlines()
+        return "\n".join([ln for ln in lines if ln.startswith("FAIL")] + lines[-1:]) + "\n"
     run = subprocess.run(
         [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", *args],
         cwd=ROOT, capture_output=True, text=True,

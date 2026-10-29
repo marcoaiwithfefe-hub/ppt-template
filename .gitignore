@@ -16,3 +16,4 @@ qa/gemini/*.pptx
 qa/g0/*/
 qa/demo/renders/*.pptx
 tools/fonts-src/*.ttf
+qa/e2e/*.pptx

@@ -71,7 +71,9 @@ async function loadEngine() {
   try {
     const base = new URL("./", location.href);
     const { loadPyodide } = await import("./vendor/pyodide/pyodide.mjs");
-    const py = await loadPyodide({ indexURL: new URL("vendor/pyodide/", base).href, packages: [] });
+    const vendor = new URL("vendor/pyodide/", base).href;
+    // packageBaseUrl set, so Pyodide's default package CDN is never used
+    const py = await loadPyodide({ indexURL: vendor, packageBaseUrl: vendor, packages: [] });
     await py.loadPackage([
       "lxml",
       "pillow",
@@ -92,6 +94,8 @@ session = Session()
     await document.fonts.ready;
     state.py = py;
     state.session = py.globals.get("session");
+    // The end-to-end test reaches Python through this hook to prove the lockdown covers it (C9).
+    if (location.hash === "#e2e") window.__e2e = { py };
     lockdown();
     state.ready = true;
     setStatus("ready");

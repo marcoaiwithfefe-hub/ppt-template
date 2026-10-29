@@ -1,0 +1,14 @@
+[
+ {
+  "template": "wui-tung.pptx",
+  "override": null,
+  "parts": 50,
+  "differ": []
+ },
+ {
+  "template": "typed.pptx",
+  "override": "/ppt/slideLayouts/slideLayout3.xml",
+  "parts": 52,
+  "differ": []
+ }
+]
