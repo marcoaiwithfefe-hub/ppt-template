@@ -1,0 +1,28 @@
+{
+  "note": "C5 runs on every output listed here. 'generated' outputs are made by the runner from fixtures; 'required' outputs are made by other QA runs and must all exist, or the run fails as incomplete.",
+  "generated": {
+    "outline": "fixtures/reference-outline.md",
+    "templates": [
+      "typed.pptx", "custom.pptx", "contradict.pptx", "two-masters.pptx", "no-two.pptx", "no-section.pptx",
+      "no-title.pptx", "only-content.pptx", "small-body.pptx", "small-body-insets.pptx", "nowrap.pptx",
+      "footer-active.pptx", "footer-mixed.pptx", "footer-two-masters.pptx", "footer-fixed-date.pptx",
+      "footer-hf.pptx", "external-link.pptx", "sections.pptx", "wui-tung.pptx", "wui-tung.potx",
+      "rels-order.pptx", "view-outline.pptx", "footer-local.pptx", "xml-renamed.pptx"
+    ]
+  },
+  "required": [
+    {"family": "G0", "template": "qa/real-templates/edb-mpa2022.pptx", "output": "qa/g0/edb-mpa2022/edb-mpa2022-filled.pptx"},
+    {"family": "G0", "template": "qa/real-templates/elderly-gov-diy.pptx", "output": "qa/g0/elderly-gov-diy/elderly-gov-diy-filled.pptx"},
+    {"family": "G0", "template": "qa/real-templates/ms-business-proposal.pptx", "output": "qa/g0/ms-business-proposal/ms-business-proposal-filled.pptx"},
+    {"family": "G0", "template": "qa/real-templates/usc-substitute-fonts-wide.potx", "output": "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-filled.pptx"},
+    {"family": "G0 outside the five", "template": "qa/real-templates/hkust-template14.potx", "output": "qa/g0/hkust-template14/hkust-template14-filled.pptx"},
+    {"family": "D10", "template": "fixtures/wui-tung-template.pptx", "output": "qa/demo/wui-tung-deck.pptx"},
+    {"family": "C10", "template": "fixtures/out/wui-tung.pptx", "output": "qa/e2e/c10-wui-tung.pptx"},
+    {"family": "C10", "template": "fixtures/out/typed.pptx", "output": "qa/e2e/c10-typed-override.pptx"},
+    {"family": "C1 page", "template": "fixtures/out/wui-tung.pptx", "output": "qa/e2e/c1-edit-download-1.pptx"},
+    {"family": "C1 page", "template": "fixtures/out/wui-tung.pptx", "output": "qa/e2e/c1-edit-download-2.pptx"},
+    {"family": "C15", "template": "fixtures/out/wui-tung.pptx", "output": "qa/gemini/wui-tung-report.wui-tung.pptx"},
+    {"family": "C15", "template": "fixtures/out/wui-tung.pptx", "output": "qa/gemini/english-update.wui-tung.pptx"},
+    {"family": "C15", "template": "fixtures/out/wui-tung.pptx", "output": "qa/gemini/meeting-summary.wui-tung.pptx"}
+  ]
+}

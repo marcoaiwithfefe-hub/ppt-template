@@ -5,6 +5,7 @@ Run: .venv/bin/python qa/gemini/check_c15.py
 """
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -20,7 +21,8 @@ from run_g0 import actual_sequence, expected_sequence, same_sequence  # noqa: E4
 from deckfill import fill, parse_outline, plan_deck, read_template  # noqa: E402
 from deckfill.package import check_integrity  # noqa: E402
 
-GEM = ROOT / "qa" / "gemini"
+GEM = Path(os.environ["C15_DIR"]) if os.environ.get("C15_DIR") else ROOT / "qa" / "gemini"
+CASES = ["wui-tung-report", "english-update", "meeting-summary"]  # spec C15: all three are required
 NOTES = ROOT / "fixtures" / "notes"
 FENCE = re.compile(r"^(```|~~~)", re.M)
 NUM = re.compile(r"\d[\d,]*(?:\.\d+)?%?")
@@ -28,6 +30,13 @@ NUM = re.compile(r"\d[\d,]*(?:\.\d+)?%?")
 
 def numbers(text: str) -> list[str]:
     return sorted({n.rstrip(",") for n in NUM.findall(text)})
+
+
+def missing_numbers(notes: str, outline_text: str) -> list[str]:
+    """Numbers of the notes the outline does not carry, compared as whole tokens: 14 is not kept
+    by 114 (Codex round 1, F14)."""
+    have = set(numbers(outline_text))
+    return [n for n in numbers(notes) if n not in have]
 
 
 def check(name: str) -> dict:
@@ -38,7 +47,7 @@ def check(name: str) -> dict:
     inside = re.findall(r"```[^\n]*\n(.*?)```", out, re.S)
     outline_text = inside[0] if inside else out
     outline = parse_outline(outline_text)
-    missing = [n for n in numbers(notes) if n not in outline_text]
+    missing = missing_numbers(notes, outline_text)
     data = (ROOT / "fixtures" / "out" / "wui-tung.pptx").read_bytes()
     info = read_template(data, "wui-tung.pptx")
     plan = plan_deck(info, outline)
@@ -64,14 +73,19 @@ def check(name: str) -> dict:
     return rec
 
 
-def main() -> None:
-    names = ["wui-tung-report", "english-update", "meeting-summary"]
-    report = [check(n) for n in names if (GEM / f"{n}.out.txt").exists()]
-    (GEM / "c15-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=1))
+def main() -> int:
+    absent = [n for n in CASES if not (GEM / f"{n}.out.txt").exists()]
+    report = [check(n) for n in CASES if n not in absent]
+    (GEM / "c15-report.json").write_text(
+        json.dumps({"missing_cases": absent, "cases": report}, ensure_ascii=False, indent=1)
+    )
+    for n in absent:
+        print(f"MISSING {n}: no Gemini output")
     for r in report:
         print(r["notes"], "PASS" if r["pass"] else "FAIL", "blocks", r["code_blocks"], "warn", r["parse_warnings"],
               "missing", r["numbers_missing"])
+    return 1 if absent or not all(r["pass"] for r in report) else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
