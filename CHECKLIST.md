@@ -9,10 +9,10 @@
 - [x] Pyodide self-hosted and pinned (314.0.7)
 - [x] PROMPT.md, skill/ppt-outline/SKILL.md, README.md, LICENSE (README and page copy wait on Marco's Rule 25 proof)
 - [x] End-to-end (Playwright): C8 page part, C9, C10, C12, C13 (all pass; warm load 5.0 s at the bar)
-- [ ] C14 copy floors, C15 Gemini outlines (C15 3 of 3 pass; C14 waits on the page)
+- [x] C14 copy floors, C15 Gemini outlines (C14 script part pass, Codex half pending; C15 3 of 3 pass)
 - [x] D10 demo deck and renders (qa/demo/; C1, C3, C5 integrity pass; validator NOT RUN)
 - [x] Failure demos for C1, C2, C4, C5, C9 in qa/failure-demos/ (qa/failure-demos/run_demos.py; C3 rels-order and C4 slide-number extra; C5 validator part NOT RUN)
-- [ ] Slop scan triage
-- [ ] blast-radius: privacy proof from a saved request log
+- [x] Slop scan triage (qa/slop-triage.md: 2 hits, both kept)
+- [x] blast-radius: privacy proof from a saved request log (qa/blast-radius.md, qa/e2e/privacy_proof.py PASS on fc505ff)
 - [ ] Walkthrough rendered to qa/walkthrough/
 - [ ] Report to ai-brain-52
