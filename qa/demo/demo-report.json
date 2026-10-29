@@ -1,0 +1,26 @@
+{
+ "slides": [
+  "匯通物流 2027 年度計劃 -> Title Slide (fits)",
+  "目標一：本地送貨準時率 -> Title and Content (fits)",
+  "目標二：葵涌倉存貨周轉 -> Title and Content (fits)",
+  "目標三：大灣區跨境路線 -> Title and Content (fits)",
+  "全年預算 -> Title and Content (fits)",
+  "主要風險 -> Title and Content (fits)",
+  "營運部建議 -> Title and Content (fits)"
+ ],
+ "warnings": [],
+ "c1_round_trip": true,
+ "c3_kept_problems": [],
+ "c3_unexpected_new_parts": [],
+ "c5_integrity": [],
+ "c5_validator": "NOT RUN: Open XML SDK not installed",
+ "renders": [
+  "qa/demo/renders/slide01.pptx.png",
+  "qa/demo/renders/slide02.pptx.png",
+  "qa/demo/renders/slide03.pptx.png",
+  "qa/demo/renders/slide04.pptx.png",
+  "qa/demo/renders/slide05.pptx.png",
+  "qa/demo/renders/slide06.pptx.png",
+  "qa/demo/renders/slide07.pptx.png"
+ ]
+}

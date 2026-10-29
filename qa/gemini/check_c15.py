@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 sys.path.insert(0, str(ROOT / "qa" / "g0"))
 
 from oracle import kept_part_problems, parts_of, read_deck  # noqa: E402
-from run_g0 import columns_in_order  # noqa: E402
+from run_g0 import actual_sequence, expected_sequence, same_sequence  # noqa: E402
 
 from deckfill import fill, parse_outline, plan_deck, read_template  # noqa: E402
 from deckfill.package import check_integrity  # noqa: E402
@@ -53,7 +53,7 @@ def check(name: str) -> dict:
         "numbers_in_notes": numbers(notes),
         "numbers_missing": missing,
         "slides": [f"{s.title} ({s.fit})" for s in plan.slides],
-        "fill_c1": columns_in_order(outline, deck),
+        "fill_c1": same_sequence(expected_sequence(outline), actual_sequence(deck)),
         "fill_c3": kept_part_problems(data, deck_bytes),
         "fill_c5": check_integrity(parts_of(deck_bytes)),
     }
