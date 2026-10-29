@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 
 from .errors import DeckfillError
 from .fill import fill
@@ -21,8 +22,10 @@ _UNSAFE_NAME = re.compile(r'[\\/:*?"<>|\x00-\x1f]+')
 def place_overrides(outline, remembered: list[dict]) -> tuple[dict[int, str], list[dict]]:
     """The page remembers each override as the title and kind of its slide and which of the
     slides with that title and kind it was (nth), so an override follows its slide when slides
-    are added or removed around it. Returns the overrides by slide index and the remembered
-    overrides whose slide is gone."""
+    are added or removed around it. It also remembers how many slides shared that title and kind
+    (count): when that number changed and either side is above one, nth can no longer tell which
+    slide it was, so the override is dropped, never moved to a sibling (Codex round 3, F16).
+    Returns the overrides by slide index and the remembered overrides whose slide is gone."""
     where: dict[tuple[str, str], list[int]] = {}
     for i, s in enumerate(outline.slides):
         where.setdefault((s.title, s.kind), []).append(i)
@@ -30,21 +33,24 @@ def place_overrides(outline, remembered: list[dict]) -> tuple[dict[int, str], li
     gone: list[dict] = []
     for r in remembered:
         hits = where.get((r["title"], r["kind"]), [])
-        if 0 <= r["nth"] < len(hits):
+        regrouped = r["count"] != len(hits) and max(r["count"], len(hits)) > 1
+        if not regrouped and 0 <= r["nth"] < len(hits):
             by_index[hits[r["nth"]]] = r["layout"]
         else:
             gone.append(r)
     return by_index, gone
 
 
-def nths(outline) -> list[int]:
-    """For each slide, how many earlier slides share its title and kind."""
-    seen: dict[tuple[str, str], int] = {}
+def groups(outline) -> list[tuple[int, int]]:
+    """For each slide, how many earlier slides share its title and kind (nth), and how many
+    slides share them in all (count)."""
+    keys = [(s.title, s.kind) for s in outline.slides]
+    total = Counter(keys)
+    seen: Counter = Counter()
     out = []
-    for s in outline.slides:
-        key = (s.title, s.kind)
-        out.append(seen.get(key, 0))
-        seen[key] = out[-1] + 1
+    for key in keys:
+        out.append((seen[key], total[key]))
+        seen[key] += 1
     return out
 
 
@@ -93,13 +99,14 @@ class Session:
         except DeckfillError as e:
             return json.dumps({"ok": False, "code": e.code})
         self.plan_ = plan
-        nth = nths(outline)
+        group = groups(outline)
         sources = [
             {
                 "line": s.line,
                 "title": s.title,
                 "kind": s.kind,
-                "nth": nth[i],
+                "nth": group[i][0],
+                "count": group[i][1],
                 "chosen": plan.chosen[i],
                 "compatible": list(plan.compatible[i]),
             }
@@ -107,7 +114,7 @@ class Session:
         ]
         # an override the plan dropped (the slide no longer fits it) is not kept either
         kept = [
-            {"title": s["title"], "kind": s["kind"], "nth": s["nth"], "layout": by_index[i]}
+            {"title": s["title"], "kind": s["kind"], "nth": s["nth"], "count": s["count"], "layout": by_index[i]}
             for i, s in enumerate(sources)
             if i in by_index and s["chosen"] == by_index[i]
         ]

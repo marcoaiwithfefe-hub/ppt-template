@@ -1,0 +1,9 @@
+[
+ {
+  "entry": "C2",
+  "state": "FAIL",
+  "gate": "build",
+  "note": "F16: occurrence-based matching cannot preserve slide ownership when an earlier matching heading is inserted, deleted or renamed. It can transfer a deleted slide's pick silently or discard surviving slide's pick. Existing repeated-title test preserves duplicate ordering; browser test covers only unique titles and cannot establish expanded repeated-title promise.",
+  "evidence": "45d803f:src/deckfill/web.py:26-36,109-114,136-140; 45d803f:tests/test_web_bridge.py:80-104; 45d803f:tests/e2e/override_follow.mjs:16-18,79-107"
+ }
+]

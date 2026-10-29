@@ -321,10 +321,10 @@ function renderPlan() {
       }
       sel.disabled = src.compatible.length < 2;
       sel.addEventListener("change", () => {
-        // remembered by the slide's title, kind and nth, not its index, so it follows the slide
+        // remembered by the slide's title, kind, nth and count, not its index, so it follows the slide
         const same = (o) => o.title === src.title && o.kind === src.kind && o.nth === src.nth;
         state.overrides = state.overrides.filter((o) => !same(o));
-        state.overrides.push({ title: src.title, kind: src.kind, nth: src.nth, layout: sel.value });
+        state.overrides.push({ title: src.title, kind: src.kind, nth: src.nth, count: src.count, layout: sel.value });
         staleNow();
         replan();
       });
