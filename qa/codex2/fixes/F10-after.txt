@@ -1,0 +1,11 @@
+# F10 after: c9_privacy.mjs and privacy_proof.py at a4ecbbc
+tested commit a4ecbbc762ed
+session 36 s; 22 browser requests, 19 server hits
+downloads in the session: 3; idle starts after the last one: yes
+idle after the last download: 30.0 s
+before ready: 19 requests, 0 to another origin
+after ready: 3 browser requests, of which 3 are clicked link-outs (https://gemini.google.com/app, https://github.com/marcoaiwithfefe-hub/ppt-template, https://mentron.hk/)
+after ready: 0 page requests, 0 server hits, 0 blocked attempts
+fills after ready: 2 with downloads, plus one offline
+PASS: zero page requests after ready
+rc=0

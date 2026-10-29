@@ -31,6 +31,13 @@ DEMOS = {
         "left, right = sorted((a, b), key=lambda b_: bodies.index(b_))",
         ["tests/test_c2_layouts.py"],
     ),
+    "c3-rels-order": (
+        "fill keeps python-pptx's re-sorted, relativised relationships instead of the template's own",
+        "src/deckfill/fill.py",
+        "    parts = _restore_kept(pkg.parts, parts, pkg.main)",
+        "    pass",
+        ["tests/test_c3_c6_package.py", "-k", "every_kept_part_unchanged and rels-order"],
+    ),
     "c4-footers": (
         "no footer or slide number is ever added to a new slide",
         "src/deckfill/fill.py",
