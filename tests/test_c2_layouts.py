@@ -6,7 +6,7 @@ import pytest
 from conftest import outline_text
 from oracle import deck_lines, read_deck
 
-from deckfill import PlanError, TemplateError, fill, parse_outline, plan_deck, read_template
+from deckfill import PlanError, TemplateError, Warning, fill, parse_outline, plan_deck, read_template
 
 L = "/ppt/slideLayouts/slideLayout%d.xml"
 
@@ -103,14 +103,34 @@ def test_compatible_lists_exclude_layouts_without_destination(tpl):
     assert "Title Only" in section and "Blank" not in section
 
 
-def test_bullet_slide_on_title_only_is_refused_by_plan_and_fill(tpl):
+def test_incompatible_override_falls_back_to_the_default_with_a_warning(tpl):
+    """Layout-override fix: a bullet slide overridden onto Title Only gets its default layout and
+    a layout_dropped warning, and the deck fills, instead of the plan failing."""
     data = tpl("typed.pptx")
     info = read_template(data, "t.pptx")
     outline = parse_outline(outline_text("reference"))
     title_only = next(x.id for x in info.layouts if x.name == "Title Only")
-    with pytest.raises(PlanError) as e:
-        plan_deck(info, outline, {1: title_only})
-    assert e.value.code == "incompatible_layout"
+    plan = plan_deck(info, outline, {1: title_only})
+    assert plan.chosen[1] == L % 2
+    assert Warning(4, "layout_dropped", "三個目標") in plan.warnings
+    assert read_deck(fill(data, "t.pptx", plan))[1].layout_name == "Title and Content"
+
+
+def test_out_of_range_override_is_dropped_with_a_warning(tpl):
+    data = tpl("typed.pptx")
+    info = read_template(data, "t.pptx")
+    outline = parse_outline(outline_text("reference"))
+    plan = plan_deck(info, outline, {99: L % 2})
+    assert plan.chosen == plan_deck(info, outline).chosen
+    assert Warning(0, "layout_gone", "") in plan.warnings
+    assert len(read_deck(fill(data, "t.pptx", plan))) == len(plan.slides)
+
+
+def test_bullet_slide_on_title_only_is_refused_by_fill(tpl):
+    data = tpl("typed.pptx")
+    info = read_template(data, "t.pptx")
+    outline = parse_outline(outline_text("reference"))
+    title_only = next(x.id for x in info.layouts if x.name == "Title Only")
     # a plan hand-built with that layout is refused by fill
     good = plan_deck(info, outline)
     bad_slide = dataclasses.replace(good.slides[1], layout=title_only)

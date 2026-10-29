@@ -1,0 +1,9 @@
+# before the fix: tests at the working tree, code at c49de09
+FAILED tests/test_c2_layouts.py::test_incompatible_override_falls_back_to_the_default_with_a_warning
+FAILED tests/test_c2_layouts.py::test_out_of_range_override_is_dropped_with_a_warning
+FAILED tests/test_web_bridge.py::test_override_goes_through_plan_deck - KeyEr...
+FAILED tests/test_web_bridge.py::test_override_follows_its_slide_after_an_insert
+FAILED tests/test_web_bridge.py::test_override_on_a_repeated_title_stays_on_its_slide
+FAILED tests/test_web_bridge.py::test_override_for_a_deleted_slide_is_dropped_with_a_note
+FAILED tests/test_web_bridge.py::test_override_the_slide_no_longer_fits_is_dropped_with_a_note
+7 failed, 21 passed in 0.34s
