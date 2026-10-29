@@ -48,6 +48,8 @@ Second fix, from Fable's QA of the renders: a copied slide-number field kept its
 
 Local only. They carry third-party branding and the repo goes public, so they are gitignored.
 
+Fable viewed the four clean sheets on 2026-10-30 (sha256 as listed)
+
 - `qa/g0/edb-mpa2022/edb-mpa2022-sheet.png`
 - `qa/g0/elderly-gov-diy/elderly-gov-diy-sheet.png`
 - `qa/g0/ms-business-proposal/ms-business-proposal-sheet.png`
