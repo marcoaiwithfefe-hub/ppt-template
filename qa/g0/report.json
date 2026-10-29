@@ -1,1141 +1,1203 @@
-[
- {
-  "template": "edb-mpa2022.pptx",
-  "bytes": 6993109,
-  "seconds": 0.16,
-  "layouts": [
-   {
-    "name": "標題投影片",
-    "master": 0,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 0,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 0,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 0,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 0,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 0,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 0,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "標題投影片",
-    "master": 1,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 1,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 1,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 1,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 1,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 1,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 1,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 1,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 1,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 1,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "標題投影片",
-    "master": 2,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 2,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 2,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 2,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 2,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 2,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 2,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 2,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 2,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 2,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 2,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "標題投影片",
-    "master": 3,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 3,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 3,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 3,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 3,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 3,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 3,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 3,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 3,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 3,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 3,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "標題投影片",
-    "master": 4,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 4,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 4,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 4,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 4,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 4,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 4,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 4,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 4,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 4,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 4,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "標題投影片",
-    "master": 5,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 5,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 5,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 5,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 5,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 5,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 5,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 5,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 5,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 5,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 5,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "標題投影片",
-    "master": 6,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及物件",
-    "master": 6,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "章節標題",
-    "master": 6,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "兩項物件",
-    "master": 6,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "比對",
-    "master": 6,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "只有標題",
-    "master": 6,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "空白",
-    "master": 6,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的內容",
-    "master": 6,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "含標題的圖片",
-    "master": 6,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "標題及直排文字",
-    "master": 6,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   },
-   {
-    "name": "直排標題及文字",
-    "master": 6,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": [
-     "vertical text"
-    ]
-   }
-  ],
-  "defaults": {
-   "title": "標題投影片 [title]",
-   "content": "標題及物件 [content]",
-   "two": "兩項物件 [two]",
-   "section": "章節標題 [section]"
-  },
-  "picks": [
-   "匯通物流 2027 年度計劃 -> 標題投影片 [title] (fits)",
-   "三個目標 -> 標題及物件 [content] (fits)",
-   "時間表 -> 標題及物件 [content] (fits)",
-   "預算 港幣 800 萬 -> 兩項物件 [two] (fits)",
-   "八項行動 -> 標題及物件 [content] (split)",
-   "八項行動（續） -> 標題及物件 [content] (split)",
-   "問答 -> 章節標題 [section] (fits)"
-  ],
-  "warnings": [],
-  "c1_round_trip": true,
-  "c3_kept_problems": [],
-  "c3_unexpected_new_parts": [],
-  "c5_integrity": [],
-  "c6_empty_placeholders": [],
-  "text_in_placeholders_only": true,
-  "renders": [
-   "qa/g0/edb-mpa2022/renders/slide01.pptx.png",
-   "qa/g0/edb-mpa2022/renders/slide02.pptx.png",
-   "qa/g0/edb-mpa2022/renders/slide03.pptx.png",
-   "qa/g0/edb-mpa2022/renders/slide04.pptx.png",
-   "qa/g0/edb-mpa2022/renders/slide05.pptx.png",
-   "qa/g0/edb-mpa2022/renders/slide06.pptx.png",
-   "qa/g0/edb-mpa2022/renders/slide07.pptx.png"
-  ],
-  "sheet": "qa/g0/edb-mpa2022/edb-mpa2022-sheet.png",
-  "script_clean": true
+{
+ "tested": {
+  "commit": "e85ebd92806b1210a1a544ee7d05d8745a9a810d",
+  "dirty": "",
+  "files": {
+   "qa/real-templates/edb-mpa2022.pptx": "7dd1579625bf42e7174239b0a237b58f3b5d7481a36940b1153620eb35136cc6",
+   "qa/real-templates/elderly-gov-diy.pptx": "94a245ff440f7ecdb9488b7b551f5feaa7a7f34769ede87652d2dfe58be83020",
+   "qa/real-templates/hkust-template14.potx": "101c53b73948c1906258c1a0125be86960d0602efdcc72a45c7ef8de65a62921",
+   "qa/real-templates/hkust-template15.potx": "88dfc52ea75569b5afaa8b7881e9a90b51de088fe0f2dd8b7f5ec9c027671f4c",
+   "qa/real-templates/ms-business-proposal.pptx": "701af55121a2ec0bc4b3c6e7076708915ef9121030b96ab56c382d4aee40b372",
+   "qa/real-templates/usc-substitute-fonts-wide.potx": "13649450281810e5c025b4dce299f378ef4aebd661abea96db95182cb84d77ff",
+   "fixtures/reference-outline.md": "245c7954df77306b093a9388e0e2bd8d82cbaa44987369c28c3dd5394bb77166",
+   "qa/g0/edb-mpa2022/renders/slide01.pptx.png": "aaeca628e2e3071de7b650d44f6632cefa52d5784d0fc35071691c316be7f59a",
+   "qa/g0/edb-mpa2022/renders/slide02.pptx.png": "6efe4406f36c391d6b8764deab4a4fbe7c3e1f224cca773cb094df8c5cc00bca",
+   "qa/g0/edb-mpa2022/renders/slide03.pptx.png": "25653064f2b2cdb7ed7aa7041d690f1de0b6493530df2060787612a9ff23e984",
+   "qa/g0/edb-mpa2022/renders/slide04.pptx.png": "3fabc8ad7c5e2099e61ed7d40114003ad551e0a9c4593c24cc9b1a9293b6126d",
+   "qa/g0/edb-mpa2022/renders/slide05.pptx.png": "7f73e25d8e9e2913888edcd4e2408691681187154d07590037dc33ba3f5d98c8",
+   "qa/g0/edb-mpa2022/renders/slide06.pptx.png": "1847711167da54797abdcaae371904e17f220f0067b0703815c2a2e21b21d9a6",
+   "qa/g0/edb-mpa2022/renders/slide07.pptx.png": "76a4075016734da1ede9671f6235c9aad1b649bb2133d1c3d902afe9c1353cb2",
+   "qa/g0/edb-mpa2022/edb-mpa2022-sheet.png": "e180acbcaa4a35d2616f3006697788347245a0dde8831fb9dec53be190ffe64f",
+   "qa/g0/edb-mpa2022/edb-mpa2022-filled.pptx": "04e14d2883b038773b2618f7ec67d75ace2ac866396b1863bb7971948af87631",
+   "qa/g0/elderly-gov-diy/renders/slide01.pptx.png": "713ffcf5549baaf2f91c24be043d3bf8917cc8db73d0f1be7ee41e1df2bac749",
+   "qa/g0/elderly-gov-diy/renders/slide02.pptx.png": "04821128be0450176bd00cff777ab514567feb00b6db30bfa4cc3be30cf0046a",
+   "qa/g0/elderly-gov-diy/renders/slide03.pptx.png": "bf811459a672f61a994f8c8f8d9ee23d07912c53ca140822893f899038996145",
+   "qa/g0/elderly-gov-diy/renders/slide04.pptx.png": "acb2acba2222593dc9a62082b8d4792ebcd19132ede4d2feec42cf694d3a91b1",
+   "qa/g0/elderly-gov-diy/renders/slide05.pptx.png": "e8fde7a64ace32fa6d422d852b176a2adf228744161bd6a876b13cd3cf11134a",
+   "qa/g0/elderly-gov-diy/renders/slide06.pptx.png": "c750765d06bc351b7e9e267d092bf376a7ee0ebf2d53a49e79e79d00a2f27b1d",
+   "qa/g0/elderly-gov-diy/renders/slide07.pptx.png": "3b4e3351e9f717b7904578e2894f03232edacb4c73261349ff0128ad69cd812d",
+   "qa/g0/elderly-gov-diy/elderly-gov-diy-sheet.png": "733288a95f2630fd456bfca0aaccf485e3619cfb0eb48882c9e6ce427e4f1acc",
+   "qa/g0/elderly-gov-diy/elderly-gov-diy-filled.pptx": "94a40c9e2e8752e392ab3e080c6c3b38a893b4f91c836c5b44beacead39385de",
+   "qa/g0/hkust-template14/renders/slide01.pptx.png": "eea89d8d257a1801829a1cae4f53658f7ecc5077a2be20e11626df317c48fb05",
+   "qa/g0/hkust-template14/renders/slide02.pptx.png": "1f5efb8b008d0e3fb28a3fbf1fecc051c4489e01432ce8874b802fac2c847607",
+   "qa/g0/hkust-template14/renders/slide03.pptx.png": "e6f932b1aceca3afd76619807e54c9cf7de0ecab5e89e386bcd7facfa53795e1",
+   "qa/g0/hkust-template14/renders/slide04.pptx.png": "9a6008ee494db13519d20e294668a246863963ae25f8d330fd5b9b92671f6977",
+   "qa/g0/hkust-template14/renders/slide05.pptx.png": "66c7af1bc4fd67e33e7bcd4f11843bb4dda137c936e1fe97805c3723e52f2413",
+   "qa/g0/hkust-template14/renders/slide06.pptx.png": "4543af9827471f59d541820cab077733b7ba61ee850b72d5ad26ff0dc5e6f35c",
+   "qa/g0/hkust-template14/renders/slide07.pptx.png": "d2adafcb1e70170e499fc9f2aa64b17819bfc2db57b749937af3fc94a5973ad9",
+   "qa/g0/hkust-template14/renders/slide08.pptx.png": "285113c0b44a88c0ef7a34f6a9417e986f389b7c3f05dc2abe4d805057feb1ae",
+   "qa/g0/hkust-template14/renders/slide09.pptx.png": "c88c67dc5c58040ec5c64030c6dfd081305b06e4cd3ad006e48863566ef170b4",
+   "qa/g0/hkust-template14/hkust-template14-sheet.png": "2c6b33fc0176e52979bb4d8948348dd90a563be77c767a7e6fb5f136c761fb0b",
+   "qa/g0/hkust-template14/hkust-template14-filled.pptx": "34e27769930851465b296e1a3ddd0b18cc399755d126db573c07ac18f4132606",
+   "qa/g0/ms-business-proposal/renders/slide01.pptx.png": "17fa9e0683cbac5b52d4519cddffe2a66a71e4f2234661d271a8fe9b821e5972",
+   "qa/g0/ms-business-proposal/renders/slide02.pptx.png": "ea0df8696320404e38d60b1b07cdec67485ed22138f44743836ef3fac4750e78",
+   "qa/g0/ms-business-proposal/renders/slide03.pptx.png": "c5940904ccddc2640066cf67a571450d1d9f36168e91f5ea96f520f1a53c599e",
+   "qa/g0/ms-business-proposal/renders/slide04.pptx.png": "125fab18769a2c0929e8ab28bf8fdf14f1a9dbd254e9b3b6d040e2f76275d353",
+   "qa/g0/ms-business-proposal/renders/slide05.pptx.png": "022a58fa4f42b5285468d8cbcde7d6a241db6914dfb1487ff5bb102a2bdaac14",
+   "qa/g0/ms-business-proposal/renders/slide06.pptx.png": "2be8f446c5be0296665e4f7881ac02089bc9c5489f2a11aeb26336119ba2ada6",
+   "qa/g0/ms-business-proposal/renders/slide07.pptx.png": "68415d83fb4d054ea4dece1c51885113b7144ac5881022bcb962eb3921b4dd87",
+   "qa/g0/ms-business-proposal/ms-business-proposal-sheet.png": "628c24df173516f2976d3d372316e00fbf0f57494a2f0a0d922937488ee4a54f",
+   "qa/g0/ms-business-proposal/ms-business-proposal-filled.pptx": "787aa55f9c24a01ec77be4efb58e1acd3daa796136dc19cfa60460793f086ee0",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide01.pptx.png": "6ea4056f686004ea83c195ad81e250bf26809fa41c930b4e8352ce0d5eecfdfe",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide02.pptx.png": "3d2c01030d219f30bdea3ba1c855ffd375d0418ba222225c8cbdcba02e823e1d",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide03.pptx.png": "d47ec0dbd5f26475f8a91df84595dbf7694d4d9db9194dac9b772833a567b0e6",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide04.pptx.png": "32dcea0dc7c17eabbba85a8b0ff6170cc194160a1f674e7228f08de734a80f8d",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide05.pptx.png": "61c5a18dcd78f54c12820bddf8fb0a45fefa709b120c4e41536effcc1bf8e451",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide06.pptx.png": "f6db067b0385dec69cb4151a53da5a04484ed8046018c556e286f970fe333cc1",
+   "qa/g0/usc-substitute-fonts-wide/renders/slide07.pptx.png": "1e4f8a327fc729757268fc5fa892e1e92b1c09bdbfda9f0ea9ebeab5bc0ad3a3",
+   "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-sheet.png": "7a5a473c551e91c537c4b79770a0beda70913a1c306ad07b7b8ef3cdf25a15fa",
+   "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-filled.pptx": "4da488e817db043917088c31bfc1f2d571c29917cecc35bf0e6e57e7a01ac25d"
+  }
  },
- {
-  "template": "elderly-gov-diy.pptx",
-  "bytes": 14836949,
-  "seconds": 1.07,
-  "layouts": [
-   {
-    "name": "Cover slide layout",
-    "master": 0,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
+ "runs": [
+  {
+   "template": "edb-mpa2022.pptx",
+   "bytes": 6993109,
+   "seconds": 0.16,
+   "layouts": [
+    {
+     "name": "標題投影片",
+     "master": 0,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 0,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 0,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 0,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 0,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 0,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 0,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "標題投影片",
+     "master": 1,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 1,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 1,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 1,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 1,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 1,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 1,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 1,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 1,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 1,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "標題投影片",
+     "master": 2,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 2,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 2,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 2,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 2,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 2,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 2,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 2,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 2,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 2,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 2,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "標題投影片",
+     "master": 3,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 3,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 3,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 3,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 3,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 3,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 3,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 3,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 3,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 3,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 3,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "標題投影片",
+     "master": 4,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 4,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 4,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 4,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 4,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 4,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 4,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 4,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 4,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 4,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 4,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "標題投影片",
+     "master": 5,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 5,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 5,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 5,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 5,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 5,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 5,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 5,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 5,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 5,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 5,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "標題投影片",
+     "master": 6,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及物件",
+     "master": 6,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "章節標題",
+     "master": 6,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "兩項物件",
+     "master": 6,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "比對",
+     "master": 6,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "只有標題",
+     "master": 6,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "空白",
+     "master": 6,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的內容",
+     "master": 6,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "含標題的圖片",
+     "master": 6,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "標題及直排文字",
+     "master": 6,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    },
+    {
+     "name": "直排標題及文字",
+     "master": 6,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": [
+      "vertical text"
+     ]
+    }
+   ],
+   "defaults": {
+    "title": "標題投影片 [title]",
+    "content": "標題及物件 [content]",
+    "two": "兩項物件 [two]",
+    "section": "章節標題 [section]"
    },
-   {
-    "name": "Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "1_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "13_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "3_Agenda slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "4_Taam slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "5_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "2_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "8_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "10_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "12_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "11_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "6_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "16_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "17_Contents slide layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "PNG sets layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "1_Icon sets layout",
-    "master": 1,
-    "class": "other",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Section Break Slide layout",
-    "master": 2,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "13_Contents slide layout",
-    "master": 2,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "1_Title and Content",
-    "master": 2,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Cover slide layout",
-    "master": 2,
-    "class": "other",
-    "bodies": 0,
-    "unmodelled": []
-   }
-  ],
-  "defaults": {
-   "title": null,
-   "content": null,
-   "two": null,
-   "section": null
+   "picks": [
+    "匯通物流 2027 年度計劃 -> 標題投影片 [title] (fits)",
+    "三個目標 -> 標題及物件 [content] (fits)",
+    "時間表 -> 標題及物件 [content] (fits)",
+    "預算 港幣 800 萬 -> 兩項物件 [two] (fits)",
+    "八項行動 -> 標題及物件 [content] (split)",
+    "八項行動（續） -> 標題及物件 [content] (split)",
+    "問答 -> 章節標題 [section] (fits)"
+   ],
+   "warnings": [],
+   "c1_round_trip": true,
+   "c3_kept_problems": [],
+   "c3_unexpected_new_parts": [],
+   "c5_integrity": [],
+   "c6_empty_placeholders": [],
+   "text_outside_placeholders": [],
+   "renders": [
+    "qa/g0/edb-mpa2022/renders/slide01.pptx.png",
+    "qa/g0/edb-mpa2022/renders/slide02.pptx.png",
+    "qa/g0/edb-mpa2022/renders/slide03.pptx.png",
+    "qa/g0/edb-mpa2022/renders/slide04.pptx.png",
+    "qa/g0/edb-mpa2022/renders/slide05.pptx.png",
+    "qa/g0/edb-mpa2022/renders/slide06.pptx.png",
+    "qa/g0/edb-mpa2022/renders/slide07.pptx.png"
+   ],
+   "sheet": "qa/g0/edb-mpa2022/edb-mpa2022-sheet.png",
+   "script_clean": true
   },
-  "picks": [
-   "匯通物流 2027 年度計劃 -> 1_Title and Content [other] (fits)",
-   "三個目標 -> 1_Title and Content [other] (fits)",
-   "時間表 -> 1_Title and Content [other] (fits)",
-   "預算 港幣 800 萬 -> 1_Title and Content [other] (fits)",
-   "八項行動 -> 1_Title and Content [other] (split)",
-   "八項行動（續） -> 1_Title and Content [other] (split)",
-   "問答 -> 1_Title and Content [other] (fits)"
-  ],
-  "warnings": [
-   "18 columns_merged"
-  ],
-  "c1_round_trip": true,
-  "c3_kept_problems": [],
-  "c3_unexpected_new_parts": [],
-  "c5_integrity": [],
-  "c6_empty_placeholders": [],
-  "text_in_placeholders_only": true,
-  "renders": [
-   "qa/g0/elderly-gov-diy/renders/slide01.pptx.png",
-   "qa/g0/elderly-gov-diy/renders/slide02.pptx.png",
-   "qa/g0/elderly-gov-diy/renders/slide03.pptx.png",
-   "qa/g0/elderly-gov-diy/renders/slide04.pptx.png",
-   "qa/g0/elderly-gov-diy/renders/slide05.pptx.png",
-   "qa/g0/elderly-gov-diy/renders/slide06.pptx.png",
-   "qa/g0/elderly-gov-diy/renders/slide07.pptx.png"
-  ],
-  "sheet": "qa/g0/elderly-gov-diy/elderly-gov-diy-sheet.png",
-  "script_clean": true
- },
- {
-  "template": "hkust-template14.potx",
-  "bytes": 73689269,
-  "seconds": 2.11,
-  "layouts": [
-   {
-    "name": "Title & Content Slide 1",
-    "master": 0,
-    "class": "other",
-    "bodies": 7,
-    "unmodelled": []
+  {
+   "template": "elderly-gov-diy.pptx",
+   "bytes": 14836949,
+   "seconds": 1.02,
+   "layouts": [
+    {
+     "name": "Cover slide layout",
+     "master": 0,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "1_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "13_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "3_Agenda slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "4_Taam slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "5_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "2_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "8_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "10_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "12_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "11_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "6_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "16_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "17_Contents slide layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "PNG sets layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "1_Icon sets layout",
+     "master": 1,
+     "class": "other",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Section Break Slide layout",
+     "master": 2,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "13_Contents slide layout",
+     "master": 2,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "1_Title and Content",
+     "master": 2,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Cover slide layout",
+     "master": 2,
+     "class": "other",
+     "bodies": 0,
+     "unmodelled": []
+    }
+   ],
+   "defaults": {
+    "title": null,
+    "content": null,
+    "two": null,
+    "section": null
    },
-   {
-    "name": "Title and Content 2",
-    "master": 0,
-    "class": "other",
-    "bodies": 3,
-    "unmodelled": []
-   },
-   {
-    "name": "Divider-01 ",
-    "master": 0,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "1_Divider-02 ",
-    "master": 0,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Title & Content 3",
-    "master": 0,
-    "class": "other",
-    "bodies": 3,
-    "unmodelled": []
-   },
-   {
-    "name": "Blank-1",
-    "master": 0,
-    "class": "other",
-    "bodies": 8,
-    "unmodelled": []
-   },
-   {
-    "name": "Blank-2",
-    "master": 0,
-    "class": "other",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "1_Blank-2",
-    "master": 0,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Cover",
-    "master": 1,
-    "class": "title",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "blank page",
-    "master": 1,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   }
-  ],
-  "defaults": {
-   "title": "Cover [title]",
-   "content": null,
-   "two": null,
-   "section": null
+   "picks": [
+    "匯通物流 2027 年度計劃 -> 1_Title and Content [other] (fits)",
+    "三個目標 -> 1_Title and Content [other] (fits)",
+    "時間表 -> 1_Title and Content [other] (fits)",
+    "預算 港幣 800 萬 -> 1_Title and Content [other] (fits)",
+    "八項行動 -> 1_Title and Content [other] (split)",
+    "八項行動（續） -> 1_Title and Content [other] (split)",
+    "問答 -> 1_Title and Content [other] (fits)"
+   ],
+   "warnings": [
+    "18 columns_merged"
+   ],
+   "c1_round_trip": true,
+   "c3_kept_problems": [],
+   "c3_unexpected_new_parts": [],
+   "c5_integrity": [],
+   "c6_empty_placeholders": [],
+   "text_outside_placeholders": [],
+   "renders": [
+    "qa/g0/elderly-gov-diy/renders/slide01.pptx.png",
+    "qa/g0/elderly-gov-diy/renders/slide02.pptx.png",
+    "qa/g0/elderly-gov-diy/renders/slide03.pptx.png",
+    "qa/g0/elderly-gov-diy/renders/slide04.pptx.png",
+    "qa/g0/elderly-gov-diy/renders/slide05.pptx.png",
+    "qa/g0/elderly-gov-diy/renders/slide06.pptx.png",
+    "qa/g0/elderly-gov-diy/renders/slide07.pptx.png"
+   ],
+   "sheet": "qa/g0/elderly-gov-diy/elderly-gov-diy-sheet.png",
+   "script_clean": true
   },
-  "picks": [
-   "匯通物流 2027 年度計劃 -> Cover [title] (fits)",
-   "三個目標 -> Cover [title] (fits)",
-   "時間表 -> Cover [title] (split)",
-   "時間表（續） -> Cover [title] (split)",
-   "預算 港幣 800 萬 -> Cover [title] (split)",
-   "預算 港幣 800 萬（續） -> Cover [title] (split)",
-   "八項行動 -> Cover [title] (split)",
-   "八項行動（續） -> Cover [title] (split)",
-   "問答 -> Cover [title] (fits)"
-  ],
-  "warnings": [
-   "18 columns_merged"
-  ],
-  "c1_round_trip": true,
-  "c3_kept_problems": [],
-  "c3_unexpected_new_parts": [],
-  "c5_integrity": [],
-  "c6_empty_placeholders": [],
-  "text_in_placeholders_only": true,
-  "renders": [
-   "qa/g0/hkust-template14/renders/slide01.pptx.png",
-   "qa/g0/hkust-template14/renders/slide02.pptx.png",
-   "qa/g0/hkust-template14/renders/slide03.pptx.png",
-   "qa/g0/hkust-template14/renders/slide04.pptx.png",
-   "qa/g0/hkust-template14/renders/slide05.pptx.png",
-   "qa/g0/hkust-template14/renders/slide06.pptx.png",
-   "qa/g0/hkust-template14/renders/slide07.pptx.png",
-   "qa/g0/hkust-template14/renders/slide08.pptx.png",
-   "qa/g0/hkust-template14/renders/slide09.pptx.png"
-  ],
-  "sheet": "qa/g0/hkust-template14/hkust-template14-sheet.png",
-  "script_clean": true
- },
- {
-  "template": "hkust-template15.potx",
-  "bytes": 5047057,
-  "result": "refused",
-  "code": "no_text_layout",
-  "detail": ""
- },
- {
-  "template": "ms-business-proposal.pptx",
-  "bytes": 6765419,
-  "seconds": 0.06,
-  "layouts": [
-   {
-    "name": "Title Slide",
-    "master": 0,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
+  {
+   "template": "hkust-template14.potx",
+   "bytes": 73689269,
+   "seconds": 2.11,
+   "layouts": [
+    {
+     "name": "Title & Content Slide 1",
+     "master": 0,
+     "class": "other",
+     "bodies": 7,
+     "unmodelled": []
+    },
+    {
+     "name": "Title and Content 2",
+     "master": 0,
+     "class": "other",
+     "bodies": 3,
+     "unmodelled": []
+    },
+    {
+     "name": "Divider-01 ",
+     "master": 0,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "1_Divider-02 ",
+     "master": 0,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Title & Content 3",
+     "master": 0,
+     "class": "other",
+     "bodies": 3,
+     "unmodelled": []
+    },
+    {
+     "name": "Blank-1",
+     "master": 0,
+     "class": "other",
+     "bodies": 8,
+     "unmodelled": []
+    },
+    {
+     "name": "Blank-2",
+     "master": 0,
+     "class": "other",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "1_Blank-2",
+     "master": 0,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Cover",
+     "master": 1,
+     "class": "title",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "blank page",
+     "master": 1,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    }
+   ],
+   "defaults": {
+    "title": "Cover [title]",
+    "content": null,
+    "two": null,
+    "section": null
    },
-   {
-    "name": "Agenda",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Title, content, and image left",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Section break",
-    "master": 0,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "Title, content, and image right",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Title and two content",
-    "master": 0,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Title and two content 2",
-    "master": 0,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Title and two content 3",
-    "master": 0,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Title and content",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Two content with three images",
-    "master": 0,
-    "class": "other",
-    "bodies": 2,
-    "unmodelled": []
-   }
-  ],
-  "defaults": {
-   "title": "Title Slide [title]",
-   "content": "Agenda [content]",
-   "two": "Title and two content [two]",
-   "section": null
+   "picks": [
+    "匯通物流 2027 年度計劃 -> Cover [title] (fits)",
+    "三個目標 -> Cover [title] (fits)",
+    "時間表 -> Cover [title] (split)",
+    "時間表（續） -> Cover [title] (split)",
+    "預算 港幣 800 萬 -> Cover [title] (split)",
+    "預算 港幣 800 萬（續） -> Cover [title] (split)",
+    "八項行動 -> Cover [title] (split)",
+    "八項行動（續） -> Cover [title] (split)",
+    "問答 -> Cover [title] (fits)"
+   ],
+   "warnings": [
+    "18 columns_merged"
+   ],
+   "c1_round_trip": true,
+   "c3_kept_problems": [],
+   "c3_unexpected_new_parts": [],
+   "c5_integrity": [],
+   "c6_empty_placeholders": [],
+   "text_outside_placeholders": [],
+   "renders": [
+    "qa/g0/hkust-template14/renders/slide01.pptx.png",
+    "qa/g0/hkust-template14/renders/slide02.pptx.png",
+    "qa/g0/hkust-template14/renders/slide03.pptx.png",
+    "qa/g0/hkust-template14/renders/slide04.pptx.png",
+    "qa/g0/hkust-template14/renders/slide05.pptx.png",
+    "qa/g0/hkust-template14/renders/slide06.pptx.png",
+    "qa/g0/hkust-template14/renders/slide07.pptx.png",
+    "qa/g0/hkust-template14/renders/slide08.pptx.png",
+    "qa/g0/hkust-template14/renders/slide09.pptx.png"
+   ],
+   "sheet": "qa/g0/hkust-template14/hkust-template14-sheet.png",
+   "script_clean": true
   },
-  "picks": [
-   "匯通物流 2027 年度計劃 -> Agenda [content] (fits)",
-   "三個目標 -> Agenda [content] (fits)",
-   "時間表 -> Agenda [content] (fits)",
-   "預算 港幣 800 萬 -> Title and two content [two] (fits)",
-   "八項行動 -> Agenda [content] (split)",
-   "八項行動（續） -> Agenda [content] (split)",
-   "問答 -> Title Slide [title] (fits)"
-  ],
-  "warnings": [],
-  "c1_round_trip": true,
-  "c3_kept_problems": [],
-  "c3_unexpected_new_parts": [],
-  "c5_integrity": [],
-  "c6_empty_placeholders": [],
-  "text_in_placeholders_only": true,
-  "renders": [
-   "qa/g0/ms-business-proposal/renders/slide01.pptx.png",
-   "qa/g0/ms-business-proposal/renders/slide02.pptx.png",
-   "qa/g0/ms-business-proposal/renders/slide03.pptx.png",
-   "qa/g0/ms-business-proposal/renders/slide04.pptx.png",
-   "qa/g0/ms-business-proposal/renders/slide05.pptx.png",
-   "qa/g0/ms-business-proposal/renders/slide06.pptx.png",
-   "qa/g0/ms-business-proposal/renders/slide07.pptx.png"
-  ],
-  "sheet": "qa/g0/ms-business-proposal/ms-business-proposal-sheet.png",
-  "script_clean": true
- },
- {
-  "template": "usc-substitute-fonts-wide.potx",
-  "bytes": 259046,
-  "seconds": 0.02,
-  "layouts": [
-   {
-    "name": "Title Slide",
-    "master": 0,
-    "class": "title",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "Title and Content",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Section Header",
-    "master": 0,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Two Content",
-    "master": 0,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Comparison",
-    "master": 0,
-    "class": "two",
-    "bodies": 4,
-    "unmodelled": []
-   },
-   {
-    "name": "Title Only",
-    "master": 0,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "Blank",
-    "master": 0,
-    "class": "section",
-    "bodies": 0,
-    "unmodelled": []
-   },
-   {
-    "name": "Content with Caption",
-    "master": 0,
-    "class": "two",
-    "bodies": 2,
-    "unmodelled": []
-   },
-   {
-    "name": "Picture with Caption",
-    "master": 0,
-    "class": "content",
-    "bodies": 1,
-    "unmodelled": []
-   },
-   {
-    "name": "Conclusion",
-    "master": 0,
-    "class": "section",
-    "bodies": 1,
-    "unmodelled": []
-   }
-  ],
-  "defaults": {
-   "title": "Title Slide [title]",
-   "content": "Title and Content [content]",
-   "two": "Two Content [two]",
-   "section": "Section Header [section]"
+  {
+   "template": "hkust-template15.potx",
+   "bytes": 5047057,
+   "result": "refused",
+   "code": "no_text_layout",
+   "detail": ""
   },
-  "picks": [
-   "匯通物流 2027 年度計劃 -> Title Slide [title] (fits)",
-   "三個目標 -> Title and Content [content] (fits)",
-   "時間表 -> Title and Content [content] (fits)",
-   "預算 港幣 800 萬 -> Two Content [two] (fits)",
-   "八項行動 -> Title and Content [content] (split)",
-   "八項行動（續） -> Title and Content [content] (split)",
-   "問答 -> Section Header [section] (fits)"
-  ],
-  "warnings": [],
-  "c1_round_trip": true,
-  "c3_kept_problems": [],
-  "c3_unexpected_new_parts": [],
-  "c5_integrity": [],
-  "c6_empty_placeholders": [],
-  "text_in_placeholders_only": true,
-  "renders": [
-   "qa/g0/usc-substitute-fonts-wide/renders/slide01.pptx.png",
-   "qa/g0/usc-substitute-fonts-wide/renders/slide02.pptx.png",
-   "qa/g0/usc-substitute-fonts-wide/renders/slide03.pptx.png",
-   "qa/g0/usc-substitute-fonts-wide/renders/slide04.pptx.png",
-   "qa/g0/usc-substitute-fonts-wide/renders/slide05.pptx.png",
-   "qa/g0/usc-substitute-fonts-wide/renders/slide06.pptx.png",
-   "qa/g0/usc-substitute-fonts-wide/renders/slide07.pptx.png"
-  ],
-  "sheet": "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-sheet.png",
-  "script_clean": true
- }
-]
+  {
+   "template": "ms-business-proposal.pptx",
+   "bytes": 6765419,
+   "seconds": 0.05,
+   "layouts": [
+    {
+     "name": "Title Slide",
+     "master": 0,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "Agenda",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Title, content, and image left",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Section break",
+     "master": 0,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "Title, content, and image right",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Title and two content",
+     "master": 0,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Title and two content 2",
+     "master": 0,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Title and two content 3",
+     "master": 0,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Title and content",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Two content with three images",
+     "master": 0,
+     "class": "other",
+     "bodies": 2,
+     "unmodelled": []
+    }
+   ],
+   "defaults": {
+    "title": "Title Slide [title]",
+    "content": "Agenda [content]",
+    "two": "Title and two content [two]",
+    "section": null
+   },
+   "picks": [
+    "匯通物流 2027 年度計劃 -> Agenda [content] (fits)",
+    "三個目標 -> Agenda [content] (fits)",
+    "時間表 -> Agenda [content] (fits)",
+    "預算 港幣 800 萬 -> Title and two content [two] (fits)",
+    "八項行動 -> Agenda [content] (split)",
+    "八項行動（續） -> Agenda [content] (split)",
+    "問答 -> Title Slide [title] (fits)"
+   ],
+   "warnings": [],
+   "c1_round_trip": true,
+   "c3_kept_problems": [],
+   "c3_unexpected_new_parts": [],
+   "c5_integrity": [],
+   "c6_empty_placeholders": [],
+   "text_outside_placeholders": [],
+   "renders": [
+    "qa/g0/ms-business-proposal/renders/slide01.pptx.png",
+    "qa/g0/ms-business-proposal/renders/slide02.pptx.png",
+    "qa/g0/ms-business-proposal/renders/slide03.pptx.png",
+    "qa/g0/ms-business-proposal/renders/slide04.pptx.png",
+    "qa/g0/ms-business-proposal/renders/slide05.pptx.png",
+    "qa/g0/ms-business-proposal/renders/slide06.pptx.png",
+    "qa/g0/ms-business-proposal/renders/slide07.pptx.png"
+   ],
+   "sheet": "qa/g0/ms-business-proposal/ms-business-proposal-sheet.png",
+   "script_clean": true
+  },
+  {
+   "template": "usc-substitute-fonts-wide.potx",
+   "bytes": 259046,
+   "seconds": 0.03,
+   "layouts": [
+    {
+     "name": "Title Slide",
+     "master": 0,
+     "class": "title",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "Title and Content",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Section Header",
+     "master": 0,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Two Content",
+     "master": 0,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Comparison",
+     "master": 0,
+     "class": "two",
+     "bodies": 4,
+     "unmodelled": []
+    },
+    {
+     "name": "Title Only",
+     "master": 0,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "Blank",
+     "master": 0,
+     "class": "section",
+     "bodies": 0,
+     "unmodelled": []
+    },
+    {
+     "name": "Content with Caption",
+     "master": 0,
+     "class": "two",
+     "bodies": 2,
+     "unmodelled": []
+    },
+    {
+     "name": "Picture with Caption",
+     "master": 0,
+     "class": "content",
+     "bodies": 1,
+     "unmodelled": []
+    },
+    {
+     "name": "Conclusion",
+     "master": 0,
+     "class": "section",
+     "bodies": 1,
+     "unmodelled": []
+    }
+   ],
+   "defaults": {
+    "title": "Title Slide [title]",
+    "content": "Title and Content [content]",
+    "two": "Two Content [two]",
+    "section": "Section Header [section]"
+   },
+   "picks": [
+    "匯通物流 2027 年度計劃 -> Title Slide [title] (fits)",
+    "三個目標 -> Title and Content [content] (fits)",
+    "時間表 -> Title and Content [content] (fits)",
+    "預算 港幣 800 萬 -> Two Content [two] (fits)",
+    "八項行動 -> Title and Content [content] (split)",
+    "八項行動（續） -> Title and Content [content] (split)",
+    "問答 -> Section Header [section] (fits)"
+   ],
+   "warnings": [],
+   "c1_round_trip": true,
+   "c3_kept_problems": [],
+   "c3_unexpected_new_parts": [],
+   "c5_integrity": [],
+   "c6_empty_placeholders": [],
+   "text_outside_placeholders": [],
+   "renders": [
+    "qa/g0/usc-substitute-fonts-wide/renders/slide01.pptx.png",
+    "qa/g0/usc-substitute-fonts-wide/renders/slide02.pptx.png",
+    "qa/g0/usc-substitute-fonts-wide/renders/slide03.pptx.png",
+    "qa/g0/usc-substitute-fonts-wide/renders/slide04.pptx.png",
+    "qa/g0/usc-substitute-fonts-wide/renders/slide05.pptx.png",
+    "qa/g0/usc-substitute-fonts-wide/renders/slide06.pptx.png",
+    "qa/g0/usc-substitute-fonts-wide/renders/slide07.pptx.png"
+   ],
+   "sheet": "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-sheet.png",
+   "script_clean": true
+  }
+ ]
+}

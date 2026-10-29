@@ -2,4 +2,4 @@
 # mutation in src/deckfill/fill.py: '            _number_slidenum_fields(el, number)\n' -> ''
 # tests: tests/test_c4_footers.py
 FAILED tests/test_c4_footers.py::test_footer_active - AssertionError: assert ...
-1 failed, 5 passed in 0.16s
+1 failed, 6 passed in 0.19s

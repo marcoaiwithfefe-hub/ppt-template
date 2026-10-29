@@ -1,0 +1,8 @@
+tested commit ea1513141d46 (dirty)
+session 36 s; 22 browser requests, 19 server hits
+idle after the last download: 30.0 s
+before ready: 19 requests, 0 to another origin
+after ready: 3 browser requests, of which 3 are clicked link-outs (https://gemini.google.com/app, https://github.com/marcoaiwithfefe-hub/ppt-template, https://mentron.hk/)
+after ready: 0 page requests, 0 server hits, 0 blocked attempts
+fills after ready: 2 with downloads, plus one offline
+FAIL

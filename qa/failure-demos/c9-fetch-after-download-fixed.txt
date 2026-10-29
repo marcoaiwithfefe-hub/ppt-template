@@ -1,4 +1,4 @@
 # c9-fetch-after-download: the page fetches a same-origin file one second after each download
 # mutation in docs/app.js: '  $("downloaded").hidden = false;\n}' -> '  $("downloaded").hidden = false;\n  setTimeout(() => fetch("./copy.js").catch(() => {}), 1000);\n}'
 # tests: node tests/e2e/c9_privacy.mjs
-23 passed, 0 failed
+25 passed, 0 failed
