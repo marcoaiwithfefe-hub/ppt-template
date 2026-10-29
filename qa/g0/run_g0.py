@@ -35,7 +35,7 @@ def expected_sequence(outline):
     seq = []
     for s in outline.slides:
         seq.append((s.title, 0))
-        seq.extend((t, 0) for t in s.subtitle)
+        seq.extend((t, "sub") for t in s.subtitle)
         for col in s.columns:
             seq.extend((it.text, it.level) for it in col)
     return seq
@@ -62,11 +62,12 @@ def actual_sequence(deck):
     return seq
 
 
-def columns_in_order(outline, deck):
-    """Continuation slides of a two-column slide interleave columns; compare as multisets per
-    source slide instead of one sequence when the outline has a split two-column slide."""
-    return sorted(expected_sequence(outline)) == sorted(
-        (t, 0 if lvl == 0 else lvl) for t, lvl in actual_sequence(deck)
+def same_sequence(expected, actual):
+    """Exact order and text. A subtitle line ("sub") matches level 0 in a subtitle placeholder or
+    level 1 as the first paragraphs of a body (D3 step 4 fallback when no title layout fits)."""
+    return len(expected) == len(actual) and all(
+        et == at and (el == al or (el == "sub" and al in (0, 1)))
+        for (et, el), (at, al) in zip(expected, actual)
     )
 
 
@@ -138,8 +139,7 @@ def run_one(path: Path, outline_text: str) -> dict:
     rec["picks"] = [f"{s.title} -> {names[s.layout]} ({s.fit})" for s in plan.slides]
     rec["warnings"] = [f"{w.line} {w.code}" for w in plan.warnings]
     deck = read_deck(out)
-    rec["c1_round_trip"] = columns_in_order(outline, deck)
-    rec["c1_sequence_exact"] = expected_sequence(outline) == actual_sequence(deck)
+    rec["c1_round_trip"] = same_sequence(expected_sequence(outline), actual_sequence(deck))
     rec["c3_kept_problems"] = kept_part_problems(data, out)
     rec["c3_unexpected_new_parts"] = [n for n in new_parts(data, out) if not n.startswith("ppt/slides/")]
     rec["c5_integrity"] = check_integrity(parts_of(out))

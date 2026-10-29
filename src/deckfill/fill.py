@@ -9,12 +9,14 @@ import zipfile
 from lxml import etree
 
 from .errors import PlanError, TemplateError
-from .package import check_integrity, RT_SLIDE
+from .package import RT_SLIDE, Index, check_integrity, is_xml_name, rels_name, source_of_rels
 from .plan import Plan, plan_deck
 from .template import FOOTER_TYPES, open_template, ph_idx, ph_type, placeholders
 from .xmlsafe import NS, R_NS, q
 
 SECTION_EXT_URI = "{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"
+CT_SLIDE = "application/vnd.openxmlformats-officedocument.presentationml.slide+xml"
+CT_NOTES = "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml"
 HLINK_TAGS = {q("a:hlinkClick"), q("a:hlinkMouseOver"), q("a:hlinkHover")}
 
 
@@ -207,6 +209,43 @@ def _update_app_xml(prs, n: int) -> None:
         part._blob = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
 
 
+def _restore_kept(inp: dict[str, bytes], out: dict[str, bytes], main: str) -> dict[str, bytes]:
+    """python-pptx re-serialises every part it saves: relationships sorted by id, absolute
+    targets made relative. Where a kept part means the same as the template's (same resolved
+    relationships, or equal canonical XML), the template's own bytes go back (D4: kept parts
+    unchanged). Slide and notes parts are the fill's own and are left alone."""
+    allowed = {main, rels_name(main), "[Content_Types].xml", "docProps/app.xml"}
+    out_idx, in_idx = Index(out), Index(inp)
+    restored = dict(out)
+    for name, data in out.items():
+        if name in allowed or name not in inp or inp[name] == data:
+            continue
+        source = source_of_rels(name) if name.endswith(".rels") else name
+        if out_idx.content_type(source) in (CT_SLIDE, CT_NOTES):
+            continue
+        if name.endswith(".rels"):
+            same = {(r.rid, r.type, r.target, r.external) for r in in_idx.rels(source).values()} == {
+                (r.rid, r.type, r.target, r.external) for r in out_idx.rels(source).values()
+            }
+        elif is_xml_name(name):
+            same = etree.tostring(in_idx.xml(name), method="c14n2") == etree.tostring(
+                out_idx.xml(name), method="c14n2"
+            )
+        else:
+            same = False
+        if same:
+            restored[name] = inp[name]
+    return restored
+
+
+def _zip(parts: dict[str, bytes]) -> bytes:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for name, data in parts.items():
+            z.writestr(name, data)
+    return buf.getvalue()
+
+
 def fill(data: bytes, filename: str, plan: Plan) -> bytes:
     info, pkg = open_template(data, filename)
     expected = plan_deck(info, plan.outline, dict(plan.overrides))
@@ -261,9 +300,10 @@ def fill(data: bytes, filename: str, plan: Plan) -> bytes:
     _update_app_xml(prs, len(plan.slides))
     out = io.BytesIO()
     prs.save(out)
-    result = out.getvalue()
-    with zipfile.ZipFile(io.BytesIO(result)) as z:
+    with zipfile.ZipFile(io.BytesIO(out.getvalue())) as z:
         parts = {n: z.read(n) for n in z.namelist()}
+    parts = _restore_kept(pkg.parts, parts, pkg.main)
+    result = _zip(parts)
     problems = check_integrity(parts)
     if problems:
         raise TemplateError("bad_file", "output failed integrity: " + "; ".join(problems[:5]))

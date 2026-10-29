@@ -16,6 +16,7 @@ FILLABLE = [
     "no-title.pptx", "only-content.pptx", "small-body.pptx", "small-body-insets.pptx", "nowrap.pptx",
     "footer-active.pptx", "footer-mixed.pptx", "footer-two-masters.pptx", "footer-fixed-date.pptx",
     "footer-hf.pptx", "external-link.pptx", "sections.pptx", "wui-tung.pptx", "wui-tung.potx",
+    "rels-order.pptx",
 ]
 
 
@@ -32,6 +33,16 @@ def test_c3_every_kept_part_unchanged(name, tpl):
     assert kept_part_problems(data, out) == []
     extra = [n for n in new_parts(data, out) if not n.startswith("ppt/slides/")]
     assert extra == []
+
+
+def test_c3_kept_relationships_byte_identical(tpl):
+    """Relationships out of Id order and absolute targets come back as the template wrote them."""
+    data = tpl("rels-order.pptx")
+    out = make(data, "rels-order.pptx")
+    ip, op = parts_of(data), parts_of(out)
+    kept = [n for n in ip if n.startswith(("ppt/slideMasters/_rels/", "ppt/slideLayouts/_rels/"))]
+    assert kept and all(op[n] == ip[n] for n in kept)
+    assert b'Target="/ppt/theme/' in op["ppt/slideMasters/_rels/slideMaster1.xml.rels"]
 
 
 @pytest.mark.parametrize("name", FILLABLE)

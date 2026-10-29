@@ -1,0 +1,4 @@
+tests/test_c3_c6_package.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_c3_c6_package.py::test_c3_every_kept_part_unchanged[rels-order.pptx]
+1 failed, 3 passed, 88 deselected in 0.25s

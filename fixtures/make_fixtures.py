@@ -619,6 +619,29 @@ def make_billion_laughs(src: Path) -> Path:
     return zip_edit(src, OUT / "billion-laughs.pptx", {"ppt/presProps.xml": BILLION_LAUGHS})
 
 
+def make_rels_order(src: Path) -> Path:
+    """Relationships the way PowerPoint often writes them: not in Id order, and absolute
+    targets. python-pptx re-sorts and relativises them on save; real templates do this
+    (G0: EDB, Microsoft, USC), python-pptx-made fixtures never do."""
+
+    def reverse(data: bytes) -> bytes:
+        rels = re.findall(rb"<Relationship [^>]*/>", data)
+        start, end = data.index(rels[0]), data.rindex(rels[-1]) + len(rels[-1])
+        return data[:start] + b"".join(reversed(rels)) + data[end:]
+
+    def absolute(data: bytes) -> bytes:
+        return reverse(data).replace(b'Target="../theme/', b'Target="/ppt/theme/')
+
+    with zipfile.ZipFile(src) as z:
+        names = z.namelist()
+    edits = {
+        n: (absolute if n.startswith("ppt/slideMasters/_rels/") else reverse)
+        for n in names
+        if n.startswith(("ppt/slideMasters/_rels/", "ppt/slideLayouts/_rels/")) and n.endswith(".rels")
+    }
+    return zip_edit(src, OUT / "rels-order.pptx", edits)
+
+
 def make_damaged(src: Path) -> Path:
     data = src.read_bytes()
     path = OUT / "damaged.pptx"
@@ -636,7 +659,7 @@ def main() -> None:
         make_footer_mixed(), make_footer_two_masters(), make_footer_fixed_date(), make_footer_hf(),
         make_missing_embed(), make_external_link(), make_missing_target(), make_dangling(),
         make_sections(), make_encrypted(wt), make_legacy_ppt(), make_not_pptx(), make_zip_bomb(wt),
-        make_lying_size(wt), make_billion_laughs(wt), make_damaged(wt),
+        make_lying_size(wt), make_billion_laughs(wt), make_damaged(wt), make_rels_order(wt),
     ]
     for p in made:
         print(f"{p.name:32s} {p.stat().st_size:>10,d}")
