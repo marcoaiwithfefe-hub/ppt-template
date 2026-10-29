@@ -223,15 +223,47 @@ def is_rels(name):
     return name.endswith(".rels")
 
 
+def content_type(parts, name) -> str:
+    ct = xml(parts["[Content_Types].xml"])
+    for e in ct:
+        if e.get("PartName", "").lstrip("/") == name:
+            return e.get("ContentType", "")
+    ext = name.rsplit(".", 1)[-1].lower() if "." in posixpath.basename(name) else ""
+    for e in ct:
+        if (e.get("Extension") or "").lower() == ext:
+            return e.get("ContentType", "")
+    return ""
+
+
+def is_xml_part(parts, name) -> bool:
+    ct = content_type(parts, name)
+    return name.endswith(".xml") or ct.endswith("+xml") or ct in ("application/xml", "text/xml")
+
+
+def without_links(data: bytes, dead: set) -> str:
+    """Canonical XML of a part with only the authorised edit made: every element that uses one of
+    the removed-slide relationships taken out (D4), nothing else."""
+    root = xml(data)
+    for el in list(root.iter()):
+        if any(k.startswith("{%s}" % R) and v in dead for k, v in el.attrib.items()):
+            el.getparent().remove(el)
+    return etree.tostring(root, method="c14n2").decode()
+
+
+def rel_set(parts, name, dead=frozenset()):
+    return {(rid, ty, t, ext) for rid, (ty, t, ext) in rels_of(parts, name).items() if rid not in dead}
+
+
 def kept_part_problems(inp: bytes, out: bytes, allowed_extra_changes=()) -> list[str]:
     """Every input part outside D4's allowed changes is in the output: binary parts byte for byte,
-    XML parts equal after canonicalisation."""
+    XML parts equal after canonicalisation. A part that linked to a removed slide is compared after
+    taking out only those link elements and relationships (Codex round 1, F11), so any other
+    change to it still counts."""
     ip, op = parts_of(inp), parts_of(out)
     slides, links = removed_slide_links(ip)
     kept = reachable(ip, skip_targets=slides)
     main = next(t for (ty, t, _) in rels_of(ip, "").values() if ty.endswith("/officeDocument"))
-    hyperlinked = {src for (src, _) in links if src != main}
-    allowed = {main, "[Content_Types].xml", "docProps/app.xml"} | hyperlinked | set(allowed_extra_changes)
+    allowed = {main, "[Content_Types].xml", "docProps/app.xml"} | set(allowed_extra_changes)
     problems = []
     for name in sorted(kept):
         if name in allowed:
@@ -239,15 +271,15 @@ def kept_part_problems(inp: bytes, out: bytes, allowed_extra_changes=()) -> list
         if name not in op:
             problems.append(f"missing {name}")
             continue
-        if name.endswith(".xml"):
-            if canonical(ip[name]) != canonical(op[name]):
+        dead = {rid for (src, rid) in links if src == name}
+        if is_xml_part(ip, name):
+            if without_links(ip[name], dead) != canonical(op[name]):
                 problems.append(f"changed {name}")
         elif ip[name] != op[name]:
             problems.append(f"bytes changed {name}")
         # its relationships too, except the ones to removed slides
-        rn = posixpath.join(posixpath.dirname(name), "_rels", posixpath.basename(name) + ".rels")
-        if rn in ip and canonical(ip[rn]) != canonical(op.get(rn, b"<x/>")):
-            problems.append(f"changed {rn}")
+        if rel_set(ip, name, dead) != rel_set(op, name):
+            problems.append(f"changed relationships of {name}")
     return problems
 
 

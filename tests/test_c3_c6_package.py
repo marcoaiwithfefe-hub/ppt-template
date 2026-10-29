@@ -3,6 +3,7 @@
 import socket
 
 import pytest
+from lxml import etree
 from conftest import outline_text
 from oracle import (
     A, P, P14, R, RT_SLIDE, kept_part_problems, new_parts, parts_of, read_deck, rels_of, slide_order, xml,
@@ -16,7 +17,7 @@ FILLABLE = [
     "no-title.pptx", "only-content.pptx", "small-body.pptx", "small-body-insets.pptx", "nowrap.pptx",
     "footer-active.pptx", "footer-mixed.pptx", "footer-two-masters.pptx", "footer-fixed-date.pptx",
     "footer-hf.pptx", "external-link.pptx", "sections.pptx", "wui-tung.pptx", "wui-tung.potx",
-    "rels-order.pptx",
+    "rels-order.pptx", "view-outline.pptx", "footer-local.pptx", "xml-renamed.pptx",
 ]
 
 
@@ -160,3 +161,29 @@ def test_f6_outline_view_reference_to_a_sample_slide(tpl):
     view = parts["ppt/viewProps.xml"]
     assert b"<p:sld " not in view and b"rIdV1" not in view  # the outline entry went; an empty sldLst is valid
     assert "ppt/_rels/viewProps.xml.rels" not in parts or b"slides/" not in parts["ppt/_rels/viewProps.xml.rels"]
+
+
+def test_f11_damage_beside_an_authorised_link_edit_is_caught(tpl):
+    """sections: a layout links to a sample slide, so the fill may remove that link. Any other change
+    to the same layout, here a shape deleted, must still fail C3."""
+    import zipfile as zf
+    from io import BytesIO
+
+    from oracle import removed_slide_links
+
+    data = tpl("sections.pptx")
+    out = make(data, "sections.pptx")
+    assert kept_part_problems(data, out) == []
+    _, links = removed_slide_links(parts_of(data))
+    layout = next(src for src, _ in links if "slideLayouts/" in src)
+    parts = parts_of(out)
+    root = xml(parts[layout])
+    tree = root.find(".//{%s}spTree" % P)
+    shapes = [sp for sp in tree if sp.tag == "{%s}sp" % P]
+    tree.remove(shapes[-1])
+    parts[layout] = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
+    buf = BytesIO()
+    with zf.ZipFile(buf, "w") as z:
+        for n, d in parts.items():
+            z.writestr(n, d)
+    assert f"changed {layout}" in kept_part_problems(data, buf.getvalue())
