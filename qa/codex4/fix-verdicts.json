@@ -1,0 +1,7 @@
+{
+ "F16": {
+  "verdict": "fixed",
+  "note": "Implements revision 7: changed group count with either count above one drops pick before occurrence lookup, emits layout_gone and excludes pick from surviving overrides. New parameterized tests against 45d803f: pick-first-delete-first fails because old code transfers pick to survivor; rename-picked fails because old code transfers pick to sibling; insert-third fails because old code assigns pick to inserted occurrence; pick-second-delete-first already passes because old occurrence index becomes out of range. That fourth case is compatibility coverage, not proof of fix. Test helper computes count independently, so comparisons are not defeated by old replies lacking count. All three new browser assertions fail old behavior: survivor keeps default, drop note appears, and downloaded survivor keeps default.",
+  "evidence": "0a0a0cc:src/deckfill/web.py:29-40,116-121; 0a0a0cc:tests/test_web_bridge.py:36-41,151-176; 0a0a0cc:tests/e2e/override_follow.mjs:111-130"
+ }
+}
