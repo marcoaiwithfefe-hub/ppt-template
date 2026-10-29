@@ -16,4 +16,5 @@
 - [x] blast-radius: privacy proof from a saved request log (qa/blast-radius.md, qa/e2e/privacy_proof.py PASS on fc505ff)
 - [x] Walkthrough rendered to qa/walkthrough/ (not published)
 - [x] Rev 5: caps 100 MB file, uncompressed 150 MB lowered to 130 MB for the heap bar; copy, tests, worst case, C12, G0 sixth run, notes
-- [ ] Report to ai-brain-52
+- [x] Report to ai-brain-52
+- [x] Codex round 1: F1 to F14 fixed with failing-first tests (qa/codex1/fixes/); final rerun on e85ebd9, evidence 72fb67e, walkthrough fd78e9f
