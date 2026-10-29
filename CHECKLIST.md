@@ -15,5 +15,5 @@
 - [x] Slop scan triage (qa/slop-triage.md: 2 hits, both kept)
 - [x] blast-radius: privacy proof from a saved request log (qa/blast-radius.md, qa/e2e/privacy_proof.py PASS on fc505ff)
 - [x] Walkthrough rendered to qa/walkthrough/ (not published)
-- [ ] Rev 5: caps 100 MB file, uncompressed 150 MB lowered to 130 MB for the heap bar; copy, tests, worst case, C12, G0 sixth run, notes
+- [x] Rev 5: caps 100 MB file, uncompressed 150 MB lowered to 130 MB for the heap bar; copy, tests, worst case, C12, G0 sixth run, notes
 - [ ] Report to ai-brain-52
