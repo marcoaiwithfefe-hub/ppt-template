@@ -1,0 +1,6 @@
+# c5-validator: fill writes an undeclared attribute on every text run
+# mutation in src/deckfill/fill.py: '        r.text = text\n' -> '        r.text = text\n        r._r.set("bogus", "1")\n'
+# checks: pytest -k c5_integrity, then tools/validate on the filled typed.pptx
+CPython C5 integrity on the same code: 24 passed, 111 deselected in 0.45s
+Open XML SDK validator on the filled typed.pptx: 32 errors ['Sch_UndeclaredAttribute'] The 'bogus' attribute is not declared.
+FAIL C5 validator

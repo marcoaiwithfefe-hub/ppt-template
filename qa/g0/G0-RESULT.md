@@ -2,14 +2,14 @@
 
 Run 2026-10-29 on `fixtures/reference-outline.md` (title slide with subtitle, two bullet slides with level 2, one two-column slide, one 8-bullet slide, one section slide). Runner: `qa/g0/run_g0.py`. Raw numbers: `qa/g0/report.json`. Sources: `qa/real-templates/SOURCES.md`.
 
-Verdict: **4 of 5 clean on every G0 part that could run. The C5 validator part is NOT RUN**, because the Open XML SDK is not installed (the dotnet SDK install was refused by the permission classifier; see `decisions.tsv`). G0 cannot be called PASS until that part runs.
+Verdict: **4 of 5 clean on every G0 part, the C5 validator included.** The validator (Open XML SDK 3.5.1, Office 2016 rules, SDK 10.0.403 installed by Marco on 2026-10-30) ran on f8d9fc9 and found 0 errors in each of the four clean decks (`qa/c5/c5-report.json`). HKUST 15 is refused as `no_text_layout`.
 
 | template | result | C1 text round trip | C3 kept parts | C5 integrity | C5 validator | C6 empty boxes | renders (eye) |
 |---|---|---|---|---|---|---|---|
-| `edb-mpa2022.pptx` | clean | pass | pass | pass | NOT RUN | pass | decoration on every slide, no text past an edge or over another block |
-| `elderly-gov-diy.pptx` | clean | pass | pass | pass | NOT RUN | pass | same; columns merged into one body (D3 step 4 fallback, warned) |
-| `ms-business-proposal.pptx` | clean | pass | pass | pass | NOT RUN | pass | same; slide numbers 1 to 6 (cached field text now set per slide, see below) |
-| `usc-substitute-fonts-wide.potx` | clean | pass | pass | pass | NOT RUN | pass | same; logo on every slide |
+| `edb-mpa2022.pptx` | clean | pass | pass | pass | pass | pass | decoration on every slide, no text past an edge or over another block |
+| `elderly-gov-diy.pptx` | clean | pass | pass | pass | pass | pass | same; columns merged into one body (D3 step 4 fallback, warned) |
+| `ms-business-proposal.pptx` | clean | pass | pass | pass | pass | pass | same; slide numbers 1 to 6 (cached field text now set per slide, see below) |
+| `usc-substitute-fonts-wide.potx` | clean | pass | pass | pass | pass | pass | same; logo on every slide |
 | `hkust-template15.potx` | refused `no_text_layout` | n/a | n/a | n/a | n/a | n/a | none |
 
 ## Outside the five: HKUST template 14 (spec rev 5)
@@ -18,9 +18,11 @@ Rev 5 raised the file cap to 100 MB (2026-10-30), so `hkust-template14.potx` (73
 
 | template | result | C1 text round trip | C3 kept parts | C5 integrity | C5 validator | C6 empty boxes | renders (eye) |
 |---|---|---|---|---|---|---|---|
-| `hkust-template14.potx` | clean | pass | pass | pass | NOT RUN | pass | decoration on every slide (campus photo, green bands), no text past an edge or over another block; every slide uses the cover look |
+| `hkust-template14.potx` | clean, except 1 validator error the template already has | pass | pass | pass | 1 error, in the template, not added by the fill (see below) | pass | decoration on every slide (campus photo, green bands), no text past an edge or over another block; every slide uses the cover look |
 
 Its content layouts have the same shape as template 15: their title boxes are body placeholders, so all 8 of them, plus `blank page`, are `other`. The only layout with a `title` placeholder is `Cover` (master 2), so the D3 fallback put every slide on `Cover`: titles in its title box, bullets in its body, and the two columns merged with the `columns_merged` warning. The deck is complete and readable, but it is not the content look a person would pick. In the browser its fill is the slowest real-template step in C12, at 2.66 s against the 3 s bar. HKUST's template 16 (58.7 MB) was not downloaded.
+
+HKUST 14 validator error: `Sch_UndeclaredAttribute`, "The 'mod' attribute is not declared.", at `/p:sldLayout[1]/p:extLst[1]` in `ppt/slideLayouts/slideLayout9.xml`. It is HKUST's own `<p:extLst mod="1">`, the extension list that holds the layout's slide guides (`p15:sldGuideLst`). The unfilled template has the same error, and the fill copies that layout byte for byte, so the fill added nothing. It is not on `qa/c5/allowlist.json`, so the C5 runner reports this deck as FAIL. Whether to allowlist it is an open call; it does not touch the verdict on the five.
 
 ## Class picks
 
