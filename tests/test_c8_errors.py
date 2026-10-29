@@ -175,6 +175,48 @@ def test_f3_end_record_that_understates_the_count(monkeypatch):
     assert e.value.code == "too_big"
 
 
+def _zip64_beside_a_classic_end(data: bytes, classic_records: int, record: bool = True) -> bytes:
+    """ZIP64 end records with the archive's true counts, put before a classic end record whose
+    ordinary (non-sentinel) fields claim only the last few directory records. The last record's
+    comment length is stretched over the 76 ZIP64 bytes, so a walk of the classic span ends
+    exactly at the classic end record. zipfile reads the ZIP64 records whenever their locator is
+    there (Codex round 2, F3)."""
+    eocd = data.rfind(b"PK\x05\x06")
+    _, _, _, _, n, cd_size, cd_offset, _ = struct.unpack_from("<IHHHHIIH", data, eocd)
+    starts, p = [], cd_offset
+    while p < cd_offset + cd_size:
+        starts.append(p)
+        a, b, c = struct.unpack_from("<HHH", data, p + 28)
+        p += 46 + a + b + c
+    tail = starts[-classic_records]
+    body = bytearray(data[:eocd])
+    (k,) = struct.unpack_from("<H", body, starts[-1] + 32)
+    struct.pack_into("<H", body, starts[-1] + 32, k + 76)
+    z64 = struct.pack("<4sQHHIIQQQQ", b"PK\x06\x06", 44, 45, 45, 0, 0, n, n, cd_size, cd_offset)
+    if not record:
+        z64 = b"\0" * 56
+    loc = struct.pack("<4sIQI", b"PK\x06\x07", 0, eocd, 1)
+    classic = bytearray(data[eocd:])
+    struct.pack_into("<HHII", classic, 8, classic_records, classic_records, eocd - tail + 76, tail)
+    return bytes(body) + z64 + loc + bytes(classic)
+
+
+def test_f3_zip64_records_read_whatever_the_classic_fields_say(monkeypatch):
+    data = _zip64_beside_a_classic_end(_many_members(package.MAX_MEMBERS + 500), 10)
+    _no_zipfile(monkeypatch)
+    with pytest.raises(TemplateError) as e:
+        read_template(data, "zip64-beside.pptx")
+    assert e.value.code == "too_big"
+
+
+def test_f3_zip64_locator_without_its_record(monkeypatch):
+    data = _zip64_beside_a_classic_end(_many_members(20), 20, record=False)
+    _no_zipfile(monkeypatch)
+    with pytest.raises(TemplateError) as e:
+        read_template(data, "zip64-no-record.pptx")
+    assert e.value.code == "bad_file"
+
+
 def test_f3_zip64_count(monkeypatch):
     data = _many_members(70_000)  # more than 0xFFFF entries: Python writes ZIP64 end records
     assert b"PK\x06\x06" in data[-200:]

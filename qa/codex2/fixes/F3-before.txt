@@ -1,0 +1,6 @@
+# F3 before: package.py at bc19c18, new tests in the working tree
+E       AssertionError: ZipFile built before the member preflight
+E       AssertionError: ZipFile built before the member preflight
+FAILED tests/test_c8_errors.py::test_f3_zip64_records_read_whatever_the_classic_fields_say
+FAILED tests/test_c8_errors.py::test_f3_zip64_locator_without_its_record - As...
+2 failed, 3 passed, 21 deselected in 0.34s

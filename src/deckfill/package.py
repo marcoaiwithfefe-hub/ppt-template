@@ -90,10 +90,13 @@ def preflight(data: bytes) -> int:
         raise TemplateError("bad_file", "no end of central directory")
     _, _, _, _, n_total, cd_size, cd_offset, _ = struct.unpack_from("<IHHHHIIH", data, pos)
     end = pos
-    if n_total == 0xFFFF or cd_size == 0xFFFFFFFF or cd_offset == 0xFFFFFFFF:
-        loc = pos - 20
+    loc = pos - 20
+    has_locator = loc >= 0 and data[loc : loc + 4] == b"PK\x06\x07"
+    # zipfile reads the ZIP64 records whenever their locator sits before the end record, whatever
+    # the classic fields say, so they are checked whenever it is there (Codex round 2, F3)
+    if has_locator or n_total == 0xFFFF or cd_size == 0xFFFFFFFF or cd_offset == 0xFFFFFFFF:
         rec = loc - 56
-        if rec < 0 or data[loc : loc + 4] != b"PK\x06\x07" or data[rec : rec + 4] != b"PK\x06\x06":
+        if rec < 0 or not has_locator or data[rec : rec + 4] != b"PK\x06\x06":
             raise TemplateError("bad_file", "zip64 end records missing")
         n_total, cd_size = struct.unpack_from("<QQ", data, rec + 32)
         end = rec
