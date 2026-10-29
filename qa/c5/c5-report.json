@@ -1,6 +1,6 @@
 {
  "tested": {
-  "commit": "f8d9fc9b416315337574a4a096e9dd6894fccf8f",
+  "commit": "d44e31fa6a831318a319fb0c8258c1d8994a983b",
   "dirty": "",
   "files": {
    "fixtures/out/contradict.pptx": "c94ce862131236c7fccb0c241fcfefc04a6222ea9a8884d2562a0a69b006fa93",
@@ -28,30 +28,30 @@
    "fixtures/out/wui-tung.pptx": "84cb1da55f9113b2e52bb7e4465bed9870d492bce418f72a625b42c697d6b12c",
    "fixtures/out/xml-renamed.pptx": "1ffd3b1348eda074adbf4a17a15dd7784c3209f1b7b0ce78c9cef408fdadc459",
    "fixtures/wui-tung-template.pptx": "84cb1da55f9113b2e52bb7e4465bed9870d492bce418f72a625b42c697d6b12c",
-   "qa/c5/out/contradict-pptx-filled.pptx": "aa686f516e80a6f220d55e7f4c87c4012c43c5b91a43bb335788d2b5ae9f0532",
-   "qa/c5/out/custom-pptx-filled.pptx": "5086d4fe3165b68584e476f89ca33ec650f3d69ddf88857f7df69dc54f76a4e2",
-   "qa/c5/out/external-link-pptx-filled.pptx": "f95a8531604eb726613149f546e719147ec352d2aa7cb95885294fbe2e6e9509",
-   "qa/c5/out/footer-active-pptx-filled.pptx": "f53fb375b36b25b2f3283bf078af80d5486a3bf8c0f35e412c4df8589d39fc98",
-   "qa/c5/out/footer-fixed-date-pptx-filled.pptx": "3e0376f7c3bf63044fab81e8d7c9798b2b7bf2a939a47c981dfc25dc0128b376",
-   "qa/c5/out/footer-hf-pptx-filled.pptx": "d4312a666889276ae23ef32a229a2e9473e602098edb3b98d5bc2585aa35e7c6",
-   "qa/c5/out/footer-local-pptx-filled.pptx": "e77b9802f95bd86d7d6d8f4c229592c14560ce892ace6a7f1aac2f2ec2811465",
-   "qa/c5/out/footer-mixed-pptx-filled.pptx": "bc8240c398f008d4e55b82f90bab2092443db724fb60d82a70d5704dd97f1bed",
-   "qa/c5/out/footer-two-masters-pptx-filled.pptx": "51dbf5bd0f62b9c56ccaa554ffd715693998c924d5356969e3427f65a445c078",
-   "qa/c5/out/no-section-pptx-filled.pptx": "01b7764eba05f73a268bc2c0532483b6c76bc530cf4bb9c9e2740f4577e21353",
-   "qa/c5/out/no-title-pptx-filled.pptx": "c182069687e58c73094215b3da4b5926f0983ad0c46811d37fea94d8599d43f7",
-   "qa/c5/out/no-two-pptx-filled.pptx": "1acb1813d31c5ade2f5e228f712a001fb091fcaf0be18f432f64dc6a758c8aad",
-   "qa/c5/out/nowrap-pptx-filled.pptx": "3b32f0b36c7e0aa2977d3c6448aed5fcf2cdf8a7fad49a621fc70da3c0cfc4d6",
-   "qa/c5/out/only-content-pptx-filled.pptx": "96787349ff6f05f34a20602d8d0b948d17d275165131f2e8411ee06179bfd788",
-   "qa/c5/out/rels-order-pptx-filled.pptx": "b31ae30edc78b396b8162192b156165a4a6a0cecbbda3a3f0e7256830867f8b1",
-   "qa/c5/out/sections-pptx-filled.pptx": "61cb6101e0949449de8083f62ed7a42e9291054230a675c8c187cb5a0b1f020d",
-   "qa/c5/out/small-body-insets-pptx-filled.pptx": "8ddc2c444b8e0efc2d679b6d1054fd288dd2197453a0b016b1ee394e08bdf9b8",
-   "qa/c5/out/small-body-pptx-filled.pptx": "51529c39cbe9569d4b0ea8e37f8ccf2ef4e1e79cc11a2e103ce8eebc5fee9903",
-   "qa/c5/out/two-masters-pptx-filled.pptx": "7d367ed696f62ae93bff3bd4d09cb1bc3db8c411c0d2d44eac3b5cba83255127",
-   "qa/c5/out/typed-pptx-filled.pptx": "d16859b15e27c5f41dc76b7070f806f4a097df9d6d690feab91c5f6d1d01f442",
-   "qa/c5/out/view-outline-pptx-filled.pptx": "96fbdabd603b3cecef8491f1a08c217f91f88bebdc41898f1717ac6780a0d311",
-   "qa/c5/out/wui-tung-potx-filled.pptx": "2706f5de8c17ecaff77103822eb27368a96f3cd46b8d92fc958de3b393529f7b",
-   "qa/c5/out/wui-tung-pptx-filled.pptx": "2706f5de8c17ecaff77103822eb27368a96f3cd46b8d92fc958de3b393529f7b",
-   "qa/c5/out/xml-renamed-pptx-filled.pptx": "aa5224d26c7435f18c99fd3cddf4436f2c70362be60fe34a37af975a4bf89d1b",
+   "qa/c5/out/contradict-pptx-filled.pptx": "60b708ba5069273c24ebb69a2b3c786d06064db7bd7b9e155108b2950988d9d8",
+   "qa/c5/out/custom-pptx-filled.pptx": "1620c502b2e0f3c932feaad7f59769a6e2f9c719767e05e4d5398f2367a63b2a",
+   "qa/c5/out/external-link-pptx-filled.pptx": "b51b2693acddf54cb54ca81b02169cba9249eafd185a2cc73539da87c5f256fd",
+   "qa/c5/out/footer-active-pptx-filled.pptx": "4425b805485676b0258b8c2e172d7f7045f2a6af00e392207a650e7a88bd917e",
+   "qa/c5/out/footer-fixed-date-pptx-filled.pptx": "dbff8875db5d8763cc1e987c7785b4118c52d6aa43df6c683fe25f39cb3b3357",
+   "qa/c5/out/footer-hf-pptx-filled.pptx": "8ac6205d8ff6c0945c3f98647745b4552310072d5e0bd5a185e63434ea4417d2",
+   "qa/c5/out/footer-local-pptx-filled.pptx": "deda5f7083a7839a0b7669ca50144c7dbe0868e365fe59da7b40c25f3dd2bf76",
+   "qa/c5/out/footer-mixed-pptx-filled.pptx": "593821a61a6ade859566c87a2733c106fa919bec6a65bf1720fe788575da29ff",
+   "qa/c5/out/footer-two-masters-pptx-filled.pptx": "8131a57cf14f838fdb4a53ed00293c6920acfd6aacbfdc5b6e1b080195cb9313",
+   "qa/c5/out/no-section-pptx-filled.pptx": "765ac2d8a848f444476eddabad92d089c3a1ee7599b7f9742f5e9ac35b3b6c04",
+   "qa/c5/out/no-title-pptx-filled.pptx": "a463386809dea1cb363cdc0a7b4aae5261fbd71261b73d82a319545188c32b99",
+   "qa/c5/out/no-two-pptx-filled.pptx": "14399daf2d23a5fde298bc4a13c355422f9ec1167af0b431bb5aa63d67271a3f",
+   "qa/c5/out/nowrap-pptx-filled.pptx": "25ef950cf5811a6f6e048651bc9a56838d01d7873a0d08c85c293e2fc5479c5d",
+   "qa/c5/out/only-content-pptx-filled.pptx": "4575ef8cffe24202118b5cab8e1cbd926e93fd573f1180a41b775ba91ca90fdf",
+   "qa/c5/out/rels-order-pptx-filled.pptx": "c7e447987ac8a00509e95e2a3932efb86448a18b33359834ac40ba8829cc60f7",
+   "qa/c5/out/sections-pptx-filled.pptx": "104c452f4a8161f4fb27067725b809e52fa13391e80c104def35b700c910b446",
+   "qa/c5/out/small-body-insets-pptx-filled.pptx": "b06d258d0477d03c94aa3fc990eb0c0c2e0527aa96dbbaf5a62af86add590776",
+   "qa/c5/out/small-body-pptx-filled.pptx": "fbc9a87b6d1c8dea5f1ac8b15ca3a5408ba1288f1ea48bb9e7035f8d4236316d",
+   "qa/c5/out/two-masters-pptx-filled.pptx": "b789443b35a78d77d114df08e89cc22f7587257be4f03dda40dd3cb9fb80b3e9",
+   "qa/c5/out/typed-pptx-filled.pptx": "fd84365e03cdc64ae14f977bd106eaca0b41e2c929078d668c6f47e2270d35b4",
+   "qa/c5/out/view-outline-pptx-filled.pptx": "f7d436add6ba5f3d29c1e35d4ced84f600dc6a200f1bbec21babd9a952a287be",
+   "qa/c5/out/wui-tung-potx-filled.pptx": "46ccfb42e51b708893b2da5d69b8e5f1ba21c96b8bea1c2247fd2e248ff71c6a",
+   "qa/c5/out/wui-tung-pptx-filled.pptx": "46ccfb42e51b708893b2da5d69b8e5f1ba21c96b8bea1c2247fd2e248ff71c6a",
+   "qa/c5/out/xml-renamed-pptx-filled.pptx": "7da02fe5a4f554a3ab09bfd734ee88ff72c2a4a726cf9a33f1651dab1d66abed",
    "qa/demo/wui-tung-deck.pptx": "3cb1d6661ede750a46459fb832948fbbc1cdea825d1051dd0d9ffd2c05700869",
    "qa/e2e/c1-edit-download-1.pptx": "0dc6c7a435338c9de521b880e75ee7ca541cb341d04aca758da6a727285c7de9",
    "qa/e2e/c1-edit-download-2.pptx": "54b76b7c5205a4c00b7b5bbb772dc231eccfc3880886bb0ac185efe9174c8985",
@@ -72,6 +72,17 @@
    "qa/real-templates/usc-substitute-fonts-wide.potx": "13649450281810e5c025b4dce299f378ef4aebd661abea96db95182cb84d77ff"
   }
  },
+ "provisional_allowlist": [
+  {
+   "id": "Sch_UndeclaredAttribute",
+   "template": "hkust-template14.potx",
+   "part": "/ppt/slideLayouts/slideLayout9.xml",
+   "why": "the template's own <p:extLst mod=\"1\"> on layout 9 (its slide guides, p15:sldGuideLst), copied unchanged by the fill; the unfilled template, authored in PowerPoint and published by HKUST, carries the same diagnostic; ECMA-376 may declare mod on this extLst (CT_ExtensionListModify), unverified",
+   "evidence": "qa/c5/c5-report.json: errors_in_template 1, added_by_fill 0; layout 9 byte-identical in the output",
+   "provisional": true,
+   "settled_by": "C17"
+  }
+ ],
  "rows": [
   {
    "family": "fixture",
@@ -81,6 +92,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -91,6 +103,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -101,6 +114,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -111,6 +125,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -121,6 +136,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -131,6 +147,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -141,6 +158,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -151,6 +169,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -161,6 +180,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -171,6 +191,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -181,6 +202,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -191,6 +213,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -201,6 +224,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -211,6 +235,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -221,6 +246,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -231,6 +257,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -241,6 +268,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -251,6 +279,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -261,6 +290,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -271,6 +301,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -281,6 +312,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -291,6 +323,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -301,6 +334,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -311,6 +345,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -321,6 +356,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -331,6 +367,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -341,6 +378,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -351,6 +389,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -360,15 +399,19 @@
    "errors_in_template": 1,
    "errors_in_output": 1,
    "added_by_fill": [],
-   "not_allowlisted": [
+   "not_allowlisted": [],
+   "allowlisted_by": [
     {
      "id": "Sch_UndeclaredAttribute",
-     "description": "The 'mod' attribute is not declared.",
+     "template": "hkust-template14.potx",
      "part": "/ppt/slideLayouts/slideLayout9.xml",
-     "path": "/p:sldLayout[1]/p:extLst[1]"
+     "why": "the template's own <p:extLst mod=\"1\"> on layout 9 (its slide guides, p15:sldGuideLst), copied unchanged by the fill; the unfilled template, authored in PowerPoint and published by HKUST, carries the same diagnostic; ECMA-376 may declare mod on this extLst (CT_ExtensionListModify), unverified",
+     "evidence": "qa/c5/c5-report.json: errors_in_template 1, added_by_fill 0; layout 9 byte-identical in the output",
+     "provisional": true,
+     "settled_by": "C17"
     }
    ],
-   "ok": false
+   "ok": true
   },
   {
    "family": "D10",
@@ -378,6 +421,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -388,6 +432,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -398,6 +443,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -408,6 +454,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -418,6 +465,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -428,6 +476,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -438,6 +487,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   },
   {
@@ -448,6 +498,7 @@
    "errors_in_output": 0,
    "added_by_fill": [],
    "not_allowlisted": [],
+   "allowlisted_by": [],
    "ok": true
   }
  ]

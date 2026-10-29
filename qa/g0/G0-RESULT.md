@@ -18,11 +18,13 @@ Rev 5 raised the file cap to 100 MB (2026-10-30), so `hkust-template14.potx` (73
 
 | template | result | C1 text round trip | C3 kept parts | C5 integrity | C5 validator | C6 empty boxes | renders (eye) |
 |---|---|---|---|---|---|---|---|
-| `hkust-template14.potx` | clean, except 1 validator error the template already has | pass | pass | pass | 1 error, in the template, not added by the fill (see below) | pass | decoration on every slide (campus photo, green bands), no text past an edge or over another block; every slide uses the cover look |
+| `hkust-template14.potx` | clean | pass | pass | pass | pass on a provisional allowlist entry, settled by C17 (see below) | pass | decoration on every slide (campus photo, green bands), no text past an edge or over another block; every slide uses the cover look |
 
 Its content layouts have the same shape as template 15: their title boxes are body placeholders, so all 8 of them, plus `blank page`, are `other`. The only layout with a `title` placeholder is `Cover` (master 2), so the D3 fallback put every slide on `Cover`: titles in its title box, bullets in its body, and the two columns merged with the `columns_merged` warning. The deck is complete and readable, but it is not the content look a person would pick. In the browser its fill is the slowest real-template step in C12, at 2.66 s against the 3 s bar. HKUST's template 16 (58.7 MB) was not downloaded.
 
-HKUST 14 validator error: `Sch_UndeclaredAttribute`, "The 'mod' attribute is not declared.", at `/p:sldLayout[1]/p:extLst[1]` in `ppt/slideLayouts/slideLayout9.xml`. It is HKUST's own `<p:extLst mod="1">`, the extension list that holds the layout's slide guides (`p15:sldGuideLst`). The unfilled template has the same error, and the fill copies that layout byte for byte, so the fill added nothing. It is not on `qa/c5/allowlist.json`, so the C5 runner reports this deck as FAIL. Whether to allowlist it is an open call; it does not touch the verdict on the five.
+HKUST 14 validator error: `Sch_UndeclaredAttribute`, "The 'mod' attribute is not declared.", at `/p:sldLayout[1]/p:extLst[1]` in `ppt/slideLayouts/slideLayout9.xml`. It is HKUST's own `<p:extLst mod="1">`, the extension list that holds the layout's slide guides (`p15:sldGuideLst`). The unfilled template has the same error, and the fill copies that layout byte for byte, so the fill added nothing. Fable allowlisted it on 2026-10-30 as a provisional entry in `qa/c5/allowlist.json` (`provisional: true`, `settled_by: C17`). The unfilled template, authored in PowerPoint and published by HKUST, carries the same diagnostic. ECMA-376 may declare `mod` on this extLst (`CT_ExtensionListModify`); that is unverified. With the entry, the C5 runner passes all 37 outputs and exits 0, and its report lists the entry under `provisional_allowlist`.
+
+C17's two G0 templates are HKUST 14 and EDB. Opening the HKUST 14 deck in desktop PowerPoint settles the entry. If it opens with a repair prompt, the entry comes out of the allowlist and the deck is FAIL.
 
 ## Class picks
 

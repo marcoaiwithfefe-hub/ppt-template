@@ -3,7 +3,7 @@
 - [x] deckfill module: read_template, parse_outline, plan_deck, fill
 - [x] fixture templates by script (fixtures/make_fixtures.py), rels-order added at G0
 - [x] CPython tests: C1, C2, C3, C4, C5 (integrity part), C6, C7, C8, C11 (169 pass at 6d430ea)
-- [x] C5 validator: Open XML SDK console tool in tools/validate; SDK installed by Marco 2026-10-30; 36 of 37 outputs pass, HKUST 14's 1 error is the template's own (qa/c5/c5-report.json); failure demo in qa/failure-demos/c5-validator-*.txt
+- [x] C5 validator: Open XML SDK console tool in tools/validate; SDK installed by Marco 2026-10-30; 37 of 37 outputs pass, HKUST 14 on a provisional allowlist entry for its template's own error, settled by C17 (qa/c5/c5-report.json); failure demo in qa/failure-demos/c5-validator-*.txt
 - [x] G0: 5 real templates, renders, verdict (4 of 5 clean on every part, validator included; HKUST 14 outside the five has 1 template-owned validator error; qa/g0/G0-RESULT.md)
 - [x] Page: docs/, Cantonese copy file, Mentron look, CSP and lockdown (copy waits on Marco's Rule 25 proof)
 - [x] Pyodide self-hosted and pinned (314.0.7)
