@@ -71,9 +71,11 @@ DEMOS = {
 }
 
 
-def pytest(args: list[str]) -> str:
+def pytest(args: list[str], tag: str = "") -> str:
     if args[0] == "node":  # end-to-end check (C9): FAIL lines and the summary
-        run = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, env={**os.environ, "IDLE_MS": "3000"})
+        # its own output folder, so a demo run never overwrites the evidence run in qa/e2e
+        env = {**os.environ, "E2E_OUT": str(OUT / "runs" / tag)}
+        run = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, env=env)
         lines = (run.stdout + run.stderr).strip().splitlines()
         return "\n".join([ln for ln in lines if ln.startswith("FAIL")] + lines[-1:]) + "\n"
     run = subprocess.run(
@@ -93,10 +95,10 @@ def demo(key: str) -> None:
     head = f"# {key}: {what}\n# mutation in {rel}: {old!r} -> {new!r}\n# tests: {' '.join(args)}\n"
     try:
         path.write_text(original.replace(old, new), encoding="utf-8")
-        (OUT / f"{key}-mutated.txt").write_text(head + pytest(args), encoding="utf-8")
+        (OUT / f"{key}-mutated.txt").write_text(head + pytest(args, f"{key}-mutated"), encoding="utf-8")
     finally:
         path.write_text(original, encoding="utf-8")
-    (OUT / f"{key}-fixed.txt").write_text(head + pytest(args), encoding="utf-8")
+    (OUT / f"{key}-fixed.txt").write_text(head + pytest(args, f"{key}-fixed"), encoding="utf-8")
 
 
 if __name__ == "__main__":

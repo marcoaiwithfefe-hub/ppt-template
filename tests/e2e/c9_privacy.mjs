@@ -1,17 +1,21 @@
 // C9 privacy, C8 page part, C10 downloads, C13 phone: the page in headless Chromium on a local
 // static server. One browser context logs every request for the whole session.
 // Run: node tests/e2e/c9_privacy.mjs   (report: qa/e2e/c9-report.json, exit 1 on any failure)
+// E2E_OUT=<dir> writes the report and downloads there instead (failure demos use it, so a mutated
+// run never overwrites the evidence run).
 import { chromium } from "playwright-core";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { startServer } from "./server.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const OUT = path.join(ROOT, "qa", "e2e");
+const OUT = process.env.E2E_OUT ? path.resolve(process.env.E2E_OUT) : path.join(ROOT, "qa", "e2e");
 const FIX = path.join(ROOT, "fixtures", "out");
 const EXE = process.env.CHROME || `${process.env.HOME}/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell`;
-const IDLE_MS = Number(process.env.IDLE_MS || 30000);
+const IDLE_MS = 30000; // spec C9: 30 s idle after the last download, asserted from measured times
 const REQUIRED = {
   "default-src": ["'self'"], "connect-src": ["'self'"], "form-action": ["'none'"],
   "base-uri": ["'none'"], "object-src": ["'none'"], "script-src": ["'self'", "'wasm-unsafe-eval'"],
@@ -140,7 +144,8 @@ async function session(browser) {
     const u = route.request().url();
     if (u.startsWith(origin) || u.startsWith("data:") || u.startsWith("blob:")) return route.continue();
     linkOuts.push({ t: Date.now(), url: u, nav: route.request().isNavigationRequest() });
-    return route.abort();
+    // 204 No Content: the browser stays on the page, so every link can be clicked in turn
+    return route.fulfill({ status: 204, body: "" });
   });
   ctx.on("request", (r) => reqs.push({ t: Date.now(), url: r.url(), type: r.resourceType() }));
   const page = await ctx.newPage();
@@ -156,8 +161,13 @@ async function session(browser) {
   const fills = [];
   fills.push({ template: "wui-tung.pptx", ...(await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "c10-wui-tung")) });
   fills.push({ template: "typed.pptx", ...(await fillOnce(page, path.join(FIX, "typed.pptx"), outline, "c10-typed-override", 1)) });
+  const tLastDownload = Date.now();
   await page.click("#reset");
   await page.waitForTimeout(IDLE_MS);
+  const tIdleEnd = Date.now();
+  const idleRequests = reqs.filter((r) => r.t > tLastDownload && r.t <= tIdleEnd);
+  check("C9", `idle after the last download ${((tIdleEnd - tLastDownload) / 1000).toFixed(1)} s (at least 30), no request in it`,
+    tIdleEnd - tLastDownload >= IDLE_MS && !idleRequests.length, idleRequests.map((r) => r.url).join(" "));
 
   const made = await page.evaluate(() => window.__made.slice());
   const violations = await page.evaluate(() => window.__violations.slice());
@@ -234,25 +244,44 @@ json.dumps(r)
   const staticHtml = await readFile(path.join(ROOT, "docs", "index.html"), "utf8");
   const staticHrefs = [...staticHtml.matchAll(/<a\s[^>]*href="([^"]+)"/g)].map((m) => new URL(m[1]).href);
   check("C9", "every link is a fixed anchor from index.html", anchors.every((h) => staticHrefs.includes(h)), anchors.join(" "));
-  for (const a of await page.$$("a[href^='http']")) {
-    const popup = ctx.waitForEvent("page", { timeout: 3000 }).catch(() => null);
-    await a.click({ modifiers: [] }).catch(() => {});
-    const pp = await popup;
-    if (pp) await pp.close();
-    await page.waitForTimeout(300);
+  const pageUrl = page.url();
+  const clicked = [];
+  // new-tab links first: after a same-tab navigation that the 204 cancels, Playwright waits on it
+  // and would block the real click a new-tab link needs
+  const links = [];
+  for (const a of await page.$$("a[href^='http']")) links.push({ a, blank: (await a.getAttribute("target")) === "_blank" });
+  links.sort((x, y) => Number(y.blank) - Number(x.blank));
+  for (const { a, blank } of links) {
+    const href = await a.evaluate((el) => el.href);
+    const n = linkOuts.length;
+    // a new-tab link gets a real click (a script click has no gesture, so its popup is blocked);
+    // a same-tab link gets an in-page click, so Playwright does not wait on the navigation the
+    // 204 cancels
+    if (blank) {
+      await a.scrollIntoViewIfNeeded();
+      await a.click();
+    } else {
+      await a.evaluate((el) => el.click());
+    }
+    await page.waitForTimeout(800);
+    for (const extra of ctx.pages().filter((x) => x !== page)) await extra.close();
+    clicked.push({ href, recorded: linkOuts.slice(n).map((l) => l.url), pageStayed: page.url() === pageUrl });
   }
+  check("C9", `each of the ${staticHrefs.length} link-outs clicked, intercepted, the page kept`,
+    clicked.length === staticHrefs.length && clicked.every((c) => c.recorded.includes(c.href) && c.pageStayed),
+    JSON.stringify(clicked));
   const userText = outline.split("\n").map((l) => l.replace(/^[#\-\s|]+/, "").trim()).filter((t) => t.length >= 2);
   const urls = [...reqs.map((r) => r.url), ...linkOuts.map((l) => l.url), ...anchors];
   const leaked = urls.filter((u) => userText.some((t) => decodeURIComponent(u).includes(t)));
   check("C9", "no URL carries outline text", !leaked.length, leaked.join(" "));
-  check("C9", "link-outs intercepted, only the fixed anchors", linkOuts.length > 0 && linkOuts.every((l) => staticHrefs.some((h) => l.url.startsWith(h))),
+  check("C9", "link-outs intercepted, only the fixed anchors", linkOuts.length > 0 && linkOuts.every((l) => staticHrefs.includes(l.url)),
     linkOuts.map((l) => l.url).join(" "));
 
   await ctx.close();
   server.close();
   return {
-    tReady, requestsBeforeReady: before.length, fills, outline: "fixtures/reference-outline.md", linkOuts,
-    requests: reqs, serverLog: log, violations,
+    tReady, tLastDownload, tIdleEnd, requestsBeforeReady: before.length, fills, outline: "fixtures/reference-outline.md",
+    linkOuts, clicked, requests: reqs, serverLog: log, violations,
   };
 }
 
@@ -304,6 +333,18 @@ async function phone(browser) {
   server.close();
 }
 
+// ------------------------------------------------------------------ what was tested
+const sha256 = async (f) => createHash("sha256").update(await readFile(f)).digest("hex");
+
+async function provenance(info) {
+  const git = (...a) => execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }).trim();
+  const inputs = [path.join(ROOT, info.outline || "fixtures/reference-outline.md"), ...(info.fills || []).map((f) => path.join(FIX, f.template))];
+  const out = { commit: git("rev-parse", "HEAD"), dirty: git("status", "--porcelain", "--", "docs", "src", "tests"), inputs: {}, outputs: {} };
+  for (const f of inputs) out.inputs[path.relative(ROOT, f)] = await sha256(f);
+  for (const f of info.fills || []) out.outputs[path.relative(ROOT, f.file)] = await sha256(f.file);
+  return out;
+}
+
 // ------------------------------------------------------------------ main
 await mkdir(OUT, { recursive: true });
 await staticPolicy();
@@ -318,7 +359,7 @@ try {
   await browser.close();
 }
 const failed = checks.filter((c) => !c.ok);
-await writeFile(path.join(OUT, "c9-report.json"), JSON.stringify({ checks, session: info }, null, 1));
+await writeFile(path.join(OUT, "c9-report.json"), JSON.stringify({ tested: await provenance(info), checks, session: info }, null, 1));
 for (const c of checks) console.log(c.ok ? "PASS" : "FAIL", c.id, c.name, c.ok ? "" : `-- ${c.detail}`);
 console.log(`${checks.length - failed.length} passed, ${failed.length} failed`);
 process.exit(failed.length ? 1 : 0);

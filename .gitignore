@@ -21,3 +21,4 @@ qa/c12/*.pptx
 tools/fonts-src/
 qa/c5/out/
 qa/e2e/c1-edit-download-*.pptx
+qa/failure-demos/runs/

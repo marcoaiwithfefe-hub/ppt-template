@@ -1,0 +1,4 @@
+old report f6c30a9: idle fields present: False
+old report: ready to first link-out 5.247 s (the whole session after ready, so idle under 30 s)
+old report: link-outs recorded 1: ['https://mentron.hk/'] (3 anchors on the page)
+new checks would FAIL: idle >= 30 s not met, 3 of 3 link-outs not met; tested commit not recorded

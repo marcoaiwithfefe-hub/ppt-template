@@ -29,15 +29,19 @@ def main() -> int:
     server_after = [r for r in s["serverLog"] if r["t"] > ready]
     before_other = [r for r in s["requests"] if r["t"] <= ready and not r["url"].startswith(("http://127.0.0.1", "data:"))]
     session_s = (max(r["t"] for r in s["requests"] + s["serverLog"]) - min(r["t"] for r in s["requests"])) / 1000
+    idle_s = (s["tIdleEnd"] - s["tLastDownload"]) / 1000
+    tested = rep.get("tested", {})
 
+    print(f"tested commit {tested.get('commit', '?')[:12]}{' (dirty)' if tested.get('dirty') else ''}")
     print(f"session {session_s:.0f} s; {len(s['requests'])} browser requests, {len(s['serverLog'])} server hits")
+    print(f"idle after the last download: {idle_s:.1f} s")
     print(f"before ready: {s['requestsBeforeReady']} requests, {len(before_other)} to another origin")
     print(f"after ready: {len(after)} browser requests, of which {len(after) - len(page_requests)} are clicked link-outs "
           f"({', '.join(sorted({r['url'] for r in after if r not in page_requests}))})")
     print(f"after ready: {len(page_requests)} page requests, {len(server_after)} server hits, "
           f"{len(s.get('violations', []))} blocked attempts")
     print(f"fills after ready: {len(s['fills'])} with downloads, plus one offline")
-    failed = page_requests or server_after or before_other or s.get("violations")
+    failed = page_requests or server_after or before_other or s.get("violations") or idle_s < 30 or tested.get("dirty")
     print("FAIL" if failed else "PASS: zero page requests after ready")
     return 1 if failed else 0
 
