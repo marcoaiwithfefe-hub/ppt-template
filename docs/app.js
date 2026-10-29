@@ -22,7 +22,7 @@ const state = {
   ready: false,
   loading: false,
   template: null, // { name, layouts, defaults }
-  overrides: {},
+  overrides: [], // { title, kind, nth, layout } per picked layout; the bridge places each on its slide
   plan: null,
   planTimer: 0,
   gen: 0, // bumps on every change to the outline, overrides or template; a plan from an older gen is dropped
@@ -164,7 +164,7 @@ async function readTemplate(file) {
   $("downloaded").hidden = true;
   staleNow();
   state.template = null;
-  state.overrides = {};
+  state.overrides = [];
   state.plan = null;
   renderTemplate();
   renderPlan();
@@ -279,6 +279,7 @@ async function replan() {
     return;
   }
   state.plan = result;
+  state.overrides = result.overrides; // a dropped override is forgotten; its note shows once
   renderPlan();
 }
 
@@ -320,7 +321,10 @@ function renderPlan() {
       }
       sel.disabled = src.compatible.length < 2;
       sel.addEventListener("change", () => {
-        state.overrides[s.source] = sel.value;
+        // remembered by the slide's title, kind and nth, not its index, so it follows the slide
+        const same = (o) => o.title === src.title && o.kind === src.kind && o.nth === src.nth;
+        state.overrides = state.overrides.filter((o) => !same(o));
+        state.overrides.push({ title: src.title, kind: src.kind, nth: src.nth, layout: sel.value });
         staleNow();
         replan();
       });
@@ -388,7 +392,7 @@ async function download() {
 function reset() {
   staleNow();
   state.template = null;
-  state.overrides = {};
+  state.overrides = [];
   state.plan = null;
   $("outline").value = "";
   $("file").value = "";
@@ -423,7 +427,7 @@ function wire() {
   $("change-template").addEventListener("click", () => {
     staleNow();
     state.template = null;
-    state.overrides = {};
+    state.overrides = [];
     state.plan = null;
     $("file").value = "";
     renderTemplate();

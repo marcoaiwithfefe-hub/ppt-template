@@ -220,24 +220,30 @@ def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | 
         raise OutlineError("no_slides")
     overrides = dict(overrides or {})
     ids = {lay.id for lay in info.layouts}
+    warnings: list[Warning] = list(outline.warnings)
     for k, v in overrides.items():
-        if not (0 <= k < len(outline.slides)):
-            raise PlanError("unknown_layout", f"slide {k}")
         if v not in ids:
             raise PlanError("unknown_layout", v)
+        if not (0 <= k < len(outline.slides)):
+            # its slide is gone: dropped with a warning, no title to name (the page's bridge
+            # names it when it drops an override itself)
+            warnings.append(Warning(0, "layout_gone", ""))
     deck_has_subtitle = any(s.kind == "title" and s.subtitle for s in outline.slides)
     out: list[PlannedSlide] = []
     chosen: list[str] = []
     compatible: list[tuple[str, ...]] = []
-    warnings: list[Warning] = list(outline.warnings)
     for i, s in enumerate(outline.slides):
         need = need_of(s)
         compatible.append(tuple(lay.id for lay in info.layouts if destination(lay, need)))
-        lid = overrides.get(i) or default_layout(info, s, deck_has_subtitle)
-        lay = info.layout(lid)
-        dest = destination(lay, need)
+        lid = overrides.get(i)
+        dest = destination(info.layout(lid), need) if lid else None
+        if lid and dest is None:
+            # the slide no longer fits the layout picked for it: its default, with a warning
+            warnings.append(Warning(s.line, "layout_dropped", s.title))
         if dest is None:
-            raise PlanError("incompatible_layout", f"slide {i} on {lid}")
+            lid = default_layout(info, s, deck_has_subtitle)
+            dest = destination(info.layout(lid), need)
+        lay = info.layout(lid)
         chosen.append(lid)
         if dest.merged:
             warnings.append(Warning(s.line, "columns_merged", s.title))

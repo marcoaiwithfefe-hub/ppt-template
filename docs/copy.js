@@ -111,6 +111,8 @@ export const COPY = {
     columns_merged: "「{text}」：範本冇兩欄版面，兩欄放咗喺同一個框，右欄跟喺左欄後面。",
     fit_warn: "「{text}」：有一點太長，一張放唔落，冇拆開。下載後請喺 PowerPoint 睇吓。",
     fit_check: "「{text}」：呢個版面網頁估唔到放唔放得落，下載後請喺 PowerPoint 檢查。",
+    layout_gone: "大綱已經冇「{text}」呢張投影片，之前幫佢揀嘅版面取消咗。如果只係改咗標題，請再揀一次版面。",
+    layout_dropped: "「{text}」：之前揀嘅版面放唔落呢張投影片而家嘅內容，改返用預設版面。",
   },
 
   phoneTitle: "呢個工具要用電腦開",
