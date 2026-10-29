@@ -1,4 +1,4 @@
 # c9-outline-in-link: the Gemini link carries the start of the outline in its URL
 # mutation in docs/app.js: '  $("download-label").textContent = fmt(COPY.download, { name: p.name });' -> '  $("download-label").textContent = fmt(COPY.download, { name: p.name });\n  document.querySelector(\'a[href^="https://gemini"]\').href =\n    "https://gemini.google.com/app?q=" + encodeURIComponent($("outline").value.slice(0, 60));'
 # tests: node tests/e2e/c9_privacy.mjs
-25 passed, 0 failed
+26 passed, 0 failed

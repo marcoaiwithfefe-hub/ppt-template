@@ -24,12 +24,12 @@
   "qa/demo/renders/slide07.pptx.png"
  ],
  "tested": {
-  "commit": "e85ebd92806b1210a1a544ee7d05d8745a9a810d",
+  "commit": "c038a9bfdefa3d36ada27f78cac1e0f929e00815",
   "dirty": "",
   "files": {
    "fixtures/wui-tung-template.pptx": "84cb1da55f9113b2e52bb7e4465bed9870d492bce418f72a625b42c697d6b12c",
    "qa/demo/wui-tung-outline.md": "ca3ce7c3ec811e6185ec8afea656eb29ee05f3304b4f5716e5fbf50e3033d5ef",
-   "qa/demo/wui-tung-deck.pptx": "263c3dce4090a37ada4a7cfd9390be012d88faa9abb11d37d2ecf49cdc02e4a8",
+   "qa/demo/wui-tung-deck.pptx": "3cb1d6661ede750a46459fb832948fbbc1cdea825d1051dd0d9ffd2c05700869",
    "qa/demo/renders/slide01.pptx.png": "0f656521eba32e1df5ce0734d8b014d51ec26a1a8b20c34eb14bd7c4dee87e72",
    "qa/demo/renders/slide02.pptx.png": "11f6b5265e6ad8fe316df7de8d5ed00fd8a57ecf307768a2a653f4ff6173480f",
    "qa/demo/renders/slide03.pptx.png": "1cd4f3058df0a952e2011157eaeee0f903440da142919c96f3756c37dd57c1d8",

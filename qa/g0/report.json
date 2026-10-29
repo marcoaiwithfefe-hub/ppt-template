@@ -1,6 +1,6 @@
 {
  "tested": {
-  "commit": "e85ebd92806b1210a1a544ee7d05d8745a9a810d",
+  "commit": "c038a9bfdefa3d36ada27f78cac1e0f929e00815",
   "dirty": "",
   "files": {
    "qa/real-templates/edb-mpa2022.pptx": "7dd1579625bf42e7174239b0a237b58f3b5d7481a36940b1153620eb35136cc6",
@@ -18,7 +18,7 @@
    "qa/g0/edb-mpa2022/renders/slide06.pptx.png": "1847711167da54797abdcaae371904e17f220f0067b0703815c2a2e21b21d9a6",
    "qa/g0/edb-mpa2022/renders/slide07.pptx.png": "76a4075016734da1ede9671f6235c9aad1b649bb2133d1c3d902afe9c1353cb2",
    "qa/g0/edb-mpa2022/edb-mpa2022-sheet.png": "e180acbcaa4a35d2616f3006697788347245a0dde8831fb9dec53be190ffe64f",
-   "qa/g0/edb-mpa2022/edb-mpa2022-filled.pptx": "04e14d2883b038773b2618f7ec67d75ace2ac866396b1863bb7971948af87631",
+   "qa/g0/edb-mpa2022/edb-mpa2022-filled.pptx": "babf4542c2ebf7216ab39d8a64adecc03926332a866bc2664587bbd2bca553c5",
    "qa/g0/elderly-gov-diy/renders/slide01.pptx.png": "713ffcf5549baaf2f91c24be043d3bf8917cc8db73d0f1be7ee41e1df2bac749",
    "qa/g0/elderly-gov-diy/renders/slide02.pptx.png": "04821128be0450176bd00cff777ab514567feb00b6db30bfa4cc3be30cf0046a",
    "qa/g0/elderly-gov-diy/renders/slide03.pptx.png": "bf811459a672f61a994f8c8f8d9ee23d07912c53ca140822893f899038996145",
@@ -27,7 +27,7 @@
    "qa/g0/elderly-gov-diy/renders/slide06.pptx.png": "c750765d06bc351b7e9e267d092bf376a7ee0ebf2d53a49e79e79d00a2f27b1d",
    "qa/g0/elderly-gov-diy/renders/slide07.pptx.png": "3b4e3351e9f717b7904578e2894f03232edacb4c73261349ff0128ad69cd812d",
    "qa/g0/elderly-gov-diy/elderly-gov-diy-sheet.png": "733288a95f2630fd456bfca0aaccf485e3619cfb0eb48882c9e6ce427e4f1acc",
-   "qa/g0/elderly-gov-diy/elderly-gov-diy-filled.pptx": "94a40c9e2e8752e392ab3e080c6c3b38a893b4f91c836c5b44beacead39385de",
+   "qa/g0/elderly-gov-diy/elderly-gov-diy-filled.pptx": "9f4bb08af28f42d80ba048e1d34e7a8c94da4748bc12e4e49243d1183d9ec332",
    "qa/g0/hkust-template14/renders/slide01.pptx.png": "eea89d8d257a1801829a1cae4f53658f7ecc5077a2be20e11626df317c48fb05",
    "qa/g0/hkust-template14/renders/slide02.pptx.png": "1f5efb8b008d0e3fb28a3fbf1fecc051c4489e01432ce8874b802fac2c847607",
    "qa/g0/hkust-template14/renders/slide03.pptx.png": "e6f932b1aceca3afd76619807e54c9cf7de0ecab5e89e386bcd7facfa53795e1",
@@ -38,7 +38,7 @@
    "qa/g0/hkust-template14/renders/slide08.pptx.png": "285113c0b44a88c0ef7a34f6a9417e986f389b7c3f05dc2abe4d805057feb1ae",
    "qa/g0/hkust-template14/renders/slide09.pptx.png": "c88c67dc5c58040ec5c64030c6dfd081305b06e4cd3ad006e48863566ef170b4",
    "qa/g0/hkust-template14/hkust-template14-sheet.png": "2c6b33fc0176e52979bb4d8948348dd90a563be77c767a7e6fb5f136c761fb0b",
-   "qa/g0/hkust-template14/hkust-template14-filled.pptx": "34e27769930851465b296e1a3ddd0b18cc399755d126db573c07ac18f4132606",
+   "qa/g0/hkust-template14/hkust-template14-filled.pptx": "8049092e12952cfe111a72e33d343122d044c9441d894ad5bc3d9e1a6722a865",
    "qa/g0/ms-business-proposal/renders/slide01.pptx.png": "17fa9e0683cbac5b52d4519cddffe2a66a71e4f2234661d271a8fe9b821e5972",
    "qa/g0/ms-business-proposal/renders/slide02.pptx.png": "ea0df8696320404e38d60b1b07cdec67485ed22138f44743836ef3fac4750e78",
    "qa/g0/ms-business-proposal/renders/slide03.pptx.png": "c5940904ccddc2640066cf67a571450d1d9f36168e91f5ea96f520f1a53c599e",
@@ -47,7 +47,7 @@
    "qa/g0/ms-business-proposal/renders/slide06.pptx.png": "2be8f446c5be0296665e4f7881ac02089bc9c5489f2a11aeb26336119ba2ada6",
    "qa/g0/ms-business-proposal/renders/slide07.pptx.png": "68415d83fb4d054ea4dece1c51885113b7144ac5881022bcb962eb3921b4dd87",
    "qa/g0/ms-business-proposal/ms-business-proposal-sheet.png": "628c24df173516f2976d3d372316e00fbf0f57494a2f0a0d922937488ee4a54f",
-   "qa/g0/ms-business-proposal/ms-business-proposal-filled.pptx": "787aa55f9c24a01ec77be4efb58e1acd3daa796136dc19cfa60460793f086ee0",
+   "qa/g0/ms-business-proposal/ms-business-proposal-filled.pptx": "8a2860ee75b744b7ddb91a4994129607999847057c72f60673e12749b558eddc",
    "qa/g0/usc-substitute-fonts-wide/renders/slide01.pptx.png": "6ea4056f686004ea83c195ad81e250bf26809fa41c930b4e8352ce0d5eecfdfe",
    "qa/g0/usc-substitute-fonts-wide/renders/slide02.pptx.png": "3d2c01030d219f30bdea3ba1c855ffd375d0418ba222225c8cbdcba02e823e1d",
    "qa/g0/usc-substitute-fonts-wide/renders/slide03.pptx.png": "d47ec0dbd5f26475f8a91df84595dbf7694d4d9db9194dac9b772833a567b0e6",
@@ -56,7 +56,7 @@
    "qa/g0/usc-substitute-fonts-wide/renders/slide06.pptx.png": "f6db067b0385dec69cb4151a53da5a04484ed8046018c556e286f970fe333cc1",
    "qa/g0/usc-substitute-fonts-wide/renders/slide07.pptx.png": "1e4f8a327fc729757268fc5fa892e1e92b1c09bdbfda9f0ea9ebeab5bc0ad3a3",
    "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-sheet.png": "7a5a473c551e91c537c4b79770a0beda70913a1c306ad07b7b8ef3cdf25a15fa",
-   "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-filled.pptx": "4da488e817db043917088c31bfc1f2d571c29917cecc35bf0e6e57e7a01ac25d"
+   "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-filled.pptx": "85daca7e245db3bb8ad8eb58aa04ea84d0cccddde6ccc0950ea7e07527cfb81e"
   }
  },
  "runs": [
@@ -670,7 +670,7 @@
   {
    "template": "elderly-gov-diy.pptx",
    "bytes": 14836949,
-   "seconds": 1.02,
+   "seconds": 1.06,
    "layouts": [
     {
      "name": "Cover slide layout",
@@ -859,7 +859,7 @@
   {
    "template": "hkust-template14.potx",
    "bytes": 73689269,
-   "seconds": 2.11,
+   "seconds": 2.09,
    "layouts": [
     {
      "name": "Title & Content Slide 1",
@@ -982,7 +982,7 @@
   {
    "template": "ms-business-proposal.pptx",
    "bytes": 6765419,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "layouts": [
     {
      "name": "Title Slide",

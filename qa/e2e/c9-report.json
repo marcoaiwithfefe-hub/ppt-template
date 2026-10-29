@@ -1,6 +1,6 @@
 {
  "tested": {
-  "commit": "a4ecbbc762ed6550ad7dfea4526d989738b8bf7a",
+  "commit": "c038a9bfdefa3d36ada27f78cac1e0f929e00815",
   "dirty": "",
   "inputs": {
    "fixtures/reference-outline.md": "245c7954df77306b093a9388e0e2bd8d82cbaa44987369c28c3dd5394bb77166",
@@ -8,8 +8,8 @@
    "fixtures/out/typed.pptx": "3d9e91210d484d37a7f8b398337e2810bdb43cdba81ed903fc7fa91e8573be65"
   },
   "outputs": {
-   "qa/e2e/c10-wui-tung.pptx": "fb0970f71a3853dcdcd5d95c4c4dbf2d58c4dcdb36d40129cb393f536b235940",
-   "qa/e2e/c10-typed-override.pptx": "71aece1d614b6e411093df8313a91031d2854f35bb7fd1f0850328827fb33570"
+   "qa/e2e/c10-wui-tung.pptx": "659c1b39964cbd192f5d5a349e75691e0514732c546142e96a6cb04572ac2ae1",
+   "qa/e2e/c10-typed-override.pptx": "801859dec80a5cf05219fcdacf8e8ebb2a793ededacda56012d72fc701e00e74"
   }
  },
  "checks": [
@@ -119,49 +119,49 @@
    "id": "C8",
    "name": "legacy.pptx: legacy_ppt message, no download, responsive",
    "ok": true,
-   "detail": "呢個係舊式 .ppt 檔。請喺 PowerPoint 開，另存做 .pptx，再 | download hidden true | 0 ms"
+   "detail": "呢個係舊式 .ppt 檔。請喺 PowerPoint 開，另存做 .pptx，再 | download hidden true | 14 ms"
   },
   {
    "id": "C8",
    "name": "encrypted.pptx: encrypted message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案有密碼。請喺 PowerPoint 移除密碼，另存一份再拖入嚟。 | download hidden true | 0 ms"
+   "detail": "呢個檔案有密碼。請喺 PowerPoint 移除密碼，另存一份再拖入嚟。 | download hidden true | 2 ms"
   },
   {
    "id": "C8",
    "name": "not-powerpoint.pptx: not_pptx message, no download, responsive",
    "ok": true,
-   "detail": "呢個唔係 PowerPoint 檔。請揀 .pptx 或 .potx 範本。 | download hidden true | 0 ms"
+   "detail": "呢個唔係 PowerPoint 檔。請揀 .pptx 或 .potx 範本。 | download hidden true | 1 ms"
   },
   {
    "id": "C8",
    "name": "dangling-relationship.pptx: bad_file message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 3 ms"
+   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 12 ms"
   },
   {
    "id": "C8",
    "name": "zip-bomb.pptx: too_big message, no download, responsive",
    "ok": true,
-   "detail": "檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走 | download hidden true | 5 ms"
+   "detail": "檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走 | download hidden true | 1 ms"
   },
   {
    "id": "C8",
    "name": "lying-size.pptx: bad_file message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 3 ms"
+   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 2 ms"
   },
   {
    "id": "C8",
    "name": "billion-laughs.pptx: bad_file message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 6 ms"
+   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 1 ms"
   },
   {
    "id": "C8",
    "name": "no-body.pptx: no_text_layout message, no download, responsive",
    "ok": true,
-   "detail": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本 | download hidden true | 4 ms"
+   "detail": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本 | download hidden true | 12 ms"
   },
   {
    "id": "C13",
@@ -171,15 +171,15 @@
   }
  ],
  "session": {
-  "tReady": 1793286246056,
+  "tReady": 1793286486880,
   "tDownloads": [
-   1793286247031,
-   1793286248007,
-   1793286248950
+   1793286487870,
+   1793286488848,
+   1793286489797
   ],
-  "tLastDownload": 1793286248950,
-  "tIdleStart": 1793286248953,
-  "tIdleEnd": 1793286278985,
+  "tLastDownload": 1793286489797,
+  "tIdleStart": 1793286489799,
+  "tIdleEnd": 1793286519821,
   "requestsBeforeReady": 19,
   "fills": [
    {
@@ -188,7 +188,7 @@
     "name": "匯通物流 2027 年度計劃.pptx",
     "override": null,
     "overrideSource": null,
-    "tDownload": 1793286247031
+    "tDownload": 1793286487870
    },
    {
     "template": "typed.pptx",
@@ -196,23 +196,23 @@
     "name": "匯通物流 2027 年度計劃.pptx",
     "override": "/ppt/slideLayouts/slideLayout3.xml",
     "overrideSource": 1,
-    "tDownload": 1793286248007
+    "tDownload": 1793286488848
    }
   ],
   "outline": "fixtures/reference-outline.md",
   "linkOuts": [
    {
-    "t": 1793286279084,
+    "t": 1793286519921,
     "url": "https://gemini.google.com/app",
     "nav": true
    },
    {
-    "t": 1793286279888,
+    "t": 1793286520725,
     "url": "https://mentron.hk/",
     "nav": true
    },
    {
-    "t": 1793286280690,
+    "t": 1793286521527,
     "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
     "nav": true
    }
@@ -242,209 +242,209 @@
   ],
   "requests": [
    {
-    "t": 1793286244891,
-    "url": "http://127.0.0.1:52411/",
+    "t": 1793286485695,
+    "url": "http://127.0.0.1:52541/",
     "type": "document"
    },
    {
-    "t": 1793286244898,
-    "url": "http://127.0.0.1:52411/style.css",
+    "t": 1793286485702,
+    "url": "http://127.0.0.1:52541/style.css",
     "type": "stylesheet"
    },
    {
-    "t": 1793286244898,
-    "url": "http://127.0.0.1:52411/app.js",
+    "t": 1793286485703,
+    "url": "http://127.0.0.1:52541/app.js",
     "type": "script"
    },
    {
-    "t": 1793286244908,
-    "url": "http://127.0.0.1:52411/fonts/mentron-serif-var.woff2",
+    "t": 1793286485714,
+    "url": "http://127.0.0.1:52541/fonts/mentron-serif-var.woff2",
     "type": "font"
    },
    {
-    "t": 1793286244908,
-    "url": "http://127.0.0.1:52411/fonts/newsreader-latin.woff2",
+    "t": 1793286485715,
+    "url": "http://127.0.0.1:52541/fonts/newsreader-latin.woff2",
     "type": "font"
    },
    {
-    "t": 1793286244908,
-    "url": "http://127.0.0.1:52411/copy.js",
+    "t": 1793286485715,
+    "url": "http://127.0.0.1:52541/copy.js",
     "type": "script"
    },
    {
-    "t": 1793286244911,
-    "url": "http://127.0.0.1:52411/prompt.txt",
+    "t": 1793286485718,
+    "url": "http://127.0.0.1:52541/prompt.txt",
     "type": "fetch"
    },
    {
-    "t": 1793286244917,
-    "url": "http://127.0.0.1:52411/fonts/noto-serif-tc-page.woff2",
+    "t": 1793286485722,
+    "url": "http://127.0.0.1:52541/fonts/noto-serif-tc-page.woff2",
     "type": "font"
    },
    {
-    "t": 1793286244922,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/pyodide.mjs",
+    "t": 1793286485728,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/pyodide.mjs",
     "type": "script"
    },
    {
-    "t": 1793286244925,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/pyodide-lock.json",
+    "t": 1793286485731,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/pyodide-lock.json",
     "type": "fetch"
    },
    {
-    "t": 1793286244925,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/python_stdlib.zip",
+    "t": 1793286485731,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/python_stdlib.zip",
     "type": "fetch"
    },
    {
-    "t": 1793286244925,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/pyodide.asm.wasm",
+    "t": 1793286485731,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/pyodide.asm.wasm",
     "type": "fetch"
    },
    {
-    "t": 1793286244925,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/pyodide.asm.mjs",
+    "t": 1793286485731,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/pyodide.asm.mjs",
     "type": "script"
    },
    {
-    "t": 1793286245639,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+    "t": 1793286486457,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
     "type": "fetch"
    },
    {
-    "t": 1793286245639,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+    "t": 1793286486457,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
     "type": "fetch"
    },
    {
-    "t": 1793286245639,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl",
+    "t": 1793286486457,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl",
     "type": "fetch"
    },
    {
-    "t": 1793286245639,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl",
+    "t": 1793286486457,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl",
     "type": "fetch"
    },
    {
-    "t": 1793286245640,
-    "url": "http://127.0.0.1:52411/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl",
+    "t": 1793286486457,
+    "url": "http://127.0.0.1:52541/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl",
     "type": "fetch"
    },
    {
-    "t": 1793286245772,
-    "url": "http://127.0.0.1:52411/py/deckfill.zip",
+    "t": 1793286486591,
+    "url": "http://127.0.0.1:52541/py/deckfill.zip",
     "type": "fetch"
    },
    {
-    "t": 1793286279084,
+    "t": 1793286519921,
     "url": "https://gemini.google.com/app",
     "type": "document"
    },
    {
-    "t": 1793286279888,
+    "t": 1793286520725,
     "url": "https://mentron.hk/",
     "type": "document"
    },
    {
-    "t": 1793286280690,
+    "t": 1793286521527,
     "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
     "type": "document"
    }
   ],
   "serverLog": [
    {
-    "t": 1793286244893,
+    "t": 1793286485697,
     "method": "GET",
     "path": "/"
    },
    {
-    "t": 1793286244899,
+    "t": 1793286485703,
     "method": "GET",
     "path": "/style.css"
    },
    {
-    "t": 1793286244899,
+    "t": 1793286485703,
     "method": "GET",
     "path": "/app.js"
    },
    {
-    "t": 1793286244908,
+    "t": 1793286485715,
     "method": "GET",
     "path": "/fonts/mentron-serif-var.woff2"
    },
    {
-    "t": 1793286244908,
+    "t": 1793286485715,
     "method": "GET",
     "path": "/fonts/newsreader-latin.woff2"
    },
    {
-    "t": 1793286244909,
+    "t": 1793286485715,
     "method": "GET",
     "path": "/copy.js"
    },
    {
-    "t": 1793286244911,
+    "t": 1793286485719,
     "method": "GET",
     "path": "/prompt.txt"
    },
    {
-    "t": 1793286244918,
+    "t": 1793286485723,
     "method": "GET",
     "path": "/fonts/noto-serif-tc-page.woff2"
    },
    {
-    "t": 1793286244922,
+    "t": 1793286485728,
     "method": "GET",
     "path": "/vendor/pyodide/pyodide.mjs"
    },
    {
-    "t": 1793286244926,
+    "t": 1793286485732,
     "method": "GET",
     "path": "/vendor/pyodide/pyodide-lock.json"
    },
    {
-    "t": 1793286244926,
+    "t": 1793286485732,
     "method": "GET",
     "path": "/vendor/pyodide/python_stdlib.zip"
    },
    {
-    "t": 1793286244926,
+    "t": 1793286485732,
     "method": "GET",
     "path": "/vendor/pyodide/pyodide.asm.wasm"
    },
    {
-    "t": 1793286244926,
+    "t": 1793286485732,
     "method": "GET",
     "path": "/vendor/pyodide/pyodide.asm.mjs"
    },
    {
-    "t": 1793286245640,
+    "t": 1793286486458,
     "method": "GET",
     "path": "/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
    },
    {
-    "t": 1793286245640,
+    "t": 1793286486458,
     "method": "GET",
     "path": "/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
    },
    {
-    "t": 1793286245640,
+    "t": 1793286486458,
     "method": "GET",
     "path": "/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl"
    },
    {
-    "t": 1793286245640,
+    "t": 1793286486458,
     "method": "GET",
     "path": "/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl"
    },
    {
-    "t": 1793286245640,
+    "t": 1793286486458,
     "method": "GET",
     "path": "/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl"
    },
    {
-    "t": 1793286245773,
+    "t": 1793286486592,
     "method": "GET",
     "path": "/py/deckfill.zip"
    }

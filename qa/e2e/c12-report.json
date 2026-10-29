@@ -23,20 +23,20 @@
    "ok": true
   },
   {
-   "name": "longest task on G0 templates and fixtures 2.60 s, hkust-template14.potx (bar 3)",
+   "name": "longest task on G0 templates and fixtures 2.53 s, hkust-template14.potx (bar 3)",
    "ok": true
   },
   {
-   "name": "slowest click response after a step 45 ms (bar 500)",
+   "name": "slowest click response after a step 39 ms (bar 500)",
    "ok": true
   },
   {
-   "name": "worst case longest task 4.96 s (bar 10); read 820 plan 346 fill 4965 ms",
+   "name": "worst case longest task 5.01 s (bar 10); read 817 plan 348 fill 5007 ms",
    "ok": true,
    "detail": ""
   },
   {
-   "name": "worst case click response 39 ms (bar 500)",
+   "name": "worst case click response 37 ms (bar 500)",
    "ok": true
   },
   {
@@ -46,59 +46,59 @@
   {
    "name": "working state on screen during the longest task (qa/e2e/c12-working-during-longest-task.png)",
    "ok": true,
-   "detail": "{\"frames\":10,\"taskMs\":4965,\"frameBeforeTaskMs\":11,\"overlayPixel\":255}"
+   "detail": "{\"frames\":10,\"taskMs\":5007,\"frameBeforeTaskMs\":10,\"overlayPixel\":255}"
   }
  ],
- "coldReadyS": 8.47,
- "coldTransferMB": 17.893133,
- "warmReadyS": 4.918,
+ "coldReadyS": 8.456,
+ "coldTransferMB": 17.893241,
+ "warmReadyS": 4.872,
  "warmTransferMB": 9.598424,
  "runs": [
   {
    "file": "edb-mpa2022.pptx",
-   "readMs": 115,
-   "clickAfterReadMs": 24,
+   "readMs": 117,
+   "clickAfterReadMs": 39,
    "refused": null,
    "planMs": 0,
    "clickAfterPlanMs": 35,
-   "fillMs": 228,
+   "fillMs": 245,
    "clickAfterFillMs": 35
   },
   {
    "file": "elderly-gov-diy.pptx",
-   "readMs": 848,
-   "clickAfterReadMs": 37,
+   "readMs": 793,
+   "clickAfterReadMs": 24,
    "refused": null,
    "planMs": 0,
    "clickAfterPlanMs": 35,
-   "fillMs": 1567,
-   "clickAfterFillMs": 30
+   "fillMs": 1576,
+   "clickAfterFillMs": 19
   },
   {
    "file": "hkust-template14.potx",
-   "readMs": 287,
-   "clickAfterReadMs": 30,
+   "readMs": 265,
+   "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 26,
-   "fillMs": 2604,
-   "clickAfterFillMs": 24
+   "clickAfterPlanMs": 33,
+   "fillMs": 2532,
+   "clickAfterFillMs": 32
   },
   {
    "file": "hkust-template15.potx",
-   "readMs": 51,
-   "clickAfterReadMs": 33,
+   "readMs": 61,
+   "clickAfterReadMs": 23,
    "refused": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有"
   },
   {
    "file": "ms-business-proposal.pptx",
-   "readMs": 67,
-   "clickAfterReadMs": 32,
+   "readMs": 66,
+   "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 34,
-   "fillMs": 73,
-   "clickAfterFillMs": 27
+   "clickAfterPlanMs": 37,
+   "fillMs": 85,
+   "clickAfterFillMs": 30
   },
   {
    "file": "usc-substitute-fonts-wide.potx",
@@ -106,19 +106,19 @@
    "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 26
+   "clickAfterFillMs": 21
   },
   {
    "file": "typed.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 33,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 26
+   "clickAfterFillMs": 33
   },
   {
    "file": "custom.pptx",
@@ -126,9 +126,9 @@
    "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 45,
+   "clickAfterPlanMs": 32,
    "fillMs": 0,
-   "clickAfterFillMs": 26
+   "clickAfterFillMs": 30
   },
   {
    "file": "contradict.pptx",
@@ -136,29 +136,29 @@
    "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
    "clickAfterFillMs": 21
   },
   {
    "file": "two-masters.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 33,
+   "clickAfterReadMs": 26,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 34
+   "clickAfterFillMs": 28
   },
   {
    "file": "no-two.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 34,
+   "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 33,
+   "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 35
+   "clickAfterFillMs": 33
   },
   {
    "file": "no-section.pptx",
@@ -168,7 +168,7 @@
    "planMs": 0,
    "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 23
+   "clickAfterFillMs": 21
   },
   {
    "file": "no-title.pptx",
@@ -176,19 +176,19 @@
    "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 33,
    "fillMs": 0,
-   "clickAfterFillMs": 28
+   "clickAfterFillMs": 29
   },
   {
    "file": "only-content.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 35,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
    "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 30
+   "clickAfterFillMs": 32
   },
   {
    "file": "small-body.pptx",
@@ -196,9 +196,9 @@
    "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 34,
+   "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 30
+   "clickAfterFillMs": 24
   },
   {
    "file": "small-body-insets.pptx",
@@ -206,19 +206,19 @@
    "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 36,
    "fillMs": 0,
-   "clickAfterFillMs": 31
+   "clickAfterFillMs": 28
   },
   {
    "file": "nowrap.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 35,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 36,
    "fillMs": 0,
-   "clickAfterFillMs": 28
+   "clickAfterFillMs": 32
   },
   {
    "file": "footer-active.pptx",
@@ -228,37 +228,37 @@
    "planMs": 0,
    "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 35
+   "clickAfterFillMs": 22
   },
   {
    "file": "footer-mixed.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 35,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 36,
+   "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 24
+   "clickAfterFillMs": 26
   },
   {
    "file": "footer-two-masters.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 31,
+   "clickAfterReadMs": 32,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 34,
+   "clickAfterPlanMs": 36,
    "fillMs": 0,
-   "clickAfterFillMs": 31
+   "clickAfterFillMs": 27
   },
   {
    "file": "footer-fixed-date.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 35,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
    "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 34
+   "clickAfterFillMs": 23
   },
   {
    "file": "footer-hf.pptx",
@@ -266,9 +266,9 @@
    "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 28
+   "clickAfterFillMs": 26
   },
   {
    "file": "external-link.pptx",
@@ -276,9 +276,9 @@
    "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 33,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 25
+   "clickAfterFillMs": 26
   },
   {
    "file": "sections.pptx",
@@ -286,19 +286,19 @@
    "clickAfterReadMs": 35,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 24
+   "clickAfterFillMs": 33
   },
   {
    "file": "wui-tung.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 35,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
-   "clickAfterPlanMs": 35,
+   "clickAfterPlanMs": 34,
    "fillMs": 0,
-   "clickAfterFillMs": 33
+   "clickAfterFillMs": 23
   },
   {
    "file": "wui-tung.potx",
@@ -308,17 +308,17 @@
    "planMs": 0,
    "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 33
+   "clickAfterFillMs": 27
   },
   {
    "file": "rels-order.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 36,
+   "clickAfterReadMs": 34,
    "refused": null,
    "planMs": 0,
    "clickAfterPlanMs": 35,
    "fillMs": 0,
-   "clickAfterFillMs": 22
+   "clickAfterFillMs": 34
   },
   {
    "file": "legacy.pptx",
@@ -329,19 +329,19 @@
   {
    "file": "encrypted.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 35,
+   "clickAfterReadMs": 33,
    "refused": "呢個檔案有密碼。請喺 PowerPoint 移除密碼，另存一"
   },
   {
    "file": "not-powerpoint.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 33,
+   "clickAfterReadMs": 34,
    "refused": "呢個唔係 PowerPoint 檔。請揀 .pptx 或 ."
   },
   {
    "file": "dangling-relationship.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 34,
+   "clickAfterReadMs": 35,
    "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
   },
   {
@@ -353,7 +353,7 @@
   {
    "file": "lying-size.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 34,
+   "clickAfterReadMs": 35,
    "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
   },
   {
@@ -365,7 +365,7 @@
   {
    "file": "no-body.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 33,
+   "clickAfterReadMs": 34,
    "refused": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有"
   },
   {
@@ -377,27 +377,27 @@
   {
    "file": "missing-target.pptx",
    "readMs": 0,
-   "clickAfterReadMs": 34,
+   "clickAfterReadMs": 33,
    "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
   }
  ],
  "worst": {
   "fileMB": 104.358194,
   "file": "worst-case.pptx",
-  "readMs": 820,
-  "clickAfterReadMs": 31,
+  "readMs": 817,
+  "clickAfterReadMs": 36,
   "refused": null,
-  "planMs": 346,
-  "clickAfterPlanMs": 39,
-  "fillMs": 4965,
+  "planMs": 348,
+  "clickAfterPlanMs": 37,
+  "fillMs": 5007,
   "shot": {
    "frames": 10,
-   "taskMs": 4965,
-   "frameBeforeTaskMs": 11,
+   "taskMs": 5007,
+   "frameBeforeTaskMs": 10,
    "overlayPixel": 255
   },
   "shotWhileWorking": true,
-  "clickAfterFillMs": 20,
+  "clickAfterFillMs": 14,
   "wasmHeapAtReadyMB": 45.350912,
   "wasmHeapMB": 1384.12032
  }
