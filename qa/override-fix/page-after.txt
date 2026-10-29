@@ -1,0 +1,12 @@
+# after the fix: page test at 247fa54
+PASS override the pick is shown on 乙 
+PASS override after an insert above, 乙 keeps its layout 
+PASS override after an insert above, 甲 (now at 乙's old place) keeps its default 
+PASS override the download puts 乙 on the picked layout 
+PASS override the download keeps 甲 on its default 
+PASS override after 乙 is deleted, no slide takes its layout 
+PASS override after 乙 is deleted, 甲 keeps its default 
+PASS override a one-line note says the layout for 乙 was dropped 
+PASS override the note goes with the next edit 
+PASS override 甲 still keeps its default 
+10 passed, 0 failed

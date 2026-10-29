@@ -1,0 +1,2 @@
+# after the fix: code and tests at 247fa54
+28 passed in 0.22s

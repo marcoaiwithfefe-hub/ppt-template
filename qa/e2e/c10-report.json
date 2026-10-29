@@ -1,15 +1,15 @@
 {
  "tested": {
-  "commit": "e85ebd92806b1210a1a544ee7d05d8745a9a810d",
+  "commit": "247fa54a879680bf5246d50686d427aa2a28645e",
   "dirty": "",
   "files": {
    "fixtures/out/wui-tung.pptx": "84cb1da55f9113b2e52bb7e4465bed9870d492bce418f72a625b42c697d6b12c",
    "fixtures/out/typed.pptx": "3d9e91210d484d37a7f8b398337e2810bdb43cdba81ed903fc7fa91e8573be65",
-   "qa/e2e/c10-wui-tung.pptx": "13ece8b771487ce87ac4f3aef6e83c2f6d7922e729e1ffbeeed5e5ed173bcc5b",
-   "qa/e2e/c10-typed-override.pptx": "098425c46b7869517508341dc5383c0d90098be40708181dade37c6a81818eea"
+   "qa/e2e/c10-wui-tung.pptx": "fe17bc467998f2ed3eb6a8245509f074660ba0b1094d3ac26ef05afb46d60089",
+   "qa/e2e/c10-typed-override.pptx": "e9fc45c43a5a37bee2128e196e036e579ecfc5179f9c43d20da9190264845a65"
   }
  },
- "browser_run": "e85ebd92806b1210a1a544ee7d05d8745a9a810d",
+ "browser_run": "247fa54a879680bf5246d50686d427aa2a28645e",
  "results": [
   {
    "template": "wui-tung.pptx",
