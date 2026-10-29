@@ -17,3 +17,5 @@ qa/g0/*/
 qa/demo/renders/*.pptx
 tools/fonts-src/*.ttf
 qa/e2e/*.pptx
+qa/c12/*.pptx
+tools/fonts-src/

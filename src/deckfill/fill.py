@@ -223,7 +223,7 @@ def _number_slidenum_fields(el, number: int) -> None:
 def _restore_kept(inp: dict[str, bytes], out: dict[str, bytes], main: str) -> dict[str, bytes]:
     """python-pptx re-serialises every part it saves: relationships sorted by id, absolute
     targets made relative. Where a kept part means the same as the template's (same resolved
-    relationships, or equal canonical XML), the template's own bytes go back (D4: kept parts
+    relationships, or equal parsed XML), the template's own bytes go back (D4: kept parts
     unchanged). Slide and notes parts are the fill's own and are left alone."""
     allowed = {main, rels_name(main), "[Content_Types].xml", "docProps/app.xml"}
     out_idx, in_idx = Index(out), Index(inp)
@@ -239,9 +239,10 @@ def _restore_kept(inp: dict[str, bytes], out: dict[str, bytes], main: str) -> di
                 (r.rid, r.type, r.target, r.external) for r in out_idx.rels(source).values()
             }
         elif is_xml_name(name):
-            same = etree.tostring(in_idx.xml(name), method="c14n2") == etree.tostring(
-                out_idx.xml(name), method="c14n2"
-            )
+            # both parsed by the same parser, so equal trees serialise to equal bytes; libxml2's
+            # serialiser is fast where C14N 2.0 is pure Python (5 s on a real template in the
+            # browser). A false "different" only leaves python-pptx's bytes, which C3 then flags.
+            same = etree.tostring(in_idx.xml(name)) == etree.tostring(out_idx.xml(name))
         else:
             same = False
         if same:

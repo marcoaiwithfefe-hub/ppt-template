@@ -1,0 +1,394 @@
+{
+ "bars": {
+  "coldS": 15,
+  "coldMB": 25,
+  "warmS": 5,
+  "taskS": 3,
+  "worstTaskS": 10,
+  "clickMs": 500
+ },
+ "net": "20 Mbps down, 40 ms latency",
+ "checks": [
+  {
+   "name": "cold ready 8.5 s (bar 15)",
+   "ok": true
+  },
+  {
+   "name": "cold transfer 17.9 MB (bar 25)",
+   "ok": true
+  },
+  {
+   "name": "warm ready 5.0 s, 9.60 MB transferred (bar 5 s)",
+   "ok": true
+  },
+  {
+   "name": "longest task on G0 templates and fixtures 1.56 s, elderly-gov-diy.pptx (bar 3)",
+   "ok": true
+  },
+  {
+   "name": "slowest click response after a step 40 ms (bar 500)",
+   "ok": true
+  },
+  {
+   "name": "worst case longest task 4.29 s (bar 10); read 802 plan 389 fill 4295 ms",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "worst case click response 33 ms (bar 500)",
+   "ok": true
+  },
+  {
+   "name": "working state on screen during the longest task (qa/e2e/c12-working-during-longest-task.png)",
+   "ok": true,
+   "detail": "{\"frames\":9,\"taskMs\":4295,\"frameBeforeTaskMs\":11,\"overlayPixel\":255}"
+  }
+ ],
+ "coldReadyS": 8.488,
+ "coldTransferMB": 17.886352,
+ "warmReadyS": 4.985,
+ "warmTransferMB": 9.598424,
+ "runs": [
+  {
+   "file": "edb-mpa2022.pptx",
+   "readMs": 116,
+   "clickAfterReadMs": 40,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 36,
+   "fillMs": 246,
+   "clickAfterFillMs": 31
+  },
+  {
+   "file": "elderly-gov-diy.pptx",
+   "readMs": 802,
+   "clickAfterReadMs": 31,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 1558,
+   "clickAfterFillMs": 23
+  },
+  {
+   "file": "hkust-template14.potx",
+   "readMs": 0,
+   "clickAfterReadMs": 31,
+   "refused": "檔案太大，網頁處理唔到（上限 50 MB）。可以喺 Powe"
+  },
+  {
+   "file": "hkust-template15.potx",
+   "readMs": 52,
+   "clickAfterReadMs": 32,
+   "refused": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有"
+  },
+  {
+   "file": "ms-business-proposal.pptx",
+   "readMs": 70,
+   "clickAfterReadMs": 30,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 34,
+   "fillMs": 74,
+   "clickAfterFillMs": 25
+  },
+  {
+   "file": "usc-substitute-fonts-wide.potx",
+   "readMs": 0,
+   "clickAfterReadMs": 33,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 34,
+   "fillMs": 0,
+   "clickAfterFillMs": 30
+  },
+  {
+   "file": "typed.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 23
+  },
+  {
+   "file": "custom.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 36,
+   "fillMs": 0,
+   "clickAfterFillMs": 28
+  },
+  {
+   "file": "contradict.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 36,
+   "fillMs": 0,
+   "clickAfterFillMs": 34
+  },
+  {
+   "file": "two-masters.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 32,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 51,
+   "clickAfterFillMs": 29
+  },
+  {
+   "file": "no-two.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 34,
+   "fillMs": 0,
+   "clickAfterFillMs": 29
+  },
+  {
+   "file": "no-section.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 24
+  },
+  {
+   "file": "no-title.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 33,
+   "fillMs": 0,
+   "clickAfterFillMs": 25
+  },
+  {
+   "file": "only-content.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 34,
+   "fillMs": 0,
+   "clickAfterFillMs": 21
+  },
+  {
+   "file": "small-body.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 28,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 32
+  },
+  {
+   "file": "small-body-insets.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 34,
+   "fillMs": 0,
+   "clickAfterFillMs": 30
+  },
+  {
+   "file": "nowrap.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 24
+  },
+  {
+   "file": "footer-active.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 33,
+   "fillMs": 0,
+   "clickAfterFillMs": 37
+  },
+  {
+   "file": "footer-mixed.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 36,
+   "fillMs": 0,
+   "clickAfterFillMs": 27
+  },
+  {
+   "file": "footer-two-masters.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 26,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 21
+  },
+  {
+   "file": "footer-fixed-date.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 35
+  },
+  {
+   "file": "footer-hf.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 32,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 27
+  },
+  {
+   "file": "external-link.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 23
+  },
+  {
+   "file": "sections.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 23
+  },
+  {
+   "file": "wui-tung.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 27,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 36,
+   "fillMs": 0,
+   "clickAfterFillMs": 27
+  },
+  {
+   "file": "wui-tung.potx",
+   "readMs": 0,
+   "clickAfterReadMs": 29,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 36,
+   "fillMs": 0,
+   "clickAfterFillMs": 24
+  },
+  {
+   "file": "rels-order.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 32,
+   "refused": null,
+   "planMs": 0,
+   "clickAfterPlanMs": 35,
+   "fillMs": 0,
+   "clickAfterFillMs": 29
+  },
+  {
+   "file": "legacy.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "呢個係舊式 .ppt 檔。請喺 PowerPoint 開，另"
+  },
+  {
+   "file": "encrypted.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 35,
+   "refused": "呢個檔案有密碼。請喺 PowerPoint 移除密碼，另存一"
+  },
+  {
+   "file": "not-powerpoint.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 31,
+   "refused": "呢個唔係 PowerPoint 檔。請揀 .pptx 或 ."
+  },
+  {
+   "file": "dangling-relationship.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
+  },
+  {
+   "file": "zip-bomb.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "檔案太大，網頁處理唔到（上限 50 MB）。可以喺 Powe"
+  },
+  {
+   "file": "lying-size.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
+  },
+  {
+   "file": "billion-laughs.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
+  },
+  {
+   "file": "no-body.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 33,
+   "refused": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有"
+  },
+  {
+   "file": "missing-embed.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
+  },
+  {
+   "file": "missing-target.pptx",
+   "readMs": 0,
+   "clickAfterReadMs": 34,
+   "refused": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開"
+  }
+ ],
+ "worst": {
+  "fileMB": 52.173305,
+  "file": "worst-case.pptx",
+  "readMs": 802,
+  "clickAfterReadMs": 33,
+  "refused": null,
+  "planMs": 389,
+  "clickAfterPlanMs": 29,
+  "fillMs": 4295,
+  "shot": {
+   "frames": 9,
+   "taskMs": 4295,
+   "frameBeforeTaskMs": 11,
+   "overlayPixel": 255
+  },
+  "shotWhileWorking": true,
+  "clickAfterFillMs": 14,
+  "wasmHeapMB": 2298.150912
+ }
+}

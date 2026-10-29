@@ -8,7 +8,7 @@
 - [x] Page: docs/, Cantonese copy file, Mentron look, CSP and lockdown (copy waits on Marco's Rule 25 proof)
 - [x] Pyodide self-hosted and pinned (314.0.7)
 - [x] PROMPT.md, skill/ppt-outline/SKILL.md, README.md, LICENSE (README and page copy wait on Marco's Rule 25 proof)
-- [ ] End-to-end (Playwright): C8 page part, C9, C10, C12, C13 (C8, C9, C10, C13 pass; C12 next)
+- [x] End-to-end (Playwright): C8 page part, C9, C10, C12, C13 (all pass; warm load 5.0 s at the bar)
 - [ ] C14 copy floors, C15 Gemini outlines (C15 3 of 3 pass; C14 waits on the page)
 - [x] D10 demo deck and renders (qa/demo/; C1, C3, C5 integrity pass; validator NOT RUN)
 - [x] Failure demos for C1, C2, C4, C5, C9 in qa/failure-demos/ (qa/failure-demos/run_demos.py; C3 rels-order and C4 slide-number extra; C5 validator part NOT RUN)
