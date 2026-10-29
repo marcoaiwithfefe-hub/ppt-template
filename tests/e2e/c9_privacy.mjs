@@ -128,9 +128,10 @@ async function fillOnce(page, tpl, outline, label, overrideIndex) {
     }
   }
   const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#download")]);
+  const tDownload = Date.now();
   const file = path.join(OUT, `${label}.pptx`);
   await dl.saveAs(file);
-  return { file, name: dl.suggestedFilename(), override, overrideSource: override ? overrideIndex : null };
+  return { file, name: dl.suggestedFilename(), override, overrideSource: override ? overrideIndex : null, tDownload };
 }
 
 async function session(browser) {
@@ -161,13 +162,27 @@ async function session(browser) {
   const fills = [];
   fills.push({ template: "wui-tung.pptx", ...(await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "c10-wui-tung")) });
   fills.push({ template: "typed.pptx", ...(await fillOnce(page, path.join(FIX, "typed.pptx"), outline, "c10-typed-override", 1)) });
-  const tLastDownload = Date.now();
+
+  // offline after ready: a fill still downloads. It runs before the idle, and the network is back
+  // on for the idle, so the session's last download is followed by 30 s in which any delayed
+  // request could reach the server (Codex round 2, F10)
+  await ctx.setOffline(true);
+  const off = await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "offline");
+  check("C9", "offline after ready: a fill still downloads", off.name.endsWith(".pptx"));
+  await ctx.setOffline(false);
+
+  const tDownloads = [...fills, off].map((f) => f.tDownload);
+  const tLastDownload = Math.max(...tDownloads);
+  const tIdleStart = Date.now();
   await page.click("#reset");
   await page.waitForTimeout(IDLE_MS);
   const tIdleEnd = Date.now();
   const idleRequests = reqs.filter((r) => r.t > tLastDownload && r.t <= tIdleEnd);
-  check("C9", `idle after the last download ${((tIdleEnd - tLastDownload) / 1000).toFixed(1)} s (at least 30), no request in it`,
-    tIdleEnd - tLastDownload >= IDLE_MS && !idleRequests.length, idleRequests.map((r) => r.url).join(" "));
+  const idleHits = log.filter((l) => l.t > tLastDownload && l.t <= tIdleEnd);
+  check("C9", `idle starts after the session's last download (${tDownloads.length} downloads)`, tIdleStart >= tLastDownload);
+  check("C9", `idle after the last download ${((tIdleEnd - tIdleStart) / 1000).toFixed(1)} s (at least 30), no request in it`,
+    tIdleEnd - tIdleStart >= IDLE_MS && !idleRequests.length && !idleHits.length,
+    [...idleRequests.map((r) => r.url), ...idleHits.map((l) => l.path)].join(" "));
 
   const made = await page.evaluate(() => window.__made.slice());
   const violations = await page.evaluate(() => window.__violations.slice());
@@ -215,12 +230,6 @@ json.dumps(r)
     Object.values(flat).every((v) => v === "blocked"), JSON.stringify(flat));
   const probeHits = log.filter((l) => l.t > tReady && /probe/.test(l.path));
   check("C9", "no probe reached the server", !probeHits.length, probeHits.map((l) => l.path).join(" "));
-
-  // offline after ready: a fill still downloads
-  await ctx.setOffline(true);
-  const off = await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "offline");
-  check("C9", "offline after ready: a fill still downloads", off.name.endsWith(".pptx"));
-  await ctx.setOffline(false);
 
   const storage = await page.evaluate(async () => ({
     cookie: document.cookie,
@@ -280,7 +289,7 @@ json.dumps(r)
   await ctx.close();
   server.close();
   return {
-    tReady, tLastDownload, tIdleEnd, requestsBeforeReady: before.length, fills, outline: "fixtures/reference-outline.md",
+    tReady, tDownloads, tLastDownload, tIdleStart, tIdleEnd, requestsBeforeReady: before.length, fills, outline: "fixtures/reference-outline.md",
     linkOuts, clicked, requests: reqs, serverLog: log, violations,
   };
 }

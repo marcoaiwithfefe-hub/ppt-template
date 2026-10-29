@@ -29,11 +29,15 @@ def main() -> int:
     server_after = [r for r in s["serverLog"] if r["t"] > ready]
     before_other = [r for r in s["requests"] if r["t"] <= ready and not r["url"].startswith(("http://127.0.0.1", "data:"))]
     session_s = (max(r["t"] for r in s["requests"] + s["serverLog"]) - min(r["t"] for r in s["requests"])) / 1000
-    idle_s = (s["tIdleEnd"] - s["tLastDownload"]) / 1000
+    # the idle must start after every download of the session, the offline one included (F10)
+    downloads = s.get("tDownloads") or []
+    idle_after_last = bool(downloads) and "tIdleStart" in s and s["tIdleStart"] >= max(downloads)
+    idle_s = (s["tIdleEnd"] - s["tIdleStart"]) / 1000 if idle_after_last else 0
     tested = rep.get("tested", {})
 
     print(f"tested commit {tested.get('commit', '?')[:12]}{' (dirty)' if tested.get('dirty') else ''}")
     print(f"session {session_s:.0f} s; {len(s['requests'])} browser requests, {len(s['serverLog'])} server hits")
+    print(f"downloads in the session: {len(downloads)}; idle starts after the last one: {'yes' if idle_after_last else 'no'}")
     print(f"idle after the last download: {idle_s:.1f} s")
     print(f"before ready: {s['requestsBeforeReady']} requests, {len(before_other)} to another origin")
     print(f"after ready: {len(after)} browser requests, of which {len(after) - len(page_requests)} are clicked link-outs "

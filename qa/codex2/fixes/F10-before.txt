@@ -1,0 +1,12 @@
+# F10 before: the new privacy_proof.py on the saved C9 session from 247fa54 (c9_privacy.mjs before the reorder)
+tested commit 247fa54a8796
+session 36 s; 22 browser requests, 19 server hits
+downloads in the session: 0; idle starts after the last one: no
+idle after the last download: 0.0 s
+before ready: 19 requests, 0 to another origin
+after ready: 3 browser requests, of which 3 are clicked link-outs (https://gemini.google.com/app, https://github.com/marcoaiwithfefe-hub/ppt-template, https://mentron.hk/)
+after ready: 0 page requests, 0 server hits, 0 blocked attempts
+fills after ready: 2 with downloads, plus one offline
+FAIL
+rc=1
+offline.pptx saved +1.0 s after the idle ended (tIdleEnd 1793285622273, file mtime 1793285623227)
