@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import unicodedata
 from dataclasses import asdict, dataclass
 
@@ -155,14 +156,12 @@ def text_lines(text: str, size: int, width: int) -> int:
         if used + w <= width or used == 0 and w <= width:
             used += w
             continue
-        if w > width:  # a long word breaks by character
-            rest = w
+        if w > width:  # a long word breaks by character, in constant time (Codex round 1, F4)
             if used:
                 lines += 1
-            while rest > width:
-                rest -= width
-                lines += 1
-            used = rest
+            k = max(0, math.ceil(w / width) - 1)  # full lines before the last part
+            lines += k
+            used = w - k * width
             continue
         lines += 1
         used = w
@@ -243,7 +242,17 @@ def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | 
         if dest.merged:
             warnings.append(Warning(s.line, "columns_merged", s.title))
         if s.kind in ("title", "section"):
-            out.append(PlannedSlide(i, 0, lid, s.kind, s.title, s.subtitle, (), dest, FITS))
+            status = FITS
+            if dest.subtitle and dest.subtitle[0] == "body" and s.subtitle:
+                # the subtitle fills a content body (D3 step 4 fallback or an override): estimate it (F7)
+                fit = lay.body(dest.subtitle[1]).fit
+                if fit is None:
+                    status = CHECK
+                    warnings.append(Warning(s.line, "fit_check", s.title))
+                elif height(tuple(Item(1, t) for t in s.subtitle), fit) > fit.height:
+                    status = WARNED
+                    warnings.append(Warning(s.line, "fit_warn", s.title))
+            out.append(PlannedSlide(i, 0, lid, s.kind, s.title, s.subtitle, (), dest, status))
             continue
         cols = s.columns
         if dest.merged:

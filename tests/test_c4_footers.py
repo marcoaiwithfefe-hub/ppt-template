@@ -1,9 +1,13 @@
 """C4, silent break: footers and slide numbers follow what the template already shows (D4)."""
 
 from conftest import outline_text
+from lxml import etree
 from oracle import A, para_text, read_deck
 
 from deckfill import fill, parse_outline, plan_deck, read_template
+
+
+A_NONE = etree.Element("none")
 
 
 def deck(data, name="t.pptx", overrides=None, text=None):
@@ -78,3 +82,15 @@ def test_wui_tung_no_footer_placeholder_but_master_footer_drawn(tpl):
     assert all(lay.footers == ("dt", "ftr", "sldNum") for lay in info.layouts)
     master = xml(parts_of(data)["ppt/slideMasters/slideMaster1.xml"])
     assert any("匯通物流有限公司" in (t.text or "") for t in master.iter("{%s}t" % A))
+
+
+def test_f8_positioned_slide_local_footer_is_kept(tpl):
+    """footer-local: the sample slide's footer has its own position; its layout has no footer box."""
+    _, d = deck(tpl("footer-local.pptx"))
+    content = d[1:]
+    assert content and all(ftext(s.footers.get("ftr", A_NONE)) == "LOCAL FOOTER" for s in content), [
+        s.footers.keys() for s in content
+    ]
+    for s in content:
+        xfrm = s.footers["ftr"].find(".//{%s}xfrm" % A)
+        assert xfrm is not None  # placed by its own geometry

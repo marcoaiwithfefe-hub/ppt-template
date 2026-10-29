@@ -1,5 +1,8 @@
 """C7: a slide that will not fit is split, warned or marked "check this slide" (D5)."""
 
+import random
+import time
+
 from oracle import deck_lines, read_deck
 
 from deckfill import fill, parse_outline, plan_deck, read_template
@@ -111,3 +114,74 @@ def test_one_paragraph_longer_than_box_is_warned_not_split(tpl):
     assert "fit_warn" in [w.code for w in plan.warnings]
     first = plan.slides[0].columns[0]
     assert len(first) == 1  # the long paragraph sits alone, unsplit
+
+
+# ---------------------------------------------------------------------------------------------
+# Codex round 1
+
+
+def _old_text_lines(text, size, width):
+    """The pre-fix wrap with its one-width-at-a-time loop, kept as the reference for small cases."""
+    from deckfill.plan import LATIN_EM, is_cjk
+
+    tokens, word = [], 0.0
+    for ch in text:
+        if is_cjk(ch):
+            if word:
+                tokens.append(word)
+                word = 0.0
+            tokens.append(size)
+        elif ch == " ":
+            word += LATIN_EM * size
+            tokens.append(word)
+            word = 0.0
+        else:
+            word += LATIN_EM * size
+    if word:
+        tokens.append(word)
+    lines, used = 1, 0.0
+    for w in tokens:
+        if used + w <= width or used == 0 and w <= width:
+            used += w
+            continue
+        if w > width:
+            rest = w
+            if used:
+                lines += 1
+            while rest > width:
+                rest -= width
+                lines += 1
+            used = rest
+            continue
+        lines += 1
+        used = w
+    return lines
+
+
+def test_f4_long_word_in_a_tiny_box_is_constant_time():
+    from deckfill.plan import text_lines
+
+    t = time.perf_counter()
+    text_lines("x" * 400, 254000, 1)  # 20 pt text, a 1 EMU wide box
+    assert time.perf_counter() - t < 0.5
+
+
+def test_f4_same_line_counts_as_before():
+    from deckfill.plan import text_lines
+
+    rnd = random.Random(4)
+    alphabet = "abcdefg 匯通物流營運部 hijklmn"
+    for _ in range(3000):
+        text = "".join(rnd.choice(alphabet) for _ in range(rnd.randrange(1, 60)))
+        size = rnd.choice([127000, 152400, 254000])
+        width = rnd.choice([size // 3, size, size * 2 + 1, size * 7, 1_000_000, 6_000_000])
+        assert text_lines(text, size, width) == _old_text_lines(text, size, width), (text, size, width)
+
+
+def test_f7_subtitle_in_a_body_is_estimated(tpl):
+    """no-title has no title layout, so the subtitle becomes the content body's first paragraphs."""
+    _, _, long = plan_for("no-title.pptx", "# 封面\n" + "很長的副題" * 800 + "\n\n## 一\n- 甲", tpl=tpl)
+    assert long.slides[0].fit == "warned"
+    assert any(w.code == "fit_warn" and w.text == "封面" for w in long.warnings)
+    _, _, short = plan_for("no-title.pptx", "# 封面\n短副題\n\n## 一\n- 甲", tpl=tpl)
+    assert short.slides[0].fit == "fits"

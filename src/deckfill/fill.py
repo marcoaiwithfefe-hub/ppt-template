@@ -9,10 +9,10 @@ import zipfile
 from lxml import etree
 
 from .errors import PlanError, TemplateError
-from .package import RT_SLIDE, Index, check_integrity, is_xml_name, rels_name, source_of_rels
+from .package import RT_SLIDE, Index, check_integrity, is_xml_name, is_xml_type, rels_name, source_of_rels
 from .plan import Plan, plan_deck
 from .template import FOOTER_TYPES, open_template, ph_idx, ph_type, placeholders
-from .xmlsafe import NS, R_NS, q
+from .xmlsafe import NS, R_NS, parse, q
 
 SECTION_EXT_URI = "{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"
 CT_SLIDE = "application/vnd.openxmlformats-officedocument.presentationml.slide+xml"
@@ -74,16 +74,29 @@ def remove_slides(prs) -> None:
         rids = [rid for rid, rel in part.rels.items() if not rel.is_external and rel.target_part in removed]
         if not rids:
             continue
+        dead = set(rids)
         el_root = getattr(part, "_element", None)
         if el_root is not None:
-            dead = set(rids)
-            for el in list(el_root.iter()):
-                if any(v in dead for _, v in _r_attrs(el)):
-                    parent = el.getparent()
-                    if parent is not None:
-                        parent.remove(el)
+            _drop_dead_refs(el_root, dead)
+        elif is_xml_type(part.content_type) or is_xml_name(str(part.partname)):
+            # an XML part python-pptx keeps as bytes, such as viewProps.xml (Codex round 1, F6)
+            root = parse(part.blob, str(part.partname))
+            if _drop_dead_refs(root, dead):
+                part._blob = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
         for rid in rids:
             part.rels.pop(rid)
+
+
+def _drop_dead_refs(root, dead: set) -> bool:
+    """Remove every element that uses a relationship to a removed slide. True when one went."""
+    changed = False
+    for el in list(root.iter()):
+        if any(v in dead for _, v in _r_attrs(el)):
+            parent = el.getparent()
+            if parent is not None:
+                parent.remove(el)
+                changed = True
+    return changed
 
 
 # ---------------------------------------------------------------------------------------------
@@ -100,7 +113,7 @@ def _input_footers(prs, layout_by_id):
         for sp, ph in placeholders(slide._element):
             t = ph_type(ph)
             if t in FOOTER_TYPES and t not in found:
-                found[t] = sp
+                found[t] = (sp, slide.slide_layout)
         out.append((lid, lay.master if lay else -1, lay.cls if lay else "other", found))
     return out
 
@@ -130,6 +143,34 @@ def _footer_from_layout(layout, t):
     return new
 
 
+def _place_footer(el, el_ph, t: str, src_layout, master_el, new_layout) -> bool:
+    """Give a copied footer an explicit place when the new layout cannot supply one. Uses the
+    footer's own xfrm, else its source layout's or the master's box of the same type. Its idx moves
+    off any idx the new layout already uses. False when no place is known."""
+    sppr = el.find(q("p:spPr"))
+    if sppr is None:
+        return False
+    if sppr.find(q("a:xfrm")) is None:
+        donor = None
+        for root in (src_layout._element, master_el):
+            for sp, ph in placeholders(root):
+                if ph_type(ph) == t:
+                    x = sp.find(q("p:spPr")).find(q("a:xfrm")) if sp.find(q("p:spPr")) is not None else None
+                    if x is not None:
+                        donor = x
+                        break
+            if donor is not None:
+                break
+        if donor is None:
+            return False
+        sppr.insert(0, copy.deepcopy(donor))
+    used = {ph_idx(ph) for _, ph in placeholders(new_layout._element)}
+    idx = ph_idx(el_ph)
+    if idx in used:
+        el_ph.set("idx", str(max(used | {idx}) + 1))
+    return True
+
+
 def _master_hf_on(master_el, t: str) -> bool:
     hf = master_el.find(q("p:hf"))
     if hf is None:
@@ -155,12 +196,16 @@ def footers_for(new_lid, layout, lay_info, inputs, master_el):
         if decided:
             if pick is None:
                 continue
+            pick_sp, pick_layout = pick
             target_sp, target_ph = _layout_footer_sp(layout, t)
-            if target_ph is None:
-                continue  # the new layout has nowhere to inherit this footer's place from
-            el = copy.deepcopy(pick)
+            el = copy.deepcopy(pick_sp)
             el_ph = el.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph"))
-            if target_ph.get("idx") is None:
+            if target_ph is None:
+                # The new layout has no box of this type, so the footer keeps the place it had on
+                # its own slide (Codex round 1, F8): its own geometry, else its layout's or master's.
+                if not _place_footer(el, el_ph, t, pick_layout, master_el, layout):
+                    continue
+            elif target_ph.get("idx") is None:
                 el_ph.attrib.pop("idx", None)
             else:
                 el_ph.set("idx", target_ph.get("idx"))
@@ -238,7 +283,7 @@ def _restore_kept(inp: dict[str, bytes], out: dict[str, bytes], main: str) -> di
             same = {(r.rid, r.type, r.target, r.external) for r in in_idx.rels(source).values()} == {
                 (r.rid, r.type, r.target, r.external) for r in out_idx.rels(source).values()
             }
-        elif is_xml_name(name):
+        elif out_idx.is_xml(name):
             # both parsed by the same parser, so equal trees serialise to equal bytes; libxml2's
             # serialiser is fast where C14N 2.0 is pure Python (5 s on a real template in the
             # browser). A false "different" only leaves python-pptx's bytes, which C3 then flags.

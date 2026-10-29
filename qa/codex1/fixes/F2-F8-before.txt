@@ -1,0 +1,14 @@
+E       AssertionError: ZipFile built before the member preflight
+tests/test_c8_errors.py:155: AssertionError
+>       with pytest.raises(TemplateError) as e:
+E       Failed: DID NOT RAISE TemplateError
+FAILED tests/test_c3_c6_package.py::test_f6_outline_view_reference_to_a_sample_slide
+FAILED tests/test_c4_footers.py::test_f8_positioned_slide_local_footer_is_kept
+FAILED tests/test_c7_overflow.py::test_f4_long_word_in_a_tiny_box_is_constant_time
+FAILED tests/test_c7_overflow.py::test_f7_subtitle_in_a_body_is_estimated - A...
+FAILED tests/test_c8_errors.py::test_f2_xml_found_by_content_type_not_extension
+FAILED tests/test_c8_errors.py::test_f3_member_cap_checked_before_zipfile - A...
+FAILED tests/test_c8_errors.py::test_f3_end_record_that_understates_the_count
+FAILED tests/test_c8_errors.py::test_f3_zip64_count - AssertionError: ZipFile...
+FAILED tests/test_c8_errors.py::test_f5_package_root_relationship_must_resolve
+9 failed, 1 passed, 175 deselected in 1.88s

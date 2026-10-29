@@ -145,3 +145,18 @@ def test_c11_potx_fills_as_presentation(tpl):
     assert read_deck(out)[0].title == "匯通物流 2027 年度計劃"
     info = read_template(tpl("wui-tung.potx"), "wui-tung.potx")
     assert info.kind == "potx"
+
+
+# ---------------------------------------------------------------------------------------------
+# Codex round 1
+
+
+def test_f6_outline_view_reference_to_a_sample_slide(tpl):
+    """viewProps.xml is a generic XML part: its outline-view link to a removed slide must go."""
+    data = tpl("view-outline.pptx")
+    out = make(data, "view-outline.pptx")
+    parts = parts_of(out)
+    assert check_integrity(parts) == []
+    view = parts["ppt/viewProps.xml"]
+    assert b"<p:sld " not in view and b"rIdV1" not in view  # the outline entry went; an empty sldLst is valid
+    assert "ppt/_rels/viewProps.xml.rels" not in parts or b"slides/" not in parts["ppt/_rels/viewProps.xml.rels"]

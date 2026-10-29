@@ -609,7 +609,7 @@
  {
   "template": "elderly-gov-diy.pptx",
   "bytes": 14836949,
-  "seconds": 1.08,
+  "seconds": 1.07,
   "layouts": [
    {
     "name": "Cover slide layout",
@@ -798,7 +798,7 @@
  {
   "template": "hkust-template14.potx",
   "bytes": 73689269,
-  "seconds": 2.1,
+  "seconds": 2.11,
   "layouts": [
    {
     "name": "Title & Content Slide 1",
@@ -921,7 +921,7 @@
  {
   "template": "ms-business-proposal.pptx",
   "bytes": 6765419,
-  "seconds": 0.05,
+  "seconds": 0.06,
   "layouts": [
    {
     "name": "Title Slide",
@@ -1031,7 +1031,7 @@
  {
   "template": "usc-substitute-fonts-wide.potx",
   "bytes": 259046,
-  "seconds": 0.03,
+  "seconds": 0.02,
   "layouts": [
    {
     "name": "Title Slide",

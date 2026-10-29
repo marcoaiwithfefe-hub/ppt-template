@@ -3,6 +3,7 @@
 import io
 import json
 import random
+import struct
 import subprocess
 import sys
 import zipfile
@@ -123,3 +124,67 @@ def test_python_pptx_parser_does_not_expand_entities():
 
     root = parse_xml(b'<!DOCTYPE x [<!ENTITY e "EXPANDED">]><x>&e;</x>')
     assert "EXPANDED" not in (root.text or "")
+
+
+# ---------------------------------------------------------------------------------------------
+# Codex round 1
+
+
+def test_f2_xml_found_by_content_type_not_extension(tpl):
+    """A layout stored as .dat is still XML: it reads, and the XML caps and DOCTYPE rule hold."""
+    read_template(tpl("xml-renamed.pptx"), "r.pptx")
+    with pytest.raises(TemplateError) as e:
+        read_template(tpl("xml-renamed-doctype.pptx"), "r.pptx")
+    assert e.value.code == "bad_file" and "doctype" in e.value.detail
+    with pytest.raises(TemplateError) as e:
+        read_template(tpl("xml-renamed-big.pptx"), "r.pptx")
+    assert e.value.code == "too_big" and "xml part" in e.value.detail
+
+
+def _many_members(n: int) -> bytes:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_STORED) as z:
+        z.writestr("[Content_Types].xml", b"<Types/>")
+        for k in range(n):
+            z.writestr(f"m/{k}", b"")
+    return buf.getvalue()
+
+
+def _no_zipfile(monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError("ZipFile built before the member preflight")
+
+    monkeypatch.setattr(package.zipfile, "ZipFile", boom)
+
+
+def test_f3_member_cap_checked_before_zipfile(monkeypatch):
+    data = _many_members(package.MAX_MEMBERS + 500)
+    _no_zipfile(monkeypatch)
+    with pytest.raises(TemplateError) as e:
+        read_template(data, "many.pptx")
+    assert e.value.code == "too_big"
+
+
+def test_f3_end_record_that_understates_the_count(monkeypatch):
+    data = bytearray(_many_members(package.MAX_MEMBERS + 500))
+    eocd = data.rfind(b"PK\x05\x06")
+    struct.pack_into("<HH", data, eocd + 8, 1, 1)  # entries on this disk, entries in total
+    _no_zipfile(monkeypatch)
+    with pytest.raises(TemplateError) as e:
+        read_template(bytes(data), "lie.pptx")
+    assert e.value.code == "too_big"
+
+
+def test_f3_zip64_count(monkeypatch):
+    data = _many_members(70_000)  # more than 0xFFFF entries: Python writes ZIP64 end records
+    assert b"PK\x06\x06" in data[-200:]
+    _no_zipfile(monkeypatch)
+    with pytest.raises(TemplateError) as e:
+        read_template(data, "zip64.pptx")
+    assert e.value.code == "too_big"
+
+
+def test_f5_package_root_relationship_must_resolve(tpl):
+    with pytest.raises(TemplateError) as e:
+        read_template(tpl("root-missing.pptx"), "root.pptx")
+    assert e.value.code == "bad_file" and "missing" in e.value.detail

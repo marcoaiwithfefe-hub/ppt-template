@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import copy
 import io
+import random
 import re
 import struct
 import subprocess
@@ -652,6 +653,106 @@ def make_damaged(src: Path) -> Path:
     return path
 
 
+# ---------------------------------------------------------------------------------------------
+# Codex round 1 fixtures
+
+
+def make_footer_local() -> Path:
+    """F8: a sample slide carries a positioned footer of its own, on a layout with no footer box."""
+    prs = Presentation()
+    lay = layout_named(prs, "Title and Content")
+    ftr = ph_sp(lay._element, "ftr")
+    ftr.getparent().remove(ftr)
+    s = bullets_slide(prs, "Title and Content", "示範", ["示範內容"])
+    master_ftr = ph_sp(prs.slide_masters[0]._element, "ftr")
+    sp = copy.deepcopy(master_ftr)
+    sp.find(q("p:nvSpPr")).find(q("p:cNvPr")).set("id", "100")
+    set_xfrm(sp, 457200, 6248400, 4114800, 365125)
+    tx = sp.find(q("p:txBody"))
+    for para in tx.findall(q("a:p")):
+        tx.remove(para)
+    r = etree.SubElement(etree.SubElement(tx, q("a:p")), q("a:r"))
+    etree.SubElement(r, q("a:rPr"), lang="en-US")
+    etree.SubElement(r, q("a:t")).text = "LOCAL FOOTER"
+    s._element.find(q("p:cSld")).find(q("p:spTree")).append(sp)
+    return save(prs, "footer-local.pptx")
+
+
+RT_SLIDE_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide"
+
+
+def make_view_outline() -> Path:
+    """F6: viewProps.xml keeps an outline-view reference to a sample slide."""
+    prs = Presentation()
+    bullets_slide(prs, "Title and Content", "示範", ["示範內容"])
+    src = save(prs, "_base-view-outline.pptx")
+    outline = (
+        b'<p:outlineViewPr><p:cViewPr><p:scale><a:sx n="33" d="100"/><a:sy n="33" d="100"/></p:scale>'
+        b'<p:origin x="0" y="0"/></p:cViewPr><p:sldLst><p:sld r:id="rIdV1" collapse="0"/></p:sldLst></p:outlineViewPr>'
+    )
+
+    def view(data: bytes) -> bytes:
+        if b"xmlns:r=" not in data:
+            data = data.replace(b"<p:viewPr ", b'<p:viewPr xmlns:r="%s" ' % NS["r"].encode(), 1)
+        return re.sub(rb"(</p:slideViewPr>)", rb"\1" + outline, data, count=1)
+
+    rels = (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        f'<Relationship Id="rIdV1" Type="{RT_SLIDE_REL}" Target="slides/slide1.xml"/></Relationships>'
+    ).encode()
+    return zip_edit(src, OUT / "view-outline.pptx", {"ppt/viewProps.xml": view}, add={"ppt/_rels/viewProps.xml.rels": rels})
+
+
+CT_LAYOUT = "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"
+
+
+def renamed_layout(src: Path, dst: Path, body=None) -> Path:
+    """F2: slideLayout11 stored as slideLayout11.dat, its content type and every target updated."""
+    old, new = "ppt/slideLayouts/slideLayout11.xml", "ppt/slideLayouts/slideLayout11.dat"
+    with zipfile.ZipFile(src) as z:
+        parts = {n: z.read(n) for n in z.namelist()}
+    out = {}
+    for n, d in parts.items():
+        if n == old:
+            n, d = new, (body(d) if body else d)
+        elif n == "ppt/slideLayouts/_rels/slideLayout11.xml.rels":
+            n = "ppt/slideLayouts/_rels/slideLayout11.dat.rels"
+        elif n.endswith(".rels"):
+            d = d.replace(b"slideLayout11.xml", b"slideLayout11.dat")
+        elif n == "[Content_Types].xml":
+            d = d.replace(b'PartName="/ppt/slideLayouts/slideLayout11.xml"', b'PartName="/ppt/slideLayouts/slideLayout11.dat"')
+            assert b"slideLayout11.dat" in d
+        out[n] = d
+    with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as z:
+        for n, d in out.items():
+            z.writestr(n, d)
+    return dst
+
+
+def make_xml_renamed(src: Path) -> list[Path]:
+    def doctype(d: bytes) -> bytes:
+        decl, _, rest = d.partition(b"?>")
+        return decl + b'?><!DOCTYPE p:sldLayout [<!ENTITY e "x">]>' + rest
+
+    def big(d: bytes) -> bytes:
+        rnd = random.Random(5)
+        pad = "".join(rnd.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(6 * 1024 * 1024))
+        return d.replace(b"</p:sldLayout>", b"<!--" + pad.encode() + b"--></p:sldLayout>")
+
+    return [
+        renamed_layout(src, OUT / "xml-renamed.pptx"),
+        renamed_layout(src, OUT / "xml-renamed-doctype.pptx", doctype),
+        renamed_layout(src, OUT / "xml-renamed-big.pptx", big),
+    ]
+
+
+def make_root_missing(src: Path) -> Path:
+    """F5: the package root names a part that does not exist."""
+    extra = b'<Relationship Id="rIdMissing" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/missing.xml"/>'
+    return zip_edit(src, OUT / "root-missing.pptx", {"_rels/.rels": lambda d: d.replace(b"</Relationships>", extra + b"</Relationships>")})
+
+
 def main() -> None:
     OUT.mkdir(exist_ok=True)
     wt = make_wui_tung()
@@ -663,6 +764,7 @@ def main() -> None:
         make_missing_embed(), make_external_link(), make_missing_target(), make_dangling(),
         make_sections(), make_encrypted(wt), make_legacy_ppt(), make_not_pptx(), make_zip_bomb(wt),
         make_lying_size(wt), make_billion_laughs(wt), make_damaged(wt), make_rels_order(wt),
+        make_footer_local(), make_view_outline(), *make_xml_renamed(wt), make_root_missing(wt),
     ]
     for p in made:
         print(f"{p.name:32s} {p.stat().st_size:>10,d}")

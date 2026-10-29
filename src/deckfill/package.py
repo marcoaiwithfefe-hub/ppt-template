@@ -8,6 +8,7 @@ from __future__ import annotations
 import io
 import posixpath
 import re
+import struct
 import zipfile
 from dataclasses import dataclass
 from urllib.parse import unquote, urlsplit
@@ -62,6 +63,10 @@ def is_xml_name(name: str) -> bool:
     return low.endswith(".xml") or low.endswith(".rels")
 
 
+def is_xml_type(ct: str | None) -> bool:
+    return bool(ct) and (ct.endswith("+xml") or ct in ("application/xml", "text/xml"))
+
+
 def sniff(data: bytes, filename: str) -> None:
     """Refuse what is plainly not a usable PowerPoint file before unzipping."""
     if len(data) > MAX_FILE:
@@ -76,7 +81,42 @@ def sniff(data: bytes, filename: str) -> None:
         raise TemplateError("not_pptx")
 
 
+def preflight(data: bytes) -> int:
+    """Count the central directory's records from the raw bytes, before zipfile builds an object
+    per record (Codex round 1, F3). Refuses too_big past the member cap, bad_file when the end
+    records and the directory disagree. Returns the record count."""
+    pos = data.rfind(b"PK\x05\x06", max(0, len(data) - 22 - 0xFFFF))
+    if pos < 0 or pos + 22 > len(data):
+        raise TemplateError("bad_file", "no end of central directory")
+    _, _, _, _, n_total, cd_size, cd_offset, _ = struct.unpack_from("<IHHHHIIH", data, pos)
+    end = pos
+    if n_total == 0xFFFF or cd_size == 0xFFFFFFFF or cd_offset == 0xFFFFFFFF:
+        loc = pos - 20
+        rec = loc - 56
+        if rec < 0 or data[loc : loc + 4] != b"PK\x06\x07" or data[rec : rec + 4] != b"PK\x06\x06":
+            raise TemplateError("bad_file", "zip64 end records missing")
+        n_total, cd_size = struct.unpack_from("<QQ", data, rec + 32)
+        end = rec
+    if n_total > MAX_MEMBERS:
+        raise TemplateError("too_big", f"{n_total} members declared")
+    if cd_size > end:
+        raise TemplateError("bad_file", "central directory larger than the file")
+    p, count = end - cd_size, 0
+    while p < end:
+        if count >= MAX_MEMBERS:
+            raise TemplateError("too_big", f"over {MAX_MEMBERS} members in the central directory")
+        if data[p : p + 4] != b"PK\x01\x02" or p + 46 > end:
+            raise TemplateError("bad_file", "damaged central directory")
+        n, m, k = struct.unpack_from("<HHH", data, p + 28)
+        p += 46 + n + m + k
+        count += 1
+    if count != n_total:
+        raise TemplateError("bad_file", f"central directory has {count} records, end record says {n_total}")
+    return count
+
+
 def unzip(data: bytes) -> dict[str, bytes]:
+    preflight(data)
     try:
         zf = zipfile.ZipFile(io.BytesIO(data))
         infos = zf.infolist()
@@ -183,6 +223,10 @@ class Index:
             self._xml[name] = parse(self.parts[name], name)
         return self._xml[name]
 
+    def is_xml(self, name: str) -> bool:
+        """XML by name or by content type: a layout stored as .dat is still XML (F2)."""
+        return is_xml_name(name) or is_xml_type(self.content_type(name))
+
     def find(self, name: str) -> str | None:
         return name if name in self.parts else self.lower.get(name.lower())
 
@@ -250,13 +294,20 @@ def check_integrity(parts: dict[str, bytes], idx: Index | None = None) -> list[s
                     problems.append(f"bad external target {rel.target!r} in {name}")
             elif not idx.find(rel.target):
                 problems.append(f"missing target {rel.target} from {name}")
-        if not is_xml_name(name):
+        if not idx.is_xml(name):
             continue
         root = idx.xml(name)
         for el in root.iter():
             for attr, value in el.attrib.items():
                 if attr.startswith("{%s}" % R_NS) and value and value not in rels:
                     problems.append(f"{attr.split('}')[1]}={value} names no relationship in {name}")
+    # the package root's relationships (F5)
+    for rel in idx.rels("").values():
+        if rel.external:
+            if not uri_ok(rel.target):
+                problems.append(f"bad external target {rel.target!r} in _rels/.rels")
+        elif not idx.find(rel.target):
+            problems.append(f"missing target {rel.target} from the package root")
     # rels files whose source part does not exist
     for name in parts:
         if name.endswith(".rels"):
@@ -279,10 +330,16 @@ def load(data: bytes, filename: str) -> Package:
     ct = idx.content_type(main)
     if ct == CT_PRES_MACRO or ct not in MAIN_TYPES:
         raise TemplateError("not_pptx", f"main content type {ct}")
-    # Every XML part goes through the safe parser before python-pptx sees it.
-    for name in parts:
-        if is_xml_name(name):
-            idx.xml(name)
+    # Every XML part, by name or by content type, is held to the XML caps and goes through the
+    # safe parser before python-pptx sees it (F2).
+    xml_names = [n for n in parts if idx.is_xml(n)]
+    for name in xml_names:
+        if len(parts[name]) > MAX_XML_PART:
+            raise TemplateError("too_big", f"xml part {name}")
+    if sum(len(parts[n]) for n in xml_names) > MAX_XML_TOTAL:
+        raise TemplateError("too_big", "xml total")
+    for name in xml_names:
+        idx.xml(name)
     problems = check_integrity(parts, idx)
     if problems:
         raise TemplateError("bad_file", "; ".join(problems[:5]))
