@@ -85,6 +85,7 @@ class OutSlide:
     placeholders: list[tuple[str, int, bool]] = field(default_factory=list)  # type, idx, has text
     footers: dict = field(default_factory=dict)  # type -> sp element
     run_props: list = field(default_factory=list)  # a:rPr elements on runs
+    loose_text: list[str] = field(default_factory=list)  # text in any shape that is not a placeholder (F12)
 
 
 def slide_order(parts) -> list[str]:
@@ -150,8 +151,29 @@ def read_deck(data: bytes) -> list[OutSlide]:
                     items.append((lvl + 1, para_text(x)))
                 bodies.append((layout_x(parts, layout, master, ptype, idx), idx, items))
         s.bodies = [items for _, _, items in sorted(bodies, key=lambda b: (b[0], b[1]))]
+        s.loose_text = loose_text(root)
         out.append(s)
     return out
+
+
+def loose_text(slide_root) -> list[str]:
+    """Every non-empty text run on a slide whose shape is not a placeholder: text boxes, shapes,
+    tables and anything inside a group (Codex round 1, F12)."""
+    found = []
+    for t in slide_root.iter(a("t")):
+        if not (t.text or "").strip():
+            continue
+        el, in_placeholder = t.getparent(), False
+        while el is not None:
+            if el.tag == p("sp"):
+                in_placeholder = ph_info(el) is not None
+                break
+            if el.tag == p("graphicFrame"):
+                break
+            el = el.getparent()
+        if not in_placeholder:
+            found.append(t.text)
+    return found
 
 
 def deck_lines(deck: list[OutSlide]) -> list[str]:

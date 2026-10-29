@@ -25,6 +25,9 @@ from pptx import Presentation  # noqa: E402
 from deckfill import DeckfillError, fill, parse_outline, plan_deck, read_template  # noqa: E402
 from deckfill.package import check_integrity  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "qa"))
+from provenance import tested  # noqa: E402
+
 OUT = ROOT / "qa" / "g0"
 REAL = ROOT / "qa" / "real-templates"
 SUFFIXES = ("（續）", " (cont.)")
@@ -147,7 +150,7 @@ def run_one(path: Path, outline_text: str) -> dict:
         (s.n, ptype, idx) for s in deck for ptype, idx, has in s.placeholders
         if not has and ptype not in ("sldNum", "ftr", "dt")
     ]
-    rec["text_in_placeholders_only"] = True  # fill writes runs only into placeholders (D4)
+    rec["text_outside_placeholders"] = [(s.n, s.loose_text) for s in deck if s.loose_text]  # F12
     pngs = render_slides(out_path, work / "renders")
     rec["renders"] = [str(p.relative_to(ROOT)) for p in pngs]
     sheet = work / f"{name}-sheet.png"
@@ -155,7 +158,7 @@ def run_one(path: Path, outline_text: str) -> dict:
     rec["sheet"] = str(sheet.relative_to(ROOT))
     rec["script_clean"] = (
         rec["c1_round_trip"] and not rec["c3_kept_problems"] and not rec["c3_unexpected_new_parts"]
-        and not rec["c5_integrity"] and not rec["c6_empty_placeholders"]
+        and not rec["c5_integrity"] and not rec["c6_empty_placeholders"] and not rec["text_outside_placeholders"]
     )
     return rec
 
@@ -166,7 +169,13 @@ def main() -> None:
         p for p in REAL.iterdir() if p.suffix.lower() in (".pptx", ".potx")
     )
     report = [run_one(p, outline_text) for p in paths]
-    (OUT / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=1))
+    files = [*paths, ROOT / "fixtures" / "reference-outline.md"]
+    for r in report:
+        files += [ROOT / f for f in r.get("renders", [])] + ([ROOT / r["sheet"]] if "sheet" in r else [])
+        name = Path(r["template"]).stem
+        if (OUT / name / f"{name}-filled.pptx").exists() and "renders" in r:
+            files.append(OUT / name / f"{name}-filled.pptx")
+    (OUT / "report.json").write_text(json.dumps({"tested": tested(files), "runs": report}, ensure_ascii=False, indent=1))
     for r in report:
         print(r["template"], r.get("result", "filled"), r.get("code", ""), "script_clean=", r.get("script_clean"))
 

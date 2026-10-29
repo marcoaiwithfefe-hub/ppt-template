@@ -187,3 +187,31 @@ def test_f11_damage_beside_an_authorised_link_edit_is_caught(tpl):
         for n, d in parts.items():
             z.writestr(n, d)
     assert f"changed {layout}" in kept_part_problems(data, buf.getvalue())
+
+
+@pytest.mark.parametrize("name", FILLABLE)
+def test_f12_no_text_outside_placeholders(name, tpl):
+    """Every text on every output slide sits in a placeholder (D4): text boxes, tables, groups."""
+    out = make(tpl(name), name)
+    assert [(s.n, s.loose_text) for s in read_deck(out) if s.loose_text] == []
+
+
+def test_f12_a_text_box_on_a_slide_is_caught(tpl):
+    import zipfile as zf
+    from io import BytesIO
+
+    out = make(tpl("typed.pptx"), "typed.pptx")
+    parts = parts_of(out)
+    name = slide_order(parts)[1]
+    root = xml(parts[name])
+    box = etree.fromstring(
+        '<p:sp xmlns:p="%s" xmlns:a="%s"><p:nvSpPr><p:cNvPr id="900" name="TextBox"/><p:cNvSpPr txBox="1"/>'
+        "<p:nvPr/></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:p><a:r><a:t>LOOSE</a:t></a:r></a:p></p:txBody></p:sp>" % (P, A)
+    )
+    root.find(".//{%s}spTree" % P).append(box)
+    parts[name] = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
+    buf = BytesIO()
+    with zf.ZipFile(buf, "w") as z:
+        for n, d in parts.items():
+            z.writestr(n, d)
+    assert read_deck(buf.getvalue())[1].loose_text == ["LOOSE"]

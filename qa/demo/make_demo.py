@@ -57,6 +57,10 @@ def main() -> None:
     pngs = render_slides(deck_path, DEMO / "renders")
     rec["renders"] = [str(p.relative_to(ROOT)) for p in pngs]
     contact_sheet(pngs, DEMO / "wui-tung-sheet.png", f"wui-tung-deck.pptx: {len(pngs)} slides")
+    sys.path.insert(0, str(ROOT / "qa"))
+    from provenance import tested
+
+    rec["tested"] = tested([ROOT / "fixtures" / "wui-tung-template.pptx", DEMO / "wui-tung-outline.md", deck_path, *pngs])
     (DEMO / "demo-report.json").write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps({k: v for k, v in rec.items() if k != "renders"}, ensure_ascii=False, indent=1))
 

@@ -34,7 +34,13 @@ def main() -> int:
         differ = sorted(n for n in set(want) | set(got) if want.get(n) != got.get(n))
         results.append({"template": f["template"], "override": f.get("override"), "parts": len(want), "differ": differ})
         print("PASS" if not differ else "FAIL", f["template"], "override" if overrides else "", len(want), "parts", differ[:5])
-    (ROOT / "qa" / "e2e" / "c10-report.json").write_text(json.dumps(results, indent=1))
+    sys.path.insert(0, str(ROOT / "qa"))
+    from provenance import tested
+
+    files = [ROOT / "fixtures" / "out" / f["template"] for f in report["session"]["fills"]]
+    files += [Path(f["file"]) for f in report["session"]["fills"]]
+    out = {"tested": tested(files), "browser_run": report.get("tested", {}).get("commit"), "results": results}
+    (ROOT / "qa" / "e2e" / "c10-report.json").write_text(json.dumps(out, indent=1))
     return 0 if all(not r["differ"] for r in results) else 1
 
 
