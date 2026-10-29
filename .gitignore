@@ -15,3 +15,4 @@ qa/g0/**/renders/*.pptx
 qa/gemini/*.pptx
 qa/g0/*/
 qa/demo/renders/*.pptx
+tools/fonts-src/*.ttf

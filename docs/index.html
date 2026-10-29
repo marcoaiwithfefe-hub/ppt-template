@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data:; script-src 'self' 'wasm-unsafe-eval'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>PPT</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<header class="bar">
+  <a class="wordmark" href="https://mentron.hk" rel="noopener noreferrer">Mentron</a>
+  <a class="bar__link" href="https://github.com/marcoaiwithfefe-hub/ppt-template" rel="noopener noreferrer" data-copy="repoLink"></a>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow" data-copy="eyebrow"></p>
+    <h1><span data-copy="h1a"></span><br><span data-copy="h1b"></span></h1>
+    <p class="lede" data-copy="lede"></p>
+    <p class="privacy" data-copy="privacy"></p>
+    <p class="status desk-only" id="status" role="status" aria-live="polite"><span class="status__mark" aria-hidden="true"></span><span id="status-text"></span><button type="button" class="link-btn" id="retry" hidden data-copy="retry"></button></p>
+  </section>
+
+  <section class="phone phone-only" aria-labelledby="phone-title">
+    <h2 id="phone-title" data-copy="phoneTitle"></h2>
+    <p data-copy="phoneBody"></p>
+    <ol class="phone__steps" id="phone-steps"></ol>
+    <button type="button" class="btn" id="copy-link"><span data-copy="copyLink"></span></button>
+    <p class="note" id="copy-link-done" hidden data-copy="copied"></p>
+  </section>
+
+  <ol class="steps desk-only">
+    <li class="step" id="step1">
+      <div class="step__no" aria-hidden="true">01</div>
+      <div class="step__body">
+        <p class="step__label" data-copy="step1Label"></p>
+        <h2 data-copy="step1Title"></h2>
+        <p data-copy="step1Body"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="copy-prompt"><span id="copy-prompt-label" data-copy="copyPrompt"></span></button>
+          <a class="ghost" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer"><span data-copy="openGemini"></span> <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="note" data-copy="step1Note"></p>
+        <details class="fold">
+          <summary data-copy="showPrompt"></summary>
+          <pre class="code" id="prompt-text"></pre>
+        </details>
+        <details class="fold">
+          <summary data-copy="showExample"></summary>
+          <p class="note" data-copy="exampleHelp"></p>
+          <pre class="code" data-copy="exampleOutline"></pre>
+        </details>
+      </div>
+    </li>
+
+    <li class="step" id="step2">
+      <div class="step__no" aria-hidden="true">02</div>
+      <div class="step__body">
+        <p class="step__label" data-copy="step2Label"></p>
+        <h2 data-copy="step2Title"></h2>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept=".pptx,.potx,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template" disabled>
+          <span class="drop__main" id="drop-main" data-copy="dropHere"></span>
+          <span class="drop__sub" id="drop-sub" data-copy="waitReady"></span>
+        </label>
+        <p class="message" id="template-error" role="alert" hidden></p>
+        <div class="layouts" id="layouts" hidden>
+          <div class="layouts__head">
+            <p class="layouts__file" id="template-name"></p>
+            <p id="layouts-count"></p>
+            <button type="button" class="link-btn" id="change-template" data-copy="changeTemplate"></button>
+          </div>
+          <div class="layouts__list" id="layouts-list"></div>
+        </div>
+      </div>
+    </li>
+
+    <li class="step" id="step3">
+      <div class="step__no" aria-hidden="true">03</div>
+      <div class="step__body">
+        <p class="step__label" data-copy="step3Label"></p>
+        <h2 data-copy="step3Title"></h2>
+        <textarea id="outline" rows="12" spellcheck="false" autocomplete="off" data-copy-placeholder="outlinePlaceholder"></textarea>
+        <p class="note" id="need-template" data-copy="needTemplate"></p>
+        <p class="message" id="outline-error" role="alert" hidden></p>
+        <div class="plan" id="plan" hidden>
+          <h3 id="slides-heading"></h3>
+          <table class="slides">
+            <tbody id="slides"></tbody>
+          </table>
+          <p class="note" data-copy="fitNote"></p>
+          <div class="warnings" id="warnings" hidden>
+            <h3 data-copy="warningsHeading"></h3>
+            <ul id="warnings-list"></ul>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn--big" id="download"><span id="download-label"></span></button>
+            <button type="button" class="link-btn" id="reset" data-copy="reset"></button>
+          </div>
+          <p class="note" id="downloaded" hidden data-copy="downloaded"></p>
+        </div>
+      </div>
+    </li>
+  </ol>
+</main>
+
+<footer class="foot">
+  <p data-copy="footer"></p>
+</footer>
+<div class="working" id="working" hidden><span data-copy="working"></span></div>
+</body>
+</html>
