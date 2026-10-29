@@ -1,0 +1,8 @@
+# F16 before: web.py at 45d803f, tests in the working tree
+FAILED tests/test_web_bridge.py::test_override_goes_through_plan_deck - Asser...
+FAILED tests/test_web_bridge.py::test_override_follows_its_slide_after_an_insert
+FAILED tests/test_web_bridge.py::test_override_the_slide_no_longer_fits_is_dropped_with_a_note
+FAILED tests/test_web_bridge.py::test_f16_a_pick_is_dropped_when_its_same_titled_group_changes[pick-first-delete-first]
+FAILED tests/test_web_bridge.py::test_f16_a_pick_is_dropped_when_its_same_titled_group_changes[rename-picked]
+FAILED tests/test_web_bridge.py::test_f16_a_pick_is_dropped_when_its_same_titled_group_changes[insert-third]
+6 failed, 7 passed in 0.12s

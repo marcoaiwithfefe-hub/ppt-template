@@ -16,6 +16,8 @@ const EXE = process.env.CHROME || `${process.env.HOME}/Library/Caches/ms-playwri
 const THREE = "# 封面\n\n## 甲\n- 一\n\n## 乙\n- 二\n";
 const INSERTED = "# 封面\n\n## 新\n- 新\n\n## 甲\n- 一\n\n## 乙\n- 二\n";
 const DELETED = "# 封面\n\n## 新\n- 新\n\n## 甲\n- 一\n";
+const PAIR = "# 封面\n\n## Status\n- a\n\n## Status\n- b\n";
+const PAIR_FIRST_DELETED = "# 封面\n\n## Status\n- b\n";
 
 // title and layout name of every slide in the deck, through the reader the CPython tests use
 function deckLayouts(file) {
@@ -105,6 +107,27 @@ try {
   const later = await notes(page);
   check("the note goes with the next edit", note && !later.includes(note), JSON.stringify(later));
   check("甲 still keeps its default", (await pickers(page))["甲"][0] === jiaDefault);
+
+  // 4: F16, two slides titled Status: pick the first, then delete it. The second must not
+  // inherit the pick, and the note must say the pick was dropped
+  await page.fill("#outline", PAIR);
+  await waitForPlan(page, 3);
+  const [statusDefault, statusDefaultName] = (await pickers(page))["Status"];
+  const firstStatus = page.locator("#slides tr", { has: page.locator("td.title", { hasText: /^Status$/ }) }).first().locator("select");
+  const pairOther = await firstStatus.evaluate((sel) => [...sel.options].find((x) => x.value !== sel.value).value);
+  await firstStatus.selectOption(pairOther);
+  await waitForPlan(page, 3);
+  await page.fill("#outline", PAIR_FIRST_DELETED);
+  await waitForPlan(page, 2);
+  const survivor = (await pickers(page))["Status"];
+  check("F16: after the picked Status is deleted, the other Status keeps its default", survivor[0] === statusDefault, JSON.stringify(survivor));
+  const pairNote = COPY.warnings.layout_gone.replace("{text}", "Status");
+  check("F16: the note says the pick for Status was dropped", (await notes(page)).includes(pairNote), JSON.stringify(await notes(page)));
+  const [dl2] = await Promise.all([page.waitForEvent("download", { timeout: 60000 }), page.click("#download")]);
+  const file2 = path.join(OUT, "override-follow-pair.pptx");
+  await dl2.saveAs(file2);
+  const deck2 = deckLayouts(file2);
+  check("F16: the download keeps the other Status on its default", deck2["Status"] === statusDefaultName, JSON.stringify(deck2));
 } finally {
   await browser.close();
   server.close();
