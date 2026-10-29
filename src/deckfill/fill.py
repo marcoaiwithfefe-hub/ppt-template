@@ -209,6 +209,17 @@ def _update_app_xml(prs, n: int) -> None:
         part._blob = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
 
 
+def _number_slidenum_fields(el, number: int) -> None:
+    """A copied slide-number field keeps its source slide's cached text ("2" from a sample slide,
+    "‹#›" from a layout). PowerPoint recomputes it on open, but Quick Look, Finder and Drive
+    previews show the cached text, so it is set to this slide's own number."""
+    for fld in el.iter(q("a:fld")):
+        if fld.get("type") == "slidenum":
+            t = fld.find(q("a:t"))
+            if t is not None:
+                t.text = str(number)
+
+
 def _restore_kept(inp: dict[str, bytes], out: dict[str, bytes], main: str) -> dict[str, bytes]:
     """python-pptx re-serialises every part it saves: relationships sorted by id, absolute
     targets made relative. Where a kept part means the same as the template's (same resolved
@@ -264,7 +275,7 @@ def fill(data: bytes, filename: str, plan: Plan) -> bytes:
     inputs = _input_footers(prs, lay_info)
     remove_slides(prs)
 
-    for ps in plan.slides:
+    for number, ps in enumerate(plan.slides, start=1):
         layout = layouts[ps.layout]
         li = lay_info[ps.layout]
         slide = prs.slides.add_slide(layout)
@@ -291,6 +302,7 @@ def fill(data: bytes, filename: str, plan: Plan) -> bytes:
                 tree.remove(sp)
         for el in footers_for(ps.layout, layout, li, inputs, masters[ps.layout]):
             el.find(q("p:nvSpPr")).find(q("p:cNvPr")).set("id", str(_next_shape_id(slide._element)))
+            _number_slidenum_fields(el, number)
             ext = tree.find(q("p:extLst"))
             if ext is not None:
                 ext.addprevious(el)

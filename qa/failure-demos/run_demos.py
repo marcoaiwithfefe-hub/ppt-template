@@ -37,6 +37,13 @@ DEMOS = {
         '    """D4 footer rules for one new slide. Returns shape elements to add."""\n    return []\n    out = []',
         ["tests/test_c4_footers.py"],
     ),
+    "c4-slidenum-text": (
+        "a copied slide-number field keeps its source slide's cached text",
+        "src/deckfill/fill.py",
+        "            _number_slidenum_fields(el, number)\n",
+        "",
+        ["tests/test_c4_footers.py"],
+    ),
     "c5-integrity": (
         "the integrity check stops checking relationship attributes (r:id, r:embed, ...)",
         "src/deckfill/package.py",

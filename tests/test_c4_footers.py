@@ -30,6 +30,7 @@ def test_footer_active(tpl):
     for s in content:
         assert set(s.footers) == {"sldNum", "ftr", "dt"}, s.n
         assert has_field(s.footers["sldNum"], "slidenum")
+        assert ftext(s.footers["sldNum"]) == str(s.n)  # cached text is this slide's number
         assert ftext(s.footers["ftr"]) == "匯通物流有限公司"
         assert has_field(s.footers["dt"], "datetime")
 

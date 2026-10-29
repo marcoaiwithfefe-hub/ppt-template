@@ -8,7 +8,7 @@ Verdict: **4 of 5 clean on every G0 part that could run. The C5 validator part i
 |---|---|---|---|---|---|---|---|
 | `edb-mpa2022.pptx` | clean | pass | pass | pass | NOT RUN | pass | decoration on every slide, no text past an edge or over another block |
 | `elderly-gov-diy.pptx` | clean | pass | pass | pass | NOT RUN | pass | same; columns merged into one body (D3 step 4 fallback, warned) |
-| `ms-business-proposal.pptx` | clean | pass | pass | pass | NOT RUN | pass | same; slide-number field shows Quick Look's cached value |
+| `ms-business-proposal.pptx` | clean | pass | pass | pass | NOT RUN | pass | same; slide numbers 1 to 6 (cached field text now set per slide, see below) |
 | `usc-substitute-fonts-wide.potx` | clean | pass | pass | pass | NOT RUN | pass | same; logo on every slide |
 | `hkust-template15.potx` | refused `no_text_layout` | n/a | n/a | n/a | n/a | n/a | none |
 
@@ -22,9 +22,19 @@ Outside the five: `hkust-template14.potx` (73.7 MB) is refused `too_big` by the 
 - USC: title, content, two and section all from the stock names; no fallback.
 - HKUST 15: no layout has a `title` or `ctrTitle` placeholder. Its title boxes are body placeholders with a custom prompt, so D3 step 5 refuses it.
 
+## elderly.gov.hk: why level 1 is small and level 2 is large
+
+This is the template's own styling, not a wrong paragraph level from the fill. Each part is one XML line, so the citations name the element path.
+
+- The fill writes the right levels. `ppt/slides/slide2.xml` of the filled deck: level-1 lines are `<a:p>` with no `a:pPr`, so `lvl` is 0; level-2 lines carry `<a:pPr lvl="1"/>` (本地送貨準時率…, then 試行 AI 排程 under `lvl="1"`).
+- The layout restyles level 1 only. `ppt/slideLayouts/slideLayout20.xml` (`1_Title and Content`), the `p:sp` holding `<p:ph idx="10"/>`: `a:lstStyle/a:lvl1pPr marL="0" indent="0"` with `<a:buNone/>` and `<a:defRPr sz="1867">` in grey (`tx1`, lumMod 75000, lumOff 25000). It has no `lvl2pPr`.
+- Level 2 falls through to the master. `ppt/slideMasters/slideMaster3.xml`, `p:txStyles/p:bodyStyle/a:lvl2pPr`: `<a:buChar char="•"/>` and `<a:defRPr sz="2400">` in `tx1` black. So level 2 is bulleted, black and 24 pt under an 18.67 pt level 1.
+
 ## Found and fixed during G0
 
 python-pptx re-sorts relationships by Id and makes absolute targets relative when it saves. Real templates keep them in another order (EDB, elderly.gov.hk, Microsoft and USC all did), so C3 flagged 3 to 16 changed `.rels` parts per template. `fill` now puts the template's own bytes back for every kept part whose meaning is unchanged. A new fixture, `rels-order`, covers it, and an isolated mutation shows the test failing without the fix (`qa/failure-demos/c3-rels-order-*.txt`).
+
+Second fix, from Fable's QA of the renders: a copied slide-number field kept its source slide's cached text, so Quick Look showed 2 on every Microsoft slide and 7 on slide 4. `fill` now writes each slide's own number into the cached text of every `slidenum` field it places. PowerPoint recomputes the field on open either way. C4 checks it on `footer-active`; the mutation demo is `qa/failure-demos/c4-slidenum-text-*.txt`.
 
 ## Renders
 
