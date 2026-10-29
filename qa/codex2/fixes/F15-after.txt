@@ -1,0 +1,2 @@
+# F15 after: oracle in the working tree (rels compared canonically after removing only dead-slide Relationship elements)
+135 passed in 2.85s

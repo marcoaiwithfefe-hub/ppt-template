@@ -1,0 +1,72 @@
+{
+ "F1": {
+  "verdict": "fixed",
+  "note": "Changes disable download immediately; obsolete plan generations are discarded. Download passes current outline and overrides to Session.fill, which replans before filling. Browser test checks immediate disabling, forced stale-state click, ordinary immediate click, output text and filename. These assertions reject original behavior. Python bridge test also checks replacement body text, although old signature fails first with TypeError.",
+  "evidence": "c49de09:docs/app.js:241-250,272,353-362; c49de09:src/deckfill/web.py:81-89; c49de09:tests/e2e/c1_edit_download.mjs:46-70; c49de09:tests/test_web_bridge.py:24-31"
+ },
+ "F2": {
+  "verdict": "fixed",
+  "note": "XML identification now includes OPC content types. Per-part and aggregate XML limits plus safe parsing apply before python-pptx opens package. Regression test requires renamed DOCTYPE and oversized XML parts to fail; original implementation accepted them. Test discriminates fix.",
+  "evidence": "c49de09:src/deckfill/package.py:226-228,335-342; c49de09:tests/test_c8_errors.py:133-141; c49de09:fixtures/make_fixtures.py:710-746"
+ },
+ "F3": {
+  "verdict": "partial",
+  "note": "Preflight bounds actual record counting before ZipFile construction. Tests replace ZipFile with a failing sentinel and genuinely reject original implementation for excessive counts, understated classic counts and ordinary ZIP64. Remaining gap: ZIP64 records are inspected only when classic EOCD fields contain sentinel values. A locator accompanied by nonsentinel classic fields receives no ZIP64 consistency check. Validate locator independently of those sentinels. Existing tests do not settle downstream allocation behavior; that needs dependency inspection or a new probe. Likelihood: adversarial archive, unlikely accidental input.",
+  "evidence": "c49de09:src/deckfill/package.py:88-115,119-126; c49de09:tests/test_c8_errors.py:153-184"
+ },
+ "F4": {
+  "verdict": "fixed",
+  "note": "Arithmetic replaces repeated width subtraction. Tiny-width test asserts 400 characters at 1 EMU finish within 0.5 seconds and fails original loop. Separate 3,000-case comparison protects ordinary line counts; it intentionally passes original algorithm and is compatibility evidence.",
+  "evidence": "c49de09:src/deckfill/plan.py:159-164; c49de09:tests/test_c7_overflow.py:161-178; c49de09:qa/codex1/fixes/F2-F8-before.txt:7"
+ },
+ "F5": {
+  "verdict": "fixed",
+  "note": "Package-root relationships now receive missing-target and external-URI checks. Regression test requires bad_file for missing root target; original implementation accepted fixture. Test discriminates fix. External-root URI branch lacks its own targeted test.",
+  "evidence": "c49de09:src/deckfill/package.py:304-310; c49de09:tests/test_c8_errors.py:187-190; c49de09:fixtures/make_fixtures.py:750-753"
+ },
+ "F6": {
+  "verdict": "fixed",
+  "note": "Generic XML blobs now have dead-slide reference elements removed before relationships are deleted. Changed XML is written back. Test requires successful fill, valid integrity and absence of viewProps outline reference and slide relationship. Without fix, fill fails output integrity before those assertions.",
+  "evidence": "c49de09:src/deckfill/fill.py:77-98; c49de09:tests/test_c3_c6_package.py:155-163; c49de09:fixtures/make_fixtures.py:684-704"
+ },
+ "F7": {
+  "verdict": "fixed",
+  "note": "Subtitle targeting a body now receives body fit estimation, warned status when oversized, or check status when unmodelled. Long-subtitle test fails original unconditional fits result; short subtitle is compatibility control. Explicit override and unknown-fit branches lack separate regression cases but use inspected destination-based logic.",
+  "evidence": "c49de09:src/deckfill/plan.py:244-255; c49de09:tests/test_c7_overflow.py:181-187"
+ },
+ "F8": {
+  "verdict": "fixed",
+  "note": "Positioned source footer survives when destination layout lacks matching footer. Source layout or master can supply missing geometry. Test requires LOCAL FOOTER text and transform; original code drops footer and fails. Donor geometry and index-remapping branches lack dedicated cases.",
+  "evidence": "c49de09:src/deckfill/fill.py:146-171,199-211; c49de09:tests/test_c4_footers.py:87-96; c49de09:fixtures/make_fixtures.py:660-678"
+ },
+ "F9": {
+  "verdict": "fixed",
+  "note": "Prompt load checks HTTP status and nonempty content. Copy remains disabled until shared prompt state is populated. Failure stops boot; retry uses same path. HTTP 500 test checks failure state, disabled Copy, successful retry and exact clipboard contents. Original implementation fails failure-state assertions and cannot complete expected retry flow.",
+  "evidence": "c49de09:docs/app.js:129-136,436-439,456-468; c49de09:tests/e2e/f9_prompt_load.mjs:23-45"
+ },
+ "F10": {
+  "verdict": "partial",
+  "note": "Mutation evidence is isolated, elapsed idle time asserted, all three links required, and provenance recorded. Checks reject original short-idle and incomplete-link evidence. However, recorded last-download timestamp precedes a later offline fill and download. No 30-second idle follows that final download. Move offline fill before final idle interval, or add interval afterward. No leak demonstrated.",
+  "evidence": "c49de09:tests/e2e/c9_privacy.mjs:130-133,164-170,219-223,270-278; c49de09:qa/failure-demos/run_demos.py:74-78; c49de09:qa/e2e/c9-report.json:34-38,94-98"
+ },
+ "F11": {
+  "verdict": "fixed",
+  "note": "Whole-part exemption removed. Oracle removes authorized reference elements and compares remaining part XML. Regression test deletes another shape from linked layout and requires detection; original exemption misses deletion and fails assertion. Separate relationship-comparison regression introduced by this fix is F15.",
+  "evidence": "c49de09:tests/oracle.py:265-272,284-304; c49de09:tests/test_c3_c6_package.py:166-189"
+ },
+ "F12": {
+  "verdict": "fixed",
+  "note": "Reader now detects non-placeholder text, including grouped shapes and tables; G0 includes result in script_clean. Planted-text-box test requires LOOSE to be returned and fails old reader, which lacks loose_text. Valid-output tests alone would not prove detection; planted-box test supplies negative case.",
+  "evidence": "c49de09:tests/oracle.py:154-175; c49de09:qa/g0/run_g0.py:153-161; c49de09:tests/test_c3_c6_package.py:192-217"
+ },
+ "F13": {
+  "verdict": "fixed",
+  "note": "Explicit manifest requires G0, D10, C10, C1 page and C15 outputs. Missing required output returns failure before validator availability check. Test supplies missing output and requires exit 1 plus named MISSING message; original runner cannot satisfy it. Complete-manifest test is a control, not proof of missing-output fix.",
+  "evidence": "c49de09:qa/c5/run_validator.py:49-76; c49de09:qa/c5/manifest.json:13-26; c49de09:tests/test_qa_runners.py:15-32"
+ },
+ "F14": {
+  "verdict": "fixed",
+  "note": "Checker requires three named cases, compares numeric tokens and exits nonzero for missing cases or failed records. Tests reject 14 versus 114 and require failure for missing third case; both discriminate corresponding fixes. No dedicated test covers present-but-failing record exit status, though inspected return expression handles it.",
+  "evidence": "c49de09:qa/gemini/check_c15.py:24-39,76-91; c49de09:tests/test_qa_runners.py:35-48"
+ }
+}

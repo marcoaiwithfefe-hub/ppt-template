@@ -1,0 +1,6 @@
+# F15 before: oracle at d09d782, new test in the working tree
+FAILED tests/test_c3_c6_package.py::test_f15_reordered_or_rewritten_relationships_are_caught[typed.pptx-ppt/slideMasters/_rels/slideMaster1.xml.rels-ppt/slideMasters/slideMaster1.xml-reorder]
+FAILED tests/test_c3_c6_package.py::test_f15_reordered_or_rewritten_relationships_are_caught[typed.pptx-ppt/slideMasters/_rels/slideMaster1.xml.rels-ppt/slideMasters/slideMaster1.xml-absolute]
+FAILED tests/test_c3_c6_package.py::test_f15_reordered_or_rewritten_relationships_are_caught[sections.pptx-ppt/slideLayouts/_rels/slideLayout2.xml.rels-ppt/slideLayouts/slideLayout2.xml-reorder]
+FAILED tests/test_c3_c6_package.py::test_f15_reordered_or_rewritten_relationships_are_caught[sections.pptx-ppt/slideLayouts/_rels/slideLayout2.xml.rels-ppt/slideLayouts/slideLayout2.xml-absolute]
+4 failed, 131 deselected in 0.25s

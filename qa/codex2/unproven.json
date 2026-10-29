@@ -1,0 +1,37 @@
+[
+ {
+  "entry": "C3",
+  "state": "weak_check",
+  "gate": "build",
+  "note": "Original whole-part exemption fixed. F15's normalized relationship-set comparison still cannot prove canonical preservation of every kept relationship part.",
+  "evidence": "c49de09:tests/oracle.py:45-57,275-276,302-304; c49de09:tests/test_c3_c6_package.py:39-46"
+ },
+ {
+  "entry": "C8 / D1b",
+  "state": "partial",
+  "gate": "build",
+  "note": "Renamed XML enforcement and tested central-directory cases are repaired. ZIP64 locator with nonsentinel classic fields remains outside consistency checks and existing tests. Allocation impact remains unknown without dependency inspection or a new probe; no memory failure asserted this round.",
+  "evidence": "c49de09:src/deckfill/package.py:88-115,119-126; c49de09:tests/test_c8_errors.py:153-184"
+ },
+ {
+  "entry": "C9",
+  "state": "coverage_gap",
+  "gate": "build",
+  "note": "Saved evidence now establishes 30 seconds idle and all three link-outs. Idle interval precedes later offline download, so coverage after session's final download remains unproven.",
+  "evidence": "c49de09:tests/e2e/c9_privacy.mjs:164-170,219-223; c49de09:qa/e2e/c9-report.json:34-38,94-98"
+ },
+ {
+  "entry": "G0 / C7 visual evidence",
+  "state": "unavailable_evidence",
+  "gate": "build",
+  "note": "New hashes identify renders, but renders remain explicitly local and gitignored. Pinned text records visual passes without supplying visual content needed to independently check overflow, overlap and decoration.",
+  "evidence": "c49de09:qa/g0/G0-RESULT.md:9-12,47-56; c49de09:qa/g0/report.json:13-59"
+ },
+ {
+  "entry": "C14",
+  "state": "unverified",
+  "gate": "build",
+  "note": "Existing test checks locally encoded naming, description and file-layout rules. No new pinned evidence establishes agreement with Google's format page. External format agreement remains unverified under this code-and-existing-tests review.",
+  "evidence": "c49de09:tests/test_c14_copy.py:50-62"
+ }
+]

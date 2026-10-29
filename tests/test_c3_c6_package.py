@@ -131,6 +131,61 @@ def test_c5_external_link_kept_and_never_fetched(tpl, monkeypatch):
     assert calls == []
 
 
+def _rezip(parts):
+    import zipfile as zf
+    from io import BytesIO
+
+    buf = BytesIO()
+    with zf.ZipFile(buf, "w") as z:
+        for n, d in parts.items():
+            z.writestr(n, d)
+    return buf.getvalue()
+
+
+def _swap_first_two(rels: bytes) -> bytes:
+    root = xml(rels)
+    a, b = root[0], root[1]
+    root.remove(b)
+    a.addprevious(b)
+    return etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
+
+
+def _absolute_first_target(rels: bytes, base: str) -> bytes:
+    import posixpath
+
+    root = xml(rels)
+    e = root[0]
+    e.set("Target", "/" + posixpath.normpath(posixpath.join(base, e.get("Target"))))
+    return etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
+
+
+MASTER_RELS = "ppt/slideMasters/_rels/slideMaster1.xml.rels"
+LINKED_RELS = "ppt/slideLayouts/_rels/slideLayout2.xml.rels"  # sections: also links to a sample slide
+
+
+@pytest.mark.parametrize(
+    "name, rels, part, edit",
+    [
+        ("typed.pptx", MASTER_RELS, "ppt/slideMasters/slideMaster1.xml", "reorder"),
+        ("typed.pptx", MASTER_RELS, "ppt/slideMasters/slideMaster1.xml", "absolute"),
+        ("sections.pptx", LINKED_RELS, "ppt/slideLayouts/slideLayout2.xml", "reorder"),
+        ("sections.pptx", LINKED_RELS, "ppt/slideLayouts/slideLayout2.xml", "absolute"),
+    ],
+)
+def test_f15_reordered_or_rewritten_relationships_are_caught(name, rels, part, edit, tpl):
+    """Codex round 2, F15: two relationships swapped, or a target rewritten to an equal absolute
+    form, in a kept part's relationships must fail C3, beside an authorised link removal too."""
+    data = tpl(name)
+    out = make(data, name)
+    assert kept_part_problems(data, out) == []
+    parts = parts_of(out)
+    if edit == "reorder":
+        parts[rels] = _swap_first_two(parts[rels])
+    else:
+        parts[rels] = _absolute_first_target(parts[rels], part.rsplit("/", 1)[0])
+    assert f"changed relationships of {part}" in kept_part_problems(data, _rezip(parts))
+
+
 @pytest.mark.parametrize("name", FILLABLE)
 def test_c6_no_empty_placeholders(name, tpl):
     for s in read_deck(make(tpl(name), name)):

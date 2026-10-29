@@ -272,8 +272,19 @@ def without_links(data: bytes, dead: set) -> str:
     return etree.tostring(root, method="c14n2").decode()
 
 
-def rel_set(parts, name, dead=frozenset()):
-    return {(rid, ty, t, ext) for rid, (ty, t, ext) in rels_of(parts, name).items() if rid not in dead}
+def rels_without(parts, name, dead=frozenset()) -> str | None:
+    """Canonical XML of a part's relationships with only the authorised edit made: the
+    relationships to removed slides taken out (D4), nothing else, so order and target spelling
+    still count (Codex round 2, F15). None when the part has no relationships left."""
+    d, f = posixpath.split(name)
+    rn = posixpath.join(d, "_rels", f + ".rels")
+    if rn not in parts:
+        return None
+    root = xml(parts[rn])
+    for e in list(root):
+        if e.get("Id") in dead:
+            root.remove(e)
+    return etree.tostring(root, method="c14n2").decode() if len(root) else None
 
 
 def kept_part_problems(inp: bytes, out: bytes, allowed_extra_changes=()) -> list[str]:
@@ -300,7 +311,7 @@ def kept_part_problems(inp: bytes, out: bytes, allowed_extra_changes=()) -> list
         elif ip[name] != op[name]:
             problems.append(f"bytes changed {name}")
         # its relationships too, except the ones to removed slides
-        if rel_set(ip, name, dead) != rel_set(op, name):
+        if rels_without(ip, name, dead) != rels_without(op, name):
             problems.append(f"changed relationships of {name}")
     return problems
 
