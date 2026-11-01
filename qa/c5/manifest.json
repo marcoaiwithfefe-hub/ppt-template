@@ -143,17 +143,17 @@
   {
    "family": "Q5 sample route",
    "template": "qa/real-templates/edb-mpa2022.pptx",
-   "output": "qa/rev8/q5/edb-mpa2022-sample/edb-mpa2022-sample-filled.pptx"
+   "output": "qa/rev8/q5/qa2/edb-mpa2022-sample/edb-mpa2022-sample-filled.pptx"
   },
   {
    "family": "Q5 sample route",
    "template": "qa/real-templates/elderly-gov-diy.pptx",
-   "output": "qa/rev8/q5/elderly-gov-diy-sample/elderly-gov-diy-sample-filled.pptx"
+   "output": "qa/rev8/q5/qa2/elderly-gov-diy-sample/elderly-gov-diy-sample-filled.pptx"
   },
   {
    "family": "Q5 sample route",
    "template": "qa/real-templates/hkust-template14.potx",
-   "output": "qa/rev8/q5/hkust-template14-sample/hkust-template14-sample-filled.pptx"
+   "output": "qa/rev8/q5/qa2/hkust-template14-sample/hkust-template14-sample-filled.pptx"
   }
  ],
  "generated_sample": [
@@ -260,6 +260,33 @@
   {
    "template": "sample-split.pptx",
    "outline": "tests/outlines/sample/split.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-grow.pptx",
+   "outline": "tests/outlines/sample/four-long.md",
+   "overrides": {
+    "0": "s1"
+   }
+  },
+  {
+   "template": "sample-geom.pptx",
+   "outline": "tests/outlines/sample/backings.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-order.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-two.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-only2.pptx",
+   "outline": "tests/outlines/sample/readable.md",
    "overrides": {}
   }
  ]
