@@ -17,10 +17,11 @@ The page strings that changed after Marco's last Rule 25 proof. Each one waits o
 | `sampleOption` | rev 8 | 範本頁 {k}　{words} |
 | `fit.shrunk` | rev 8 | 字細咗 |
 | `fit.small_text` | rev 8 QA round 1 | 字細 |
+| `fit.grown` | rev 8 QA round 2 | 版面調整 |
 | `outlineErrors.too_big` | rev 8 | 做出嚟嘅簡報太大，網頁處理唔到。請減少投影片或者每張嘅點數，再試。 |
 | `warnings.subtitle_in_title` | rev 8 | 「{text}」：範本封面冇副題框，副題放咗喺標題下面。 |
 
-When to expect the rev 8 states: 字細咗 shows on a sample-route slide whose text was shrunk to fit its box; 字細 shows when no sample slide of the template can hold that slide's text at a readable size (or a picked one cannot), so the text is small.
+When to expect the rev 8 states: 字細咗 shows on a sample-route slide whose text was shrunk to fit its box; 字細 shows when no sample slide of the template can hold that slide's text at a readable size (or a picked one cannot), so the text is small. 版面調整 shows when the page made a slide's text box bigger, into empty space on that slide, so the text fits on fewer slides.
 
 When to expect the two new notes:
 - `layout_gone` shows once, after the edit that deletes the overridden slide, changes its title or kind (a section slide that gains its first bullet, for example), or changes how many slides share its title. A slide with the same title may still be there, so the note names no single cause.

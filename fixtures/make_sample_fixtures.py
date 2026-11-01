@@ -615,6 +615,193 @@ def make_sample_split(out):
     return save(prs, out, "sample-split.pptx")
 
 
+# --- QA round 2 fixtures (C34 to C37). Cells of the R3 grid are 190500 EMU square on this 12192000 x 6858000 slide.
+C = 190500
+
+
+def cells(c0, r0, c1, r1):
+    """A box covering grid columns c0..c1 and rows r0..r1 exactly."""
+    return c0 * C, r0 * C, (c1 - c0 + 1) * C, (r1 - r0 + 1) * C
+
+
+def _geom(shape, xml_geom):
+    pr = shape._element.find(q("p:spPr"))
+    old = pr.find(q("a:prstGeom"))
+    new = etree.fromstring(xml_geom)
+    old.addprevious(new)
+    pr.remove(old)
+
+
+CUSTRECT = ('<a:custGeom xmlns:a="%s"><a:avLst/><a:gdLst/><a:ahLst/><a:cxnLst/><a:rect l="l" t="t" r="r" b="b"/>'
+            '<a:pathLst><a:path w="%d" h="%d"><a:moveTo><a:pt x="0" y="0"/></a:moveTo><a:lnTo><a:pt x="%d" y="0"/></a:lnTo>'
+            '<a:lnTo><a:pt x="%d" y="%d"/></a:lnTo><a:lnTo><a:pt x="0" y="%d"/></a:lnTo><a:lnTo><a:pt x="0" y="0"/></a:lnTo>'
+            '<a:close/></a:path></a:pathLst></a:custGeom>')
+LEAF = ('<a:custGeom xmlns:a="%s"><a:avLst/><a:gdLst/><a:ahLst/><a:cxnLst/><a:rect l="l" t="t" r="r" b="b"/>'
+        '<a:pathLst><a:path w="1000" h="1000"><a:moveTo><a:pt x="0" y="500"/></a:moveTo>'
+        '<a:cubicBezTo><a:pt x="300" y="0"/><a:pt x="700" y="0"/><a:pt x="1000" y="500"/></a:cubicBezTo>'
+        '<a:cubicBezTo><a:pt x="700" y="1000"/><a:pt x="300" y="1000"/><a:pt x="0" y="500"/></a:cubicBezTo>'
+        '<a:close/></a:path></a:pathLst></a:custGeom>')
+
+
+def custrect(shapes, sid, x, y, w, h, rgb):
+    """A rectangle written as a four-corner custGeom path with a solid fill, the way Canva exports one (Marco's slide 6
+    backings)."""
+    s = rect(shapes, sid, x, y, w, h, rgb)
+    _geom(s, CUSTRECT % (NS["a"], w, h, w, w, h, h))
+    return s
+
+
+def leaf(shapes, sid, x, y, w, h, rgb):
+    s = rect(shapes, sid, x, y, w, h, rgb)
+    _geom(s, LEAF % NS["a"])
+    return s
+
+
+def picture_rect(slide, sid, x, y, w, h, rot):
+    """A rectangle path filled with a picture and rotated (Marco's olive leaf, shape 74)."""
+    p = pic(slide.shapes, 9000 + sid, x, y, w, h, (110, 140, 60))
+    rid = p._element.find(".//" + q("a:blip")).get(q("r:embed"))
+    s = custrect(slide.shapes, sid, x, y, w, h, (0, 0, 0))
+    pr = s._element.find(q("p:spPr"))
+    pr.remove(pr.find(q("a:solidFill")))
+    bf = etree.SubElement(pr, q("a:blipFill"))
+    etree.SubElement(bf, q("a:blip")).set(q("r:embed"), rid)
+    etree.SubElement(etree.SubElement(bf, q("a:stretch")), q("a:fillRect"))
+    ln = pr.find(q("a:ln"))
+    if ln is not None:
+        ln.addprevious(bf)
+    pr.find(q("a:xfrm")).set("rot", str(rot))
+    p._element.getparent().remove(p._element)
+    return s
+
+
+LONG = ("Quarter one: pilot the scheduling tool", "Quarter two: roll it out to every truck",
+        "Quarter three: open the cross-border routes", "Quarter four: review and plan next year")
+
+
+def make_sample_grow(out):
+    """C34 grown box. g1: Marco's slide 6 after clearing (a title, four number labels on their own rectangle-path
+    backings, four caption body boxes of different widths, a photo on the right). g2: a 70% declared background panel
+    behind a small body. g3: a small body boxed in by pictures (no free area of 25% by 15%). g4: a plus-shaped free
+    area whose vertical and horizontal bars hold the same area (the top-most wins). g5: Marco's grouped body (a 3.97x
+    scaled group holding a white rectangle-path backing, the body box and a side accent). g6: a body on a backing with
+    positive margins beside an obstacle. g7: a body under two qualifying backings (no growth)."""
+    prs = new_prs()
+    g1 = blank_slide(prs, (225, 240, 230))
+    tb(g1.shapes, 101, 600000, 300000, 6600000, 900000, "My health in numbers", 40)
+    spots = ((600000, 1400000, 2800000, 1100000), (3600000, 1400000, 2400000, 1100000),
+             (600000, 3600000, 2600000, 1100000), (3600000, 3600000, 2200000, 1100000))
+    for i, (num, (x, y, w, h)) in enumerate(zip(("$1,300", "4", "2", "11"), spots)):
+        custrect(g1.shapes, 111 + i, x, y, w, h, (255, 255, 255))
+        tb(g1.shapes, 121 + i, x, y, w, h, num, 32)
+    caps = ((600000, 2600000, 2800000, 600000), (3600000, 2600000, 2400000, 600000),
+            (600000, 4800000, 2600000, 600000), (3600000, 4800000, 2200000, 600000))
+    for i, (word, (x, y, w, h)) in enumerate(zip(("Total medical bills", "Times I caught the flu", "Trips to the ER",
+                                                 "Sick days used"), caps)):
+        tb(g1.shapes, 131 + i, x, y, w, h, word, 18)
+    pic(g1.shapes, 141, 7400000, 300000, 4400000, 6200000, (90, 90, 90))
+
+    g2 = blank_slide(prs, (240, 230, 220))
+    rect(g2.shapes, 201, 800000, 700000, 10600000, 5500000, (250, 250, 250))
+    tb(g2.shapes, 211, 1000000, 800000, 8 * M, 800000, "Behind the panel", 36)
+    tb(g2.shapes, 221, 1000000, 2 * M, 3 * M, 500000, "Body", 18)
+
+    g3 = blank_slide(prs, (230, 220, 240))
+    tb(g3.shapes, 301, 600000, 300000, 10 * M, 800000, "Boxed in", 36)
+    tb(g3.shapes, 311, 4800000, 3 * M, 2400000, 500000, "Body", 18)
+    for i, (x, y, w, h) in enumerate(((600000, 1300000, 4100000, 5 * M), (7300000, 1300000, 4300000, 5 * M),
+                                      (4800000, 1300000, 2400000, 1600000), (4800000, 3600000, 2400000, 2700000))):
+        pic(g3.shapes, 321 + i, x, y, w, h, (60 + 30 * i, 90, 120))
+
+    g4 = blank_slide(prs, (240, 240, 210))
+    blocks = ((3, 2, 23, 13), (40, 2, 60, 13), (3, 20, 23, 33), (40, 20, 60, 33), (24, 2, 39, 7), (24, 26, 39, 33),
+              (3, 14, 7, 19), (56, 14, 60, 19))
+    for i, b in enumerate(blocks):
+        pic(g4.shapes, 401 + i, *cells(*b), (80, 100 + 10 * i, 140))
+    tb(g4.shapes, 411, *cells(5, 4, 18, 8), "Plus", 36)
+    tb(g4.shapes, 421, *cells(30, 16, 33, 17), "Body", 18)
+
+    g5 = blank_slide(prs, (230, 240, 250))
+    tb(g5.shapes, 501, 600000, 300000, 10 * M, 800000, "Grouped body", 36)
+
+    def kids(sh):
+        custrect(sh, 511, 0, 57114, 1123000, 246486, (255, 255, 255))
+        tb(sh, 512, 0, 0, 1123000, 303600, "Body", 18)
+        rect(sh, 513, 1173000, 60000, 60000, 180000, (240, 120, 60))
+    group(g5.shapes, 510, (600000, 2 * M), (4902000, 1206562), (1233000, 303600), kids)
+
+    g6 = blank_slide(prs, (245, 235, 225))
+    tb(g6.shapes, 601, 600000, 300000, 10 * M, 800000, "Margins", 36)
+    custrect(g6.shapes, 611, 600000, 2 * M, 3400000, 900000, (255, 255, 255))
+    tb(g6.shapes, 612, 800000, 2200000, 3 * M, 500000, "Body", 18)
+    pic(g6.shapes, 621, 7 * M, 1500000, 600000, 4 * M, (120, 60, 60))
+
+    g7 = blank_slide(prs, (235, 245, 225))
+    tb(g7.shapes, 701, 600000, 300000, 10 * M, 800000, "Two backings", 36)
+    custrect(g7.shapes, 711, 700000, 1900000, 3200000, 700000, (255, 255, 255))
+    custrect(g7.shapes, 712, 750000, 1950000, 3100000, 600000, (250, 250, 250))
+    tb(g7.shapes, 721, 800000, 2 * M, 3 * M, 500000, "Body", 18)
+    return save(prs, out, "sample-grow.pptx")
+
+
+def make_sample_geom(out):
+    """C36 backings by geometry: four labels, each over a text-free shape: a curved leaf path (stays), a rect preset
+    (goes), a four-corner rectangle path like Marco's slide 6 backings (goes), a rotated picture-filled rectangle path
+    like Marco's olive leaf (stays). One caption body takes the outline."""
+    prs = new_prs()
+    s = blank_slide(prs, (230, 235, 245))
+    tb(s.shapes, 101, 600000, 300000, 10 * M, 900000, "Backings by shape", 40)
+    xs = (600000, 3400000, 6200000, 9000000)
+    leaf(s.shapes, 111, xs[0], 1500000, 2400000, 1200000, (90, 160, 90))
+    rect(s.shapes, 112, xs[1], 1500000, 2400000, 1200000, (255, 255, 255))
+    custrect(s.shapes, 113, xs[2], 1500000, 2400000, 1200000, (255, 255, 255))
+    picture_rect(s, 114, xs[3], 1500000, 2400000, 1200000, 6861076)
+    for i, (x, num) in enumerate(zip(xs, ("1", "2", "3", "4"))):
+        tb(s.shapes, 121 + i, x, 1500000, 2400000, 1200000, num, 28)
+    tb(s.shapes, 131, 600000, 3200000, 10 * M, 2500000, "Caption body", 20)
+    return save(prs, out, "sample-geom.pptx")
+
+
+def make_sample_order(out):
+    """C35. o1: a content sample whose body holds six bullets on one slide; o2: one whose body holds three; o3: three
+    24 pt slots too small for their bullets (they would be warned); o4: a narrow title box where 時間表 fits and
+    時間表（續） does not, over a body that splits."""
+    prs = new_prs()
+    content_slide(prs, 1, (240, 230, 220), "Order one", "Body", 40, 20)
+    content_slide(prs, 2, (220, 240, 230), "Order two", "Body", 40, 20)
+    prs.slides[1].shapes[1].height = Emu(1300000)
+    s3 = blank_slide(prs, (230, 220, 240))
+    tb(s3.shapes, 301, 600000, 400000, 10 * M, 800000, "Order three", 40)
+    for i in range(3):
+        tb(s3.shapes, 311 + i, 600000 + 3800000 * i, 2 * M, 1500000, 400000, f"Slot {i + 1}", 24)
+    s4 = blank_slide(prs, (240, 240, 210))
+    tb(s4.shapes, 401, 600000, 400000, 2 * M, 800000, "窄標題", 40)
+    tb(s4.shapes, 411, 600000, 1500000, 10 * M, 1000000, "Wide body", 20)
+    return save(prs, out, "sample-order.pptx")
+
+
+def make_sample_two(out):
+    """C37: two usable decorated content samples beside python-pptx's layouts: both routes, the layout route default."""
+    prs = new_prs()
+    for k in (1, 2):
+        s = content_slide(prs, k, (240 - 20 * k, 230, 220), f"Two sample {k}", "Body")
+        pic(s.shapes, k * 100 + 21, 9 * M, 6 * M, M, 600000, (40 * k, 100, 160))
+    return save(prs, out, "sample-two.pptx")
+
+
+def make_sample_only2(out):
+    """C37: no usable layout and two decorated samples: the sample route is the only route, so it is used."""
+    prs = new_prs()
+    for name in ("Title Slide", "Title and Content", "Section Header", "Two Content", "Comparison", "Content with Caption",
+                 "Picture with Caption", "Title and Vertical Text", "Vertical Title and Text"):
+        lay = layout_named(prs, name)
+        lay.slide_master.slide_layouts.remove(lay)
+    for k in (1, 2):
+        s = content_slide(prs, k, (240 - 20 * k, 230, 220), f"Only two {k}", "Body")
+        pic(s.shapes, k * 100 + 21, 9 * M, 6 * M, M, 600000, (40 * k, 100, 160))
+    return save(prs, out, "sample-only2.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -623,5 +810,6 @@ def make_all(out) -> list:
         make_sample_only(out), make_sample_thin(out), make_sample_typo(out), make_layout_design(out),
         make_layout_photos(out), make_sample_titleonly(out), make_sample_heavy(out), make_sample_bigrpr(out),
         make_sample_biglvl2(out), make_sample_fit(out), make_sample_backings(out), make_sample_readable(out),
-        make_sample_small(out), make_sample_split(out),
+        make_sample_small(out), make_sample_split(out), make_sample_grow(out), make_sample_geom(out),
+        make_sample_order(out), make_sample_two(out), make_sample_only2(out),
     ]

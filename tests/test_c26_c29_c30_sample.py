@@ -51,11 +51,11 @@ def test_c26_media_follow_the_copies():
     sp, op = parts_of(data), parts_of(out)
     src_media = {n: b for n, b in sp.items() if n.startswith("ppt/media/")}
     out_media = {n: b for n, b in op.items() if n.startswith("ppt/media/")}
-    used = {"ppt/slides/slide%d.xml" % k for k in (1, 2, 3, 4, 6)}  # the samples the golden copies
+    used = {"ppt/slides/slide%d.xml" % k for k in (1, 2, 3, 6)}  # the samples the golden copies
     def media_of(parts, name):
         return {t for (rt, t, ext) in rels(parts, name).values() if t.startswith("ppt/media/")}
     keep = set().union(*(media_of(sp, n) for n in used))
-    unused = set().union(*(media_of(sp, f"ppt/slides/slide{k}.xml") for k in (5, 7, 8))) - keep
+    unused = set().union(*(media_of(sp, f"ppt/slides/slide{k}.xml") for k in (4, 5, 7, 8))) - keep
     assert keep and unused
     assert {sp[n] for n in keep} <= set(out_media.values())  # same bytes kept
     assert not ({sp[n] for n in unused} & set(out_media.values()))  # media no copy uses are gone

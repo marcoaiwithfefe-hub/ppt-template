@@ -84,7 +84,7 @@ def _cut(tag: bytes, sid: int):
 
 def test_c23_amended_negative_panel_of_8pct_or_more_removed():
     """QA round 1 (C23 amended): the 10% panel that held cleared text must stay; its removal fails."""
-    data, out = _design()
+    data, out = run("sample-design.pptx", "design", {3: "s4"})  # Compare picked onto s4
     bad = _edit(out, "ppt/slides/slide4.xml", _cut(b"sp", 451))
     assert any("shape 451 (sp) missing" in d for d in look_diff(bad, data))
 

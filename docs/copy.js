@@ -80,6 +80,7 @@ export const COPY = {
     fits: "放得落",
     shrunk: "字細咗",
     small_text: "字細",
+    grown: "版面調整",
     split: "太多，分開咗",
     warned: "有一點太長",
     check: "請喺 PowerPoint 檢查",

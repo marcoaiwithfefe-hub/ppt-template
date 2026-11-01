@@ -100,7 +100,7 @@ def test_c25_title_shrinks_then_warns():
 
 
 def test_c25_subtitle_shrinks():
-    _, info, plan = plan_on("sample-fit.pptx", "# T\nA subtitle that is longer than its box\n\n## S\n- x\n")
+    _, info, plan = plan_on("sample-fit.pptx", "# T\nA subtitle that is longer than its box\n\n## S\n- x\n", {0: "s1"})
     sub = next(b for b in plan.slides[0].boxes if b.role == "subtitle")
     assert sub.status in ("shrunk", "warned")
 

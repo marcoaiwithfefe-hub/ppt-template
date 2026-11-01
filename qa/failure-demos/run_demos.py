@@ -79,15 +79,15 @@ DEMOS = {
     "c24-box-uncleared": (
         "nothing that received no outline text is cleared on a copy",
         "src/deckfill/sample_fill.py",
-        'if sid in fills or sid in removed or etree.QName(el).localname != "sp":',
+        "if sid in fills or sid in removed:",
         "if True:",
         ["tests/test_c24_c27_sample_text.py"],
     ),
     "c24-hidden-left": (
         "hidden shapes keep their sample text on the copy",
         "src/deckfill/sample_fill.py",
-        '            el = w.el\n            if sid in fills or sid in removed',
-        '            el = w.el\n            if w.hidden:\n                continue\n            if sid in fills or sid in removed',
+        "            if sid in fills or sid in removed:\n                continue",
+        "            if sid in fills or sid in removed:\n                continue\n            if w.hidden:\n                continue",
         ["tests/test_c24_c27_sample_text.py"],
     ),
     "c24-instruction-copied": (

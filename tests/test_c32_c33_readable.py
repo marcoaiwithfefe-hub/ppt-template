@@ -33,8 +33,8 @@ def _plan(fixture: str, text: str, overrides=None):
 
 
 def test_c32_design_chip_and_6pct_box_go_10pct_panel_stays_empty():
-    data, out = run("sample-design.pptx", "design", None)
-    ids = _shapes(out, 4)  # Compare, on s4
+    data, out = run("sample-design.pptx", "design", {3: "s4"})
+    ids = _shapes(out, 4)  # Compare, picked onto s4
     assert 431 not in ids  # the filled label chip
     assert 441 not in ids  # the filled 6% box that held cleared sample text
     assert 451 in ids and _text(ids[451]) == ""  # the filled 10% panel stays, as an empty shape

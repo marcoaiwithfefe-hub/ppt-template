@@ -16,7 +16,7 @@ DEFAULTS = [
     ("typed.pptx", "layout"),
     ("layout-photos.pptx", "layout"),
     ("sample-typo.pptx", "sample"),
-    ("sample-thin.pptx", "sample"),
+    ("sample-thin.pptx", "layout"),  # QA round 2 R4: one usable sample, so the layout route is the default
 ]
 
 

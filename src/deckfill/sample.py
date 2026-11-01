@@ -738,6 +738,19 @@ def is_rect_geom(el) -> bool:
     return all(a[0] == b[0] or a[1] == b[1] for a, b in zip(pts, pts[1:] + pts[:1]))
 
 
+def backing_shape(el, turned: bool) -> bool:
+    """R5 backing test on a text-free p:sp: rectangular geometry (is_rect_geom), unrotated and unflipped (its groups
+    too), and filled with a:solidFill, or with a:noFill and a line. A picture, gradient or pattern fill never is."""
+    if turned or not is_rect_geom(el):
+        return False
+    pr = el.find(q("p:spPr"))
+    if pr.find(q("a:solidFill")) is not None:
+        return True
+    ln = pr.find(q("a:ln"))
+    has_line = ln is not None and ln.find(q("a:noFill")) is None and (len(ln) > 0 or ln.get("w") is not None)
+    return pr.find(q("a:noFill")) is not None and has_line
+
+
 def _rot(el) -> int:
     x = _xfrm_el(el)
     return int(x.get("rot", "0") or 0) if x is not None else 0
@@ -786,7 +799,7 @@ class Leaf:
     text: bool
     deco: bool
     ph: str  # placeholder type, "" for a free shape
-    rect: bool  # R5 rectangular geometry
+    rect: bool  # passes the R5 backing test: rectangular, unrotated, solid fill (or no fill and a line)
     groups: tuple[int, ...]  # enclosing group shape ids, innermost first
 
 
@@ -829,7 +842,7 @@ def shape_tree_leaves(sptree, styles=None):
             if src is not None and _local_box(src) is not None:
                 qbox = occ = _local_box(src)
         leaves.append(Leaf(shape_id(el), tag, qbox, occ, local, w.hidden, tag == "sp" and has_text(el), decorated(el),
-                           ph_type(ph) if ph is not None else "", tag == "sp" and is_rect_geom(el), gids))
+                           ph_type(ph) if ph is not None else "", tag == "sp" and backing_shape(el, w.turned), gids))
     return tuple(leaves), tuple(groups)
 
 
@@ -1055,9 +1068,12 @@ def sample_route_available(samples) -> bool:
 
 
 def sample_default(samples) -> bool:
-    """D11: the sample route is the default when at least half of the usable sample slides carry design of their own."""
+    """D11 with QA round 2's R4: when both routes are available, the sample route is the default when at least half of
+    the usable sample slides carry design of their own and at least 3 usable samples are content-compatible (a title
+    and a body destination). A template with only the sample route uses it whatever this says (open_template)."""
     u = usable(samples)
-    return bool(u) and sum(1 for s in u if s.design) * 2 >= len(u)
+    content = [s for s in u if s.title and s.bodies]
+    return bool(u) and sum(1 for s in u if s.design) * 2 >= len(u) and len(content) >= 3
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1151,44 +1167,48 @@ def _xf_of(off, ext, choff, chext) -> Xf:
     return Xf(ox, oy, ex / cex if cex else 1.0, ey / cey if cey else 1.0, c0x, c0y)
 
 
-def grow_in_groups(S: Sample, sid: int, slide_box) -> bool:
-    """R3 grouped bodies: whether box sid can take slide_box with each enclosing group grown by grown_groups while
-    every other shape in those groups keeps its slide-space box exactly."""
-    leaf = next((lf for lf in S.leaves if lf.sid == sid), None)
-    if leaf is None or leaf.local is None:
+def grow_in_groups(S: Sample, moves) -> bool:
+    """R3 grouped bodies: whether the shapes in moves, a list of (shape id, new slide-space box), can take their new
+    boxes with each enclosing group grown by grown_groups (once, to hold all of them) while every other shape in those
+    groups keeps its slide-space box exactly. The moved shapes must share one group chain (a body and its own backing
+    in separate nested groups cannot both grow)."""
+    leaves = {lf.sid: lf for lf in S.leaves}
+    moved = [leaves.get(sid) for sid, _ in moves]
+    if any(lf is None or lf.local is None for lf in moved):
         return False
-    if not leaf.groups:
+    chain_ids = moved[0].groups
+    if any(lf.groups != chain_ids for lf in moved):
+        return False
+    if not chain_ids:
         return True
     gt = {g.sid: g for g in S.groups}
-    if any(g not in gt or gt[g].local is None for g in leaf.groups):
+    if any(g not in gt or gt[g].local is None for g in chain_ids):
         return False
-    chain = [((gt[g].local[0], gt[g].local[1]), (gt[g].local[2], gt[g].local[3]), gt[g].choff, gt[g].chext)
-             for g in leaf.groups]
-    old_xf = {g: _xf_of(*c) for g, c in zip(leaf.groups, chain)}
-    local = to_local(slide_box, tuple(old_xf[g] for g in leaf.groups))
-    new = grown_groups(chain, local)
+    chain = [_chain_of(gt[g]) for g in chain_ids]
+    old_xf = {g: _xf_of(*c) for g, c in zip(chain_ids, chain)}
+    locals_ = [to_local(box, tuple(old_xf[g] for g in chain_ids)) for _, box in moves]
+    x1 = min(b[0] for b in locals_)
+    y1 = min(b[1] for b in locals_)
+    x2 = max(b[0] + b[2] for b in locals_)
+    y2 = max(b[1] + b[3] for b in locals_)
+    new = grown_groups(chain, (x1, y1, x2 - x1, y2 - y1))
     if new is None:
         return False
     new_xf = dict(old_xf)
-    new_xf.update({g: _xf_of(*c) for g, c in zip(leaf.groups, new)})
+    new_xf.update({g: _xf_of(*c) for g, c in zip(chain_ids, new)})
+    moved_ids = {sid for sid, _ in moves}
+    outer = chain_ids[-1]
 
-    def slide_of(local_box, gids, xfs):
-        return to_slide(local_box, tuple(xfs[g] for g in gids if g in xfs) if all(g in xfs for g in gids) else ())
+    def xfs(gids, table):
+        return tuple(table.get(g) or _xf_of(*_chain_of(gt[g])) for g in gids)
 
-    outer = leaf.groups[-1]
-    # every other shape under the outermost grown group, its own group boxes included
-    for lf in S.leaves:
-        if lf.sid != sid and outer in lf.groups and lf.local is not None:
-            xfs_old = {g: old_xf.get(g) or _xf_of(*_chain_of(gt[g])) for g in lf.groups}
-            xfs_new = {g: new_xf.get(g) or xfs_old[g] for g in lf.groups}
-            if slide_of(lf.local, lf.groups, xfs_old) != slide_of(lf.local, lf.groups, xfs_new):
-                return False
-    for g in S.groups:
-        if outer in g.groups and g.sid not in leaf.groups and g.local is not None:
-            xfs_old = {p: old_xf.get(p) or _xf_of(*_chain_of(gt[p])) for p in g.groups}
-            xfs_new = {p: new_xf.get(p) or xfs_old[p] for p in g.groups}
-            if slide_of(g.local, g.groups, xfs_old) != slide_of(g.local, g.groups, xfs_new):
-                return False
+    others = [(lf.local, lf.groups) for lf in S.leaves if lf.sid not in moved_ids and outer in lf.groups and lf.local]
+    others += [(g.local, g.groups) for g in S.groups if outer in g.groups and g.sid not in chain_ids and g.local]
+    for local, gids in others:
+        if any(g not in gt for g in gids):
+            return False
+        if to_slide(local, xfs(gids, old_xf)) != to_slide(local, xfs(gids, new_xf)):
+            return False
     return True
 
 

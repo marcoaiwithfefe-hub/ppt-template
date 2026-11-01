@@ -1,6 +1,9 @@
-# sample-design + outlines/sample/design.md, written from D12: title sample s1 (subtitle joins the title box, it has no
-# body box); 3 bullets to s2's 3-slot row; variety skips s1 and s2 so Steps takes s3's 3-slot list; the only
-# two-column sample s4; one bullet to s6 (no unused body box); the section back on s1 (no unused body box).
+# sample-design + outlines/sample/design.md, written from D12 with QA round 2 (R1, R6): title sample s1 (subtitle joins
+# the title box; s1, s5 and s6 leave no body box unused, file order); 3 bullets to s2's 3-slot row; variety skips s1 and
+# s2 so Steps takes s3's 3-slot list; Compare: the pool runs across the two class and its content fallback (R6), s2 and
+# s3 are recent, s6 merges both columns into its one body and leaves no box unused, s4 leaves two (441, 451), so s6,
+# left column then right; one bullet to s2's largest body box (s3 and s6 recent; s2 leaves 2 unused, s4 3); the
+# section back on s1 (no unused body box).
 slide 1 s1
 112 1 Annual Plan
 112 1 Operations team
@@ -14,12 +17,12 @@ slide 3 s3
 311 1 Pilot
 312 1 Rollout
 313 1 Review
-slide 4 s4
-401 1 Compare
-411 1 Old way
-412 1 New way
-slide 5 s6
-601 1 Paying by card
-611 1 Use the company card
+slide 4 s6
+601 1 Compare
+611 1 Old way
+611 1 New way
+slide 5 s2
+201 1 Paying by card
+212 1 Use the company card
 slide 6 s1
 112 1 Questions

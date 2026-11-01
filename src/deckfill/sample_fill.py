@@ -133,9 +133,8 @@ def _write(sp, sbox, bf, l2_ppr) -> None:
         etree.SubElement(r, q("a:t")).text = text
 
 
-def _set_box(sp, chain, box) -> None:
-    """Widen a title box to the union of its fragments, written in the shape's own coordinates."""
-    x, y, cx, cy = to_local(box, chain)
+def _put_xfrm(sp, local) -> None:
+    x, y, cx, cy = local
     pr = sp.find(q("p:spPr"))
     xf = pr.find(q("a:xfrm"))
     if xf is None:
@@ -150,7 +149,24 @@ def _set_box(sp, chain, box) -> None:
     off.set("y", str(y))
     ext.set("cx", str(cx))
     ext.set("cy", str(cy))
-    _grow_groups(sp, (x, y, cx, cy))
+
+
+def _set_box(sp, chain, box) -> None:
+    """Widen a title box to the union of its fragments, written in the shape's own coordinates."""
+    local = to_local(box, chain)
+    _put_xfrm(sp, local)
+    _grow_groups(sp, local)
+
+
+def _set_boxes(moves) -> None:
+    """R3: a grown body box and its own backing, (walked shape, slide-space box) each, written in their own (shared)
+    coordinates; their groups grow once to hold both (sample.grow_in_groups checked the siblings)."""
+    locals_ = [to_local(box, w.chain) for w, box in moves]
+    for (w, _), local in zip(moves, locals_):
+        _put_xfrm(w.el, local)
+    x1, y1 = min(b[0] for b in locals_), min(b[1] for b in locals_)
+    x2, y2 = max(b[0] + b[2] for b in locals_), max(b[1] + b[3] for b in locals_)
+    _grow_groups(moves[0][0].el, (x1, y1, x2 - x1, y2 - y1))
 
 
 def _grow_groups(el, box) -> None:
@@ -307,7 +323,9 @@ def fill_sample(info, pkg, plan) -> bytes:
             w = walked[bf.sid]
             para, _ = donor(w.el)
             _write(w.el, S.box(bf.sid), bf, level2_written(w.el, styles, para))
-            if bf.box is not None:
+            if bf.box is not None and bf.backing:
+                _set_boxes([(w, bf.box), (walked[bf.backing[0]], bf.backing[1])])
+            elif bf.box is not None:
                 _set_box(w.el, w.chain, bf.box)
         if len(S.title) > 1:
             _raise_title(walked[S.title[0]].el, [walked[sid].el for sid in S.title[1:]])

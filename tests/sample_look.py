@@ -189,7 +189,184 @@ def _slide_area(parts) -> int:
     return int(sz.get("cx")) * int(sz.get("cy"))
 
 
-def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area) -> set[int]:
+# --- QA round 2: R5 backings and the R3 grown body, checked here with this file's own arithmetic
+
+RECT = {"rect", "roundRect", "snip1Rect", "snip2SameRect", "round1Rect", "round2SameRect", "flowChartProcess",
+        "flowChartAlternateProcess"}
+
+
+def _rect_path(pr) -> bool:
+    pg = pr.find(a("prstGeom"))
+    if pg is not None:
+        return pg.get("prst") in RECT
+    cg = pr.find(a("custGeom"))
+    paths = [] if cg is None or cg.find(a("pathLst")) is None else cg.find(a("pathLst")).findall(a("path"))
+    if len(paths) != 1:
+        return False
+    cmds = [c for c in paths[0] if isinstance(c.tag, str)]
+    names = [etree.QName(c).localname for c in cmds]
+    closed = bool(names) and names[-1] == "close"
+    pts = [(int(c.find(a("pt")).get("x")), int(c.find(a("pt")).get("y"))) for c in cmds if etree.QName(c).localname in ("moveTo", "lnTo")]
+    body = [n for n in names if n != "close"]
+    if body[:1] != ["moveTo"] or any(n != "lnTo" for n in body[1:]) or len(body) not in (4, 5) or names.count("close") > 1:
+        return False
+    if len(pts) == 5:
+        if pts[0] != pts[4]:
+            return False
+        pts = pts[:4]
+    elif not closed:
+        return False
+    corners = {(x, y) for x in {q[0] for q in pts} for y in {q[1] for q in pts}}
+    return len(corners) == 4 and set(pts) == corners and all(
+        u[0] == v[0] or u[1] == v[1] for u, v in zip(pts, pts[1:] + pts[:1]))
+
+
+def _turned_ids(tree) -> set[int]:
+    """Shapes rotated or flipped, by their own a:xfrm or an enclosing group's."""
+    out: set[int] = set()
+
+    def rec(parent, turned):
+        for el in parent:
+            if not isinstance(el.tag, str) or etree.QName(el).localname not in SHAPES:
+                continue
+            x = _xfrm(el)
+            t = turned or (x is not None and ((int(x.get("rot", "0") or 0) % 21600000) != 0 or x.get("flipH") in ("1", "true")
+                                               or x.get("flipV") in ("1", "true")))
+            if t:
+                out.add(nv_id(el)[0])
+            if etree.QName(el).localname == "grpSp":
+                rec(el, t)
+
+    rec(tree, False)
+    return out
+
+
+def _backing_ok(el, turned: bool) -> bool:
+    """R5: a rectangle (preset or a four-corner path), unrotated, with a solid fill or no fill and a line."""
+    pr = el.find(p("spPr"))
+    if turned or pr is None or not _rect_path(pr):
+        return False
+    if pr.find(a("solidFill")) is not None:
+        return True
+    ln = pr.find(a("ln"))
+    return pr.find(a("noFill")) is not None and ln is not None and ln.find(a("noFill")) is None and (len(ln) or ln.get("w"))
+
+
+def _occ(tree) -> dict[int, tuple]:
+    """Drawn bounds of every non-group shape, rotation and groups included (axis-aligned)."""
+    import math
+    out = {}
+
+    def rot(pts, c, r):
+        if not r % 21600000:
+            return pts
+        t = math.radians(r / 60000)
+        return [(c[0] + (x - c[0]) * math.cos(t) - (y - c[1]) * math.sin(t), c[1] + (x - c[0]) * math.sin(t) + (y - c[1]) * math.cos(t)) for x, y in pts]
+
+    def rec(parent, maps):
+        for el in parent:
+            if not isinstance(el.tag, str) or etree.QName(el).localname not in SHAPES:
+                continue
+            x = _xfrm(el)
+            if x is None or x.find(a("off")) is None or x.find(a("ext")) is None:
+                continue
+            ox, oy = int(x.find(a("off")).get("x")), int(x.find(a("off")).get("y"))
+            cx, cy = int(x.find(a("ext")).get("cx")), int(x.find(a("ext")).get("cy"))
+            r = int(x.get("rot", "0") or 0)
+            if etree.QName(el).localname == "grpSp":
+                co, ce = x.find(a("chOff")), x.find(a("chExt"))
+                c0x, c0y = (int(co.get("x")), int(co.get("y"))) if co is not None else (ox, oy)
+                cex, cey = (int(ce.get("cx")), int(ce.get("cy"))) if ce is not None else (cx, cy)
+
+                def m(pts, ox=ox, oy=oy, c0x=c0x, c0y=c0y, sx=(cx / cex if cex else 1), sy=(cy / cey if cey else 1), r=r, cx=cx, cy=cy):
+                    pts = [(ox + (px - c0x) * sx, oy + (py - c0y) * sy) for px, py in pts]
+                    return rot(pts, (ox + cx / 2, oy + cy / 2), r)
+                rec(el, [m] + maps)
+                continue
+            pts = rot([(ox, oy), (ox + cx, oy), (ox, oy + cy), (ox + cx, oy + cy)], (ox + cx / 2, oy + cy / 2), r)
+            for f in maps:
+                pts = f(pts)
+            xs, ys = [q[0] for q in pts], [q[1] for q in pts]
+            out[nv_id(el)[0]] = (min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys))
+
+    rec(tree, [])
+    return out
+
+
+def _fixed_parts(parts, name, root):
+    """Visible non-placeholder shape bounds of the slide's layout and master, honouring showMasterSp."""
+    out = []
+    if root.get("showMasterSp") in ("0", "false"):
+        return out
+    lay = next((t for (rt, t, ext) in rels(parts, name).values() if rt.endswith("/slideLayout")), None)
+    if lay is None:
+        return out
+    trees = [(lay, xml(parts[lay]))]
+    if trees[0][1].get("showMasterSp") not in ("0", "false"):
+        mas = next((t for (rt, t, ext) in rels(parts, lay).values() if rt.endswith("/slideMaster")), None)
+        if mas is not None:
+            trees.append((mas, xml(parts[mas])))
+    for _, r in trees:
+        t = r.find(p("cSld")).find(p("spTree"))
+        hidden = _hidden_ids(t)
+        occ = _occ(t)
+        for i, el in shapes(t).items():
+            if etree.QName(el).localname == "grpSp" or i in hidden or i not in occ:
+                continue
+            nvpr = next((c for c in el if etree.QName(c).localname.startswith("nv")), None)
+            if nvpr is not None and nvpr.find(p("nvPr")) is not None and nvpr.find(p("nvPr")).find(p("ph")) is not None:
+                continue
+            out.append(occ[i])
+    return out
+
+
+def free_cells_ok(foot, ot, oroot, op, name, skip: set, sw: int, sh: int) -> bool:
+    """R3 grid, recomputed: every cell the footprint overlaps by more than 1% of a cell is free of the copy's visible
+    shapes (backgrounds of 60% or more aside), the 2%-padded text destinations, the layout's and master's shapes, and
+    the 4% edge band."""
+    W, H = 64, 36
+    taken = [[False] * W for _ in range(H)]
+
+    def mark(b):
+        if b is None or b[2] * b[3] >= 0.6 * sw * sh:
+            return
+        for r in range(H):
+            y0, y1 = r * sh / H, (r + 1) * sh / H
+            if not (b[1] < y1 and b[1] + max(b[3], 1) > y0):
+                continue
+            for c in range(W):
+                x0, x1 = c * sw / W, (c + 1) * sw / W
+                if b[0] < x1 and b[0] + max(b[2], 1) > x0:
+                    taken[r][c] = True
+
+    hidden = _hidden_ids(ot)
+    occ = _occ(ot)
+    sh_all = shapes(ot)
+    for i, el in sh_all.items():
+        if etree.QName(el).localname == "grpSp" or i in hidden or i in skip or i not in occ:
+            continue
+        mark(occ[i])
+        if etree.QName(el).localname == "sp" and _has_text(el) and ph_type(el) not in FOOTER:
+            pad = 0.02 * sw
+            b = occ[i]
+            mark((b[0] - pad, b[1] - pad, b[2] + 2 * pad, b[3] + 2 * pad))
+    for b in _fixed_parts(op, name, oroot):
+        mark(b)
+    for r in range(H):
+        for c in range(W):
+            if c / W < 0.04 or (c + 1) / W > 0.96 or r / H < 0.04 or (r + 1) / H > 0.96:
+                taken[r][c] = True
+    cw, ch = sw / W, sh / H
+    for r in range(H):
+        for c in range(W):
+            ix = min(foot[0] + foot[2], (c + 1) * cw) - max(foot[0], c * cw)
+            iy = min(foot[1] + foot[3], (r + 1) * ch) - max(foot[1], r * ch)
+            if ix > 0 and iy > 0 and ix * iy > 0.01 * cw * ch and taken[r][c]:
+                return False
+    return True
+
+
+def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area, turned=frozenset(), grown=frozenset()) -> set[int]:
     """QA round 1 (Q1, C23 amended): the shapes a copy may lose, computed from the source sample and the output's
     destinations, never from the fill's record. Footers; text boxes with no fill or line, and placeholders; a text
     shape with a fill or line under 8% of the slide; a text-free shape with a fill or line under 8% that holds at least
@@ -197,7 +374,7 @@ def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area) -> set[int]:
     Nothing behind a destination that kept its text may go (it holds 80% of the destination's output box, or 80% of it
     lies inside that box), and neither may anything 8% or larger."""
     dests = {i for i, el in o_sh.items() if i in s_sh and etree.QName(el).localname == "sp" and _has_text(el)}
-    dest_boxes = [o_bx[i] for i in dests if i in o_bx]
+    dest_boxes = [s_bx[i] if i in grown else o_bx[i] for i in dests if i in o_bx]  # a grown body (R3) at its source box
     cleared = [s_bx[i] for i, el in s_sh.items() if etree.QName(el).localname == "sp" and _has_text(el) and i not in dests
                and i not in hidden and ph_type(el) not in FOOTER and i in s_bx]
     removed = {i for i in s_sh if i not in o_sh}
@@ -218,7 +395,8 @@ def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area) -> set[int]:
         elif _has_text(el):
             if not _decorated(el) or ph_type(el) is not None or small_free(i):
                 ok.add(i)
-        elif ph_type(el) is None and _decorated(el) and small_free(i) and any(_share_inside(c, s_bx[i]) >= 0.8 for c in cleared):
+        elif (ph_type(el) is None and _decorated(el) and _backing_ok(el, i in turned) and small_free(i)
+              and any(_share_inside(c, s_bx[i]) >= 0.8 for c in cleared)):
             ok.add(i)
     # groups, innermost first: every visible member gone with an allowed reason; hidden members go with the group
     groups = [i for i in s_sh if etree.QName(s_sh[i]).localname == "grpSp" and i in removed]
@@ -257,11 +435,34 @@ def look_diff(out: bytes, src: bytes) -> list[str]:
         o_sh = {i: e for i, e in o_sh.items() if not (etree.QName(e).localname == "sp" and ph_type(e) in FOOTER)}
         removed = [i for i in s_sh if i not in o_sh]
         removed_text = [s_bx[i] for i in removed if i in s_bx and etree.QName(s_sh[i]).localname == "sp" and _has_text(s_sh[i])]
-        allowed = allowed_removals(s_sh, s_bx, o_sh, o_bx, _hidden_ids(st), _slide_area(sp))
+        widened = set()
+        # R3: a grown body is a text destination whose box grew past the removed text (so not the title widening);
+        # its own backing is a text-free shape whose margins around it are unchanged; its enclosing groups may grow
+        changed = [i for i in o_sh if i in s_sh and o_bx.get(i) != s_bx.get(i) and o_bx.get(i) and s_bx.get(i)]
+        grown = [i for i in changed if etree.QName(o_sh[i]).localname == "sp" and _has_text(o_sh[i])
+                 and _within(s_bx[i], o_bx[i]) and not (removed_text and _within(o_bx[i], _union([s_bx[i]] + removed_text)))]
+        backing = None
+        if len(grown) == 1:
+            g = grown[0]
+
+            def margins(bx, j):
+                return (bx[g][0] - bx[j][0], bx[g][1] - bx[j][1], bx[j][0] + bx[j][2] - bx[g][0] - bx[g][2],
+                        bx[j][1] + bx[j][3] - bx[g][1] - bx[g][3])
+            backs = [j for j in changed if j != g and etree.QName(o_sh[j]).localname == "sp" and not _has_text(o_sh[j])
+                     and all(abs(u - v) <= 12 for u, v in zip(margins(o_bx, j), margins(s_bx, j)))]
+            backing = backs[0] if len(backs) == 1 else None
+            foot = _union([o_bx[g]] + ([o_bx[backing]] if backing is not None else []))
+            sz = xml(sp["ppt/presentation.xml"]).find(p("sldSz"))
+            if not free_cells_ok(foot, ot, o_root, op, name, {g} | ({backing} if backing is not None else set()),
+                                 int(sz.get("cx")), int(sz.get("cy"))):
+                diffs.append(f"slide {n} (s{k}): grown box {g} covers a taken cell")
+            ancestors = {nv_id(a_)[0] for a_ in shapes(ot).get(g).iterancestors() if etree.QName(a_).localname == "grpSp"}
+        elif len(grown) > 1:
+            diffs.append(f"slide {n} (s{k}): more than one grown box {grown}")
+        allowed = allowed_removals(s_sh, s_bx, o_sh, o_bx, _hidden_ids(st), _slide_area(sp), _turned_ids(st), set(grown))
         for i in removed:
             if i not in allowed:
                 diffs.append(f"slide {n} (s{k}): shape {i} ({etree.QName(s_sh[i]).localname}) missing")
-        widened = set()
         for i, el in o_sh.items():
             if i not in s_sh:
                 continue  # added shapes are footers (declared)
@@ -271,6 +472,8 @@ def look_diff(out: bytes, src: bytes) -> list[str]:
                 ob, sb = o_bx.get(i), s_bx.get(i)
                 if ob and sb and _within(sb, ob) and removed_text and _within(ob, _union([sb] + removed_text)):
                     widened.add(i)  # the declared title widening (or a group grown with it)
+                elif len(grown) == 1 and (i == grown[0] or i == backing or (i in ancestors and _within(sb, ob))):
+                    pass  # the declared R3 growth: the body, its own backing, their enclosing groups
                 else:
                     diffs.append(f"slide {n} (s{k}): shape {i} box {sb} -> {ob}")
 
