@@ -1,0 +1,4 @@
+# f6-level2-ppr-dropped: level-2 paragraphs are written without their paragraph properties
+# mutation in src/deckfill/sample_fill.py: '            ppr = copy.deepcopy(l2_ppr)' -> '            ppr = None'
+# tests: tests/test_c25_fit.py
+10 passed in 0.25s

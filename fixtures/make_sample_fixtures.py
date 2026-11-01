@@ -957,6 +957,42 @@ def make_sample_cols2(out):
     return save(prs, out, "sample-cols2.pptx")
 
 
+def make_sample_inherit(out):
+    """Code review F6 (C25 resolved sizes): no written run carries a size of its own. i1: title and body placeholders
+    on Title and Content, whose body placeholder sets level 1 to 24 pt at 90% line spacing; level 2 and the spacing
+    before come from the master's body style (28 pt, 20%). i2: a free body box with no size anywhere (the
+    presentation's default text style, 18 pt). i3: a free body box whose own list style sets level 2 to 14 pt, 6 pt
+    before, a 0.6M margin."""
+    prs = new_prs()
+    lay = layout_named(prs, "Title and Content")
+    body_ph = next(sp for sp in lay.placeholders if sp.placeholder_format.idx == 1)
+    lst = body_ph._element.find(".//" + q("a:lstStyle"))
+    l1 = etree.SubElement(lst, q("a:lvl1pPr"))
+    etree.SubElement(etree.SubElement(l1, q("a:lnSpc")), q("a:spcPct"), val="90000")
+    etree.SubElement(l1, q("a:defRPr"), sz="2400")
+    i1 = prs.slides.add_slide(lay)
+    bg(i1, (240, 230, 220))
+    i1.shapes.title.text = "Inherited title"
+    set_id(i1.shapes.title, 101)
+    body = next(sp for sp in i1.placeholders if sp.placeholder_format.idx == 1)
+    body.text = "Inherited body"
+    set_id(body, 111)
+    i2 = blank_slide(prs, (220, 240, 230))
+    tb(i2.shapes, 201, 600000, 400000, 10900000, 1000000, "Default style", 40)
+    free = i2.shapes.add_textbox(Emu(600000), Emu(1800000), Emu(10900000), Emu(4200000))
+    set_id(free, 211)
+    free.text_frame.word_wrap = True
+    free.text_frame.text = "Default body"
+    i3 = blank_slide(prs, (230, 220, 240))
+    tb(i3.shapes, 301, 600000, 400000, 10900000, 1000000, "Own level two", 40)
+    own = tb(i3.shapes, 311, 600000, 1800000, 10900000, 4200000, "Own body", 20)
+    lst = own._element.find(".//" + q("a:lstStyle"))
+    l2 = etree.SubElement(lst, q("a:lvl2pPr"), marL="600000")
+    etree.SubElement(etree.SubElement(l2, q("a:spcBef")), q("a:spcPts"), val="600")
+    etree.SubElement(l2, q("a:defRPr"), sz="1400")
+    return save(prs, out, "sample-inherit.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -969,5 +1005,5 @@ def make_all(out) -> list:
         make_sample_order(out), make_sample_two(out), make_sample_only2(out), make_sample_cover(out),
         make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
         make_sample_altcontent(out), make_sample_flip(out),
-        make_sample_cols2(out),
+        make_sample_cols2(out), make_sample_inherit(out),
     ]

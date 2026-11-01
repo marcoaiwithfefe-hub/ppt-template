@@ -1,4 +1,5 @@
-"""Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27).
+"""Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27; code
+review round 1: F1, F2, F6).
 
 Each demo applies one isolated mutation to the source, runs the check's tests, restores the
 file, and runs the tests again. Output: qa/failure-demos/<id>-mutated.txt and <id>-fixed.txt.
@@ -132,6 +133,20 @@ DEMOS = {
         "    normalise_alternates(csld)  # code review F1: the fallback branches only, as the reader classified them\n",
         "",
         ["tests/test_c24_c27_sample_text.py", "tests/test_cr1_code_review.py", "-k", "altcontent or f1"],
+    ),
+    "f6-inherited-size": (
+        "the reader skips the layout placeholder when it resolves a placeholder's inherited size and spacing",
+        "src/deckfill/sample.py",
+        "            out.append(lvl_ppr(_lst(lay_sp), level))",
+        "            pass",
+        ["tests/test_c25_fit.py"],
+    ),
+    "f6-level2-ppr-dropped": (
+        "level-2 paragraphs are written without their paragraph properties",
+        "src/deckfill/sample_fill.py",
+        "            ppr = copy.deepcopy(l2_ppr)",
+        "            ppr = None",
+        ["tests/test_c25_fit.py"],
     ),
     "f2-guide-path": (
         "a custom path's guide-name corner is read as an integer",

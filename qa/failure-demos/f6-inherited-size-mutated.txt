@@ -1,0 +1,5 @@
+# f6-inherited-size: the reader skips the layout placeholder when it resolves a placeholder's inherited size and spacing
+# mutation in src/deckfill/sample.py: '            out.append(lvl_ppr(_lst(lay_sp), level))' -> '            pass'
+# tests: tests/test_c25_fit.py
+FAILED tests/test_c25_fit.py::test_c25_generic_on_every_fit_case - AssertionE...
+1 failed, 9 passed in 0.26s

@@ -15,7 +15,7 @@ from deckfill import fill, parse_outline, plan_deck, read_template
 from deckfill.outline import Item
 from deckfill.plan import height
 from deckfill.sample_plan import SHRUNK, scaled
-from sample_oracle import nv_id, parts_of, slides, tree_of, walk
+from sample_oracle import nv_id, parts_of, resolved_paras, slides, tree_of, walk
 
 A = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
 
@@ -43,14 +43,30 @@ def written_sizes(out: bytes) -> dict[tuple[int, int], list[int]]:
     return res
 
 
+def check_resolved(n, bf, sb, op, name, shapes_by_id):
+    """Code review F6: each written paragraph's size, line spacing, spacing before and after and left margin, resolved
+    on the output by the test-side oracle (run, paragraph, the box's list style, its inheritance), equal the values the
+    estimate used: the plan's written size or the box's effective size, and the box's level spacing."""
+    got = resolved_paras(op, name, shapes_by_id[bf.sid])
+    want = []
+    for lvl, _ in bf.paras:
+        spec = sb.lvl1 if lvl == 1 else sb.lvl2
+        want.append((lvl, bf.sizes[lvl - 1] or spec.size, spec.ln, spec.bef, spec.aft, spec.margin))
+    assert got == want, f"slide {n} box {bf.sid}: resolved {got}, estimate used {want}"
+
+
 def check_plan(info, plan, out):
     """The generic C25 checks over every box of every output slide."""
     samples = {s.id: s for s in info.samples}
     sizes = written_sizes(out)
+    op = parts_of(out)
+    names = slides(op)
     for n, ps in enumerate(plan.slides, start=1):
         S = samples[ps.layout]
+        by_id = {nv_id(el)[0]: el for el in walk(tree_of(op[names[n - 1]]))}
         for bf in ps.boxes:
             sb = S.box(bf.sid)
+            check_resolved(n, bf, sb, op, names[n - 1], by_id)
             if bf.status == "check":
                 assert sb.unmodelled, f"slide {n} box {bf.sid}: check on a box the estimate models"
                 continue
@@ -83,10 +99,36 @@ def test_c25_generic_on_every_fit_case():
         ("sample-fit.pptx", "## Slots\n- a fairly long first slot text\n- second\n- third\n"),
         ("sample-design.pptx", open(FIX.parent.parent / "tests/outlines/sample/design.md", encoding="utf-8").read()),
         ("sample-rotated.pptx", "## Turn\n- spin\n"),
+        ("sample-fit.pptx", "## Two levels\n- one\n  - sub one\n- two\n"),
+        ("sample-biglvl2.pptx", "## Two levels\n- one\n  - sub one\n"),
     ]
     for fixture, text in cases:
         data, info, plan = plan_on(fixture, text)
         check_plan(info, plan, fill(data, fixture, plan))
+    for k in (1, 2, 3):  # code review F6: inherited sizes and spacing, level 2 included, on each sample
+        data, info, plan = plan_on("sample-inherit.pptx", INHERIT, {0: f"s{k}"})
+        check_plan(info, plan, fill(data, "sample-inherit.pptx", plan))
+
+
+INHERIT = "## Inherit\n- one\n  - sub one\n- two\n"
+
+
+def test_c25_inherited_sizes_resolve_on_the_output():
+    """Written by hand from the fixture (make_sample_inherit) and python-pptx's default master and presentation: no
+    written run carries a size, so each resolves through the box's inheritance."""
+    want = {1: (111, [2400, 2800, 2400]), 2: (211, [1800, 1800, 1800]), 3: (311, [2000, 2000, 2000])}
+    for k, (sid, sizes) in want.items():
+        data, info, plan = plan_on("sample-inherit.pptx", INHERIT, {0: f"s{k}"})
+        out = fill(data, "sample-inherit.pptx", plan)
+        op = parts_of(out)
+        name = slides(op)[0]
+        el = next(e for e in walk(tree_of(op[name])) if nv_id(e)[0] == sid)
+        got = resolved_paras(op, name, el)
+        assert [g[1] for g in got] == sizes and [g[0] for g in got] == [1, 2, 1]
+        if k == 1:
+            assert got[0][2] == ("pct", 0.9) and got[0][3] == ("pct", 0.2) and got[1][5] == 742950
+        if k == 3:
+            assert got[1][3] == ("pts", 76200.0) and got[1][5] == 600000
 
 
 def test_c25_title_shrinks_then_warns():
