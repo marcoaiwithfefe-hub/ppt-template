@@ -131,16 +131,20 @@ def to_local(box, chain: tuple[Xf, ...]) -> tuple[int, int, int, int]:
     return round(min(x1, x2)), round(min(y1, y2)), round(abs(x2 - x1)), round(abs(y2 - y1))
 
 
+MC_NS = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+MC_AC, MC_FB = "{%s}AlternateContent" % MC_NS, "{%s}Fallback" % MC_NS
+
+
 def normalise_alternates(root) -> int:
     """Code review F1: every mc:AlternateContent under root, nested ones included, is replaced by the children of
     its mc:Fallback (removed when it has none). The reader classifies, the fill edits and PowerPoint draws the same
     tree, so no choice branch can show a sample's words. Returns how many were replaced."""
     n = 0
     while True:
-        ac = next((e for e in root.iter() if isinstance(e.tag, str) and etree.QName(e).localname == "AlternateContent"), None)
+        ac = next(root.iter(MC_AC), None)  # lxml filters by tag in C: one fast pass when there is none
         if ac is None:
             return n
-        fb = next((c for c in ac if isinstance(c.tag, str) and etree.QName(c).localname == "Fallback"), None)
+        fb = ac.find(MC_FB)
         for c in list(fb) if fb is not None else []:
             ac.addprevious(c)
         ac.getparent().remove(ac)
