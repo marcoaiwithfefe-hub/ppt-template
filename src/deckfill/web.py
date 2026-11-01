@@ -83,19 +83,29 @@ class Session:
                     {"id": lay.id, "name": lay.name, "master": lay.master, "cls": lay.cls} for lay in info.layouts
                 ],
                 "defaults": {cls: lid for cls, lid in info.defaults if lid},
+                # rev 8 (D11): the routes this template offers, the default, and the usable sample slides
+                "routes": list(info.routes),
+                "route": info.route,
+                "samples": [{"id": sm.id, "k": sm.k, "words": sm.words} for sm in info.samples if sm.usable],
             },
             ensure_ascii=False,
         )
 
-    def plan(self, text: str, overrides_json: str = "[]") -> str:
-        """overrides_json: the page's remembered overrides, a list of {title, kind, nth, layout}.
-        The reply's overrides are the ones still in use; a dropped one comes back as a warning."""
+    def plan(self, text: str, overrides_json: str = "[]", route: str = "") -> str:
+        """overrides_json: the page's remembered overrides, a list of {title, kind, nth, count, layout, route}.
+        route: layout or sample, empty for the template's default (D11). A remembered override made on the other
+        route is dropped (switching drops every pick, D11). The reply's overrides are the ones still in use; a
+        dropped one comes back as a warning."""
         self.plan_ = None
+        route = route or self.info.route
         remembered = json.loads(overrides_json)
+        same = [r for r in remembered if r.get("route", "layout") == route]
+        switched = [r for r in remembered if r.get("route", "layout") != route]
         try:
             outline = parse_outline(text)
-            by_index, gone = place_overrides(outline, remembered)
-            plan = plan_deck(self.info, outline, by_index or None)
+            by_index, gone = place_overrides(outline, same)
+            gone = switched + gone
+            plan = plan_deck(self.info, outline, by_index or None, route=route)
         except DeckfillError as e:
             return json.dumps({"ok": False, "code": e.code})
         self.plan_ = plan
@@ -113,8 +123,10 @@ class Session:
             for i, s in enumerate(outline.slides)
         ]
         # an override the plan dropped (the slide no longer fits it) is not kept either
+        # a sample-route pick carries its route; a pick with none is a layout-route pick (rev 7's shape unchanged)
         kept = [
-            {"title": s["title"], "kind": s["kind"], "nth": s["nth"], "count": s["count"], "layout": by_index[i]}
+            {"title": s["title"], "kind": s["kind"], "nth": s["nth"], "count": s["count"], "layout": by_index[i],
+             **({"route": route} if route != "layout" else {})}
             for i, s in enumerate(sources)
             if i in by_index and s["chosen"] == by_index[i]
         ]
@@ -124,9 +136,10 @@ class Session:
             {
                 "ok": True,
                 "name": file_name(outline.title),
+                "route": route,
                 "sources": sources,
                 "slides": [
-                    {"source": s.source, "part": s.part, "layout": s.layout, "title": s.title, "fit": s.fit}
+                    {"source": s.source, "part": s.part, "layout": s.layout, "title": s.title, "fit": s.fit, "flags": list(s.flags)}
                     for s in plan.slides
                 ],
                 "warnings": warnings,
@@ -135,13 +148,15 @@ class Session:
             ensure_ascii=False,
         )
 
-    def fill(self, text: str, overrides_json: str = "[]") -> bytes:
-        """Plan from the outline and overrides the page reads at the click, then fill, in one
+    def fill(self, text: str, overrides_json: str = "[]", route: str = "") -> bytes:
+        """Plan from the outline, overrides and route the page reads at the click, then fill, in one
         call, so a download can never use a plan made from older text (Codex round 1, F1).
         The overrides are placed on that outline the same way plan places them.
         Sets fill_name to the download's name for that same outline."""
+        route = route or self.info.route
         outline = parse_outline(text)
-        by_index, _ = place_overrides(outline, json.loads(overrides_json))
-        plan = plan_deck(self.info, outline, by_index or None)
+        same = [r for r in json.loads(overrides_json) if r.get("route", "layout") == route]
+        by_index, _ = place_overrides(outline, same)
+        plan = plan_deck(self.info, outline, by_index or None, route=route)
         self.fill_name = file_name(outline.title)
         return fill(self.data, self.filename, plan)
