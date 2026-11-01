@@ -218,7 +218,7 @@ def _raise_title(dest, frags) -> None:
 
 CHIP_SHARE = 0.08  # QA round 1 Q1: a cleared chip or backing under 8% of the slide area goes
 BACKING_SHARE = 0.8  # a backing holds at least 80% of the text box's area
-SHAPES = {"sp", "pic", "grpSp", "cxnSp", "graphicFrame", "contentPart"}
+SHAPES = tuple(q("p:" + t) for t in ("sp", "pic", "grpSp", "cxnSp", "graphicFrame", "contentPart"))
 
 
 def _xywh(b) -> tuple[int, int, int, int]:
@@ -234,7 +234,7 @@ def _inside(inner, outer) -> float:
 
 
 def _shape_kids(el):
-    return [c for c in el if isinstance(c.tag, str) and etree.QName(c).localname in SHAPES]
+    return list(el.iterchildren(*SHAPES))
 
 
 def _visible(el) -> bool:
@@ -247,7 +247,7 @@ def _visible(el) -> bool:
 
 
 def _members(g) -> int:
-    return sum(1 for e in g.iter() if e is not g and isinstance(e.tag, str) and etree.QName(e).localname in SHAPES)
+    return sum(1 for _ in g.iterdescendants(*SHAPES))
 
 
 def _sample_footers(src_slide, layout):
