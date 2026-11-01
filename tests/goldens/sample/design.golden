@@ -1,0 +1,25 @@
+# sample-design + outlines/sample/design.md, written from D12: title sample s1 (subtitle joins the title box, it has no
+# body box); 3 bullets to s2's 3-slot row; variety skips s1 and s2 so Steps takes s3's 3-slot list; the only
+# two-column sample s4; one bullet to s6 (no unused body box); the section back on s1 (no unused body box).
+slide 1 s1
+112 1 Annual Plan
+112 1 Operations team
+slide 2 s2
+201 1 Three Goals
+212 1 Faster delivery
+222 1 Lower stock
+232 1 New routes
+slide 3 s3
+301 1 Steps
+311 1 Pilot
+312 1 Rollout
+313 1 Review
+slide 4 s4
+401 1 Compare
+411 1 Old way
+412 1 New way
+slide 5 s6
+601 1 Paying by card
+611 1 Use the company card
+slide 6 s1
+112 1 Questions

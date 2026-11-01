@@ -1,0 +1,5 @@
+# sample-footer-nopos + outlines/sample/only.md: the grouped footer has no position source (the layout lost its ftr
+# box), so it is not added; no sample carries a number or date.
+slide 1 s1
+101 1 Only
+111 1 x
