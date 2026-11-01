@@ -1,0 +1,102 @@
+{
+ "commit": "89bf525",
+ "dirty_src_or_docs": false,
+ "machine": "darwin arm64",
+ "browser": "chromium headless shell (playwright-core 1.64.1)",
+ "results": [
+  {
+   "template": "bullen-free-presentation-template.pptx",
+   "run": 1,
+   "route": "sample",
+   "read_ms": 665,
+   "cold_ms": 348,
+   "warm_ms": 355,
+   "download": "匯通物流 2027 年度計劃.pptx"
+  },
+  {
+   "template": "bullen-free-presentation-template.pptx",
+   "run": 2,
+   "route": "sample",
+   "read_ms": 662,
+   "cold_ms": 344,
+   "warm_ms": 352,
+   "download": "匯通物流 2027 年度計劃.pptx"
+  },
+  {
+   "template": "bullen-free-presentation-template.pptx",
+   "run": 3,
+   "route": "sample",
+   "read_ms": 652,
+   "cold_ms": 359,
+   "warm_ms": 353,
+   "download": "匯通物流 2027 年度計劃.pptx"
+  },
+  {
+   "template": "marco-year-in-breakdowns.pptx",
+   "run": 1,
+   "route": "sample",
+   "read_ms": 258,
+   "cold_ms": 702,
+   "warm_ms": 693,
+   "download": "匯通物流 2027 年度計劃.pptx"
+  },
+  {
+   "template": "marco-year-in-breakdowns.pptx",
+   "run": 2,
+   "route": "sample",
+   "read_ms": 246,
+   "cold_ms": 708,
+   "warm_ms": 706,
+   "download": "匯通物流 2027 年度計劃.pptx"
+  },
+  {
+   "template": "marco-year-in-breakdowns.pptx",
+   "run": 3,
+   "route": "sample",
+   "read_ms": 260,
+   "cold_ms": 721,
+   "warm_ms": 696,
+   "download": "匯通物流 2027 年度計劃.pptx"
+  }
+ ],
+ "summary": {
+  "bullen-free-presentation-template.pptx": {
+   "read_ms": [
+    665,
+    662,
+    652
+   ],
+   "cold_ms": [
+    348,
+    344,
+    359
+   ],
+   "warm_ms": [
+    355,
+    352,
+    353
+   ],
+   "cold_max_ms": 359,
+   "warm_max_ms": 355
+  },
+  "marco-year-in-breakdowns.pptx": {
+   "read_ms": [
+    258,
+    246,
+    260
+   ],
+   "cold_ms": [
+    702,
+    708,
+    721
+   ],
+   "warm_ms": [
+    693,
+    706,
+    696
+   ],
+   "cold_max_ms": 721,
+   "warm_max_ms": 706
+  }
+ }
+}
