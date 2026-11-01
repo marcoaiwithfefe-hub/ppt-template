@@ -1,5 +1,5 @@
 {
- "note": "C5 runs on every output listed here. 'generated' outputs are made by the runner from fixtures; 'required' outputs are made by other QA runs and must all exist, or the run fails as incomplete. 'generated_sample' outputs (rev 8) are made by the runner on the sample route, each fixture with its golden outline.",
+ "note": "C5 runs on every output listed here. 'generated' outputs are made by the runner from fixtures; 'required' outputs are made by other QA runs and must all exist, or the run fails as incomplete. 'generated_sample' outputs (rev 8) are made by the runner on the sample route, each fixture with its golden outline. Each output's name is unique; an entry with a 'name' gets it in its output file name. The runner fails when the outputs it validated differ from this list (code review F5).",
  "generated": {
   "outline": "fixtures/reference-outline.md",
   "templates": [
@@ -26,7 +26,8 @@
    "rels-order.pptx",
    "view-outline.pptx",
    "footer-local.pptx",
-   "xml-renamed.pptx"
+   "xml-renamed.pptx",
+   "sample-malformed.pptx"
   ]
  },
  "required": [
@@ -287,6 +288,86 @@
   {
    "template": "sample-only2.pptx",
    "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-fit.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cover.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cover2.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cols.pptx",
+   "outline": "tests/outlines/sample/cols.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cols2.pptx",
+   "outline": "tests/outlines/sample/cols.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-malformed.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-altcontent.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-flip.pptx",
+   "outline": "tests/outlines/sample/four-long.md",
+   "overrides": {
+    "0": "s1"
+   },
+   "name": "flipH"
+  },
+  {
+   "template": "sample-flip.pptx",
+   "outline": "tests/outlines/sample/four-long.md",
+   "overrides": {
+    "0": "s2"
+   },
+   "name": "flipV"
+  },
+  {
+   "template": "sample-inherit.pptx",
+   "outline": "tests/outlines/sample/inherit.md",
+   "overrides": {
+    "0": "s1"
+   },
+   "name": "placeholder"
+  },
+  {
+   "template": "sample-inherit.pptx",
+   "outline": "tests/outlines/sample/inherit.md",
+   "overrides": {
+    "0": "s2"
+   },
+   "name": "default"
+  },
+  {
+   "template": "sample-inherit.pptx",
+   "outline": "tests/outlines/sample/inherit.md",
+   "overrides": {
+    "0": "s3"
+   },
+   "name": "own"
+  },
+  {
+   "template": "sample-footbig.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
    "overrides": {}
   }
  ]

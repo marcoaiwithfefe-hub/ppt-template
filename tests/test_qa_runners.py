@@ -46,3 +46,34 @@ def test_f14_a_missing_case_fails_the_run(tmp_path):
     r = subprocess.run([sys.executable, str(ROOT / "qa" / "gemini" / "check_c15.py")], cwd=ROOT, capture_output=True,
                        text=True, env={**__import__("os").environ, "C15_DIR": str(tmp_path)})
     assert r.returncode == 1 and "MISSING meeting-summary" in r.stdout
+
+
+def test_f5_a_test_manifest_never_overwrites_the_evidence_report(tmp_path):
+    """Code review F5: the suite's own runs of the validator (above) once overwrote qa/c5/c5-report.json with a
+    50-output test manifest; a manifest other than qa/c5/manifest.json reports beside itself."""
+    report = ROOT / "qa" / "c5" / "c5-report.json"
+    before = report.read_bytes() if report.exists() else None
+    manifest = json.loads((ROOT / "qa" / "c5" / "manifest.json").read_text())
+    manifest["generated"]["templates"] = manifest["generated"]["templates"][:1]
+    manifest["generated_sample"] = manifest["generated_sample"][:1]
+    manifest["required"] = []
+    m = tmp_path / "manifest.json"
+    m.write_text(json.dumps(manifest))
+    r = run("qa/c5/run_validator.py", "--manifest", str(m))
+    assert (report.read_bytes() if report.exists() else None) == before
+    if (ROOT / "tools" / "dotnet" / "dotnet").exists():
+        assert r.returncode == 0 and "2 of 2 manifest outputs" in r.stdout, r.stdout[-500:]
+        assert json.loads((tmp_path / "c5-report.json").read_text())["validated"] == 2
+
+
+def test_f5_duplicate_output_names_fail_as_incomplete(tmp_path):
+    manifest = json.loads((ROOT / "qa" / "c5" / "manifest.json").read_text())
+    manifest["generated"]["templates"] = []
+    manifest["generated_sample"] = [manifest["generated_sample"][0]] * 2  # two entries, one output name
+    manifest["required"] = []
+    m = tmp_path / "manifest.json"
+    m.write_text(json.dumps(manifest))
+    r = run("qa/c5/run_validator.py", "--manifest", str(m))
+    if not (ROOT / "tools" / "dotnet" / "dotnet").exists():
+        return
+    assert r.returncode == 1 and "INCOMPLETE: the manifest lists 2 outputs, the run made 1 distinct ones" in r.stdout
