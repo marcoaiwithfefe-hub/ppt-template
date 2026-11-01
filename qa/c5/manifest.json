@@ -28,7 +28,9 @@
    "footer-local.pptx",
    "xml-renamed.pptx",
    "sample-malformed.pptx",
-   "sample-badidx.pptx"
+   "sample-badidx.pptx",
+   "sample-footbad.pptx",
+   "sample-badidx2.pptx"
   ]
  },
  "required": [
@@ -392,6 +394,21 @@
   {
    "template": "sample-badidx.pptx",
    "outline": "fixtures/reference-outline.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-footbad.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-badidx2.pptx",
+   "outline": "fixtures/reference-outline.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-footrot.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
    "overrides": {}
   }
  ]
