@@ -29,7 +29,7 @@ from .fill import (
     remove_slides,
 )
 from .package import RT_SLIDE, check_integrity
-from .sample import Styles, _is_hidden, _local_box, decorated, donor, has_text, level2_written, shape_id, to_local, to_slide, walk
+from .sample import Styles, _is_hidden, clearing, donor, grown_groups, has_text, level2_written, shape_id, to_local, walk
 from .sample_plan import MAX_XML
 from .template import FOOTER_TYPES, ph_of, ph_type
 from .xmlsafe import R_NS, q
@@ -154,36 +154,33 @@ def _set_box(sp, chain, box) -> None:
 
 
 def _grow_groups(el, box) -> None:
-    """A widened box inside a group: each enclosing group's child extent grows to hold it, at the group's own scale,
-    so the group's declared bounds still contain every child (renderers redraw a group from those bounds)."""
+    """A widened or grown box inside a group: each enclosing group's child extent grows to hold it, at the group's
+    own scale, so the group's declared bounds still contain every child (renderers redraw a group from those
+    bounds). The arithmetic is sample.grown_groups, the one the planner checks siblings with (R3)."""
+    xfs, chain = [], []
     parent = el.getparent()
     while parent is not None and parent.tag == q("p:grpSp"):
         xf = parent.find(q("p:grpSpPr")).find(q("a:xfrm"))
         if xf is None:
-            return
-        off, ext, choff, chext = (xf.find(q("a:" + t)) for t in ("off", "ext", "chOff", "chExt"))
-        if off is None or ext is None or choff is None or chext is None:
-            return
-        ox, oy, ex, ey = (int(off.get("x")), int(off.get("y")), int(ext.get("cx")), int(ext.get("cy")))
-        c0x, c0y, cex, cey = (int(choff.get("x")), int(choff.get("y")), int(chext.get("cx")), int(chext.get("cy")))
-        sx, sy = (ex / cex if cex else 1.0), (ey / cey if cey else 1.0)
-        bx, by, bcx, bcy = box
-        u0x, u0y = min(c0x, bx), min(c0y, by)
-        u1x, u1y = max(c0x + cex, bx + bcx), max(c0y + cey, by + bcy)
-        if (u0x, u0y, u1x, u1y) == (c0x, c0y, c0x + cex, c0y + cey):
-            return
-        nox, noy = round(ox + (u0x - c0x) * sx), round(oy + (u0y - c0y) * sy)
-        nex, ney = round((u1x - u0x) * sx), round((u1y - u0y) * sy)
-        choff.set("x", str(u0x))
-        choff.set("y", str(u0y))
-        chext.set("cx", str(u1x - u0x))
-        chext.set("cy", str(u1y - u0y))
-        off.set("x", str(nox))
-        off.set("y", str(noy))
-        ext.set("cx", str(nex))
-        ext.set("cy", str(ney))
-        box = (nox, noy, nex, ney)
+            break
+        parts = [xf.find(q("a:" + t)) for t in ("off", "ext", "chOff", "chExt")]
+        if any(p is None for p in parts):
+            break
+        off, ext, choff, chext = parts
+        xfs.append(parts)
+        chain.append(((int(off.get("x")), int(off.get("y"))), (int(ext.get("cx")), int(ext.get("cy"))),
+                      (int(choff.get("x")), int(choff.get("y"))), (int(chext.get("cx")), int(chext.get("cy")))))
         parent = parent.getparent()
+    new = grown_groups(chain, box) if chain else []
+    for (off, ext, choff, chext), ((ox, oy), (ex, ey), (cx0, cy0), (cex, cey)) in zip(xfs, new or []):
+        off.set("x", str(ox))
+        off.set("y", str(oy))
+        ext.set("cx", str(ex))
+        ext.set("cy", str(ey))
+        choff.set("x", str(cx0))
+        choff.set("y", str(cy0))
+        chext.set("cx", str(cex))
+        chext.set("cy", str(cey))
 
 
 def _raise_title(dest, frags) -> None:
@@ -216,21 +213,7 @@ def _raise_title(dest, frags) -> None:
         last.addnext(db)
 
 
-CHIP_SHARE = 0.08  # QA round 1 Q1: a cleared chip or backing under 8% of the slide area goes
-BACKING_SHARE = 0.8  # a backing holds at least 80% of the text box's area
 SHAPES = tuple(q("p:" + t) for t in ("sp", "pic", "grpSp", "cxnSp", "graphicFrame", "contentPart"))
-
-
-def _xywh(b) -> tuple[int, int, int, int]:
-    return b.x, b.y, b.cx, b.cy
-
-
-def _inside(inner, outer) -> float:
-    """The share of inner's area that lies inside outer (slide-space boxes)."""
-    ix = min(inner[0] + inner[2], outer[0] + outer[2]) - max(inner[0], outer[0])
-    iy = min(inner[1] + inner[3], outer[1] + outer[3]) - max(inner[1], outer[1])
-    a = inner[2] * inner[3]
-    return (ix * iy) / a if ix > 0 and iy > 0 and a > 0 else 0.0
 
 
 def _shape_kids(el):
@@ -331,39 +314,17 @@ def fill_sample(info, pkg, plan) -> bytes:
         for sid in S.title[1:]:  # the other title fragments
             _remove(walked[sid].el)
             removed.add(sid)
-        # everything that received no outline text is cleared (hidden shapes included). QA round 1 Q1: a cleared
-        # shape with a fill or line under 8% of the slide goes whole, and so does a text-free shape with a fill or
-        # line under 8% that holds at least 80% of a cleared text box (its backing); nothing behind a destination that
-        # kept its text goes. Measured in slide space against the sample's boxes.
-        dests = [bf.box or _xywh(S.box(bf.sid)) for bf in ps.boxes]
-        cleared = [_xywh(b) for b in S.boxes if b.sid not in fills]
-
-        def slide_box(w):
-            local = _local_box(w.el)
-            return None if local is None else to_slide(local, w.chain)
-
-        def goes(box, backing: bool) -> bool:
-            if box is None or box[2] * box[3] >= CHIP_SHARE * area:
-                return False
-            # behind a destination that kept its text: it backs the destination's written box, or it lies under
-            # that box (the word blocks under a joined title's widened box)
-            if any(_inside(d, box) >= BACKING_SHARE or _inside(box, d) >= BACKING_SHARE for d in dests):
-                return False
-            return not backing or any(_inside(c, box) >= BACKING_SHARE for c in cleared)
-
+        # everything that received no outline text is cleared (hidden shapes included): Q1 chips and R5 rectangular
+        # backings under 8% go whole, nothing behind a destination that kept its text goes (sample.clearing)
+        gone, emptied = clearing(S, ps.boxes, area)
         for sid, w in walked.items():
-            el = w.el
-            if sid in fills or sid in removed or etree.QName(el).localname != "sp":
+            if sid in fills or sid in removed:
                 continue
-            if has_text(el):
-                if ph_of(el) is not None or not decorated(el) or goes(slide_box(w), False):
-                    _remove(el)
-                    removed.add(sid)
-                else:
-                    _clear_text(el)
-            elif ph_of(el) is None and decorated(el) and goes(slide_box(w), True):
-                _remove(el)
+            if sid in gone:
+                _remove(w.el)
                 removed.add(sid)
+            elif sid in emptied:
+                _clear_text(w.el)
         for w in walk(tree):  # placeholders left with no text (C6)
             el = w.el
             if etree.QName(el).localname == "sp" and ph_of(el) is not None and not has_text(el) and el.getparent() is not None:

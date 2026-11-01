@@ -513,6 +513,10 @@ class Sample:
     nshapes: int  # shapes in the slide's tree
     footer_bytes: int  # an upper bound on the footers the fill may add to a copy (the D12 size budget)
     slide: tuple[int, int] = (0, 0)  # slide width and height, EMU (QA round 1 readability bars)
+    leaves: tuple = ()  # QA round 2: every non-group shape (Leaf), for the clearing and the R3 grid
+    groups: tuple = ()  # QA round 2: every group (GroupT), for growing a grouped body
+    fixed: tuple = ()  # QA round 2 R3: drawn bounds of the layout's and master's visible non-placeholder shapes
+    footers: tuple = ()  # QA round 2 R3: every box a rebuilt footer can take (an upper bound)
 
     def box(self, sid: int) -> SBox:
         return next(b for b in self.boxes if b.sid == sid)
@@ -689,9 +693,193 @@ def decoration_rects(sptree) -> list:
 
 
 # ---------------------------------------------------------------------------------------------
+# shapes on the copy (QA round 2: R3 free space, R5 rectangular backings)
+
+RECT_PRESETS = {"rect", "roundRect", "snip1Rect", "snip2SameRect", "round1Rect", "round2SameRect", "flowChartProcess",
+                "flowChartAlternateProcess"}
 
 
-def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, master_bg, layout_master_cover: float) -> Sample:
+def is_rect_geom(el) -> bool:
+    """R5: a rectangular preset, or a custGeom with one closed path of one moveTo and three or four lnTo visiting the
+    four corners of its own bounding box in perimeter order (no curve, no diagonal, no crossing)."""
+    pr = el.find(q("p:spPr"))
+    if pr is None:
+        return False
+    pg = pr.find(q("a:prstGeom"))
+    if pg is not None:
+        return pg.get("prst") in RECT_PRESETS
+    cg = pr.find(q("a:custGeom"))
+    lst = None if cg is None else cg.find(q("a:pathLst"))
+    paths = [] if lst is None else lst.findall(q("a:path"))
+    if len(paths) != 1:
+        return False
+    cmds = [c for c in paths[0] if isinstance(c.tag, str)]
+    names = [etree.QName(c).localname for c in cmds]
+    closed = names[-1:] == ["close"]
+    if closed:
+        names, cmds = names[:-1], cmds[:-1]
+    if not names or names[0] != "moveTo" or any(n != "lnTo" for n in names[1:]) or len(names) not in (4, 5):
+        return False
+    pts = []
+    for c in cmds:
+        pt = c.find(q("a:pt"))
+        if pt is None:
+            return False
+        pts.append((int(pt.get("x", 0)), int(pt.get("y", 0))))
+    if len(pts) == 5:
+        if pts[4] != pts[0]:
+            return False
+        pts = pts[:4]
+    elif not closed:
+        return False
+    xs, ys = sorted({p[0] for p in pts}), sorted({p[1] for p in pts})
+    if len(xs) != 2 or len(ys) != 2 or set(pts) != {(x, y) for x in xs for y in ys}:
+        return False
+    return all(a[0] == b[0] or a[1] == b[1] for a, b in zip(pts, pts[1:] + pts[:1]))
+
+
+def _rot(el) -> int:
+    x = _xfrm_el(el)
+    return int(x.get("rot", "0") or 0) if x is not None else 0
+
+
+def _rotate(pts, centre, rot: int):
+    if rot % 21600000 == 0:
+        return pts
+    import math
+
+    a = math.radians(rot / 60000)
+    c, s = math.cos(a), math.sin(a)
+    cx, cy = centre
+    return [(cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c) for x, y in pts]
+
+
+def occ_box(el, ancestors) -> tuple[int, int, int, int] | None:
+    """R3: the axis-aligned slide-space bounds of a drawn shape, its own rotation and its groups' included."""
+    local = _local_box(el)
+    if local is None:
+        return None
+    x, y, cx, cy = local
+    pts = _rotate([(x, y), (x + cx, y), (x, y + cy), (x + cx, y + cy)], (x + cx / 2, y + cy / 2), _rot(el))
+    for g in ancestors:  # innermost first
+        xf = group_xf(g)
+        if xf is not None:
+            pts = [xf.apply(px, py) for px, py in pts]
+        if _rot(g):
+            gl = _local_box(g)
+            if gl is not None:
+                pts = _rotate(pts, (gl[0] + gl[2] / 2, gl[1] + gl[3] / 2), _rot(g))
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return round(min(xs)), round(min(ys)), round(max(xs) - min(xs)), round(max(ys) - min(ys))
+
+
+@dataclass(frozen=True)
+class Leaf:
+    """A non-group shape of a sample slide, as the copy will hold it."""
+
+    sid: int | None
+    tag: str  # sp, pic, cxnSp, graphicFrame, contentPart
+    qbox: tuple | None  # slide-space box without rotation, as the Q1 clearing measures it
+    occ: tuple | None  # drawn bounds, rotation included (R3 grid)
+    local: tuple | None  # its own a:xfrm box
+    hidden: bool
+    text: bool
+    deco: bool
+    ph: str  # placeholder type, "" for a free shape
+    rect: bool  # R5 rectangular geometry
+    groups: tuple[int, ...]  # enclosing group shape ids, innermost first
+
+
+@dataclass(frozen=True)
+class GroupT:
+    sid: int | None
+    local: tuple | None  # off and ext
+    choff: tuple | None
+    chext: tuple | None
+    groups: tuple[int, ...]  # enclosing group shape ids, innermost first
+
+
+def _group_t(g, parents) -> GroupT:
+    x = _xfrm_el(g)
+    get = (lambda t: None if x is None else x.find(q("a:" + t)))
+    co, ce = get("chOff"), get("chExt")
+    return GroupT(shape_id(g), _local_box(g), None if co is None else (int(co.get("x", 0)), int(co.get("y", 0))),
+                  None if ce is None else (int(ce.get("cx", 0)), int(ce.get("cy", 0))), parents)
+
+
+def shape_tree_leaves(sptree, styles=None):
+    """Leaves and groups of a shape tree (R3, R5). A placeholder with no a:xfrm takes its layout's or master's box."""
+    leaves, groups = [], []
+    for w in walk(sptree):
+        el = w.el
+        tag = etree.QName(el).localname
+        anc = [a for a in el.iterancestors() if a.tag == q("p:grpSp")]
+        gids = tuple(shape_id(a) for a in anc)
+        if tag == "grpSp":
+            groups.append(_group_t(el, gids))
+            continue
+        ph = ph_of(el) if tag == "sp" else None
+        local = _local_box(el)
+        qbox = to_slide(local, w.chain) if local is not None else None
+        occ = occ_box(el, anc)
+        if local is None and ph is not None and styles is not None:
+            src = _match_ph(styles.layout_el, ph_type(ph), ph.get("idx"))
+            if src is None:
+                src = find_master_ph(styles.master_el, ph_type(ph))
+            if src is not None and _local_box(src) is not None:
+                qbox = occ = _local_box(src)
+        leaves.append(Leaf(shape_id(el), tag, qbox, occ, local, w.hidden, tag == "sp" and has_text(el), decorated(el),
+                           ph_type(ph) if ph is not None else "", tag == "sp" and is_rect_geom(el), gids))
+    return tuple(leaves), tuple(groups)
+
+
+def fixed_boxes(tree) -> list:
+    """Drawn bounds of a layout's or master's visible non-placeholder shapes (R3)."""
+    out = []
+    for w in walk(tree):
+        el = w.el
+        tag = etree.QName(el).localname
+        if tag == "grpSp" or w.hidden:
+            continue
+        if tag == "sp" and ph_of(el) is not None:
+            continue
+        if tag == "pic":
+            nv = el.find(q("p:nvPicPr"))
+            if nv is not None and nv.find(q("p:nvPr")) is not None and nv.find(q("p:nvPr")).find(q("p:ph")) is not None:
+                continue
+        b = occ_box(el, [a for a in el.iterancestors() if a.tag == q("p:grpSp")])
+        if b is not None:
+            out.append(b)
+    return out
+
+
+def footer_boxes(tree, layout_el=None, master_el=None) -> list:
+    """Slide-space boxes of the footer placeholders in a tree (dt, ftr, sldNum); one with no a:xfrm takes its
+    layout's, then its master's box."""
+    out = []
+    for w in walk(tree):
+        el = w.el
+        if etree.QName(el).localname != "sp" or ph_of(el) is None or ph_type(ph_of(el)) not in FOOTER_TYPES:
+            continue
+        local = _local_box(el)
+        if local is None:
+            t = ph_type(ph_of(el))
+            src = _match_ph(layout_el, t, ph_of(el).get("idx")) if layout_el is not None else None
+            if src is None and master_el is not None:
+                src = find_master_ph(master_el, t)
+            local = _local_box(src) if src is not None else None
+            if local is not None:
+                out.append(local)
+            continue
+        out.append(to_slide(local, w.chain))
+    return out
+
+
+# ---------------------------------------------------------------------------------------------
+
+
+def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, master_bg, layout_master_cover: float,
+                fixed=(), footers=()) -> Sample:
     el = slide._element
     part = slide.part
     csld = el.find(q("p:cSld"))
@@ -789,6 +977,7 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
     if covered(decoration_rects(sptree), sw, sh) >= 0.15 and layout_master_cover < 0.05:
         design = True
     words = " ".join(title_text.split())
+    leaves, groups = shape_tree_leaves(sptree, styles)
     return Sample(
         k=k,
         id=f"s{k}",
@@ -813,6 +1002,10 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
                          and ph_of(w.el) is not None and ph_type(ph_of(w.el)) in FOOTER_TYPES)
         + sum(len(etree.tostring(sp)) for sp, ph in placeholders(styles.layout_el) if ph_type(ph) in FOOTER_TYPES),
         slide=(sw, sh),
+        leaves=leaves,
+        groups=groups,
+        fixed=tuple(fixed) if el.get("showMasterSp") not in ("0", "false") else (),
+        footers=tuple(footers),
     )
 
 
@@ -821,19 +1014,34 @@ def read_samples(prs) -> tuple[Sample, ...]:
     default_style = prs.part._element.find(q("p:defaultTextStyle"))
     out = []
     cover_cache: dict[str, float] = {}
+    fixed_cache: dict[str, list] = {}
+    # R3: every box a rebuilt footer can take on a copy: footer placeholders of every slide on the same layout (D4
+    # step 1's examples), of the layout and of its master (an upper bound, so the grid never under-counts)
+    foot: dict[str, list] = {}
+    for slide in prs.slides:
+        lay = slide.slide_layout
+        foot.setdefault(str(lay.part.partname), []).extend(
+            footer_boxes(slide._element.find(q("p:cSld")).find(q("p:spTree")), lay._element, lay.slide_master._element))
     for k, slide in enumerate(prs.slides, start=1):
         layout = slide.slide_layout
         master = layout.slide_master
         styles = Styles(layout._element, master._element, default_style)
         lid = str(layout.part.partname)
+        lay_tree = layout._element.find(q("p:cSld")).find(q("p:spTree"))
+        mas_tree = master._element.find(q("p:cSld")).find(q("p:spTree"))
         if lid not in cover_cache:
-            rects = decoration_rects(layout._element.find(q("p:cSld")).find(q("p:spTree")))
+            rects = decoration_rects(lay_tree)
+            fixed = fixed_boxes(lay_tree)
             if layout._element.get("showMasterSp") not in ("0", "false"):
-                rects += decoration_rects(master._element.find(q("p:cSld")).find(q("p:spTree")))
+                rects += decoration_rects(mas_tree)
+                fixed += fixed_boxes(mas_tree)
             cover_cache[lid] = covered(rects, sw, sh)
+            fixed_cache[lid] = fixed
+            foot.setdefault(lid, []).extend(footer_boxes(lay_tree, None, master._element) + footer_boxes(mas_tree))
         layout_bg = resolved_bg(layout._element, layout.part)
         master_bg = resolved_bg(master._element, master.part)
-        out.append(read_sample(k, slide, styles, sw, sh, layout_bg, master_bg, cover_cache[lid]))
+        out.append(read_sample(k, slide, styles, sw, sh, layout_bg, master_bg, cover_cache[lid], fixed_cache[lid],
+                               foot.get(lid, [])))
     return tuple(out)
 
 
@@ -850,3 +1058,139 @@ def sample_default(samples) -> bool:
     """D11: the sample route is the default when at least half of the usable sample slides carry design of their own."""
     u = usable(samples)
     return bool(u) and sum(1 for s in u if s.design) * 2 >= len(u)
+
+
+# ---------------------------------------------------------------------------------------------
+# what a copy keeps (QA round 1 Q1 with round 2's R5), shared by the fill and the R3 grid
+
+CHIP_SHARE = 0.08  # Q1: a cleared chip or backing under 8% of the slide area goes
+BACKING_SHARE = 0.8  # a backing holds at least 80% of the text box's area
+
+
+def box_of(b) -> tuple[int, int, int, int]:
+    return b.x, b.y, b.cx, b.cy
+
+
+def inside(inner, outer) -> float:
+    """The share of inner's area that lies inside outer (slide-space boxes)."""
+    ix = min(inner[0] + inner[2], outer[0] + outer[2]) - max(inner[0], outer[0])
+    iy = min(inner[1] + inner[3], outer[1] + outer[3]) - max(inner[1], outer[1])
+    a = inner[2] * inner[3]
+    return (ix * iy) / a if ix > 0 and iy > 0 and a > 0 else 0.0
+
+
+def dest_boxes(S: Sample, fills) -> list:
+    """The boxes the Q1 'behind a destination' test reads: a joined title's widened box, every other destination's
+    own sample box (a grown body box counts at its original size, R3)."""
+    return [bf.box if bf.role == "title" and bf.box else box_of(S.box(bf.sid)) for bf in fills]
+
+
+def clearing(S: Sample, fills, area: int) -> tuple[set, set]:
+    """Q1 (with R5) on a copy of S: the shapes that go whole, and the decorated text shapes that keep their shape
+    and lose their text. Title fragments and footer placeholders are handled apart by the fill."""
+    fill_ids = {bf.sid for bf in fills}
+    dests = dest_boxes(S, fills)
+    cleared = [box_of(b) for b in S.boxes if b.sid not in fill_ids]
+    frags = set(S.title[1:])
+
+    def goes(box, backing: bool) -> bool:
+        if box is None or box[2] * box[3] >= CHIP_SHARE * area:
+            return False
+        # behind a destination that kept its text: it backs the destination's box, or it lies under that box
+        if any(inside(d, box) >= BACKING_SHARE or inside(box, d) >= BACKING_SHARE for d in dests):
+            return False
+        return not backing or any(inside(c, box) >= BACKING_SHARE for c in cleared)
+
+    remove, clear = set(), set()
+    for lf in S.leaves:
+        if lf.tag != "sp" or lf.sid is None or lf.sid in fill_ids or lf.sid in frags or lf.ph in FOOTER_TYPES:
+            continue
+        if lf.text:
+            if lf.ph or not lf.deco or goes(lf.qbox, False):
+                remove.add(lf.sid)
+            else:
+                clear.add(lf.sid)
+        elif not lf.ph and lf.deco and lf.rect and goes(lf.qbox, True):  # R5: only a rectangle is a backing
+            remove.add(lf.sid)
+    return remove, clear
+
+
+# ---------------------------------------------------------------------------------------------
+# growing a box inside its groups (D12 title widening, R3 grown body)
+
+
+def grown_groups(chain, box):
+    """The transforms each enclosing group takes so that its declared bounds hold a child box: chain is the
+    enclosing groups' (off, ext, chOff, chExt) tuples innermost first, box the child's local box. Each group's child
+    extent grows to hold the box at the group's own scale. Returns the new tuples, or None at the first group with
+    no chOff or chExt (it cannot be grown)."""
+    out = []
+    for off, ext, choff, chext in chain:
+        if choff is None or chext is None:
+            return None
+        (ox, oy), (ex, ey), (c0x, c0y), (cex, cey) = off, ext, choff, chext
+        sx, sy = (ex / cex if cex else 1.0), (ey / cey if cey else 1.0)
+        bx, by, bcx, bcy = box
+        u0x, u0y = min(c0x, bx), min(c0y, by)
+        u1x, u1y = max(c0x + cex, bx + bcx), max(c0y + cey, by + bcy)
+        if (u0x, u0y, u1x, u1y) == (c0x, c0y, c0x + cex, c0y + cey):
+            out.append((off, ext, choff, chext))
+            box = (ox, oy, ex, ey)
+            continue
+        nox, noy = round(ox + (u0x - c0x) * sx), round(oy + (u0y - c0y) * sy)
+        nex, ney = round((u1x - u0x) * sx), round((u1y - u0y) * sy)
+        out.append(((nox, noy), (nex, ney), (u0x, u0y), (u1x - u0x, u1y - u0y)))
+        box = (nox, noy, nex, ney)
+    return out
+
+
+def _xf_of(off, ext, choff, chext) -> Xf:
+    (ox, oy), (ex, ey) = off, ext
+    c0x, c0y = choff if choff is not None else (ox, oy)
+    cex, cey = chext if chext is not None else (ex, ey)
+    return Xf(ox, oy, ex / cex if cex else 1.0, ey / cey if cey else 1.0, c0x, c0y)
+
+
+def grow_in_groups(S: Sample, sid: int, slide_box) -> bool:
+    """R3 grouped bodies: whether box sid can take slide_box with each enclosing group grown by grown_groups while
+    every other shape in those groups keeps its slide-space box exactly."""
+    leaf = next((lf for lf in S.leaves if lf.sid == sid), None)
+    if leaf is None or leaf.local is None:
+        return False
+    if not leaf.groups:
+        return True
+    gt = {g.sid: g for g in S.groups}
+    if any(g not in gt or gt[g].local is None for g in leaf.groups):
+        return False
+    chain = [((gt[g].local[0], gt[g].local[1]), (gt[g].local[2], gt[g].local[3]), gt[g].choff, gt[g].chext)
+             for g in leaf.groups]
+    old_xf = {g: _xf_of(*c) for g, c in zip(leaf.groups, chain)}
+    local = to_local(slide_box, tuple(old_xf[g] for g in leaf.groups))
+    new = grown_groups(chain, local)
+    if new is None:
+        return False
+    new_xf = dict(old_xf)
+    new_xf.update({g: _xf_of(*c) for g, c in zip(leaf.groups, new)})
+
+    def slide_of(local_box, gids, xfs):
+        return to_slide(local_box, tuple(xfs[g] for g in gids if g in xfs) if all(g in xfs for g in gids) else ())
+
+    outer = leaf.groups[-1]
+    # every other shape under the outermost grown group, its own group boxes included
+    for lf in S.leaves:
+        if lf.sid != sid and outer in lf.groups and lf.local is not None:
+            xfs_old = {g: old_xf.get(g) or _xf_of(*_chain_of(gt[g])) for g in lf.groups}
+            xfs_new = {g: new_xf.get(g) or xfs_old[g] for g in lf.groups}
+            if slide_of(lf.local, lf.groups, xfs_old) != slide_of(lf.local, lf.groups, xfs_new):
+                return False
+    for g in S.groups:
+        if outer in g.groups and g.sid not in leaf.groups and g.local is not None:
+            xfs_old = {p: old_xf.get(p) or _xf_of(*_chain_of(gt[p])) for p in g.groups}
+            xfs_new = {p: new_xf.get(p) or xfs_old[p] for p in g.groups}
+            if slide_of(g.local, g.groups, xfs_old) != slide_of(g.local, g.groups, xfs_new):
+                return False
+    return True
+
+
+def _chain_of(g: GroupT):
+    return (g.local[0], g.local[1]), (g.local[2], g.local[3]), g.choff, g.chext
