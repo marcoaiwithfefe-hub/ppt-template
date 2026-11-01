@@ -3,4 +3,4 @@
 # tests: tests/test_c26_c29_c30_sample.py -k c26
 FAILED tests/test_c26_c29_c30_sample.py::test_c26_integrity_and_kept_parts[jump]
 FAILED tests/test_c26_c29_c30_sample.py::test_c26_slide_link_gone_with_its_relationship
-2 failed, 25 passed in 2.19s
+2 failed, 29 passed in 2.29s

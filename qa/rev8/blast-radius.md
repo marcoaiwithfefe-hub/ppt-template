@@ -26,3 +26,21 @@ S1 changes only `plan_sample`'s pool choice on the sample route. Proven again: `
 ## QA round 3 S2 (ad434fe..cb09123)
 
 S2 changes only the sample route's pool choice for two-column slides. Proven again: `qa/rev8/layout-head-qa3b.json`, 213 of 213 baseline keys equal to 6a576a6 at cb09123.
+
+## Code review round 1 (057c266..b0ef3cf, branch fix-cr1)
+
+**What it does.** F1 normalises every `mc:AlternateContent` to its fallback, in place on the reader's own `Presentation` (`read_samples`) and on each copy (`_copy_sample`). F2 makes custom-path corners that are guide names non-backings and turns any error while reading one sample slide into an unusable sample (`unreadable`, `Sample.error`). F3 mirrors flipped groups in `occ_box` and in the C23 comparator. F4 adds a merged variant of every content-tier sample for two-column slides. E1 counts the largest footer of each type in the deck, plus slack, and escaped text in the size budget; the fill's running guard now measures UTF-8 as saved. E2 marks remembered picks `switched` at route-switch time. Shared code the layout route runs: `open_template` still calls `read_samples` on every template, now with the normalisation, the per-slide `try` and the deck footer sizes.
+
+**The one fact it is safe because of: the layout route is unchanged.** Step 4, ran real code. `qa/rev8/layout_baseline.py src qa/rev8/layout-head-cr1.json` at b0ef3cf: 213 of 213 baseline keys equal to 6a576a6, 0 differ, 0 missing (288 extra keys are later fixtures; the layout route fills every new one, sample-malformed included).
+
+**Risks (real ones).**
+- E1 refuses earlier. A template whose slides carry a large footer now has it counted on every copy, so a deck near the 40 MB cap is refused at planning instead of filled. Likelihood low (no G0, G0b or fixture template is near the cap; `test_c30_heavy_under_the_caps_fills` still fills 12 heavy copies). Check: C30 tests.
+- F4 changes sample-route picks for two-column slides. Real templates: G0b reports equal to the S2 run (sheets byte-equal); Q5's edb-mpa2022 on the sample route goes from 9 to 7 slides (預算 merges on s5). Evidence: `qa/rev8/q5/cr1/`.
+- Not changed, found while tracing: the Q1 clearing measures shapes with `to_slide`, which ignores rotation and flips by design, so a chip inside a flipped group is tested at its unflipped place (`src/deckfill/sample.py`, `shape_tree_leaves` qbox). F3 covered only the R3 grid. Unproven either way.
+- Not changed: an unreadable sample slide's footer can still be borrowed by D4 step 1 on both routes (`fill._input_footers`). The layout route behaves as at 6a576a6 (baseline above); a malformed footer attribute would be copied, not raise, unless the target layout lacks that footer type (`_place_footer` reads its geometry). Unproven.
+
+**Cleared.**
+- `read_samples` mutating its `Presentation`: its only caller is `open_template`, whose `prs` is local and dropped after reading (`src/deckfill/template.py:384-402`).
+- F1 speed: the first scan walked every element in Python; the C12 sample-xml stress fill rose from 5.46 s to 7.06 s. The tag-filtered scan (b0ef3cf) restores it: CPython fill 2.93 s at 057c266, 3.85 s before, 2.98 s after; C12 5.42 s.
+- E2 and the download: a switched pick never reaches `fill`, because a switch disables the download until a plan succeeds, and a successful plan replaces the picks with the ones in use (`docs/app.js` `switchRoute`, `replan`).
+- Privacy: C9 31 of 31 and `qa/e2e/privacy_proof.py` PASS at b0ef3cf.

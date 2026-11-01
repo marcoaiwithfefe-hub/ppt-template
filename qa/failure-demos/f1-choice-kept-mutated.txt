@@ -3,4 +3,4 @@
 # tests: tests/test_c24_c27_sample_text.py tests/test_cr1_code_review.py -k altcontent or f1
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[altcontent]
 FAILED tests/test_cr1_code_review.py::test_f1_copies_hold_no_alternate_content_and_no_choice_table
-2 failed, 2 passed, 30 deselected in 0.09s
+2 failed, 2 passed, 36 deselected in 0.09s

@@ -2,4 +2,4 @@
 # mutation in src/deckfill/fill.py: '    parts = _restore_kept(pkg.parts, parts, pkg.main)' -> '    pass'
 # tests: tests/test_c3_c6_package.py -k every_kept_part_unchanged and rels-order
 FAILED tests/test_c3_c6_package.py::test_c3_every_kept_part_unchanged[rels-order.pptx]
-1 failed, 134 deselected in 0.09s
+1 failed, 134 deselected in 0.10s

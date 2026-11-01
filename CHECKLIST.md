@@ -68,3 +68,17 @@
 - [x] G0b with S2: Marco's 預算 3 -> 2, business-conference's 3 -> 1; qa/g0b/marco-before-after-qa3b.jpg
 - [x] Done gates at the S2 head; walkthrough over the whole range 6a576a6..head for the Codex code review loop
 - [x] Report to ai-brain-24 [75678f] (QA round 3 S2)
+
+## Code review round 1 (fix-cr1 from 057c266)
+
+- [x] F2 guide-name paths are not backings; a sample that fails to read is unreadable, never the template (1a70b24; demos f2-guide-path, f2-sample-isolation)
+- [x] F1 copies and the reader hold only fallback branches; C24 oracle lists choice text (d6b4778, b0ef3cf; demo f1-choice-kept)
+- [x] F3 flipped groups in occ_box and the C23 comparator (ec50cf0)
+- [x] F4 S2 compares a two-column sample's own merged variant (2914b63)
+- [x] F6 C25 resolves output sizes and paragraph properties independently (8530535; demos f6-*)
+- [x] E1 size budget counts borrowed footers and escaped text (42c6621)
+- [x] E2 route switch forgets picks at once (1b686bd; demo e2-picks-kept-on-switch)
+- [x] F5 C5 runner validates exactly its manifest; 88 of 88 (1ed65b0)
+- [x] Done gates: suite, demos, G0b, Q5 (qa/rev8/q5/cr1), C9, C10/C28, C12, C5, layout baseline 213 of 213, blast radius
+- [x] F7 walkthrough re-rendered over 6a576a6..head
+- [x] Report to ai-brain-24 [75678f] (code review round 1)

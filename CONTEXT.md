@@ -36,3 +36,8 @@ Terms QA round 1 adds (spec "Rev 8 QA round 1"):
 - **chip**: a cleared shape with a fill or line under 8% of the slide area (a label tile, an unused small text box). It goes whole on the copy.
 - **backing**: a text-free shape with a fill or line, under 8% of the slide, that holds at least 80% of a cleared text box's area. It goes with its text. Nothing behind a destination that kept its text goes.
 - **small_text**: the per-slide state (字細 on the page) when no candidate meets the bars, or a picked sample does not.
+
+Terms code review round 1 adds:
+
+- **unreadable sample**: a sample slide whose reading raised (a malformed attribute, an unresolved reference). It is never usable on either route; why it failed stays in the template info.
+- **merged variant**: a two-column slide built on a sample with its columns merged into that sample's largest body box. S2 compares the best readable merged variant with the best readable two-column build, including the merged variant of a sample that has two column boxes.
