@@ -354,12 +354,25 @@ def level_spec(sp, styles: Styles, para, run, level: int) -> LevelSpec:
     return LevelSpec(size, vals["lnSpc"], vals["spcBef"], vals["spcAft"], max(margin, 0))
 
 
-def level2_defined(sp, styles: Styles) -> bool:
-    """D12: the box or its inheritance defines level-2 paragraph properties."""
+def level2_ppr(sp, styles: Styles):
+    """D12: the box's level-2 paragraph properties, the box's own list style first, then its inheritance; None when
+    neither defines them."""
     for e in [lvl_ppr(_lst(sp), 2)] + styles.chain(sp, 2):
         if e is not None and (len(e) or e.attrib):
-            return True
-    return False
+            return e
+    return None
+
+
+def level2_written(sp, styles: Styles, para):
+    """The exact a:pPr a written level-2 paragraph carries (D12 text, size budget R3-1): the box's level-2 properties
+    resolved to an a:pPr with lvl="1" when defined, else the donor paragraph's a:pPr with lvl="1"."""
+    src = level2_ppr(sp, styles)
+    if src is None:
+        src = None if para is None else para.find(q("a:pPr"))
+    el = copy.deepcopy(src) if src is not None else etree.Element(q("a:pPr"))
+    el.tag = q("a:pPr")
+    el.set("lvl", "1")
+    return el
 
 
 def body_attrs(sp, styles: Styles):
@@ -459,7 +472,7 @@ class SBox:
     ins: tuple[int, int, int, int]  # l, r, t, b
     lvl1: LevelSpec
     lvl2: LevelSpec
-    lvl2_inherited: bool  # level-2 paragraphs take the box's own level-2 properties
+    lvl2_inherited: bool  # the box or its inheritance defines level-2 properties (level-2 paragraphs carry them)
     ppr1: int  # bytes of the a:pPr a level-1 paragraph carries
     ppr2: int  # bytes of the a:pPr a level-2 paragraph carries
     rpr: int  # bytes of the donor a:rPr every written run carries
@@ -719,7 +732,7 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         l1 = level_spec(sp, styles, para, run, lvl)
         # a level-2 paragraph carries <a:pPr lvl="1"/> when the box or its inheritance defines level 2, else the
         # donor's a:pPr with lvl="1"; its runs carry the donor's a:rPr either way (D12 text)
-        l2_def = level2_defined(sp, styles)
+        l2_def = level2_ppr(sp, styles) is not None
         l2 = level_spec(sp, styles, None if l2_def else para, run, 2)
         attrs, autofit = body_attrs(sp, styles)
         why = unmodelled_reason(attrs, autofit, w.turned)
@@ -728,7 +741,7 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         ppr = None if para is None else para.find(q("a:pPr"))
         rpr = None if run is None else run.find(q("a:rPr"))
         ppr1 = len(etree.tostring(ppr)) if ppr is not None else 0
-        ppr2 = len(b'<a:pPr lvl="1"/>') if (l2_def or ppr is None) else ppr1 + len(b' lvl="1"')
+        ppr2 = len(etree.tostring(level2_written(sp, styles, para)))
         boxes.append(SBox(sid, x, y, cx, cy, text, l1.size, ph is not None, decorated(sp), why, attrs.get("wrap") == "none", insets(attrs), l1, l2, l2_def,
                           ppr1, ppr2, len(etree.tostring(rpr)) if rpr is not None else 0))
     hidden_slide = el.get("show") in ("0", "false")

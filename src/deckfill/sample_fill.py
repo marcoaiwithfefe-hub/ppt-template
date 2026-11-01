@@ -29,7 +29,7 @@ from .fill import (
     remove_slides,
 )
 from .package import RT_SLIDE, check_integrity
-from .sample import decorated, donor, has_text, shape_id, to_local, walk
+from .sample import Styles, decorated, donor, has_text, level2_written, shape_id, to_local, walk
 from .sample_plan import MAX_XML
 from .template import FOOTER_TYPES, ph_of, ph_type
 from .xmlsafe import R_NS, q
@@ -104,7 +104,7 @@ def _clear_text(sp) -> None:
     etree.SubElement(tx, q("a:p"))
 
 
-def _write(sp, sbox, bf) -> None:
+def _write(sp, sbox, bf, l2_ppr) -> None:
     """Replace a destination box's paragraphs (D12 text): each written paragraph copies the donor paragraph's a:pPr
     (level-2 paragraphs take the box's level-2 properties when defined, else the donor's with lvl="1"), each run the
     donor run's a:rPr (a field's, for a field-only box), with the plan's size when the box shrinks."""
@@ -118,12 +118,8 @@ def _write(sp, sbox, bf) -> None:
         p = etree.SubElement(tx, q("a:p"))
         if lvl == 1:
             ppr = copy.deepcopy(d_ppr) if d_ppr is not None else None
-        elif sbox.lvl2_inherited or d_ppr is None:
-            ppr = etree.Element(q("a:pPr"))
-            ppr.set("lvl", "1")
         else:
-            ppr = copy.deepcopy(d_ppr)
-            ppr.set("lvl", "1")
+            ppr = copy.deepcopy(l2_ppr)
         if ppr is not None:
             p.append(ppr)
         r = etree.SubElement(p, q("a:r"))
@@ -287,9 +283,11 @@ def fill_sample(info, pkg, plan) -> bytes:
         walked = {shape_id(w.el): w for w in walk(tree) if shape_id(w.el) is not None}
         fills = {bf.sid: bf for bf in ps.boxes}
         removed: set[int] = set()
+        styles = Styles(layout._element, layout.slide_master._element, prs.part._element.find(q("p:defaultTextStyle")))
         for bf in ps.boxes:
             w = walked[bf.sid]
-            _write(w.el, S.box(bf.sid), bf)
+            para, _ = donor(w.el)
+            _write(w.el, S.box(bf.sid), bf, level2_written(w.el, styles, para))
             if bf.box is not None:
                 _set_box(w.el, w.chain, bf.box)
         if len(S.title) > 1:
