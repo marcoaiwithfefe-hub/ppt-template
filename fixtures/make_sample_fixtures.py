@@ -825,6 +825,20 @@ def make_sample_cover2(out):
     return save(prs, out, "sample-cover2.pptx")
 
 
+def make_sample_cols(out):
+    """C38 (S2): k1 a cover; k2 a two-column sample whose boxes hold two bullets each at the floor; k3 a content
+    sample whose body holds six."""
+    prs = new_prs()
+    k1 = blank_slide(prs, (30, 50, 90))
+    tb(k1.shapes, 101, M, 2 * M, 10 * M, 1 * M, "Cols cover", 40)
+    s2 = blank_slide(prs, (240, 230, 220))
+    tb(s2.shapes, 201, 600000, 400000, 10900000, 1000000, "Two columns", 40)
+    tb(s2.shapes, 211, 600000, 2 * M, 5 * M, 600000, "Left", 20)
+    tb(s2.shapes, 212, 6400000, 2 * M, 5 * M, 600000, "Right", 20)
+    content_slide(prs, 3, (220, 240, 230), "One body", "Body", 40, 20)
+    return save(prs, out, "sample-cols.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -835,5 +849,5 @@ def make_all(out) -> list:
         make_sample_biglvl2(out), make_sample_fit(out), make_sample_backings(out), make_sample_readable(out),
         make_sample_small(out), make_sample_split(out), make_sample_grow(out), make_sample_geom(out),
         make_sample_order(out), make_sample_two(out), make_sample_only2(out), make_sample_cover(out),
-        make_sample_cover2(out),
+        make_sample_cover2(out), make_sample_cols(out),
     ]

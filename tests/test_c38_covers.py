@@ -50,3 +50,25 @@ def test_c38_user_picks_are_kept():
     assert p.chosen[0] == "s2"
     _, q = plan("sample-readable.pptx", "# Big cover\n\n## A\n- x\n", {0: "s1"})
     assert q.chosen[0] == "s1" and SMALL_TEXT in q.slides[0].flags  # kept below the bar, warned
+
+
+def cols(n):
+    return "## Cols\n" + "".join(f"- left {i}\n" for i in range(n)) + "||\n" + "".join(f"- right {i}\n" for i in range(n))
+
+
+def test_c38_two_columns_yield_to_a_merge_that_needs_fewer_slides():
+    """S2: the readable two-column sample k2 needs 2 continuation slides for five bullets a column, the readable content
+    merge on k3 needs 1: the merge wins, with rev 7's columns_merged warning."""
+    info, p = plan("sample-cols.pptx", cols(5))
+    s = parse_outline(cols(5)).slides[0]
+    k2, k3 = info.samples[1], info.samples[2]
+    assert (len(build(k2, s).parts), len(build(k3, s).parts)) == (3, 2) and readable(k2, build(k2, s))
+    assert p.chosen == ("s3",) and len(p.slides) == 2
+    assert "columns_merged" in [w.code for w in p.warnings]
+
+
+def test_c38_two_columns_win_at_equal_continuation_counts():
+    info, p = plan("sample-cols.pptx", cols(2))
+    s = parse_outline(cols(2)).slides[0]
+    assert (len(build(info.samples[1], s).parts), len(build(info.samples[2], s).parts)) == (1, 1)
+    assert p.chosen == ("s2",) and "columns_merged" not in [w.code for w in p.warnings]

@@ -564,9 +564,13 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
 
             def pool_of(cands):
                 ok = [(x, b) for x, b in cands if readable(x, b)]
-                for t in tiers_c:  # S1: the first class tier that holds a readable candidate
-                    ids = {x.id for x in t}
-                    tier = [(x, b) for x, b in ok if x.id in ids]
+                readable_tiers = [[(x, b) for x, b in ok if x.id in {y.id for y in t}] for t in tiers_c]
+                if s.kind == "two" and all(readable_tiers[:2]):
+                    # S2: two columns yield when they add slides: the content merge wins when its best candidate
+                    # needs fewer continuation slides than the best two-column one; equal counts keep the columns
+                    if min(len(b.parts) for _, b in readable_tiers[1]) < min(len(b.parts) for _, b in readable_tiers[0]):
+                        return readable_tiers[1], False
+                for tier in readable_tiers:  # S1: the first class tier that holds a readable candidate
                     if tier:
                         return tier, False
                 first = next(t for t in tiers_c if t)
