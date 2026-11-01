@@ -1,5 +1,5 @@
 # c24-box-uncleared: nothing that received no outline text is cleared on a copy
-# mutation in src/deckfill/sample_fill.py: 'if sid in fills or sid in removed or etree.QName(el).localname != "sp" or not has_text(el):' -> 'if True:'
+# mutation in src/deckfill/sample_fill.py: 'if sid in fills or sid in removed or etree.QName(el).localname != "sp":' -> 'if True:'
 # tests: tests/test_c24_c27_sample_text.py
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[design]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[footer]
@@ -7,4 +7,4 @@ FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[hidden
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[short]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[connector]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
-6 failed, 10 passed in 0.43s
+6 failed, 10 passed in 0.47s

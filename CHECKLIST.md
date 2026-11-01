@@ -21,3 +21,25 @@
 - [x] Layout-override fix (after round 1, MAJOR): picks follow their slide by title, kind and nth; gone or misfit picks drop with a note; tests fail before at b5db511, pass at 247fa54 (qa/override-fix/); C19 list in qa/c19/PROOF-LIST.md
 - [x] Codex round 2: F15, F3 partial, F10 partial fixed with failing-first runs (qa/codex2/fixes/); C14 format evidence (qa/c14/google-format.md); G0 Fable-view line; rerun on c038a9b
 - [x] Codex round 3: F16 (same-titled picks) fixed with failing-first runs (qa/codex3/fixes/); layout_gone reworded (C19 list); rerun on edaae49
+
+## Rev 8 (sample-slide route, map rev 5) and QA round 1
+
+- [x] sample.py reading: D11 availability and default, D12 title region, labels, slots, donor runs, effective sizes
+- [x] sample_plan.py: D12 planning, fit with spAutoFit modelled, limits (too_big before allocating)
+- [x] sample_fill.py: copy step, donor text, title widening, footers rebuilt once, clearing
+- [x] 22 rev 8 fixtures by fixtures/make_sample_fixtures.py; C22 to C27, C29, C30 tests with independent oracles
+- [x] Failure demos C24, C26, C27 reject their mutations; rev 7 C1 to C5 demos still reject theirs
+- [x] G0b: 8 of 8 clean (qa/g0b/G0B-RESULT.md)
+- [x] Page: route line and switch, 範本頁 picker, fit states incl. 字細咗; deckfill.zip rebuilt from src
+- [x] End-to-end: C9 session incl. C22 page part and C31, C10/C28 full override replay, C12 with sample stress cases
+- [x] QA round 1: Q1 chips and backings, Q2 and Q3 readability bars, Q4 fewest continuation slides, precedence, small_text (字細 in docs/copy.js); C23 comparator computes the Q1 removals itself; C32 and C33 tests fail on b38d280 and pass at head (qa/qa1/)
+- [x] QA round 1: shapes under a kept destination's box stay (Marco's 問答 title on s1)
+- [x] Q5: edb-mpa2022, elderly-gov-diy, hkust-template14 on both routes (qa/rev8/q5/Q5-RESULT.md); D11 unchanged
+- [x] G0b rerun with the QA round 1 clean definition; qa/g0b/marco-before-after-qa1.jpg
+- [x] C5 validator on every output incl. the sample-route fixtures, G0b decks, C28 and Q5 sample outputs
+- [x] Fill time, click to download, Bullen and Marco's template, three runs cold and warm (qa/e2e/fill-time.json)
+- [x] C19 proof list gains the rev 8 strings and 字細
+- [x] Blast radius: layout route 213 of 213 keys equal to 6a576a6 at the final code commit (qa/rev8/)
+- [x] Slop scan once (qa/slop-triage.md, rev 8 section)
+- [x] Walkthrough rendered to qa/walkthrough/rev8/ (not published)
+- [ ] Report to ai-brain-24 [75678f]

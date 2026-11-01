@@ -1,0 +1,11 @@
+
+kill-ai-slop — scanned 4 files under docs
+
+slop 09 decorative strikes & highlights  → strike for edits, underline for links
+     style.css:147  color: var(--cobalt-light); text-decoration: underline; text-underline-offset: 4px;
+
+slop 12 emoji everywhere  → cut emoji from product copy
+     index.html:45  <a class="ghost" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer"><spa
+
+→ 2 groups, 2 hits. Confirm each by reading the code, then fix per references/fixes.md.
+

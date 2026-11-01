@@ -1,4 +1,4 @@
 # c27-wrong-slot: slot bullets go to the slots in reverse reading order
-# mutation in src/deckfill/sample_plan.py: 'for sid, g in zip(slots, groups):' -> 'for sid, g in zip(slots[::-1], groups):'
+# mutation in src/deckfill/sample_plan.py: 'fills = [fill_box(S.box(sid), "slot", g) for sid, g in zip(slots, groups)]' -> 'fills = [fill_box(S.box(sid), "slot", g) for sid, g in zip(slots[::-1], groups)]'
 # tests: tests/test_c24_c27_sample_text.py
-16 passed in 0.30s
+16 passed in 0.33s

@@ -79,7 +79,7 @@ DEMOS = {
     "c24-box-uncleared": (
         "nothing that received no outline text is cleared on a copy",
         "src/deckfill/sample_fill.py",
-        'if sid in fills or sid in removed or etree.QName(el).localname != "sp" or not has_text(el):',
+        'if sid in fills or sid in removed or etree.QName(el).localname != "sp":',
         "if True:",
         ["tests/test_c24_c27_sample_text.py"],
     ),
@@ -121,8 +121,8 @@ DEMOS = {
     "c27-wrong-slot": (
         "slot bullets go to the slots in reverse reading order",
         "src/deckfill/sample_plan.py",
-        "for sid, g in zip(slots, groups):",
-        "for sid, g in zip(slots[::-1], groups):",
+        'fills = [fill_box(S.box(sid), "slot", g) for sid, g in zip(slots, groups)]',
+        'fills = [fill_box(S.box(sid), "slot", g) for sid, g in zip(slots[::-1], groups)]',
         ["tests/test_c24_c27_sample_text.py"],
     ),
 }

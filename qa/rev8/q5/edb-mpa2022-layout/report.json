@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.22,
+ "seconds": 0.23,
  "samples": [
   {
    "id": "s1",

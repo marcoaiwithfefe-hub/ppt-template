@@ -17,4 +17,4 @@ FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[chart]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[typo]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[thin]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
-16 failed in 0.33s
+16 failed in 0.36s

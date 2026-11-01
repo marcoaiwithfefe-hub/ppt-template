@@ -29,3 +29,10 @@ Terms rev 8 adds (the sample-slide route, spec D11 and D12):
 - **donor run**: the first run or field of a box's first paragraph. Written paragraphs copy its paragraph's properties and written runs copy its run properties; its resolved size is the box's effective size.
 - **effective size**: the donor run's size resolved through the run, the paragraph, the box's list style, the layout and master placeholders (or the presentation's default text style for a free text box), else 18 pt.
 - **shrink**: on the sample route, a box whose text does not fit gets an explicit size on every written run, in 5% steps on a half-point grid, never below 70% of its effective size (the floor). Fit states add `shrunk` (字細咗); a slide can carry several states.
+
+Terms QA round 1 adds (spec "Rev 8 QA round 1"):
+
+- **readability bar**: a destination's written size, after any shrink, against the slide height: 4% for a title, 2% for every body destination (subtitle, body, slot). A candidate sample meets the bars when every destination on every slide it makes does.
+- **chip**: a cleared shape with a fill or line under 8% of the slide area (a label tile, an unused small text box). It goes whole on the copy.
+- **backing**: a text-free shape with a fill or line, under 8% of the slide, that holds at least 80% of a cleared text box's area. It goes with its text. Nothing behind a destination that kept its text goes.
+- **small_text**: the per-slide state (字細 on the page) when no candidate meets the bars, or a picked sample does not.

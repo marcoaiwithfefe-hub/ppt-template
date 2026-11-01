@@ -1,4 +1,4 @@
 # c1-text-lost: fill drops the last paragraph of every body
 # mutation in src/deckfill/fill.py: '_put(shapes[idx], paras)' -> '_put(shapes[idx], paras[:-1])'
 # tests: tests/test_c1_text.py
-22 passed in 0.33s
+22 passed in 0.35s
