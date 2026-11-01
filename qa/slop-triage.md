@@ -20,3 +20,7 @@ The page changed (`fit.grown`, 版面調整, and the Noto Serif TC subset rebuil
 ## Rev 8 QA round 3 rescan
 
 Only `docs/py/deckfill.zip` changed under `docs/` (the rebuilt module); the scan ran once anyway (raw output in `qa/slop-scan-rev8-qa3.txt`): the same 2 kept hits, no new hit.
+
+## Rev 8 QA round 3 S2 rescan
+
+Only `docs/py/deckfill.zip` changed under `docs/`; one scan (raw output in `qa/slop-scan-rev8-qa3b.txt`), the same 2 kept hits.

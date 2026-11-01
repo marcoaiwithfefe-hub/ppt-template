@@ -1,5 +1,5 @@
 # c9-fetch-after-download: the page fetches a same-origin file one second after each download
 # mutation in docs/app.js: '  $("downloaded").hidden = false;\n}' -> '  $("downloaded").hidden = false;\n  setTimeout(() => fetch("./copy.js").catch(() => {}), 1000);\n}'
 # tests: node tests/e2e/c9_privacy.mjs
-FAIL C9 no CSP violation in the session (nothing tried the network) -- [{"dir":"connect-src","uri":"http://127.0.0.1:52949/copy.js","t":1793520979101},{"dir":"connect-src","uri":"http://127.0.0.1:52949/copy.js","t":1793520980091},{"dir":"connect-src","uri":"http://127.0.0.1:52949/copy.js","t":1793520981152},{"dir":"connect-src","uri":"http://127.0.0.1:52949/copy.js","t":1793520982344}]
+FAIL C9 no CSP violation in the session (nothing tried the network) -- [{"dir":"connect-src","uri":"http://127.0.0.1:53634/copy.js","t":1793521884918},{"dir":"connect-src","uri":"http://127.0.0.1:53634/copy.js","t":1793521885929},{"dir":"connect-src","uri":"http://127.0.0.1:53634/copy.js","t":1793521886990},{"dir":"connect-src","uri":"http://127.0.0.1:53634/copy.js","t":1793521888180}]
 29 passed, 1 failed

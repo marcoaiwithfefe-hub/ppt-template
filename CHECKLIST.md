@@ -64,3 +64,7 @@
 - [x] G0b rerun with title slides and two-column slides reported; qa/g0b/title-slides-qa3.jpg; qa/g0b/marco-before-after-qa3.jpg
 - [x] Done gates at the final head: suite, failure demos, C5, C9, C10/C28, C12, fill time, layout baseline 213 of 213, slop scan once, walkthrough re-rendered
 - [x] Report to ai-brain-24 [75678f] (QA round 3)
+- [x] S2 two columns yield when they add slides (cb09123); C38 gains both cases, the yield case fails on ad434fe (qa/qa3/before-ad434fe-s2.txt)
+- [x] G0b with S2: Marco's 預算 3 -> 2, business-conference's 3 -> 1; qa/g0b/marco-before-after-qa3b.jpg
+- [x] Done gates at the S2 head; walkthrough over the whole range 6a576a6..head for the Codex code review loop
+- [x] Report to ai-brain-24 [75678f] (QA round 3 S2)

@@ -1,4 +1,4 @@
 # c3-rels-order: fill keeps python-pptx's re-sorted, relativised relationships instead of the template's own
 # mutation in src/deckfill/fill.py: '    parts = _restore_kept(pkg.parts, parts, pkg.main)' -> '    pass'
 # tests: tests/test_c3_c6_package.py -k every_kept_part_unchanged and rels-order
-1 passed, 134 deselected in 0.08s
+1 passed, 134 deselected in 0.09s

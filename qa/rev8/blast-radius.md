@@ -22,3 +22,7 @@ The shared code the layout route runs did not change in round 2: R1 to R7 live i
 ## QA round 3 (d1b3ca1..2dd5c96)
 
 S1 changes only `plan_sample`'s pool choice on the sample route. Proven again: `qa/rev8/layout-head-qa3.json`, 213 of 213 baseline keys equal to 6a576a6 at 2dd5c96.
+
+## QA round 3 S2 (ad434fe..cb09123)
+
+S2 changes only the sample route's pool choice for two-column slides. Proven again: `qa/rev8/layout-head-qa3b.json`, 213 of 213 baseline keys equal to 6a576a6 at cb09123.
