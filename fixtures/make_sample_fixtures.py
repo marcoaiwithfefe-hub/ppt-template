@@ -839,6 +839,30 @@ def make_sample_cols(out):
     return save(prs, out, "sample-cols.pptx")
 
 
+GUIDERECT = ('<a:custGeom xmlns:a="%s"><a:avLst/><a:gdLst><a:gd name="gd1" fmla="val 0"/></a:gdLst><a:ahLst/>'
+             '<a:cxnLst/><a:rect l="l" t="t" r="r" b="b"/><a:pathLst><a:path><a:moveTo><a:pt x="gd1" y="t"/></a:moveTo>'
+             '<a:lnTo><a:pt x="w" y="t"/></a:lnTo><a:lnTo><a:pt x="w" y="h"/></a:lnTo><a:lnTo><a:pt x="l" y="h"/></a:lnTo>'
+             '<a:close/></a:path></a:pathLst></a:custGeom>')
+
+
+def make_sample_malformed(out):
+    """Code review F2. m1: a decorated content sample. m2: a content sample with a number label over a chip drawn
+    as a rectangle path whose corners are guide names (gd1, w, h, l, t), so it is never a backing. m3: a content
+    sample whose body box has an unreadable offset (x="bad"): only m3 is unusable, both routes still fill."""
+    prs = new_prs()
+    s1 = content_slide(prs, 1, (240, 230, 220), "Malformed one", "Body one")
+    pic(s1.shapes, 121, 9 * M, 6 * M, M, 600000, (40, 100, 160))
+    s2 = content_slide(prs, 2, (220, 240, 230), "Malformed two", "Body two")
+    s2.shapes[1].top = Emu(3 * M)
+    s2.shapes[1].height = Emu(3 * M)
+    chip = rect(s2.shapes, 211, 600000, 1700000, 1 * M, 1 * M, (255, 255, 255))
+    _geom(chip, GUIDERECT % NS["a"])
+    tb(s2.shapes, 221, 600000, 1700000, 1 * M, 1 * M, "1", 28)
+    s3 = content_slide(prs, 3, (230, 220, 240), "Malformed three", "Body three")
+    s3.shapes[1]._element.find(q("p:spPr")).find(q("a:xfrm")).find(q("a:off")).set("x", "bad")
+    return save(prs, out, "sample-malformed.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -849,5 +873,5 @@ def make_all(out) -> list:
         make_sample_biglvl2(out), make_sample_fit(out), make_sample_backings(out), make_sample_readable(out),
         make_sample_small(out), make_sample_split(out), make_sample_grow(out), make_sample_geom(out),
         make_sample_order(out), make_sample_two(out), make_sample_only2(out), make_sample_cover(out),
-        make_sample_cover2(out), make_sample_cols(out),
+        make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
     ]

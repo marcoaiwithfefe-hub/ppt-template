@@ -1,0 +1,4 @@
+# f2-guide-path: a custom path's guide-name corner is read as an integer
+# mutation in src/deckfill/sample.py: 'return int(v) if v is not None and _INT.fullmatch(v.strip()) else None' -> 'return int(v or 0)'
+# tests: tests/test_cr1_code_review.py -k f2
+14 passed in 0.10s

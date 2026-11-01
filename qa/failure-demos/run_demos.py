@@ -125,6 +125,21 @@ DEMOS = {
         'fills = [fill_box(S.box(sid), "slot", g) for sid, g in zip(slots[::-1], groups)]',
         ["tests/test_c24_c27_sample_text.py"],
     ),
+    # code review round 1
+    "f2-guide-path": (
+        "a custom path's guide-name corner is read as an integer",
+        "src/deckfill/sample.py",
+        "return int(v) if v is not None and _INT.fullmatch(v.strip()) else None",
+        "return int(v or 0)",
+        ["tests/test_cr1_code_review.py", "-k", "f2"],
+    ),
+    "f2-sample-isolation": (
+        "an error while reading one sample slide aborts the whole template",
+        "src/deckfill/sample.py",
+        "            out.append(unreadable(k, slide, _why(e)))\n    return tuple(out)",
+        "            raise\n    return tuple(out)",
+        ["tests/test_cr1_code_review.py", "-k", "f2"],
+    ),
 }
 
 

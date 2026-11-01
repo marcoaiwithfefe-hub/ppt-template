@@ -517,6 +517,7 @@ class Sample:
     groups: tuple = ()  # QA round 2: every group (GroupT), for growing a grouped body
     fixed: tuple = ()  # QA round 2 R3: drawn bounds of the layout's and master's visible non-placeholder shapes
     footers: tuple = ()  # QA round 2 R3: every box a rebuilt footer can take (an upper bound)
+    error: str = ""  # code review F2: why reading this slide failed (reason "unreadable"); "" when it read
 
     def box(self, sid: int) -> SBox:
         return next(b for b in self.boxes if b.sid == sid)
@@ -699,6 +700,14 @@ RECT_PRESETS = {"rect", "roundRect", "snip1Rect", "snip2SameRect", "round1Rect",
                 "flowChartAlternateProcess"}
 
 
+_INT = re.compile(r"[+-]?[0-9]+")
+
+
+def _coord(v) -> int | None:
+    """A custom path point coordinate as a plain integer; None for a guide name or anything else unresolved."""
+    return int(v) if v is not None and _INT.fullmatch(v.strip()) else None
+
+
 def is_rect_geom(el) -> bool:
     """R5: a rectangular preset, or a custGeom with one closed path of one moveTo and three or four lnTo visiting the
     four corners of its own bounding box in perimeter order (no curve, no diagonal, no crossing)."""
@@ -725,7 +734,10 @@ def is_rect_geom(el) -> bool:
         pt = c.find(q("a:pt"))
         if pt is None:
             return False
-        pts.append((int(pt.get("x", 0)), int(pt.get("y", 0))))
+        x, y = _coord(pt.get("x")), _coord(pt.get("y"))
+        if x is None or y is None:
+            return False  # a guide name (w, h, a named guide) or an unreadable value: not a backing (code review F2)
+        pts.append((x, y))
     if len(pts) == 5:
         if pts[4] != pts[0]:
             return False
@@ -1031,31 +1043,64 @@ def read_samples(prs) -> tuple[Sample, ...]:
     # R3: every box a rebuilt footer can take on a copy: footer placeholders of every slide on the same layout (D4
     # step 1's examples), of the layout and of its master (an upper bound, so the grid never under-counts)
     foot: dict[str, list] = {}
-    for slide in prs.slides:
-        lay = slide.slide_layout
-        foot.setdefault(str(lay.part.partname), []).extend(
-            footer_boxes(slide._element.find(q("p:cSld")).find(q("p:spTree")), lay._element, lay.slide_master._element))
+    broken: dict[int, str] = {}  # code review F2: a slide whose reading raised is unusable, never the whole template
     for k, slide in enumerate(prs.slides, start=1):
-        layout = slide.slide_layout
-        master = layout.slide_master
-        styles = Styles(layout._element, master._element, default_style)
-        lid = str(layout.part.partname)
-        lay_tree = layout._element.find(q("p:cSld")).find(q("p:spTree"))
-        mas_tree = master._element.find(q("p:cSld")).find(q("p:spTree"))
-        if lid not in cover_cache:
-            rects = decoration_rects(lay_tree)
-            fixed = fixed_boxes(lay_tree)
-            if layout._element.get("showMasterSp") not in ("0", "false"):
-                rects += decoration_rects(mas_tree)
-                fixed += fixed_boxes(mas_tree)
-            cover_cache[lid] = covered(rects, sw, sh)
-            fixed_cache[lid] = fixed
-            foot.setdefault(lid, []).extend(footer_boxes(lay_tree, None, master._element) + footer_boxes(mas_tree))
-        layout_bg = resolved_bg(layout._element, layout.part)
-        master_bg = resolved_bg(master._element, master.part)
-        out.append(read_sample(k, slide, styles, sw, sh, layout_bg, master_bg, cover_cache[lid], fixed_cache[lid],
-                               foot.get(lid, [])))
+        try:
+            lay = slide.slide_layout
+            foot.setdefault(str(lay.part.partname), []).extend(
+                footer_boxes(slide._element.find(q("p:cSld")).find(q("p:spTree")), lay._element, lay.slide_master._element))
+        except MemoryError:
+            raise
+        except Exception as e:
+            broken[k] = _why(e)
+    for k, slide in enumerate(prs.slides, start=1):
+        if k in broken:
+            out.append(unreadable(k, slide, broken[k]))
+            continue
+        try:
+            layout = slide.slide_layout
+            master = layout.slide_master
+            styles = Styles(layout._element, master._element, default_style)
+            lid = str(layout.part.partname)
+            lay_tree = layout._element.find(q("p:cSld")).find(q("p:spTree"))
+            mas_tree = master._element.find(q("p:cSld")).find(q("p:spTree"))
+            if lid not in cover_cache:
+                rects = decoration_rects(lay_tree)
+                fixed = fixed_boxes(lay_tree)
+                if layout._element.get("showMasterSp") not in ("0", "false"):
+                    rects += decoration_rects(mas_tree)
+                    fixed += fixed_boxes(mas_tree)
+                fixed_cache[lid] = fixed
+                foot.setdefault(lid, []).extend(footer_boxes(lay_tree, None, master._element) + footer_boxes(mas_tree))
+                cover_cache[lid] = covered(rects, sw, sh)
+            layout_bg = resolved_bg(layout._element, layout.part)
+            master_bg = resolved_bg(master._element, master.part)
+            out.append(read_sample(k, slide, styles, sw, sh, layout_bg, master_bg, cover_cache[lid], fixed_cache[lid],
+                                   foot.get(lid, [])))
+        except MemoryError:
+            raise
+        except Exception as e:
+            out.append(unreadable(k, slide, _why(e)))
     return tuple(out)
+
+
+def _why(e: Exception) -> str:
+    return f"{type(e).__name__}: {e}"[:200]
+
+
+def unreadable(k: int, slide, why: str) -> Sample:
+    """Code review F2: a sample slide whose reading raised (a malformed attribute, an unresolved reference). It is
+    never usable, so neither route uses it, and why it failed stays in the template info (Sample.error)."""
+    def name(get):
+        try:
+            return str(get())
+        except Exception:
+            return ""
+
+    return Sample(k=k, id=f"s{k}", part=name(lambda: slide.part.partname),
+                  layout=name(lambda: slide.slide_layout.part.partname), usable=False, reason="unreadable",
+                  design=False, title=(), title_box=(0, 0, 0, 0), labels=(), bodies=(), subtitle=None, slots=(),
+                  classes=(), boxes=(), words="", turned=False, nbytes=0, nshapes=0, footer_bytes=0, error=why)
 
 
 def usable(samples) -> list[Sample]:

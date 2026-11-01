@@ -1,0 +1,42 @@
+base 057c266 (057c266), tests from working tree at 057c266, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.PCMhAet27S
+_____________________________ test_f2_coord[-None] _____________________________
+
+value = '', expected = None
+
+    @pytest.mark.parametrize("value,expected", [("0", 0), ("-12", -12), ("+7", 7), ("w", None), ("h", None),
+                                                ("gd1", None), ("1.5", None), ("", None), (None, None)])
+    def test_f2_coord(value, expected):
+>       assert sample_mod._coord(value) == expected
+               ^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'deckfill.sample' has no attribute '_coord'
+
+tests/test_cr1_code_review.py:79: AttributeError
+___________________________ test_f2_coord[None-None] ___________________________
+
+value = None, expected = None
+
+    @pytest.mark.parametrize("value,expected", [("0", 0), ("-12", -12), ("+7", 7), ("w", None), ("h", None),
+                                                ("gd1", None), ("1.5", None), ("", None), (None, None)])
+    def test_f2_coord(value, expected):
+>       assert sample_mod._coord(value) == expected
+               ^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'deckfill.sample' has no attribute '_coord'
+
+tests/test_cr1_code_review.py:79: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_cr1_code_review.py::test_f2_template_with_guide_paths_and_a_malformed_sample_reads
+FAILED tests/test_cr1_code_review.py::test_f2_guide_name_corners_are_not_a_backing
+FAILED tests/test_cr1_code_review.py::test_f2_layout_route_fills_on_malformed_samples
+FAILED tests/test_cr1_code_review.py::test_f2_sample_route_never_uses_the_unreadable_sample
+FAILED tests/test_cr1_code_review.py::test_f2_footer_reading_failure_makes_only_that_sample_unusable
+FAILED tests/test_cr1_code_review.py::test_f2_coord[0-0] - AttributeError: mo...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[-12--12] - AttributeError...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[+7-7] - AttributeError: m...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[w-None] - AttributeError:...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[h-None] - AttributeError:...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[gd1-None] - AttributeErro...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[1.5-None] - AttributeErro...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[-None] - AttributeError: ...
+FAILED tests/test_cr1_code_review.py::test_f2_coord[None-None] - AttributeErr...
+14 failed in 0.18s
+read_template(sample-malformed.pptx) at 057c266 raised ValueError: invalid literal for int() with base 10: 'gd1' (both routes lost)
