@@ -12,3 +12,7 @@ Checked by eye against the other 21 tells before the first render: one cobalt ac
 ## Rev 8 and QA round 1 rescan
 
 Scan run once at the end of the rev 8 QA round 1 work (raw output in `qa/slop-scan-rev8.txt`): the same 2 hits as the first scan, same lines, same verdicts (kept: the `.link-btn` underline marks text-style buttons; `↗` is the pre-declared typographic arrow). The rev 8 page additions (route line and switch, the 範本頁 picker, the fit states 字細咗 and 字細) add no hit. No fix made.
+
+## Rev 8 QA round 2 rescan
+
+The page changed (`fit.grown`, 版面調整, and the Noto Serif TC subset rebuilt for its two new glyphs), so the scan ran once more (raw output in `qa/slop-scan-rev8-qa2.txt`): the same 2 hits on the same lines, kept for the same reasons. No new hit, no fix made.

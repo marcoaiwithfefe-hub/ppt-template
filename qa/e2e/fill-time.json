@@ -1,5 +1,5 @@
 {
- "commit": "6d9a809",
+ "commit": "0aa5218",
  "dirty_src_or_docs": false,
  "machine": "darwin arm64",
  "browser": "chromium headless shell (playwright-core 1.64.1)",
@@ -8,95 +8,95 @@
    "template": "bullen-free-presentation-template.pptx",
    "run": 1,
    "route": "sample",
-   "read_ms": 648,
-   "cold_ms": 343,
-   "warm_ms": 337,
+   "read_ms": 831,
+   "cold_ms": 325,
+   "warm_ms": 324,
    "download": "匯通物流 2027 年度計劃.pptx"
   },
   {
    "template": "bullen-free-presentation-template.pptx",
    "run": 2,
    "route": "sample",
-   "read_ms": 651,
-   "cold_ms": 347,
-   "warm_ms": 342,
+   "read_ms": 834,
+   "cold_ms": 319,
+   "warm_ms": 308,
    "download": "匯通物流 2027 年度計劃.pptx"
   },
   {
    "template": "bullen-free-presentation-template.pptx",
    "run": 3,
    "route": "sample",
-   "read_ms": 660,
-   "cold_ms": 338,
-   "warm_ms": 328,
+   "read_ms": 840,
+   "cold_ms": 318,
+   "warm_ms": 304,
    "download": "匯通物流 2027 年度計劃.pptx"
   },
   {
    "template": "marco-year-in-breakdowns.pptx",
    "run": 1,
    "route": "sample",
-   "read_ms": 244,
-   "cold_ms": 711,
-   "warm_ms": 693,
+   "read_ms": 276,
+   "cold_ms": 659,
+   "warm_ms": 660,
    "download": "匯通物流 2027 年度計劃.pptx"
   },
   {
    "template": "marco-year-in-breakdowns.pptx",
    "run": 2,
    "route": "sample",
-   "read_ms": 253,
-   "cold_ms": 709,
-   "warm_ms": 729,
+   "read_ms": 279,
+   "cold_ms": 657,
+   "warm_ms": 655,
    "download": "匯通物流 2027 年度計劃.pptx"
   },
   {
    "template": "marco-year-in-breakdowns.pptx",
    "run": 3,
    "route": "sample",
-   "read_ms": 259,
-   "cold_ms": 717,
-   "warm_ms": 711,
+   "read_ms": 274,
+   "cold_ms": 669,
+   "warm_ms": 651,
    "download": "匯通物流 2027 年度計劃.pptx"
   }
  ],
  "summary": {
   "bullen-free-presentation-template.pptx": {
    "read_ms": [
-    648,
-    651,
-    660
+    831,
+    834,
+    840
    ],
    "cold_ms": [
-    343,
-    347,
-    338
+    325,
+    319,
+    318
    ],
    "warm_ms": [
-    337,
-    342,
-    328
+    324,
+    308,
+    304
    ],
-   "cold_max_ms": 347,
-   "warm_max_ms": 342
+   "cold_max_ms": 325,
+   "warm_max_ms": 324
   },
   "marco-year-in-breakdowns.pptx": {
    "read_ms": [
-    244,
-    253,
-    259
+    276,
+    279,
+    274
    ],
    "cold_ms": [
-    711,
-    709,
-    717
+    659,
+    657,
+    669
    ],
    "warm_ms": [
-    693,
-    729,
-    711
+    660,
+    655,
+    651
    ],
-   "cold_max_ms": 717,
-   "warm_max_ms": 729
+   "cold_max_ms": 669,
+   "warm_max_ms": 660
   }
  }
 }

@@ -43,3 +43,16 @@
 - [x] Slop scan once (qa/slop-triage.md, rev 8 section)
 - [x] Walkthrough rendered to qa/walkthrough/rev8/ (not published)
 - [x] Report to ai-brain-24 [75678f] (QA round 1)
+
+## Rev 8 QA round 2
+
+- [x] R4 route default (design test and 3 usable content samples), R7 slots must fit, R2 continuation titles, R1 order with R6 pool, R3 grown body with its own backing, R5 backings by geometry (eedcf10 groundwork, 7d9dbde)
+- [x] C23 comparator: R5 backings, R3 growth with an independent grid, exclusive C14N; C34 to C37; C22 sample-thin defaults to layout; round 2 tests fail on eedcf10 (qa/qa2/)
+- [x] Stale c24 demo anchors retargeted; all 15 failure demos reject their mutations
+- [x] 版面調整 in docs/copy.js and the C19 list; page font subset rebuilt; deckfill.zip rebuilt
+- [x] G0b rerun with the round 2 checks, fresh render folders, C23 on every real deck; qa/g0b/marco-before-after-qa2.jpg
+- [x] Q5 rerun, sheets in qa/rev8/q5/qa2/ beside round 1's
+- [x] C5 on the round 2 fixtures and Q5 sample outputs; the other grown cases validated (qa/qa2/c5-grow-cases.txt)
+- [x] Slop scan once (docs changed)
+- [x] End-to-end, fill time, layout baseline 213 of 213, walkthrough re-rendered
+- [x] Report to ai-brain-24 [75678f] (QA round 2)

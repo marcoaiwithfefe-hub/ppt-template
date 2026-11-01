@@ -14,3 +14,7 @@
 - `read_template` now reads sample slides on every template, so a sample-slide oddity runs on the layout route's read too. All 8 G0b, 6 G0 and 37 fixture templates read; a probe that set a malformed run size on every sample run of `footer-active.pptx` still read. Not traced further: a different malformed attribute could still raise outside `DeckfillError` (unproven either way).
 
 **Cleared.** `plan.height`'s new branch: `Fit.nowrap` defaults to False and only `sample.SBox.fit_at` sets it (`src/deckfill/template.py`, `src/deckfill/sample.py`). `footer_for_type`: the layout route's C4 tests and the 213-key baseline cover it. Privacy: C9 30 of 30 and `qa/e2e/privacy_proof.py` PASS at 6d9a809 (zero page requests after ready).
+
+## QA round 2 (eedcf10..8cccd6b)
+
+The shared code the layout route runs did not change in round 2: R1 to R7 live in `sample_plan.py`, `sample.py` and `sample_fill.py`, which the layout route never calls; `open_template` changed only through `sample_default` (R4), which moves the default route of templates with fewer than 3 usable samples (hkust-template14, sample-thin, sample-shapes, sample-xml) to the layout route without changing what that route builds. Proven again by running code: `qa/rev8/layout-head-qa2.json`, 213 of 213 baseline keys equal to 6a576a6 at 8cccd6b. Risk found and fixed in the gates: R4 moved the C12 sample-route stress templates onto the layout route, so the stress check now switches routes and requires the sample route.
