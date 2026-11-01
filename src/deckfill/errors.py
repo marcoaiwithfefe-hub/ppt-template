@@ -19,4 +19,4 @@ class OutlineError(DeckfillError):
 
 class PlanError(DeckfillError):
     """A plan cannot be made or used. Codes: too_many_slides, incompatible_layout,
-    unknown_layout, stale_plan."""
+    unknown_layout, stale_plan, route_unavailable (rev 8)."""

@@ -46,6 +46,8 @@ class PlannedSlide:
     columns: tuple[tuple[Item, ...], ...]  # one tuple per destination body
     dest: Dest
     fit: str
+    boxes: tuple = ()  # rev 8 sample route: sample_plan.BoxFill per box that receives text
+    flags: tuple[str, ...] = ()  # rev 8 sample route: shrunk, split, warned, check (a slide can carry several)
 
 
 @dataclass(frozen=True)
@@ -56,6 +58,7 @@ class Plan:
     chosen: tuple[str, ...]  # layout id per outline slide
     compatible: tuple[tuple[str, ...], ...]  # compatible layout ids per outline slide
     warnings: tuple[Warning, ...]  # parser warnings first, then planning warnings
+    route: str = "layout"  # rev 8: layout or sample (D11)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -168,11 +171,19 @@ def text_lines(text: str, size: int, width: int) -> int:
     return lines
 
 
+def text_width(text: str, size: int) -> float:
+    return sum(size if is_cjk(ch) else LATIN_EM * size for ch in text)
+
+
 def height(items: tuple[Item, ...], fit: Fit) -> int:
     total = 0
     for i, it in enumerate(items):
         lv: Level = fit.levels[min(it.level, 2) - 1]
-        n = text_lines(it.text, lv.size, fit.width - lv.margin)
+        if fit.nowrap:
+            # rev 8 sample route, wrapping off: one line, and a line wider than the box does not fit at all
+            n = 1 if text_width(it.text, lv.size) <= fit.width - lv.margin else 10**6
+        else:
+            n = text_lines(it.text, lv.size, fit.width - lv.margin)
         total += (lv.before if i else 0) + n * lv.line + lv.after
     return total
 
@@ -215,9 +226,17 @@ def cont_title(title: str) -> str:
 # ---------------------------------------------------------------------------------------------
 
 
-def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | None = None) -> Plan:
+def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | None = None, route: str | None = None) -> Plan:
+    """route: layout (D3 to D5) or sample (D12); None takes the template's default route (D11)."""
     if not outline.slides:
         raise OutlineError("no_slides")
+    route = route or info.route
+    if route not in info.routes:
+        raise PlanError("route_unavailable", route)
+    if route == "sample":
+        from .sample_plan import plan_sample
+
+        return plan_sample(info, outline, dict(overrides or {}))
     overrides = dict(overrides or {})
     ids = {lay.id for lay in info.layouts}
     warnings: list[Warning] = list(outline.warnings)
