@@ -1,0 +1,7 @@
+# c27-wrong-slot: slot bullets go to the slots in reverse reading order
+# mutation in src/deckfill/sample_plan.py: 'for sid, g in zip(slots, groups):' -> 'for sid, g in zip(slots[::-1], groups):'
+# tests: tests/test_c24_c27_sample_text.py
+FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[design]
+FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[short]
+FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
+3 failed, 13 passed in 0.32s

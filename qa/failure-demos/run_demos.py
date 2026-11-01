@@ -1,4 +1,4 @@
-"""Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part).
+"""Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27).
 
 Each demo applies one isolated mutation to the source, runs the check's tests, restores the
 file, and runs the tests again. Output: qa/failure-demos/<id>-mutated.txt and <id>-fixed.txt.
@@ -74,6 +74,56 @@ DEMOS = {
         '  document.querySelector(\'a[href^="https://gemini"]\').href =\n'
         '    "https://gemini.google.com/app?q=" + encodeURIComponent($("outline").value.slice(0, 60));',
         ["node", "tests/e2e/c9_privacy.mjs"],
+    ),
+    # rev 8, sample route
+    "c24-box-uncleared": (
+        "nothing that received no outline text is cleared on a copy",
+        "src/deckfill/sample_fill.py",
+        'if sid in fills or sid in removed or etree.QName(el).localname != "sp" or not has_text(el):',
+        "if True:",
+        ["tests/test_c24_c27_sample_text.py"],
+    ),
+    "c24-hidden-left": (
+        "hidden shapes keep their sample text on the copy",
+        "src/deckfill/sample_fill.py",
+        '            el = w.el\n            if sid in fills or sid in removed',
+        '            el = w.el\n            if w.hidden:\n                continue\n            if sid in fills or sid in removed',
+        ["tests/test_c24_c27_sample_text.py"],
+    ),
+    "c24-instruction-copied": (
+        "instruction slides are not excluded, so a pick of the font guide is copied",
+        "src/deckfill/sample.py",
+        "    elif instruction(all_text):",
+        "    elif False:",
+        ["tests/test_c24_c27_sample_text.py"],
+    ),
+    "c26-link-kept": (
+        "an element using a link to a removed slide stays on the copy (its relationship is not copied)",
+        "src/deckfill/sample_fill.py",
+        "            if v in dead:",
+        "            if False:",
+        ["tests/test_c26_c29_c30_sample.py", "-k", "c26"],
+    ),
+    "c27-bullet-omitted": (
+        "the last paragraph of every multi-paragraph box is not written",
+        "src/deckfill/sample_fill.py",
+        "    for lvl, text in bf.paras:",
+        "    for lvl, text in bf.paras[:-1] or bf.paras:",
+        ["tests/test_c24_c27_sample_text.py"],
+    ),
+    "c27-bullet-duplicated": (
+        "the last paragraph of every box is written twice",
+        "src/deckfill/sample_fill.py",
+        "    for lvl, text in bf.paras:",
+        "    for lvl, text in bf.paras + bf.paras[-1:]:",
+        ["tests/test_c24_c27_sample_text.py"],
+    ),
+    "c27-wrong-slot": (
+        "slot bullets go to the slots in reverse reading order",
+        "src/deckfill/sample_plan.py",
+        "for sid, g in zip(slots, groups):",
+        "for sid, g in zip(slots[::-1], groups):",
+        ["tests/test_c24_c27_sample_text.py"],
     ),
 }
 

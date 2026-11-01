@@ -1,0 +1,4 @@
+# c24-instruction-copied: instruction slides are not excluded, so a pick of the font guide is copied
+# mutation in src/deckfill/sample.py: '    elif instruction(all_text):' -> '    elif False:'
+# tests: tests/test_c24_c27_sample_text.py
+16 passed in 0.30s

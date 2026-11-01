@@ -1,0 +1,6 @@
+# c27-bullet-omitted: the last paragraph of every multi-paragraph box is not written
+# mutation in src/deckfill/sample_fill.py: '    for lvl, text in bf.paras:' -> '    for lvl, text in bf.paras[:-1] or bf.paras:'
+# tests: tests/test_c24_c27_sample_text.py
+FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[design]
+FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
+2 failed, 14 passed in 0.31s
