@@ -169,13 +169,13 @@
   "template": "business-conference-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.22,
+  "seconds": 0.19,
   "chosen": [
    "s1",
    "s3",
    "s7",
-   "s2",
    "s3",
+   "s4",
    "s1"
   ],
   "new_overlaps": [],
@@ -197,7 +197,7 @@
    "匯通物流 2027 年度計劃": 1,
    "三個目標": 1,
    "時間表": 1,
-   "預算 港幣 800 萬": 3,
+   "預算 港幣 800 萬": 1,
    "八項行動": 2,
    "問答": 1
   },
@@ -209,13 +209,13 @@
   },
   "two_column_slide": {
    "title": "預算 港幣 800 萬",
-   "sample": "s2",
-   "slides": 3,
-   "merged": false,
-   "warned": true
+   "sample": "s3",
+   "slides": 1,
+   "merged": true,
+   "warned": false
   },
   "sheet": "qa/g0b/business-conference-slides/sheet.jpg",
-  "slides": 9
+  "slides": 7
  },
  {
   "template": "simple-business-proposal-slides.pptx",
@@ -273,7 +273,7 @@
   "template": "viola-free-presentation-template.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.37,
+  "seconds": 0.38,
   "chosen": [
    "s1",
    "s39",
@@ -377,12 +377,12 @@
   "template": "marco-year-in-breakdowns.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.47,
+  "seconds": 0.48,
   "chosen": [
    "s7",
    "s5",
    "s2",
-   "s3",
+   "s4",
    "s6",
    "s1"
   ],
@@ -390,37 +390,37 @@
   "blank_chips": [],
   "kept_under_text": [
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 69
    },
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 72
    },
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 76
    }
   ],
   "kept_not_rect": [
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 74
    },
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 80
    },
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 83
    },
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 86
    },
    {
-    "slide": 10,
+    "slide": 9,
     "shape": 89
    }
   ],
@@ -439,7 +439,7 @@
    "匯通物流 2027 年度計劃": 1,
    "三個目標": 1,
    "時間表": 2,
-   "預算 港幣 800 萬": 3,
+   "預算 港幣 800 萬": 2,
    "八項行動": 2,
    "問答": 1
   },
@@ -451,12 +451,12 @@
   },
   "two_column_slide": {
    "title": "預算 港幣 800 萬",
-   "sample": "s3",
-   "slides": 3,
-   "merged": false,
+   "sample": "s4",
+   "slides": 2,
+   "merged": true,
    "warned": true
   },
   "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
-  "slides": 10
+  "slides": 9
  }
 ]

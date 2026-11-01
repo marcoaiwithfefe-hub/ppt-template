@@ -99,3 +99,14 @@ Run on `2dd5c96`. The runner now also reports each template's title slide (`titl
 S1 makes a two-column slide use a readable two-column sample before any merge, even where that sample splits it: business-conference's 預算 takes 3 slides on s2 (round 2 merged it onto one slide), Marco's 3 on s3 (round 2: 2 merged on s4).
 
 Before and after on Marco's template: `qa/g0b/marco-before-after-qa3.jpg` (top: d1b3ca1; bottom: this run).
+
+## QA round 3 with S2 (two columns yield when they add slides)
+
+Run on `cb09123`. 8 of 8 clean (new overlaps 0, blank chips 0, C23 0 diffs on every deck); every title slide as in the round 3 run (seven covers, Marco's on s7); Marco's 時間表 2 slides, 八項行動 2, 問答 on s1 at 36 pt.
+
+| 預算 (two columns) | round 3 (S1) | with S2 |
+|---|---|---|
+| Marco's template | s3, 3 slides, warned (deck 10) | s4, 2 slides, columns merged, warned: the title runs onto the body (deck 9) |
+| business-conference-slides | s2, 3 slides, warned (deck 9) | s3, 1 slide, columns merged (deck 7) |
+
+The other six templates keep their 預算 picks (five two-column samples on one slide each, Viola's merge on s39). Before and after on Marco's template: `qa/g0b/marco-before-after-qa3b.jpg` (top: ad434fe; bottom: this run).
