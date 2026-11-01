@@ -59,3 +59,13 @@ S2 changes only the sample route's pool choice for two-column slides. Proven aga
 - `own_backing` (R3) still reads `qbox`: its candidates must pass the R5 backing test, which rejects any rotated or flipped shape or group, so their `qbox` equals their drawn bounds.
 - The demo runner bug found on the way: a same-size mutation restored within one second left its bytecode in `__pycache__`; demo runs now write no bytecode. Every earlier demo mutation changed the file's size, so none was affected.
 - Privacy: C9 31 of 31 and `qa/e2e/privacy_proof.py` PASS at 34987a8.
+
+## Code review round 3 (3df373e..b3717b6, branch fix-cr3)
+
+**What it does.** `template.footer_ok` replaces round 2's `idx_ok`: a footer placeholder is copied only when its idx is absent or converts with `int()`, and its own `a:off` and `a:ext`, when present, convert too. `fill.footer_for_type` (shared with the layout route) and `sample_fill._sample_footers` use it; `sample.footer_sizes` counts only footers that pass it, so the E1 budget no longer counts a footer the fill never copies.
+
+**The one fact it is safe because of: valid templates are unaffected.** Step 4: `qa/rev8/layout_baseline.py` at b3717b6 gives 213 of 213 baseline keys equal to 6a576a6, and G0b reports equal round 2's apart from timing, sheets byte-equal; Q5 images byte-equal. Every footer in those templates passes `footer_ok`.
+
+**Risks.** None new on valid input. A malformed footer is now dropped where it used to be copied, so a deck from such a template has no footer of that type.
+
+**Cleared.** `int()` accepts some non-ASCII digits (`"٣"` is 3); the same `int()` is what reads them downstream (`ph_idx`, `_local_box`), so whatever passes the check cannot raise there.

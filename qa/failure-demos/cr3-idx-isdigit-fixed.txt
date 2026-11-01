@@ -1,4 +1,4 @@
 # cr3-idx-isdigit: a footer's idx is checked with isdigit(), which passes "²" that int() refuses
 # mutation in src/deckfill/template.py: '    return v is None or _parses(v)' -> '    return v is None or v.strip().isdigit()'
 # tests: tests/test_cr2_code_review.py -k edge1 or round3
-14 passed, 6 deselected in 0.17s
+14 passed, 6 deselected in 0.18s

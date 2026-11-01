@@ -91,3 +91,10 @@
 - [x] Done gates: suite, demos 24 of 24 plus C5 validator, C5 92 of 92, C9, C10/C28, C12, G0b, Q5 (qa/rev8/q5/cr2), layout baseline 213 of 213, blast radius
 - [x] Walkthrough re-rendered over 6a576a6..head
 - [x] Report to ai-brain-24 [75678f] (code review round 2)
+
+## Code review round 3 (fix-cr3 from 3df373e)
+
+- [x] footer idx checked with int(); "²" case fails at 3df373e (9fcfc40; demo cr3-idx-isdigit)
+- [x] footer with an unreadable a:off or a:ext skipped on both routes; skipped footers not budgeted; sample-footbad in C5 (9fcfc40; demo cr3-footer-box)
+- [x] Gates: suite, 26 mutation demos plus C5 validator, C5 97 of 97, layout baseline 213 of 213, G0b and Q5 unchanged, C9, C10/C28
+- [x] Walkthrough re-rendered; report to ai-brain-24 [75678f] (code review round 3)

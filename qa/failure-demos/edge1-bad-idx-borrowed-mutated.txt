@@ -5,4 +5,4 @@ FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_
 FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[layout-sample-badidx2.pptx]
 FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample-sample-badidx.pptx]
 FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample-sample-badidx2.pptx]
-4 failed, 16 deselected in 0.13s
+4 failed, 16 deselected in 0.15s

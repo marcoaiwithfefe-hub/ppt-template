@@ -5,4 +5,4 @@ FAILED tests/test_cr1_code_review.py::test_f2_template_with_guide_paths_and_a_ma
 FAILED tests/test_cr1_code_review.py::test_f2_guide_name_corners_are_not_a_backing
 FAILED tests/test_cr1_code_review.py::test_f2_layout_route_fills_on_malformed_samples
 FAILED tests/test_cr1_code_review.py::test_f2_sample_route_never_uses_the_unreadable_sample
-4 failed, 10 passed, 9 deselected in 0.17s
+4 failed, 10 passed, 9 deselected in 0.16s

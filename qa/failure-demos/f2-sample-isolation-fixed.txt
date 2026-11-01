@@ -1,4 +1,4 @@
 # f2-sample-isolation: an error while reading one sample slide aborts the whole template
 # mutation in src/deckfill/sample.py: '            out.append(unreadable(k, slide, _why(e)))\n    return tuple(out)' -> '            raise\n    return tuple(out)'
 # tests: tests/test_cr1_code_review.py -k f2
-14 passed, 9 deselected in 0.10s
+14 passed, 9 deselected in 0.11s

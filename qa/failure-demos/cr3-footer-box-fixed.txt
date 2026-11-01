@@ -1,4 +1,4 @@
 # cr3-footer-box: a footer whose own box does not parse is copied anyway
 # mutation in src/deckfill/template.py: '    return idx_ok(sp) and geometry_ok(sp)' -> '    return idx_ok(sp)'
 # tests: tests/test_cr2_code_review.py -k round3
-10 passed, 10 deselected in 0.08s
+10 passed, 10 deselected in 0.10s
