@@ -49,6 +49,7 @@ class Fit:
     width: int  # text width inside insets, EMU
     height: int  # text height inside insets, EMU
     levels: tuple[Level, Level]
+    nowrap: bool = False  # rev 8 sample route: wrapping off, one line per paragraph against the width
 
 
 @dataclass(frozen=True)
@@ -91,6 +92,9 @@ class TemplateInfo:
     layouts: tuple[Layout, ...]
     defaults: tuple[tuple[str, str | None], ...]  # class -> default layout id
     slide_count: int
+    samples: tuple = ()  # rev 8: every sample slide, read by sample.read_samples (D12)
+    routes: tuple[str, ...] = ("layout",)  # rev 8: the routes this template offers (D11)
+    route: str = "layout"  # rev 8: the default route (D11)
 
     def layout(self, layout_id: str) -> Layout:
         for lay in self.layouts:
@@ -393,8 +397,15 @@ def open_template(data: bytes, filename: str) -> tuple[TemplateInfo, Package]:
         masters.append(master._element.find(q("p:cSld")).get("name", "") or "")
         for layout in master.slide_layouts:
             layouts.append(read_layout(layout, mi, master._element, pres_el))
-    if not any(lay.title_idx is not None and lay.bodies for lay in layouts):
+    from .sample import read_samples, sample_default, sample_route_available
+
+    samples = read_samples(prs)
+    layout_ok = any(lay.title_idx is not None and lay.bodies for lay in layouts)
+    sample_ok = sample_route_available(samples)
+    if not layout_ok and not sample_ok:
         raise TemplateError("no_text_layout")
+    routes = tuple(r for r, ok in (("sample", sample_ok), ("layout", layout_ok)) if ok)
+    route = routes[0] if len(routes) == 1 else ("sample" if sample_default(samples) else "layout")
     defaults = []
     for cls in ("title", "content", "two", "section"):
         first = next((lay.id for lay in layouts if lay.cls == cls), None)
@@ -406,6 +417,9 @@ def open_template(data: bytes, filename: str) -> tuple[TemplateInfo, Package]:
         layouts=tuple(layouts),
         defaults=tuple(defaults),
         slide_count=len(prs.slides),
+        samples=samples,
+        routes=routes,
+        route=route,
     )
     _cache.clear()
     _cache[key] = (info, pkg)
