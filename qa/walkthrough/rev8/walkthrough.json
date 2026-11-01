@@ -20,7 +20,8 @@
   "QA round 2 R5: a backing is a rectangle (preset or four-corner path), unrotated, with a solid fill or no fill and a line",
   "QA round 2 R6: every slide's pool follows the QA round 1 precedence across its class and its fallbacks",
   "QA round 2 R7: a slot group is a destination only when every slot fits at or above the floor",
-  "QA round 3 S1: inside the readable pool the slide's own class comes first; a fallback class is used only when no readable candidate of the slide's own class exists; R1 runs inside the first non-empty class tier"
+  "QA round 3 S1: inside the readable pool the slide's own class comes first; a fallback class is used only when no readable candidate of the slide's own class exists; R1 runs inside the first non-empty class tier",
+  "QA round 3 S2: for a two-column slide, when the best readable two candidate needs more continuation slides than the best readable content merge, the merge wins; equal counts keep the two sample; covers never yield"
  ],
  "design": {
   "text": "Reading happens once per template: read_template now also reads every sample slide into a Sample (its title region, labels, body boxes, list slots, classes, whether it carries design of its own) and works out which routes the template offers and which is the default. plan_deck branches on the route; the sample branch picks a sample per outline slide and writes, per box, the paragraphs and the exact size each run gets, so fill only carries the plan out. fill branches the same way: the sample branch copies each chosen slide, writes the text, clears what got none and rebuilds footers once. The page sends the route with every plan and fill call.",
@@ -53,6 +54,10 @@
    {
     "decision": "S1: class first inside the readable pool",
     "why": "QA round 3, after the seat's flag that R6's flattened pool moved covers and merged columns; C38 and the G0b title-slide sheet (qa/g0b/title-slides-qa3.jpg)."
+   },
+   {
+    "decision": "S2: two columns yield when they add slides",
+    "why": "QA round 3 S2, after the seat's flag that S1 split Marco's and business-conference's 預算 into 3 warned slides each; with S2 they take 2 and 1 (qa/g0b/G0B-RESULT.md)."
    }
   ]
  },
@@ -82,12 +87,12 @@
    }
   },
   {
-   "title": "The pick for each outline slide (R1, R6, S1)",
-   "text": "plan_sample builds every compatible candidate across the class and its fallbacks, keeps the readable ones from the first class tier that holds one (or the first tier with small_text), adds grown candidates when 2 or more continuation slides remain, keeps the fewest continuation slides, applies variety with its relaxation, then ranks.",
+   "title": "The pick for each outline slide (R1, R6, S1, S2)",
+   "text": "plan_sample builds every compatible candidate across the class and its fallbacks and keeps the readable ones from the first class tier that holds one (S1); a two-column slide takes its content tier instead when that tier's fewest continuation slides is lower (S2); with nothing readable, the first tier with small_text. Grown candidates join when 2 or more continuation slides remain; then the fewest continuation slides, variety with its relaxation, and the ranking.",
    "peek": {
     "path": "src/deckfill/sample_plan.py",
-    "start": 559,
-    "end": 588,
+    "start": 565,
+    "end": 592,
     "side": "head"
    }
   },
@@ -133,7 +138,7 @@
   }
  ],
  "check": [
-  "S1 uses a readable two-column sample even where it splits: business-conference's 預算 takes 3 slides on s2, Marco's 3 on s3 (warned).",
+  "Marco's 預算 merges onto s4 in 2 slides and stays warned (the title runs onto the body); business-conference's merges onto s3 in 1 slide.",
   "R1 lets one sample repeat rather than add a slide: Viola uses s39 four times, edb-mpa2022 s5 four times.",
   "Marco's grouped bodies on s2 and s4 sit within 2% of their titles, so the padded title takes their cells and they do not grow; 八項行動 grows on s6.",
   "R5 keeps Marco's olive leaf and the four year-digit circles on 問答 as shapes.",
