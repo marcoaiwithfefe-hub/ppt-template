@@ -106,7 +106,8 @@ def _hash_refs(el, parts, name):
 
 
 def _canon(el) -> bytes:
-    return b"" if el is None else etree.tostring(el, method="c14n")
+    """Exclusive C14N, so an element compares alone, without the namespace declarations of the part it sits in."""
+    return b"" if el is None else etree.tostring(el, method="c14n", exclusive=True)
 
 
 def _sppr(el, parts, name):

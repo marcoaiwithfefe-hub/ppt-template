@@ -56,7 +56,7 @@ async function clickResponse(page) {
 }
 
 // one template through read, plan and fill; returns the longest task per step and click times
-async function runOne(page, file, outline, shot) {
+async function runOne(page, file, outline, shot, route = "") {
   const r = { file: path.basename(file) };
   let t = await now(page);
   await page.setInputFiles("#file", file);
@@ -66,6 +66,12 @@ async function runOne(page, file, outline, shot) {
   r.clickAfterReadMs = await clickResponse(page);
   r.refused = await page.$eval("#template-error", (e) => (e.hidden ? null : e.textContent.slice(0, 30)));
   if (r.refused) return r;
+  if (route) {
+    // QA round 2 R4: a template with fewer than 3 usable samples opens on the layout route; the stress cases switch
+    if ((await page.getAttribute(`#route-${route}`, "aria-pressed")) !== "true") await page.click(`#route-${route}`);
+    await idle(page);
+  }
+  r.route = await page.evaluate(() => (document.getElementById("route-sample")?.getAttribute("aria-pressed") === "true" ? "sample" : "layout"));
   t = await now(page);
   await page.fill("#outline", outline);
   await page.waitForFunction(() => !document.getElementById("plan").hidden || !document.getElementById("outline-error").hidden, null, { timeout: 180000 });
@@ -190,14 +196,14 @@ async function main() {
     await spage.goto(url);
     await waitReady(spage);
     const sOutline = await readFile(path.join(ROOT, "qa", "c12", outlineFile), "utf8");
-    const r = await runOne(spage, path.join(ROOT, "qa", "c12", file), sOutline, false);
+    const r = await runOne(spage, path.join(ROOT, "qa", "c12", file), sOutline, false, "sample");
     r.wasmHeapMB = await spage.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6);
     report.sampleStress.push(r);
     await sctx.close();
     const m = Math.max(r.readMs || 0, r.planMs || 0, r.fillMs || 0);
     const c = Math.max(r.clickAfterReadMs || 0, r.clickAfterPlanMs || 0, r.clickAfterFillMs || 0);
     check(`sample-route stress ${file}: longest task ${(m / 1000).toFixed(2)} s (bar ${BARS.worstTaskS}); read ${r.readMs} plan ${r.planMs} fill ${r.fillMs} ms; click ${c} ms (bar ${BARS.clickMs}); wasm heap ${r.wasmHeapMB.toFixed(0)} MB (bar ${BARS.worstHeapMB})`,
-      !r.refused && r.fillMs != null && m <= BARS.worstTaskS * 1000 && c <= BARS.clickMs && r.wasmHeapMB <= BARS.worstHeapMB, r.refused || "");
+      !r.refused && r.route === "sample" && r.fillMs != null && m <= BARS.worstTaskS * 1000 && c <= BARS.clickMs && r.wasmHeapMB <= BARS.worstHeapMB, r.refused || r.route);
   }
 
   await browser.close();
