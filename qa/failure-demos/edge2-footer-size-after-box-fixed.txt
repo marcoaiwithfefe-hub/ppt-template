@@ -1,4 +1,4 @@
 # edge2-footer-size-after-box: a slide's footers are sized only after their boxes are read
 # mutation in src/deckfill/sample.py: '            for t, n in footer_sizes(tree).items():  # round 2 Edge 2: counted before anything that can fail\n                deck_footers[t] = max(deck_footers.get(t, 0), n)\n            lay = slide.slide_layout\n            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))' -> '            lay = slide.slide_layout\n            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))\n            for t, n in footer_sizes(tree).items():  # round 2 Edge 2: counted before anything that can fail\n                deck_footers[t] = max(deck_footers.get(t, 0), n)'
-# tests: tests/test_c26_c29_c30_sample.py -k footbad
-2 passed, 31 deselected in 0.21s
+# tests: tests/test_c26_c29_c30_sample.py -k footrot
+2 passed, 33 deselected in 0.21s

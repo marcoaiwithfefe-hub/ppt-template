@@ -1,6 +1,8 @@
 # edge1-bad-idx-borrowed: a borrowed footer whose idx does not parse is placed anyway
-# mutation in src/deckfill/fill.py: '            return None  # Edge 1: a borrowed footer whose idx does not parse is skipped' -> '            pass'
+# mutation in src/deckfill/fill.py: '            return None  # Edge 1 and round 3: a borrowed footer whose idx or box does not parse is skipped' -> '            pass'
 # tests: tests/test_cr2_code_review.py -k edge1
-FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[layout]
-FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample]
-2 failed, 6 deselected in 0.10s
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[layout-sample-badidx.pptx]
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[layout-sample-badidx2.pptx]
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample-sample-badidx.pptx]
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample-sample-badidx2.pptx]
+4 failed, 16 deselected in 0.13s

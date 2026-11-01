@@ -26,7 +26,6 @@ from .fill import (
     _zip,
     HLINK_TAGS,
     footer_for_type,
-    idx_ok,
     remove_slides,
 )
 from .package import RT_SLIDE, check_integrity
@@ -44,7 +43,7 @@ from .sample import (
     walk,
 )
 from .sample_plan import MAX_XML
-from .template import FOOTER_TYPES, ph_of, ph_type
+from .template import FOOTER_TYPES, footer_ok, ph_of, ph_type
 from .xmlsafe import R_NS, q
 
 RT_NOTES = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide"
@@ -276,8 +275,8 @@ def _sample_footers(src_slide, layout):
         if ph is None or ph_type(ph) not in FOOTER_TYPES or ph_type(ph) in out:
             continue
         t = ph_type(ph)
-        if not idx_ok(el):
-            out[t] = None  # Edge 1: a footer whose idx does not parse is never copied
+        if not footer_ok(el):
+            out[t] = None  # Edge 1 and round 3: a footer whose idx or box does not parse is never copied
             continue
         new = copy.deepcopy(el)
         if not w.top:

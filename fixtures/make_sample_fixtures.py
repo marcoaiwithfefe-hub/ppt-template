@@ -993,10 +993,12 @@ def make_sample_inherit(out):
     return save(prs, out, "sample-inherit.pptx")
 
 
-def make_sample_footbig(out, bad_geometry=False):
+def make_sample_footbig(out, bad_geometry=False, bad_sibling=False):
     """Code review E1 (C30 borrowed footers): b1, a decorated content sample with no footer of its own; b2, a hidden
     slide on the same layout whose footer holds 1 MB of text. D4 step 1 gives every copy of b1 that footer.
-    bad_geometry (round 2, Edge 2): the footer's offset is x="bad", so reading its box fails."""
+    bad_geometry (round 2, sample-footbad): the footer's offset is x="bad", so it is never copied (round 3).
+    bad_sibling (round 3, sample-footrot): the footer is valid, but a rectangle beside it has rot="bad", so reading
+    b2's boxes fails while its footer can still be borrowed (Edge 2)."""
     prs = new_prs()
     lay = layout_named(prs, "Blank")
     b1 = prs.slides.add_slide(lay)
@@ -1015,12 +1017,16 @@ def make_sample_footbig(out, bad_geometry=False):
         etree.SubElement(xf, q("a:off"), x="bad", y="6300000")
         etree.SubElement(xf, q("a:ext"), cx="4000000", cy="300000")
     b2.shapes._spTree.append(f)
-    return save(prs, out, "sample-footbad.pptx" if bad_geometry else "sample-footbig.pptx")
+    if bad_sibling:
+        r = rect(b2.shapes, 281, M, M, M, M, (200, 200, 200))
+        r._element.find(q("p:spPr")).find(q("a:xfrm")).set("rot", "bad")
+    name = "sample-footbad.pptx" if bad_geometry else "sample-footrot.pptx" if bad_sibling else "sample-footbig.pptx"
+    return save(prs, out, name)
 
 
-def make_sample_badidx(out):
+def make_sample_badidx(out, idx="bad"):
     """Code review round 2, Edge 1: Title and Content has no footer box of its own. x1, hidden, carries a footer
-    whose idx is "bad"; x2, a decorated content sample on the same layout, has none. D4 step 1 borrows x1's footer
+    whose idx is "bad" (sample-badidx2, round 3: "²", a digit to isdigit() that int() refuses); x2, a decorated content sample on the same layout, has none. D4 step 1 borrows x1's footer
     for new slides on that layout and must place it itself, which reads its idx."""
     prs = new_prs()
     lay = layout_named(prs, "Title and Content")
@@ -1038,9 +1044,9 @@ def make_sample_badidx(out):
         set_id(body, k * 100 + 11)
         if k == 1:
             s._element.set("show", "0")
-            src.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph")).set("idx", "bad")
+            src.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph")).set("idx", idx)
             s.shapes._spTree.append(src)
-    return save(prs, out, "sample-badidx.pptx")
+    return save(prs, out, "sample-badidx.pptx" if idx == "bad" else "sample-badidx2.pptx")
 
 
 def make_sample_flipchip(out):
@@ -1080,5 +1086,5 @@ def make_all(out) -> list:
         make_sample_altcontent(out), make_sample_flip(out),
         make_sample_cols2(out), make_sample_inherit(out),
         make_sample_footbig(out), make_sample_flipchip(out), make_sample_footbig(out, bad_geometry=True),
-        make_sample_badidx(out),
+        make_sample_badidx(out), make_sample_badidx(out, idx="²"), make_sample_footbig(out, bad_sibling=True),
     ]

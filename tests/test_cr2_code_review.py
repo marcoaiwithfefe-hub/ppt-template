@@ -80,15 +80,57 @@ def test_n1_comparator_agrees_and_rejects_removing_the_backing(k):
 REFERENCE = (FIX.parent / "reference-outline.md").read_text(encoding="utf-8")
 
 
+@pytest.mark.parametrize("fixture", ["sample-badidx.pptx", "sample-badidx2.pptx"])
 @pytest.mark.parametrize("route", ["layout", "sample"])
-def test_edge1_borrowed_footer_with_a_bad_idx_is_skipped(route):
-    """sample-badidx: the only footer D4 step 1 can borrow has idx="bad" and the new slides' layout has no footer box
-    of its own, so placing it would read the idx. It is skipped on both routes; the decks fill."""
-    data = (FIX / "sample-badidx.pptx").read_bytes()
-    info = read_template(data, "sample-badidx.pptx")
-    out = fill(data, "sample-badidx.pptx", plan_deck(info, parse_outline(REFERENCE), route=route))
+def test_edge1_borrowed_footer_with_a_bad_idx_is_skipped(route, fixture):
+    """sample-badidx: the only footer D4 step 1 can borrow has idx="bad" ("²" in sample-badidx2, round 3) and the new
+    slides' layout has no footer box of its own, so placing it would read the idx. It is skipped on both routes; the
+    decks fill."""
+    data = (FIX / fixture).read_bytes()
+    info = read_template(data, fixture)
+    out = fill(data, fixture, plan_deck(info, parse_outline(REFERENCE), route=route))
     assert check_integrity(load(out, "out.pptx").parts) == []
     op = parts_of(out)
     for name in slides(op):
         for ph in etree.fromstring(op[name]).iter("{%s}ph" % P):
-            assert ph.get("idx") is None or ph.get("idx").isdigit(), f"{name}: placeholder idx {ph.get('idx')!r}"
+            assert ph.get("idx") is None or ph.get("idx").isascii() and ph.get("idx").isdigit(), f"{name}: idx {ph.get('idx')!r}"
+
+
+# ------------------------------------------------------------------------------------------- round 3: footer checks
+
+A_NS = "http://schemas.openxmlformats.org/drawingml/2006/main"
+
+
+def _footer(idx=None, off=None, ext=None):
+    xml = (f'<p:sp xmlns:p="{P}" xmlns:a="{A_NS}"><p:nvSpPr><p:cNvPr id="9" name="F"/><p:cNvSpPr/><p:nvPr>'
+           f'<p:ph type="ftr"{"" if idx is None else f" idx={idx!r}"}/></p:nvPr></p:nvSpPr><p:spPr>')
+    if off or ext:
+        xml += "<a:xfrm>"
+        xml += "" if off is None else f'<a:off x="{off[0]}" y="{off[1]}"/>'
+        xml += "" if ext is None else f'<a:ext cx="{ext[0]}" cy="{ext[1]}"/>'
+        xml += "</a:xfrm>"
+    return etree.fromstring(xml + "</p:spPr></p:sp>")
+
+
+@pytest.mark.parametrize("sp,ok", [
+    (_footer(), True), (_footer("11"), True), (_footer("bad"), False), (_footer("²"), False),
+    (_footer("11", (0, 6300000), (4000000, 300000)), True), (_footer("11", ("bad", 0)), False),
+    (_footer("11", (0, 0), ("1.5", 300000)), False), (_footer("11", None, (4000000, "²")), False),
+], ids=["none", "11", "bad", "superscript-two", "box", "off-bad", "ext-decimal", "ext-superscript"])
+def test_round3_footer_ok_uses_int(sp, ok):
+    from deckfill.template import footer_ok
+
+    assert footer_ok(sp) is ok
+
+
+@pytest.mark.parametrize("route", ["layout", "sample"])
+def test_round3_footer_with_an_unreadable_box_is_skipped(route):
+    """sample-footbad: the only footer to borrow has a:off x="bad". It is never copied on either route, so the decks
+    carry no unreadable box."""
+    data = (FIX / "sample-footbad.pptx").read_bytes()
+    info = read_template(data, "sample-footbad.pptx")
+    out = fill(data, "sample-footbad.pptx", plan_deck(info, parse_outline("## A\n- x\n\n## B\n- y\n"), route=route))
+    op = parts_of(out)
+    for name in slides(op):
+        assert b'x="bad"' not in op[name]
+    assert check_integrity(load(out, "out.pptx").parts) == []

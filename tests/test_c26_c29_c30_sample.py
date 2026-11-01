@@ -183,7 +183,8 @@ def generated(out: bytes) -> int:
 
 @pytest.mark.parametrize("fixture,text", [
     ("sample-footbig.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # each copy borrows a 1 MB footer
-    ("sample-footbad.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # round 2 Edge 2: its box cannot be read
+    ("sample-footbad.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # round 3: its footer is never copied
+    ("sample-footrot.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # round 2 Edge 2: its slide cannot be read
     ("sample-thin.pptx", "## Amp\n- " + "&" * 3000 + "\n- " + "<a>" * 500 + "\n- 中文" * 3 + "\n"),  # escaped text
 ])
 def test_c30_budget_bounds_the_generated_xml(fixture, text):
@@ -194,7 +195,7 @@ def test_c30_budget_bounds_the_generated_xml(fixture, text):
     assert budget >= generated(fill(data, fixture, plan))
 
 
-@pytest.mark.parametrize("fixture", ["sample-footbig.pptx", "sample-footbad.pptx"])
+@pytest.mark.parametrize("fixture", ["sample-footbig.pptx", "sample-footrot.pptx"])
 def test_c30_borrowed_footers_refused_before_any_output_tree(fixture, monkeypatch):
     data = (FIX / fixture).read_bytes()
     info = read_template(data, fixture)
@@ -203,3 +204,12 @@ def test_c30_borrowed_footers_refused_before_any_output_tree(fixture, monkeypatc
     with pytest.raises(TemplateError) as e:
         plan_deck(info, parse_outline("".join(f"## B{i}\n- x\n\n" for i in range(45))), route="sample")
     assert e.value.code == "too_big" and not built
+
+
+def test_c30_a_footer_never_copied_is_not_budgeted():
+    """Code review round 3: sample-footbad's 1 MB footer has an unreadable box, so the fill never copies it and the
+    budget does not count it: 45 copies plan and fill."""
+    data = (FIX / "sample-footbad.pptx").read_bytes()
+    info = read_template(data, "sample-footbad.pptx")
+    plan = plan_deck(info, parse_outline("".join(f"## B{i}\n- x\n\n" for i in range(45))), route="sample")
+    assert len(plan.slides) == 45 and fill(data, "sample-footbad.pptx", plan)[:2] == b"PK"

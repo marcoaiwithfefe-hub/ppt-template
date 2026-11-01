@@ -24,6 +24,7 @@ from .template import (
     Fit,
     Level,
     find_master_ph,
+    footer_ok,
     lvl_ppr,
     ph_idx,
     ph_of,
@@ -1070,12 +1071,13 @@ FOOTER_SLACK = 512  # per footer type: an a:xfrm the fill may add, a new shape i
 
 
 def footer_sizes(tree) -> dict[str, int]:
-    """The largest footer placeholder of each type anywhere in a shape tree, by its raw serialised bytes. It parses
-    no attribute, so a footer whose box cannot be read is still counted (code review round 2, Edge 2)."""
+    """The largest copyable footer placeholder of each type anywhere in a shape tree, by its raw serialised bytes. It
+    reads no box, so a slide whose boxes cannot be read still counts its footers (code review round 2, Edge 2); a
+    footer the fill never copies (template.footer_ok) is not counted (round 3)."""
     out: dict[str, int] = {}
     for sp in tree.iter(q("p:sp")):
         ph = ph_of(sp)
-        if ph is not None and ph_type(ph) in FOOTER_TYPES:
+        if ph is not None and ph_type(ph) in FOOTER_TYPES and footer_ok(sp):
             t = ph_type(ph)
             out[t] = max(out.get(t, 0), len(etree.tostring(sp)))
     return out

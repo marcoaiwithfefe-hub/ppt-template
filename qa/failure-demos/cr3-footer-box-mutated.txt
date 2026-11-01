@@ -1,0 +1,9 @@
+# cr3-footer-box: a footer whose own box does not parse is copied anyway
+# mutation in src/deckfill/template.py: '    return idx_ok(sp) and geometry_ok(sp)' -> '    return idx_ok(sp)'
+# tests: tests/test_cr2_code_review.py -k round3
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[off-bad]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[ext-decimal]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[ext-superscript]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_with_an_unreadable_box_is_skipped[layout]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_with_an_unreadable_box_is_skipped[sample]
+5 failed, 5 passed, 10 deselected in 0.26s

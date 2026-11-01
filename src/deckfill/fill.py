@@ -11,7 +11,7 @@ from lxml import etree
 from .errors import PlanError, TemplateError
 from .package import RT_SLIDE, Index, check_integrity, is_xml_name, is_xml_type, rels_name, source_of_rels
 from .plan import Plan, plan_deck
-from .template import FOOTER_TYPES, open_template, ph_idx, ph_of, ph_type, placeholders
+from .template import FOOTER_TYPES, footer_ok, open_template, ph_idx, ph_type, placeholders
 from .xmlsafe import NS, R_NS, parse, q
 
 SECTION_EXT_URI = "{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"
@@ -178,14 +178,6 @@ def _master_hf_on(master_el, t: str) -> bool:
     return hf.get(t, "1") not in ("0", "false")
 
 
-def idx_ok(sp) -> bool:
-    """Code review round 2, Edge 1: a footer placeholder's idx is absent or a plain number. One that is neither is
-    never copied onto a new slide (placing it would read the idx)."""
-    ph = ph_of(sp)
-    v = None if ph is None else ph.get("idx")
-    return v is None or v.strip().isdigit()
-
-
 def footer_for_type(t, new_lid, layout, lay_info, inputs, master_el):
     """D4 footer rules for one footer type on one new slide. Returns the shape element to add, or None."""
     same_layout = [f for (lid, _, _, f) in inputs if lid == new_lid]
@@ -203,8 +195,8 @@ def footer_for_type(t, new_lid, layout, lay_info, inputs, master_el):
         if pick is None:
             return None
         pick_sp, pick_layout = pick
-        if not idx_ok(pick_sp):
-            return None  # Edge 1: a borrowed footer whose idx does not parse is skipped
+        if not footer_ok(pick_sp):
+            return None  # Edge 1 and round 3: a borrowed footer whose idx or box does not parse is skipped
         target_sp, target_ph = _layout_footer_sp(layout, t)
         el = copy.deepcopy(pick_sp)
         el_ph = el.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph"))

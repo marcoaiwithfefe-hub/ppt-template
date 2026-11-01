@@ -1,5 +1,5 @@
 """Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27; code
-review round 1: F1, F2, F6; round 2: N1, Edge 1, Edge 2).
+review round 1: F1, F2, F6; round 2: N1, Edge 1, Edge 2; round 3).
 
 Each demo applies one isolated mutation to the source, runs the check's tests, restores the
 file, and runs the tests again. Output: qa/failure-demos/<id>-mutated.txt and <id>-fixed.txt.
@@ -165,7 +165,7 @@ DEMOS = {
     "edge1-bad-idx-borrowed": (
         "a borrowed footer whose idx does not parse is placed anyway",
         "src/deckfill/fill.py",
-        "            return None  # Edge 1: a borrowed footer whose idx does not parse is skipped",
+        "            return None  # Edge 1 and round 3: a borrowed footer whose idx or box does not parse is skipped",
         "            pass",
         ["tests/test_cr2_code_review.py", "-k", "edge1"],
     ),
@@ -180,7 +180,21 @@ DEMOS = {
         "            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))\n"
         "            for t, n in footer_sizes(tree).items():  # round 2 Edge 2: counted before anything that can fail\n"
         "                deck_footers[t] = max(deck_footers.get(t, 0), n)",
-        ["tests/test_c26_c29_c30_sample.py", "-k", "footbad"],
+        ["tests/test_c26_c29_c30_sample.py", "-k", "footrot"],
+    ),
+    "cr3-idx-isdigit": (
+        "a footer's idx is checked with isdigit(), which passes \"²\" that int() refuses",
+        "src/deckfill/template.py",
+        "    return v is None or _parses(v)",
+        "    return v is None or v.strip().isdigit()",
+        ["tests/test_cr2_code_review.py", "-k", "edge1 or round3"],
+    ),
+    "cr3-footer-box": (
+        "a footer whose own box does not parse is copied anyway",
+        "src/deckfill/template.py",
+        "    return idx_ok(sp) and geometry_ok(sp)",
+        "    return idx_ok(sp)",
+        ["tests/test_cr2_code_review.py", "-k", "round3"],
     ),
     "f2-guide-path": (
         "a custom path's guide-name corner is read as an integer",

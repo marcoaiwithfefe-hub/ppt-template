@@ -131,6 +131,41 @@ def ph_idx(ph) -> int:
     return int(ph.get("idx", "0"))
 
 
+def _parses(v) -> bool:
+    """The value converts with int(), the conversion ph_idx and the box readers use (code review round 3)."""
+    try:
+        int(v)
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
+def idx_ok(sp) -> bool:
+    """A placeholder's idx is absent or converts with int() ("²" passes isdigit() and fails int())."""
+    ph = ph_of(sp)
+    v = None if ph is None else ph.get("idx")
+    return v is None or _parses(v)
+
+
+def geometry_ok(sp) -> bool:
+    """The a:off x, y and a:ext cx, cy of a shape's own a:xfrm, when it has one, convert with int()."""
+    pr = sp.find(q("p:spPr"))
+    xf = None if pr is None else pr.find(q("a:xfrm"))
+    if xf is None:
+        return True
+    for tag, keys in (("a:off", ("x", "y")), ("a:ext", ("cx", "cy"))):
+        el = xf.find(q(tag))
+        if el is not None and not all(_parses(el.get(k)) for k in keys):
+            return False
+    return True
+
+
+def footer_ok(sp) -> bool:
+    """Code review rounds 2 and 3: a footer placeholder that may be copied onto a new slide, on either route. One whose
+    idx or own box does not convert is skipped, never copied and never budgeted."""
+    return idx_ok(sp) and geometry_ok(sp)
+
+
 def placeholders(tree_root):
     """(sp, ph) for each placeholder shape in a slide, layout or master shape tree."""
     sptree = tree_root.find(q("p:cSld")).find(q("p:spTree"))
