@@ -279,8 +279,13 @@ def _occ(tree) -> dict[int, tuple]:
                 c0x, c0y = (int(co.get("x")), int(co.get("y"))) if co is not None else (ox, oy)
                 cex, cey = (int(ce.get("cx")), int(ce.get("cy"))) if ce is not None else (cx, cy)
 
-                def m(pts, ox=ox, oy=oy, c0x=c0x, c0y=c0y, sx=(cx / cex if cex else 1), sy=(cy / cey if cey else 1), r=r, cx=cx, cy=cy):
+                fh, fv = x.get("flipH") in ("1", "true"), x.get("flipV") in ("1", "true")
+
+                def m(pts, ox=ox, oy=oy, c0x=c0x, c0y=c0y, sx=(cx / cex if cex else 1), sy=(cy / cey if cey else 1), r=r, cx=cx, cy=cy,
+                      fh=fh, fv=fv):
                     pts = [(ox + (px - c0x) * sx, oy + (py - c0y) * sy) for px, py in pts]
+                    # code review F3: a flipped group mirrors its children about its centre before it rotates
+                    pts = [(2 * ox + cx - px if fh else px, 2 * oy + cy - py if fv else py) for px, py in pts]
                     return rot(pts, (ox + cx / 2, oy + cy / 2), r)
                 rec(el, [m] + maps)
                 continue

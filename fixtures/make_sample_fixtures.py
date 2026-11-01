@@ -915,6 +915,35 @@ def make_sample_altcontent(out):
     return save(prs, out, "sample-altcontent.pptx")
 
 
+def _flip(g, h=False, v=False):
+    xf = g._element.find(q("p:grpSpPr")).find(q("a:xfrm"))
+    if h:
+        xf.set("flipH", "1")
+    if v:
+        xf.set("flipV", "1")
+
+
+def make_sample_flip(out):
+    """Code review F3: an unrotated body outside a flipped group whose off-centre picture, once flipped, sits right
+    beside the body. f1: flipH, the picture's child box (6M, 0, 2M, 4M) in an 8M by 4M group at (3.8M, 1.5M) is drawn at
+    (3.8M, 1.5M, 2M, 4M), to the body's right. f2: flipV, the child box (0, 2M, 6M, 1M) in a 6M by 3M group at
+    (0.6M, 3.4M) is drawn at (0.6M, 3.4M, 6M, 1M), under the body. Unflipped, both would sit far from the body."""
+    prs = new_prs()
+    f1 = blank_slide(prs, (235, 240, 250))
+    tb(f1.shapes, 101, 600000, 300000, 10 * M, 800000, "Flipped across", 36)
+    tb(f1.shapes, 111, 600000, 2 * M, 3 * M, 500000, "Body", 18)
+    g = group(f1.shapes, 120, (3800000, 1500000), (8 * M, 4 * M), (8 * M, 4 * M),
+              lambda sh: pic(sh, 121, 6 * M, 0, 2 * M, 4 * M, (120, 60, 60)))
+    _flip(g, h=True)
+    f2 = blank_slide(prs, (250, 240, 235))
+    tb(f2.shapes, 201, 600000, 300000, 10 * M, 800000, "Flipped down", 36)
+    tb(f2.shapes, 211, 600000, 1600000, 3 * M, 500000, "Body", 18)
+    g = group(f2.shapes, 220, (600000, 3400000), (6 * M, 3 * M), (6 * M, 3 * M),
+              lambda sh: pic(sh, 221, 0, 2 * M, 6 * M, M, (60, 120, 60)))
+    _flip(g, v=True)
+    return save(prs, out, "sample-flip.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -926,5 +955,5 @@ def make_all(out) -> list:
         make_sample_small(out), make_sample_split(out), make_sample_grow(out), make_sample_geom(out),
         make_sample_order(out), make_sample_two(out), make_sample_only2(out), make_sample_cover(out),
         make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
-        make_sample_altcontent(out),
+        make_sample_altcontent(out), make_sample_flip(out),
     ]

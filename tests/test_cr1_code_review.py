@@ -126,3 +126,52 @@ def test_f1_normalise_nested_and_missing_fallback():
         '<k/><mc:AlternateContent><mc:Choice Requires="x"><c3/></mc:Choice></mc:AlternateContent></r>')
     assert normalise_alternates(root) == 3
     assert [c.tag for c in root] == ["f1", "f2", "k"]
+
+
+# ---------------------------------------------------------------------------------------------------------------- F3
+
+FOUR = "## Health\n" + "".join(f"- {t}\n" for t in (
+    "Quarter one: pilot the scheduling tool", "Quarter two: roll it out to every truck",
+    "Quarter three: open the cross-border routes", "Quarter four: review and plan next year"))
+# drawn picture boxes worked by hand from the fixture (make_sample_flip): mirrored about the group's centre
+TRUE_PIC = {1: (121, (3800000, 1500000, 2000000, 4000000)), 2: (221, (600000, 3400000, 6000000, 1000000))}
+
+
+def flip(k):
+    data = (FIX / "sample-flip.pptx").read_bytes()
+    info = read_template(data, "sample-flip.pptx")
+    plan = plan_deck(info, parse_outline(FOUR), {0: f"s{k}"}, route="sample")
+    return data, info, plan, fill(data, "sample-flip.pptx", plan)
+
+
+def _overlaps(a, b) -> bool:
+    return a[0] < b[0] + b[2] and b[0] < a[0] + a[2] and a[1] < b[1] + b[3] and b[1] < a[1] + a[3]
+
+
+@pytest.mark.parametrize("k", [1, 2])
+def test_f3_reader_occupancy_mirrors_flipped_groups(k):
+    _, info, _, _ = flip(k)
+    sid, box = TRUE_PIC[k]
+    assert next(lf for lf in info.samples[k - 1].leaves if lf.sid == sid).occ == box
+
+
+@pytest.mark.parametrize("k", [1, 2])
+def test_f3_comparator_occupancy_mirrors_flipped_groups(k):
+    from sample_look import _occ
+    from sample_oracle import parts_of, slides, tree_of
+
+    data, _, _, _ = flip(k)
+    parts = parts_of(data)
+    sid, box = TRUE_PIC[k]
+    assert tuple(round(v) for v in _occ(tree_of(parts[slides(parts)[k - 1]]))[sid]) == box
+
+
+@pytest.mark.parametrize("k", [1, 2])
+def test_f3_grown_body_never_covers_the_flipped_picture(k):
+    from sample_look import look_diff
+
+    data, _, plan, out = flip(k)
+    body = plan.slides[0].boxes[1]
+    assert body.box is not None  # the body grows (into the space the picture leaves free)
+    assert not _overlaps(body.box, TRUE_PIC[k][1])
+    assert look_diff(out, data) == []

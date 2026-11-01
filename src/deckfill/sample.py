@@ -795,8 +795,17 @@ def _rotate(pts, centre, rot: int):
     return [(cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c) for x, y in pts]
 
 
+def _flips(el) -> tuple[bool, bool]:
+    x = _xfrm_el(el)
+    if x is None:
+        return False, False
+    return x.get("flipH") in ("1", "true"), x.get("flipV") in ("1", "true")
+
+
 def occ_box(el, ancestors) -> tuple[int, int, int, int] | None:
-    """R3: the axis-aligned slide-space bounds of a drawn shape, its own rotation and its groups' included."""
+    """R3: the axis-aligned slide-space bounds of a drawn shape, its own rotation and its groups' included. Each group
+    maps its children to its parent's space, mirrors them about its centre when flipped (code review F3), then rotates
+    them about its centre. A shape's own flip leaves its bounds unchanged."""
     local = _local_box(el)
     if local is None:
         return None
@@ -806,10 +815,15 @@ def occ_box(el, ancestors) -> tuple[int, int, int, int] | None:
         xf = group_xf(g)
         if xf is not None:
             pts = [xf.apply(px, py) for px, py in pts]
+        gl = _local_box(g)
+        if gl is None:
+            continue
+        mx, my = gl[0] + gl[2] / 2, gl[1] + gl[3] / 2
+        fh, fv = _flips(g)
+        if fh or fv:
+            pts = [(2 * mx - px if fh else px, 2 * my - py if fv else py) for px, py in pts]
         if _rot(g):
-            gl = _local_box(g)
-            if gl is not None:
-                pts = _rotate(pts, (gl[0] + gl[2] / 2, gl[1] + gl[3] / 2), _rot(g))
+            pts = _rotate(pts, (mx, my), _rot(g))
     xs, ys = [p[0] for p in pts], [p[1] for p in pts]
     return round(min(xs)), round(min(ys)), round(max(xs) - min(xs)), round(max(ys) - min(ys))
 
