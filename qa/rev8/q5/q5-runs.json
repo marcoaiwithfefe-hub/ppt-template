@@ -1,0 +1,244 @@
+[
+ {
+  "template": "edb-mpa2022.pptx",
+  "default_route": "sample",
+  "layout": {
+   "slides": 7,
+   "chosen": [
+    "/ppt/slideLayouts/slideLayout1.xml",
+    "/ppt/slideLayouts/slideLayout2.xml",
+    "/ppt/slideLayouts/slideLayout2.xml",
+    "/ppt/slideLayouts/slideLayout4.xml",
+    "/ppt/slideLayouts/slideLayout2.xml",
+    "/ppt/slideLayouts/slideLayout3.xml"
+   ]
+  },
+  "sample": {
+   "slides": 18,
+   "chosen": [
+    "s2",
+    "s5",
+    "s4",
+    "s5",
+    "s3",
+    "s2"
+   ],
+   "flags": [
+    [],
+    [],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    []
+   ],
+   "blank_chips": 0,
+   "new_overlaps": 0,
+   "title_bar": {
+    "size_pt": 28.0,
+    "bar_pt": 21.6,
+    "meets": true
+   }
+  },
+  "image": "qa/rev8/q5/edb-mpa2022-both.jpg"
+ },
+ {
+  "template": "elderly-gov-diy.pptx",
+  "default_route": "sample",
+  "layout": {
+   "slides": 7,
+   "chosen": [
+    "/ppt/slideLayouts/slideLayout20.xml",
+    "/ppt/slideLayouts/slideLayout20.xml",
+    "/ppt/slideLayouts/slideLayout20.xml",
+    "/ppt/slideLayouts/slideLayout20.xml",
+    "/ppt/slideLayouts/slideLayout20.xml",
+    "/ppt/slideLayouts/slideLayout20.xml"
+   ]
+  },
+  "sample": {
+   "slides": 7,
+   "chosen": [
+    "s1",
+    "s14",
+    "s9",
+    "s8",
+    "s16",
+    "s1"
+   ],
+   "flags": [
+    [
+     "shrunk"
+    ],
+    [
+     "shrunk"
+    ],
+    [
+     "shrunk"
+    ],
+    [
+     "shrunk"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    [
+     "shrunk",
+     "split"
+    ],
+    []
+   ],
+   "blank_chips": 0,
+   "new_overlaps": 0,
+   "title_bar": {
+    "size_pt": 40.5,
+    "bar_pt": 21.6,
+    "meets": true
+   }
+  },
+  "image": "qa/rev8/q5/elderly-gov-diy-both.jpg"
+ },
+ {
+  "template": "hkust-template14.potx",
+  "default_route": "sample",
+  "layout": {
+   "slides": 9,
+   "chosen": [
+    "/ppt/slideLayouts/slideLayout9.xml",
+    "/ppt/slideLayouts/slideLayout9.xml",
+    "/ppt/slideLayouts/slideLayout9.xml",
+    "/ppt/slideLayouts/slideLayout9.xml",
+    "/ppt/slideLayouts/slideLayout9.xml",
+    "/ppt/slideLayouts/slideLayout9.xml"
+   ]
+  },
+  "sample": {
+   "slides": 11,
+   "chosen": [
+    "s2",
+    "s9",
+    "s9",
+    "s9",
+    "s9",
+    "s2"
+   ],
+   "flags": [
+    [
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "shrunk",
+     "split",
+     "warned"
+    ],
+    [
+     "split",
+     "warned"
+    ],
+    [
+     "warned"
+    ]
+   ],
+   "blank_chips": 0,
+   "new_overlaps": 0,
+   "title_bar": {
+    "size_pt": 46.0,
+    "bar_pt": 35.62,
+    "meets": true
+   }
+  },
+  "image": "qa/rev8/q5/hkust-template14-both.jpg"
+ }
+]

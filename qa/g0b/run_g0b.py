@@ -30,6 +30,7 @@ SET = [
     "bullen-free-presentation-template.pptx", "marco-year-in-breakdowns.pptx",
 ]
 OUT = ROOT / "qa" / "g0b"
+RENDER = OUT / "lo_render.py"
 OUTLINE = (ROOT / "fixtures" / "reference-outline.md").read_text(encoding="utf-8")
 
 
@@ -159,7 +160,7 @@ def run(name: str, route: str | None, tag: str) -> dict:
                             rep["new_overlaps"].append({"slide": i, "boxes": [x, y], "flags": list(ps.flags)})
     else:
         rep["slides"] = [{"n": i, "layout": ps.layout, "title": ps.title, "fit": ps.fit} for i, ps in enumerate(plan.slides, start=1)]
-    subprocess.run([sys.executable, str(OUT / "lo_render.py"), str(out_pptx), str(d / "renders"), "36"], check=True, capture_output=True, timeout=900)
+    subprocess.run([sys.executable, str(RENDER), str(out_pptx), str(d / "renders"), "36"], check=True, capture_output=True, timeout=900)
     pngs = sorted((d / "renders").glob("slide-*.png"))
     cols = 4
     rows = -(-len(pngs) // cols)

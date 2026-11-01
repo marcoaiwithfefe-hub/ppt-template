@@ -1,0 +1,241 @@
+{
+ "template": "hkust-template14.potx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 2.31,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s4",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s5",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s6",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s7",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s2",
+  "s9",
+  "s9",
+  "s9",
+  "s9",
+  "s2"
+ ],
+ "warnings": [
+  [
+   "subtitle_in_title",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
+   "fit_warn",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
+   "fit_warn",
+   "三個目標"
+  ],
+  [
+   "fit_warn",
+   "時間表"
+  ],
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ],
+  [
+   "fit_warn",
+   "預算 港幣 800 萬"
+  ],
+  [
+   "fit_warn",
+   "八項行動"
+  ],
+  [
+   "fit_warn",
+   "問答"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s2",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": [
+    "warned"
+   ]
+  },
+  {
+   "n": 2,
+   "sample": "s9",
+   "title": "三個目標",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 3,
+   "sample": "s9",
+   "title": "三個目標（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 4,
+   "sample": "s9",
+   "title": "三個目標（續）",
+   "flags": [
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s9",
+   "title": "時間表",
+   "flags": [
+    "shrunk",
+    "warned"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s9",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s9",
+   "title": "預算 港幣 800 萬（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 8,
+   "sample": "s9",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 9,
+   "sample": "s9",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 10,
+   "sample": "s9",
+   "title": "八項行動（續）",
+   "flags": [
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 11,
+   "sample": "s2",
+   "title": "問答",
+   "flags": [
+    "warned"
+   ]
+  }
+ ],
+ "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [
+  {
+   "slide": 5,
+   "shape": 32
+  }
+ ],
+ "title_bar": {
+  "size_pt": 46.0,
+  "bar_pt": 35.62,
+  "meets": true
+ },
+ "sheet": "qa/rev8/q5/hkust-template14-sample/sheet.jpg",
+ "renders": "qa/rev8/q5/hkust-template14-sample/renders"
+}
