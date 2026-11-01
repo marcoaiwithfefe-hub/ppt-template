@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.51,
+ "seconds": 0.52,
  "samples": [
   {
    "id": "s1",
@@ -240,7 +240,7 @@
   }
  ],
  "chosen": [
-  "s8",
+  "s1",
   "s24",
   "s11",
   "s14",
@@ -251,9 +251,11 @@
  "slides": [
   {
    "n": 1,
-   "sample": "s8",
+   "sample": "s1",
    "title": "匯通物流 2027 年度計劃",
-   "flags": []
+   "flags": [
+    "shrunk"
+   ]
   },
   {
    "n": 2,
@@ -305,7 +307,7 @@
  "kept_under_text": [],
  "kept_not_rect": [],
  "title_bar": {
-  "size_pt": 40.0,
+  "size_pt": 48.0,
   "bar_pt": 16.2,
   "meets": true
  },
@@ -323,7 +325,19 @@
   "八項行動": 2,
   "問答": 1
  },
+ "title_slide": {
+  "sample": "s1",
+  "cover": "s1",
+  "is_cover": true
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s14",
+  "slides": 1,
+  "merged": false,
+  "warned": false
+ },
  "c23_diffs": [],
  "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg",
- "renders": "qa/g0b/3d-modern-background-pitch-deck/renders-rym1wwzz"
+ "renders": "qa/g0b/3d-modern-background-pitch-deck/renders-v2_p9c_s"
 }

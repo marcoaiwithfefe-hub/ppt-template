@@ -237,7 +237,19 @@
   "八項行動": 2,
   "問答": 1
  },
+ "title_slide": {
+  "sample": "s1",
+  "cover": "s1",
+  "is_cover": true
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s3",
+  "slides": 1,
+  "merged": false,
+  "warned": false
+ },
  "c23_diffs": [],
  "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
- "renders": "qa/g0b/corporate-sales-pitch-slides-2/renders-taau7z88"
+ "renders": "qa/g0b/corporate-sales-pitch-slides-2/renders-4ajsroxb"
 }

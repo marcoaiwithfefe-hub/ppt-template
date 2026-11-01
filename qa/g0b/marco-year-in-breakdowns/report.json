@@ -106,15 +106,11 @@
   "s7",
   "s5",
   "s2",
-  "s4",
+  "s3",
   "s6",
   "s1"
  ],
  "warnings": [
-  [
-   "columns_merged",
-   "預算 港幣 800 萬"
-  ],
   [
    "fit_warn",
    "預算 港幣 800 萬"
@@ -155,7 +151,7 @@
   },
   {
    "n": 5,
-   "sample": "s4",
+   "sample": "s3",
    "title": "預算 港幣 800 萬",
    "flags": [
     "shrunk",
@@ -165,7 +161,7 @@
   },
   {
    "n": 6,
-   "sample": "s4",
+   "sample": "s3",
    "title": "預算 港幣 800 萬（續）",
    "flags": [
     "shrunk",
@@ -175,6 +171,16 @@
   },
   {
    "n": 7,
+   "sample": "s3",
+   "title": "預算 港幣 800 萬（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 8,
    "sample": "s6",
    "title": "八項行動",
    "flags": [
@@ -184,7 +190,7 @@
    ]
   },
   {
-   "n": 8,
+   "n": 9,
    "sample": "s6",
    "title": "八項行動（續）",
    "flags": [
@@ -194,7 +200,7 @@
    ]
   },
   {
-   "n": 9,
+   "n": 10,
    "sample": "s1",
    "title": "問答",
    "flags": []
@@ -204,37 +210,37 @@
  "blank_chips": [],
  "kept_under_text": [
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 69
   },
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 72
   },
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 76
   }
  ],
  "kept_not_rect": [
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 74
   },
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 80
   },
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 83
   },
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 86
   },
   {
-   "slide": 9,
+   "slide": 10,
    "shape": 89
   }
  ],
@@ -253,11 +259,23 @@
   "匯通物流 2027 年度計劃": 1,
   "三個目標": 1,
   "時間表": 2,
-  "預算 港幣 800 萬": 2,
+  "預算 港幣 800 萬": 3,
   "八項行動": 2,
   "問答": 1
  },
+ "title_slide": {
+  "sample": "s7",
+  "cover": "s1",
+  "is_cover": false
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s3",
+  "slides": 3,
+  "merged": false,
+  "warned": true
+ },
  "c23_diffs": [],
  "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
- "renders": "qa/g0b/marco-year-in-breakdowns/renders-wsvo7zc3"
+ "renders": "qa/g0b/marco-year-in-breakdowns/renders-yxnlszej"
 }

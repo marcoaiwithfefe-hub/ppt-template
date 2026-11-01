@@ -41,6 +41,18 @@
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s3",
+   "slides": 1,
+   "merged": false,
+   "warned": false
+  },
   "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
   "slides": 7
  },
@@ -48,21 +60,26 @@
   "template": "elegant-pitch-deck.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.28,
+  "seconds": 0.3,
   "chosen": [
+   "s1",
    "s33",
-   "s10",
    "s12",
-   "s33",
+   "s6",
    "s5",
    "s22"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
-  "kept_not_rect": [],
+  "kept_not_rect": [
+   {
+    "slide": 1,
+    "shape": 141
+   }
+  ],
   "title_bar": {
-   "size_pt": 28.0,
+   "size_pt": 51.0,
    "bar_pt": 16.2,
    "meets": true
   },
@@ -81,6 +98,18 @@
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s6",
+   "slides": 1,
+   "merged": false,
+   "warned": false
+  },
   "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg",
   "slides": 7
  },
@@ -88,9 +117,9 @@
   "template": "3d-modern-background-pitch-deck.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.51,
+  "seconds": 0.52,
   "chosen": [
-   "s8",
+   "s1",
    "s24",
    "s11",
    "s14",
@@ -102,7 +131,7 @@
   "kept_under_text": [],
   "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 40.0,
+   "size_pt": 48.0,
    "bar_pt": 16.2,
    "meets": true
   },
@@ -121,6 +150,18 @@
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s14",
+   "slides": 1,
+   "merged": false,
+   "warned": false
+  },
   "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg",
   "slides": 7
  },
@@ -128,27 +169,27 @@
   "template": "business-conference-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.18,
+  "seconds": 0.22,
   "chosen": [
-   "s12",
+   "s1",
    "s3",
    "s7",
+   "s2",
    "s3",
-   "s4",
-   "s6"
+   "s1"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
   "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 68.0,
+   "size_pt": 97.0,
    "bar_pt": 32.4,
    "meets": true
   },
   "closing_bar": {
-   "sample": "s6",
-   "size_pt": 80.0,
+   "sample": "s1",
+   "size_pt": 97.0,
    "bar_pt": 32.4,
    "meets": true
   },
@@ -156,39 +197,51 @@
    "匯通物流 2027 年度計劃": 1,
    "三個目標": 1,
    "時間表": 1,
-   "預算 港幣 800 萬": 1,
+   "預算 港幣 800 萬": 3,
    "八項行動": 2,
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s2",
+   "slides": 3,
+   "merged": false,
+   "warned": true
+  },
   "sheet": "qa/g0b/business-conference-slides/sheet.jpg",
-  "slides": 7
+  "slides": 9
  },
  {
   "template": "simple-business-proposal-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.39,
+  "seconds": 0.25,
   "chosen": [
+   "s1",
    "s6",
    "s14",
    "s7",
-   "s11",
    "s6",
-   "s2"
+   "s1"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
   "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 62.0,
+   "size_pt": 80.0,
    "bar_pt": 16.2,
    "meets": true
   },
   "closing_bar": {
-   "sample": "s2",
-   "size_pt": 62.0,
+   "sample": "s1",
+   "size_pt": 80.0,
    "bar_pt": 16.2,
    "meets": true
   },
@@ -201,6 +254,18 @@
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s7",
+   "slides": 1,
+   "merged": false,
+   "warned": false
+  },
   "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg",
   "slides": 7
  },
@@ -208,9 +273,9 @@
   "template": "viola-free-presentation-template.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.36,
+  "seconds": 0.37,
   "chosen": [
-   "s4",
+   "s1",
    "s39",
    "s39",
    "s39",
@@ -222,7 +287,7 @@
   "kept_under_text": [],
   "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 30.0,
+   "size_pt": 28.5,
    "bar_pt": 16.2,
    "meets": true
   },
@@ -241,6 +306,18 @@
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s39",
+   "slides": 1,
+   "merged": true,
+   "warned": false
+  },
   "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg",
   "slides": 7
  },
@@ -250,7 +327,7 @@
   "default_route": "sample",
   "seconds": 0.41,
   "chosen": [
-   "s5",
+   "s1",
    "s6",
    "s33",
    "s8",
@@ -262,7 +339,7 @@
   "kept_under_text": [],
   "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 30.0,
+   "size_pt": 45.5,
    "bar_pt": 16.2,
    "meets": true
   },
@@ -281,6 +358,18 @@
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s1",
+   "cover": "s1",
+   "is_cover": true
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s8",
+   "slides": 1,
+   "merged": false,
+   "warned": false
+  },
   "sheet": "qa/g0b/bullen-free-presentation-template/sheet.jpg",
   "slides": 7
  },
@@ -293,7 +382,7 @@
    "s7",
    "s5",
    "s2",
-   "s4",
+   "s3",
    "s6",
    "s1"
   ],
@@ -301,37 +390,37 @@
   "blank_chips": [],
   "kept_under_text": [
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 69
    },
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 72
    },
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 76
    }
   ],
   "kept_not_rect": [
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 74
    },
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 80
    },
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 83
    },
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 86
    },
    {
-    "slide": 9,
+    "slide": 10,
     "shape": 89
    }
   ],
@@ -350,12 +439,24 @@
    "匯通物流 2027 年度計劃": 1,
    "三個目標": 1,
    "時間表": 2,
-   "預算 港幣 800 萬": 2,
+   "預算 港幣 800 萬": 3,
    "八項行動": 2,
    "問答": 1
   },
   "c23_diffs": [],
+  "title_slide": {
+   "sample": "s7",
+   "cover": "s1",
+   "is_cover": false
+  },
+  "two_column_slide": {
+   "title": "預算 港幣 800 萬",
+   "sample": "s3",
+   "slides": 3,
+   "merged": false,
+   "warned": true
+  },
   "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
-  "slides": 9
+  "slides": 10
  }
 ]

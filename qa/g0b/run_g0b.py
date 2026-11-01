@@ -174,6 +174,16 @@ def run(name: str, route: str | None, tag: str) -> dict:
         sys.path.insert(0, str(ROOT / "tests"))
         from sample_look import look_diff
         rep["per_outline_slide"] = {s.title: sum(1 for ps in plan.slides if ps.source == k) for k, s in enumerate(plan.outline.slides)}
+        # QA round 3: the title slide's sample, and whether it is the template's cover (the title sample)
+        cover = next(sm.id for sm in info.samples if sm.usable)
+        rep["title_slide"] = {"sample": plan.slides[0].layout, "cover": cover, "is_cover": plan.slides[0].layout == cover}
+        two = [(k, s) for k, s in enumerate(plan.outline.slides) if s.kind == "two"]
+        if two:
+            k, s = two[0]
+            parts = [ps for ps in plan.slides if ps.source == k]
+            rep["two_column_slide"] = {"title": s.title, "sample": parts[0].layout, "slides": len(parts),
+                                       "merged": any(w.code == "columns_merged" and w.text == s.title for w in plan.warnings),
+                                       "warned": any("warned" in ps.flags for ps in parts)}
         rep["c23_diffs"] = look_diff(deck, data)
     else:
         rep["slides"] = [{"n": i, "layout": ps.layout, "title": ps.title, "fit": ps.fit} for i, ps in enumerate(plan.slides, start=1)]
@@ -198,11 +208,13 @@ if __name__ == "__main__":
     for name in SET:
         r = run(name, None, Path(name).stem)
         reports.append({k: r.get(k) for k in ("template", "route", "default_route", "seconds", "chosen", "new_overlaps",
-                                               "blank_chips", "kept_under_text", "kept_not_rect", "title_bar", "closing_bar", "per_outline_slide", "c23_diffs", "sheet")}
+                                               "blank_chips", "kept_under_text", "kept_not_rect", "title_bar", "closing_bar", "per_outline_slide", "c23_diffs", "title_slide",
+                                               "two_column_slide", "sheet")}
                        | {"slides": len(r["slides"])})
         print(name, r["route"], r["seconds"], "s", len(r["slides"]), "slides", "overlaps", len(r["new_overlaps"]),
               "blank chips", len(r.get("blank_chips", [])), "kept under text", len(r.get("kept_under_text", [])), "kept not rect", len(r.get("kept_not_rect", [])), "title", r.get("title_bar"), "closing", r.get("closing_bar"),
-              "per slide", r.get("per_outline_slide"), "C23", len(r.get("c23_diffs", [])), flush=True)
+              "per slide", r.get("per_outline_slide"), "C23", len(r.get("c23_diffs", [])),
+              "title slide", r.get("title_slide"), "two-column", r.get("two_column_slide"), flush=True)
     if "--before" in sys.argv:
         r = run("marco-year-in-breakdowns.pptx", "layout", "marco-before-layout-route")
         print("before (layout route)", r["sheet"])

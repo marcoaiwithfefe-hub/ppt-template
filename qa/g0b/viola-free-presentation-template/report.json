@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.36,
+ "seconds": 0.37,
  "samples": [
   {
    "id": "s1",
@@ -378,7 +378,7 @@
   }
  ],
  "chosen": [
-  "s4",
+  "s1",
   "s39",
   "s39",
   "s39",
@@ -387,6 +387,10 @@
  ],
  "warnings": [
   [
+   "subtitle_in_title",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
    "columns_merged",
    "預算 港幣 800 萬"
   ]
@@ -394,9 +398,11 @@
  "slides": [
   {
    "n": 1,
-   "sample": "s4",
+   "sample": "s1",
    "title": "匯通物流 2027 年度計劃",
-   "flags": []
+   "flags": [
+    "shrunk"
+   ]
   },
   {
    "n": 2,
@@ -447,7 +453,7 @@
  "kept_under_text": [],
  "kept_not_rect": [],
  "title_bar": {
-  "size_pt": 30.0,
+  "size_pt": 28.5,
   "bar_pt": 16.2,
   "meets": true
  },
@@ -465,7 +471,19 @@
   "八項行動": 2,
   "問答": 1
  },
+ "title_slide": {
+  "sample": "s1",
+  "cover": "s1",
+  "is_cover": true
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s39",
+  "slides": 1,
+  "merged": true,
+  "warned": false
+ },
  "c23_diffs": [],
  "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg",
- "renders": "qa/g0b/viola-free-presentation-template/renders-5oyvzisd"
+ "renders": "qa/g0b/viola-free-presentation-template/renders-v5x3ey6j"
 }

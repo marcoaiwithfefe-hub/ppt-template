@@ -78,3 +78,24 @@ What moved, and why:
 - R5: Marco's olive leaf and the four orange circles under the year digits stay on 問答 (not rectangles, or rotated with a picture fill); corporate's empty third circle on 預算 stays as in round 1.
 
 Before and after on Marco's template: `qa/g0b/marco-before-after-qa2.jpg` (top: b8013a1; bottom: this run).
+
+## QA round 3 rerun (S1, class first inside the readable pool)
+
+Run on `2dd5c96`. The runner now also reports each template's title slide (`title_slide`: the sample, the cover, whether they match) and its first two-column slide (`two_column_slide`: sample, slides, merged, warned). One-page sheet of all eight title slides: `qa/g0b/title-slides-qa3.jpg`.
+
+| template | slides (round 2 -> 3) | title slide, round 2 -> 3 | 預算 (two columns), round 3 | blank chips | new overlaps | C23 | verdict |
+|---|---|---|---|---|---|---|---|
+| corporate-sales-pitch-slides-2 | 7 -> 7 | s1 -> s1 (cover) | s3, 1 slide, columns kept | 0 | 0 | 0 | clean |
+| elegant-pitch-deck | 7 -> 7 | s33 -> s1 (cover) | s6, 1 slide, columns kept | 0 | 0 | 0 | clean |
+| 3d-modern-background-pitch-deck | 7 -> 7 | s8 -> s1 (cover) | s14, 1 slide, columns kept | 0 | 0 | 0 | clean |
+| business-conference-slides | 7 -> 9 | s12 -> s1 (cover) | s2, 3 slides, columns kept, warned | 0 | 0 | 0 | clean |
+| simple-business-proposal-slides | 7 -> 7 | s6 -> s1 (cover) | s7, 1 slide, columns kept | 0 | 0 | 0 | clean |
+| viola-free-presentation-template | 7 -> 7 | s4 -> s1 (cover) | s39, 1 slide, merged (no readable two-column sample) | 0 | 0 | 0 | clean |
+| bullen-free-presentation-template | 7 -> 7 | s5 -> s1 (cover) | s8, 1 slide, columns kept | 0 | 0 | 0 | clean |
+| marco-year-in-breakdowns (Marco's) | 9 -> 10 | s7 -> s7 (cover s1 is unreadable: 25.5 pt against 32.4) | s3, 3 slides, columns kept, warned | 0 | 0 | 0 | clean by the round 2 definition |
+
+**Verdict: 8 of 8 clean. Every template whose cover is readable opens on it again. Marco's template keeps the round 2 additions (時間表 2 slides, 八項行動 2 slides, 問答 on s1 at 36 pt against 32.4) and goes from 9 to 10 slides: 預算 is back on s3, his only two-column sample, in 3 slides and warned, as at round 1; the title runs onto the body's first line at the floor.**
+
+S1 makes a two-column slide use a readable two-column sample before any merge, even where that sample splits it: business-conference's 預算 takes 3 slides on s2 (round 2 merged it onto one slide), Marco's 3 on s3 (round 2: 2 merged on s4).
+
+Before and after on Marco's template: `qa/g0b/marco-before-after-qa3.jpg` (top: d1b3ca1; bottom: this run).
