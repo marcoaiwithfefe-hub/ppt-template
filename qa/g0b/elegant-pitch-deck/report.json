@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.34,
+ "seconds": 0.32,
  "samples": [
   {
    "id": "s1",
@@ -449,5 +449,5 @@
  },
  "c23_diffs": [],
  "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg",
- "renders": "qa/g0b/elegant-pitch-deck/renders-is5qkoop"
+ "renders": "qa/g0b/elegant-pitch-deck/renders-4d90n41q"
 }
