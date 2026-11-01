@@ -27,7 +27,8 @@
    "view-outline.pptx",
    "footer-local.pptx",
    "xml-renamed.pptx",
-   "sample-malformed.pptx"
+   "sample-malformed.pptx",
+   "sample-badidx.pptx"
   ]
  },
  "required": [
@@ -368,6 +369,29 @@
   {
    "template": "sample-footbig.pptx",
    "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-flipchip.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {
+    "0": "s1",
+    "1": "s1"
+   },
+   "name": "flip"
+  },
+  {
+   "template": "sample-flipchip.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {
+    "0": "s2",
+    "1": "s2"
+   },
+   "name": "rot"
+  },
+  {
+   "template": "sample-badidx.pptx",
+   "outline": "fixtures/reference-outline.md",
    "overrides": {}
   }
  ]
