@@ -178,46 +178,52 @@ def _master_hf_on(master_el, t: str) -> bool:
     return hf.get(t, "1") not in ("0", "false")
 
 
+def footer_for_type(t, new_lid, layout, lay_info, inputs, master_el):
+    """D4 footer rules for one footer type on one new slide. Returns the shape element to add, or None."""
+    same_layout = [f for (lid, _, _, f) in inputs if lid == new_lid]
+    pick = None
+    decided = False
+    if same_layout:
+        decided = True
+        pick = next((f[t] for f in same_layout if t in f), None)
+    elif lay_info.cls != "title":
+        same_master = [f for (lid, mi, cls, f) in inputs if mi == lay_info.master and cls != "title"]
+        if same_master:
+            decided = True
+            pick = next((f[t] for f in same_master if t in f), None)
+    if decided:
+        if pick is None:
+            return None
+        pick_sp, pick_layout = pick
+        target_sp, target_ph = _layout_footer_sp(layout, t)
+        el = copy.deepcopy(pick_sp)
+        el_ph = el.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph"))
+        if target_ph is None:
+            # The new layout has no box of this type, so the footer keeps the place it had on
+            # its own slide (Codex round 1, F8): its own geometry, else its layout's or master's.
+            if not _place_footer(el, el_ph, t, pick_layout, master_el, layout):
+                return None
+        elif target_ph.get("idx") is None:
+            el_ph.attrib.pop("idx", None)
+        else:
+            el_ph.set("idx", target_ph.get("idx"))
+        for h in [x for x in el.iter() if x.tag in HLINK_TAGS]:
+            h.getparent().remove(h)
+        if any(_r_attrs(x) for x in el.iter()):
+            return None
+        return el
+    if lay_info.cls != "title" and _master_hf_on(master_el, t):
+        return _footer_from_layout(layout, t)
+    return None
+
+
 def footers_for(new_lid, layout, lay_info, inputs, master_el):
     """D4 footer rules for one new slide. Returns shape elements to add."""
     out = []
     for t in FOOTER_TYPES:
-        same_layout = [f for (lid, _, _, f) in inputs if lid == new_lid]
-        pick = None
-        decided = False
-        if same_layout:
-            decided = True
-            pick = next((f[t] for f in same_layout if t in f), None)
-        elif lay_info.cls != "title":
-            same_master = [f for (lid, mi, cls, f) in inputs if mi == lay_info.master and cls != "title"]
-            if same_master:
-                decided = True
-                pick = next((f[t] for f in same_master if t in f), None)
-        if decided:
-            if pick is None:
-                continue
-            pick_sp, pick_layout = pick
-            target_sp, target_ph = _layout_footer_sp(layout, t)
-            el = copy.deepcopy(pick_sp)
-            el_ph = el.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph"))
-            if target_ph is None:
-                # The new layout has no box of this type, so the footer keeps the place it had on
-                # its own slide (Codex round 1, F8): its own geometry, else its layout's or master's.
-                if not _place_footer(el, el_ph, t, pick_layout, master_el, layout):
-                    continue
-            elif target_ph.get("idx") is None:
-                el_ph.attrib.pop("idx", None)
-            else:
-                el_ph.set("idx", target_ph.get("idx"))
-            for h in [x for x in el.iter() if x.tag in HLINK_TAGS]:
-                h.getparent().remove(h)
-            if any(_r_attrs(x) for x in el.iter()):
-                continue
+        el = footer_for_type(t, new_lid, layout, lay_info, inputs, master_el)
+        if el is not None:
             out.append(el)
-        elif lay_info.cls != "title" and _master_hf_on(master_el, t):
-            el = _footer_from_layout(layout, t)
-            if el is not None:
-                out.append(el)
     return out
 
 
@@ -305,9 +311,13 @@ def _zip(parts: dict[str, bytes]) -> bytes:
 
 def fill(data: bytes, filename: str, plan: Plan) -> bytes:
     info, pkg = open_template(data, filename)
-    expected = plan_deck(info, plan.outline, dict(plan.overrides))
+    expected = plan_deck(info, plan.outline, dict(plan.overrides), route=plan.route)
     if expected != plan:
         raise PlanError("stale_plan", "plan differs from plan_deck for the same overrides")
+    if plan.route == "sample":
+        from .sample_fill import fill_sample
+
+        return fill_sample(info, pkg, plan)
     from pptx import Presentation
 
     prs = Presentation(io.BytesIO(pkg.zip_bytes()))
