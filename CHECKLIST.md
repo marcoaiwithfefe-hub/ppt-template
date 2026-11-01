@@ -56,3 +56,11 @@
 - [x] Slop scan once (docs changed)
 - [x] End-to-end, fill time, layout baseline 213 of 213, walkthrough re-rendered
 - [x] Report to ai-brain-24 [75678f] (QA round 2)
+
+## Rev 8 QA round 3
+
+- [x] S1 class first inside the readable pool (2dd5c96); C38 (tests/test_c38_covers.py) fails on d1b3ca1 and passes at head (qa/qa3/)
+- [x] design.golden re-derived by hand; the other golden cases keep their picks (qa/qa3/golden-picks-d1b3ca1-vs-head.txt)
+- [x] G0b rerun with title slides and two-column slides reported; qa/g0b/title-slides-qa3.jpg; qa/g0b/marco-before-after-qa3.jpg
+- [x] Done gates at the final head: suite, failure demos, C5, C9, C10/C28, C12, fill time, layout baseline 213 of 213, slop scan once, walkthrough re-rendered
+- [x] Report to ai-brain-24 [75678f] (QA round 3)

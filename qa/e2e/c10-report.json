@@ -1,17 +1,17 @@
 {
  "tested": {
-  "commit": "8cccd6bd44e903b9c831b9e0f9cbf4daad3d5cc2",
+  "commit": "13012e6d2cf82bcc1570b743139ce36346e18928",
   "dirty": "",
   "files": {
-   "fixtures/out/wui-tung.pptx": "df2b865ee6de21f2c5bdd6824f622195020c7e33866d5d8dd89911f165584234",
-   "fixtures/out/typed.pptx": "e1737395979749923f5df206057834539dde53ed413db6d1de1426af69f49c94",
-   "fixtures/out/sample-design.pptx": "eaa68f887c068406d0359f3ea0357305404a50d5433511096c44d77edc5502d7",
-   "qa/e2e/c10-wui-tung.pptx": "0136389f235ae42d1df628bd7e5a15a17c1984e9bc4b1995e963d8c762c59b55",
-   "qa/e2e/c10-typed-override.pptx": "b705c3e0a6b99682de2bda97abea081e6f31a1c1246fa29b4d6e412e000ed113",
-   "qa/e2e/c28-sample-design.pptx": "2c53fb79bb0b45894791548aad473245151a6d55b9c7e286c65caa2b9ffc30a2"
+   "fixtures/out/wui-tung.pptx": "49393fd0f649d825e00a235b9e078348ac9f7a0ef4f2ba96ff6dfb888da26419",
+   "fixtures/out/typed.pptx": "ef7097d71ea7b17ac67d6e3025deddeefe6d30c98aab973e4205a1e0f619b0f7",
+   "fixtures/out/sample-design.pptx": "bf2ef05b1c9fecb6d546d40cc803a7b145a84bc7c1ab643699db326db4efc89c",
+   "qa/e2e/c10-wui-tung.pptx": "5c428b5094c4d46b6d7dfd2330753cb8feba331068b8bdefd2b8442a015b418c",
+   "qa/e2e/c10-typed-override.pptx": "9e4099bd11ea551e5d553a33a1cb217bbb6967f1513267a87af2a7038ff539f0",
+   "qa/e2e/c28-sample-design.pptx": "1191d9628af95aff815ffc6980126649b211690db3b1cf139059efe3b40d8134"
   }
  },
- "browser_run": "8cccd6bd44e903b9c831b9e0f9cbf4daad3d5cc2",
+ "browser_run": "13012e6d2cf82bcc1570b743139ce36346e18928",
  "results": [
   {
    "template": "wui-tung.pptx",

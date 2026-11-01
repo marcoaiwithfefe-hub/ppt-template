@@ -16,3 +16,7 @@ Scan run once at the end of the rev 8 QA round 1 work (raw output in `qa/slop-sc
 ## Rev 8 QA round 2 rescan
 
 The page changed (`fit.grown`, 版面調整, and the Noto Serif TC subset rebuilt for its two new glyphs), so the scan ran once more (raw output in `qa/slop-scan-rev8-qa2.txt`): the same 2 hits on the same lines, kept for the same reasons. No new hit, no fix made.
+
+## Rev 8 QA round 3 rescan
+
+Only `docs/py/deckfill.zip` changed under `docs/` (the rebuilt module); the scan ran once anyway (raw output in `qa/slop-scan-rev8-qa3.txt`): the same 2 kept hits, no new hit.

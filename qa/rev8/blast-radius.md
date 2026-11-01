@@ -18,3 +18,7 @@
 ## QA round 2 (eedcf10..8cccd6b)
 
 The shared code the layout route runs did not change in round 2: R1 to R7 live in `sample_plan.py`, `sample.py` and `sample_fill.py`, which the layout route never calls; `open_template` changed only through `sample_default` (R4), which moves the default route of templates with fewer than 3 usable samples (hkust-template14, sample-thin, sample-shapes, sample-xml) to the layout route without changing what that route builds. Proven again by running code: `qa/rev8/layout-head-qa2.json`, 213 of 213 baseline keys equal to 6a576a6 at 8cccd6b. Risk found and fixed in the gates: R4 moved the C12 sample-route stress templates onto the layout route, so the stress check now switches routes and requires the sample route.
+
+## QA round 3 (d1b3ca1..2dd5c96)
+
+S1 changes only `plan_sample`'s pool choice on the sample route. Proven again: `qa/rev8/layout-head-qa3.json`, 213 of 213 baseline keys equal to 6a576a6 at 2dd5c96.
