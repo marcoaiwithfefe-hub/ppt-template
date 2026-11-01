@@ -177,6 +177,10 @@ def make_sample_design(out):
     tb(s4.shapes, 411, 600000, 2 * M, 5200000, 3600000, "Before", 24)
     tb(s4.shapes, 412, 6400000, 2 * M, 5200000, 3600000, "After", 24)
     pic(s4.shapes, 421, 5700000, 6 * M, 800000, 600000, (160, 60, 160))
+    # C32 (QA round 1 Q1): a filled label chip and a filled 6% box go when cleared; a filled 10% panel stays, empty
+    tb(s4.shapes, 431, 11 * M, 500000, 500000, 400000, "07", 18, fill=(240, 170, 60))
+    tb(s4.shapes, 441, 600000, 5700000, 4600000, 1100000, "Small note here", 16, fill=(255, 255, 255))
+    tb(s4.shapes, 451, 6400000, 5200000, 5400000, 1600000, "Panel text here", 18, fill=(255, 255, 255))
 
     s5 = blank_slide(prs, (30, 40, 70))
     tb(s5.shapes, 501, M, 2 * M, 10 * M, 2 * M, "Chapter", 60)
@@ -550,6 +554,67 @@ def make_sample_fit(out):
     return save(prs, out, "sample-fit.pptx")
 
 
+def make_sample_backings(out):
+    """C32 on Marco's slide 6 structure: a title, four number labels each over its own separate text-free white
+    backing (top level, drawn first), four caption body boxes of different widths. b11 sits on a 9% backing (stays);
+    caption 141, the largest body box, sits on a light backing that must stay when it receives text."""
+    prs = new_prs()
+    s = blank_slide(prs, (30, 60, 90))
+    tb(s.shapes, 101, 600000, 300000, 10900000, 1000000, "Health in numbers", 48)
+    spots = ((600000, 1500000, 3200000, 1300000), (6400000, 1500000, 2200000, 1300000),
+             (600000, 4000000, 2200000, 1300000), (6400000, 4000000, 4800000, 1600000))
+    for i, (num, (x, y, w, h)) in enumerate(zip(("$1,300", "4", "2", "11"), spots)):
+        rect(s.shapes, 111 + i, x, y, w, h, (255, 255, 255))
+        tb(s.shapes, 121 + i, x, y, w, h, num, 40)
+    rect(s.shapes, 131, 600000, 2900000, 5200000, 900000, (230, 240, 250))
+    caps = ((600000, 2900000, 5200000, 900000), (6400000, 2900000, 3000000, 700000),
+            (600000, 5400000, 3400000, 700000), (6400000, 5700000, 2600000, 700000))
+    for i, (word, (x, y, w, h)) in enumerate(zip(("Total medical bills", "Times I caught the flu", "Trips to the ER",
+                                                 "Sick days used"), caps)):
+        tb(s.shapes, 141 + i, x, y, w, h, word, 20)
+    return save(prs, out, "sample-backings.pptx")
+
+
+def make_sample_readable(out):
+    """C33 (QA round 1 Q2 to Q4, precedence): r1, the title sample, has a 14 pt title; r2 a 60 pt title over an 8 pt
+    body that fits; r3 a 60 pt title over an 18 pt body; r4 a 40 pt title, three 14 pt slots, one of them too short to
+    hold its bullet above the bar at the floor, and a 9 pt notes box."""
+    prs = new_prs()
+    r1 = blank_slide(prs, (240, 230, 220))
+    tb(r1.shapes, 101, M, 2 * M, 6 * M, 600000, "Cover", 14)
+    pic(r1.shapes, 121, 8 * M, M, 3 * M, 4 * M, (40, 90, 160))
+    content_slide(prs, 2, (220, 240, 230), "Sample two", "Small print", 60, 8)
+    content_slide(prs, 3, (230, 220, 240), "Sample three", "Readable body", 60, 18)
+    r4 = blank_slide(prs, (240, 240, 210))
+    tb(r4.shapes, 401, 600000, 300000, 10900000, 1000000, "Sample four", 40)
+    for i, h in enumerate((700000, 700000, 230000)):
+        tb(r4.shapes, 411 + i, 600000 + 3800000 * i, 1600000, 3200000, h, f"Slot {i + 1}", 14)
+    tb(r4.shapes, 421, 600000, 2600000, 10900000, 3800000, "Notes", 9)
+    return save(prs, out, "sample-readable.pptx")
+
+
+def make_sample_small(out):
+    """C33: every sample's title is under the 4% bar (14 pt on a 7.5 in slide) and every body under the 2% bar."""
+    prs = new_prs()
+    content_slide(prs, 1, (240, 230, 220), "Tiny one", "Tiny body", 14, 9)
+    content_slide(prs, 2, (220, 240, 230), "Tiny two", "Tiny body", 14, 9)
+    return save(prs, out, "sample-small.pptx")
+
+
+def make_sample_split(out):
+    """C33 (Q4): two content samples whose body must split for six bullets, five short and one long. p1 (first in file
+    order) is wide and holds 1.9 lines at the floor: one bullet a slide, six slides. p2 is narrow, so the long bullet
+    takes two lines, and holds 2.2 lines: four slides. p1's unsplit text runs less far over its floor (3.16 times
+    against 3.18), so the rev 8 ratio picked p1; Q4's fewest continuation slides picks p2."""
+    prs = new_prs()
+    content_slide(prs, 1, (240, 230, 220), "Split one", "Body", 40, 20)
+    content_slide(prs, 2, (220, 240, 230), "Split two", "Body", 40, 20)
+    prs.slides[0].shapes[1].height = Emu(497000)
+    prs.slides[1].shapes[1].width = Emu(4 * M)
+    prs.slides[1].shapes[1].height = Emu(561000)
+    return save(prs, out, "sample-split.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -557,5 +622,6 @@ def make_all(out) -> list:
         make_sample_hidden(out), make_sample_equal(out), make_sample_closing5(out), make_sample_short(out),
         make_sample_only(out), make_sample_thin(out), make_sample_typo(out), make_layout_design(out),
         make_layout_photos(out), make_sample_titleonly(out), make_sample_heavy(out), make_sample_bigrpr(out),
-        make_sample_biglvl2(out), make_sample_fit(out),
+        make_sample_biglvl2(out), make_sample_fit(out), make_sample_backings(out), make_sample_readable(out),
+        make_sample_small(out), make_sample_split(out),
     ]

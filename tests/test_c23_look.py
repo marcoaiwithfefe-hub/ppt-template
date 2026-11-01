@@ -72,6 +72,36 @@ def test_c23_negative_dropped_background():
     assert any("background" in d for d in look_diff(bad, data))
 
 
+def _cut(tag: bytes, sid: int):
+    """Remove one shape element (by its cNvPr id) from a slide part."""
+    def fn(b):
+        start = b.index(b'<p:cNvPr id="%d"' % sid)
+        i = b.rindex(b"<p:" + tag + b">", 0, start)
+        end = b.index(b"</p:" + tag + b">", start) + len(b"</p:" + tag + b">")
+        return b[:i] + b[end:]
+    return fn
+
+
+def test_c23_amended_negative_panel_of_8pct_or_more_removed():
+    """QA round 1 (C23 amended): the 10% panel that held cleared text must stay; its removal fails."""
+    data, out = _design()
+    bad = _edit(out, "ppt/slides/slide4.xml", _cut(b"sp", 451))
+    assert any("shape 451 (sp) missing" in d for d in look_diff(bad, data))
+
+
+def test_c23_amended_negative_backing_behind_a_kept_destination_removed():
+    """s2's white slot block behind the first slot, which kept its text: its removal fails."""
+    data, out = _design()
+    bad = _edit(out, "ppt/slides/slide2.xml", _cut(b"sp", 211))
+    assert any("shape 211 (sp) missing" in d for d in look_diff(bad, data))
+
+
+def test_c23_amended_negative_other_shape_removed():
+    data, out = _design()
+    bad = _edit(out, "ppt/slides/slide2.xml", _cut(b"pic", 241))
+    assert any("shape 241 (pic) missing" in d for d in look_diff(bad, data))
+
+
 # --- variety (D12): automatic picks avoid the two previous slides' samples, then only the previous one's, then repeat
 
 

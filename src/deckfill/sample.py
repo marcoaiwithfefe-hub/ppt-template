@@ -512,6 +512,7 @@ class Sample:
     nbytes: int  # the slide part's size
     nshapes: int  # shapes in the slide's tree
     footer_bytes: int  # an upper bound on the footers the fill may add to a copy (the D12 size budget)
+    slide: tuple[int, int] = (0, 0)  # slide width and height, EMU (QA round 1 readability bars)
 
     def box(self, sid: int) -> SBox:
         return next(b for b in self.boxes if b.sid == sid)
@@ -811,6 +812,7 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         footer_bytes=sum(len(etree.tostring(w.el)) for w in walked if etree.QName(w.el).localname == "sp"
                          and ph_of(w.el) is not None and ph_type(ph_of(w.el)) in FOOTER_TYPES)
         + sum(len(etree.tostring(sp)) for sp, ph in placeholders(styles.layout_el) if ph_type(ph) in FOOTER_TYPES),
+        slide=(sw, sh),
     )
 
 

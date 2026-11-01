@@ -29,7 +29,7 @@ from .fill import (
     remove_slides,
 )
 from .package import RT_SLIDE, check_integrity
-from .sample import Styles, decorated, donor, has_text, level2_written, shape_id, to_local, walk
+from .sample import Styles, _is_hidden, _local_box, decorated, donor, has_text, level2_written, shape_id, to_local, to_slide, walk
 from .sample_plan import MAX_XML
 from .template import FOOTER_TYPES, ph_of, ph_type
 from .xmlsafe import R_NS, q
@@ -216,6 +216,40 @@ def _raise_title(dest, frags) -> None:
         last.addnext(db)
 
 
+CHIP_SHARE = 0.08  # QA round 1 Q1: a cleared chip or backing under 8% of the slide area goes
+BACKING_SHARE = 0.8  # a backing holds at least 80% of the text box's area
+SHAPES = {"sp", "pic", "grpSp", "cxnSp", "graphicFrame", "contentPart"}
+
+
+def _xywh(b) -> tuple[int, int, int, int]:
+    return b.x, b.y, b.cx, b.cy
+
+
+def _inside(inner, outer) -> float:
+    """The share of inner's area that lies inside outer (slide-space boxes)."""
+    ix = min(inner[0] + inner[2], outer[0] + outer[2]) - max(inner[0], outer[0])
+    iy = min(inner[1] + inner[3], outer[1] + outer[3]) - max(inner[1], outer[1])
+    a = inner[2] * inner[3]
+    return (ix * iy) / a if ix > 0 and iy > 0 and a > 0 else 0.0
+
+
+def _shape_kids(el):
+    return [c for c in el if isinstance(c.tag, str) and etree.QName(c).localname in SHAPES]
+
+
+def _visible(el) -> bool:
+    """A shape that draws: not hidden, and for a group, holding a visible member."""
+    if _is_hidden(el):
+        return False
+    if el.tag == q("p:grpSp"):
+        return any(_visible(c) for c in _shape_kids(el))
+    return True
+
+
+def _members(g) -> int:
+    return sum(1 for e in g.iter() if e is not g and isinstance(e.tag, str) and etree.QName(e).localname in SHAPES)
+
+
 def _sample_footers(src_slide, layout):
     """Each footer type the sample carries: its top-level placeholder as it is, or a grouped one re-placed on the
     layout's box of that type (never at a removed grouped copy's place); None when it has no position source."""
@@ -260,6 +294,7 @@ def fill_sample(info, pkg, plan) -> bytes:
     from pptx import Presentation
 
     prs = Presentation(io.BytesIO(pkg.zip_bytes()))
+    area = int(prs.slide_width or 9144000) * int(prs.slide_height or 6858000)
     samples = {S.id: S for S in info.samples}
     # source snapshot: the sample slides are read before D4 removes every input slide
     src = {S.id: s for S, s in zip(info.samples, list(prs.slides))}
@@ -275,6 +310,7 @@ def fill_sample(info, pkg, plan) -> bytes:
         slide = prs.slides.add_slide(layout)
         _copy_sample(slide, src_slide)
         tree = slide._element.find(q("p:cSld")).find(q("p:spTree"))
+        members = {shape_id(g): _members(g) for g in tree.iter(q("p:grpSp"))}
         # footer placeholders inside the copy go first; D4 adds each type back once
         for w in walk(tree):
             ph = ph_of(w.el) if etree.QName(w.el).localname == "sp" else None
@@ -295,16 +331,37 @@ def fill_sample(info, pkg, plan) -> bytes:
         for sid in S.title[1:]:  # the other title fragments
             _remove(walked[sid].el)
             removed.add(sid)
-        # everything that received no outline text is cleared (hidden shapes included)
+        # everything that received no outline text is cleared (hidden shapes included). QA round 1 Q1: a cleared
+        # shape with a fill or line under 8% of the slide goes whole, and so does a text-free shape with a fill or
+        # line under 8% that holds at least 80% of a cleared text box (its backing); nothing that holds 80% of a
+        # destination's written box goes. Measured in slide space against the sample's boxes.
+        dests = [bf.box or _xywh(S.box(bf.sid)) for bf in ps.boxes]
+        cleared = [_xywh(b) for b in S.boxes if b.sid not in fills]
+
+        def slide_box(w):
+            local = _local_box(w.el)
+            return None if local is None else to_slide(local, w.chain)
+
+        def goes(box, backing: bool) -> bool:
+            if box is None or box[2] * box[3] >= CHIP_SHARE * area:
+                return False
+            if any(_inside(d, box) >= BACKING_SHARE for d in dests):
+                return False
+            return not backing or any(_inside(c, box) >= BACKING_SHARE for c in cleared)
+
         for sid, w in walked.items():
             el = w.el
-            if sid in fills or sid in removed or etree.QName(el).localname != "sp" or not has_text(el):
+            if sid in fills or sid in removed or etree.QName(el).localname != "sp":
                 continue
-            if ph_of(el) is not None or not decorated(el):
+            if has_text(el):
+                if ph_of(el) is not None or not decorated(el) or goes(slide_box(w), False):
+                    _remove(el)
+                    removed.add(sid)
+                else:
+                    _clear_text(el)
+            elif ph_of(el) is None and decorated(el) and goes(slide_box(w), True):
                 _remove(el)
                 removed.add(sid)
-            else:
-                _clear_text(el)
         for w in walk(tree):  # placeholders left with no text (C6)
             el = w.el
             if etree.QName(el).localname == "sp" and ph_of(el) is not None and not has_text(el) and el.getparent() is not None:
@@ -315,9 +372,10 @@ def fill_sample(info, pkg, plan) -> bytes:
             for c in list(tree.iter(q(tag))):
                 if (c.get("id") or "").isdigit() and int(c.get("id")) in removed:
                     _remove(c)
-        for g in list(tree.iter(q("p:grpSp"))):  # groups emptied by the clearing
-            if not any(etree.QName(c).localname in ("sp", "pic", "grpSp", "cxnSp", "graphicFrame", "contentPart")
-                       for c in g if isinstance(c.tag, str)):
+        # groups emptied by the clearing, and (Q1) groups that lost members and hold no visible member, innermost first
+        for g in reversed(list(tree.iter(q("p:grpSp")))):
+            kids = _shape_kids(g)
+            if not kids or (_members(g) < members.get(shape_id(g), 0) and not any(_visible(c) for c in kids)):
                 _remove(g)
         # footers: the sample's own first, then D4 steps 1 to 4
         own = _sample_footers(src_slide, layout)

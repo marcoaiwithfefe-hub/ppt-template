@@ -3,9 +3,10 @@
 Compared per copy (the sample found by shape signature, sample_oracle.which_sample): p:bg and p:clrMapOvr; for every
 shape kept from the sample, its slide-space box, its p:spPr without a:xfrm (fills, lines, geometry), its a:srcRect
 crops and the SHA-256 of every picture or media target, and the z-order of kept shapes. Declared edits pass: text in
-boxes, removed text boxes without fill or line, title fragments and placeholders, groups those removals emptied,
-footers, shape and relationship ids, and the title widening (the joined title's box grows inside the union of the
-removed fragments' boxes, its groups grow with it, and its branch is raised above the fragments')."""
+boxes, removed text boxes without fill or line, title fragments and placeholders, QA round 1's chips and backings
+(computed here from the source sample by the Q1 rule, see allowed_removals), groups those removals emptied, footers,
+shape and relationship ids, and the title widening (the joined title's box grows inside the union of the removed
+fragments' boxes, its groups grow with it, and its branch is raised above the fragments')."""
 
 from __future__ import annotations
 
@@ -156,6 +157,84 @@ def _union(bs):
     return (x1, y1, x2 - x1, y2 - y1)
 
 
+def _share_inside(inner, outer) -> float:
+    ix = min(inner[0] + inner[2], outer[0] + outer[2]) - max(inner[0], outer[0])
+    iy = min(inner[1] + inner[3], outer[1] + outer[3]) - max(inner[1], outer[1])
+    area = inner[2] * inner[3]
+    return ix * iy / area if ix > 0 and iy > 0 and area > 0 else 0.0
+
+
+def _hidden_ids(tree) -> set[int]:
+    """Shapes hidden by their own cNvPr or an enclosing group's."""
+    out: set[int] = set()
+
+    def rec(parent, hidden):
+        for el in parent:
+            if not isinstance(el.tag, str) or etree.QName(el).localname not in SHAPES:
+                continue
+            nv = next((c for c in el if etree.QName(c).localname.startswith("nv")), None)
+            c = None if nv is None else nv.find(p("cNvPr"))
+            h = hidden or (c is not None and c.get("hidden") in ("1", "true"))
+            if h:
+                out.add(nv_id(el)[0])
+            if etree.QName(el).localname == "grpSp":
+                rec(el, h)
+
+    rec(tree, False)
+    return out
+
+
+def _slide_area(parts) -> int:
+    sz = xml(parts["ppt/presentation.xml"]).find(p("sldSz"))
+    return int(sz.get("cx")) * int(sz.get("cy"))
+
+
+def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area) -> set[int]:
+    """QA round 1 (Q1, C23 amended): the shapes a copy may lose, computed from the source sample and the output's
+    destinations, never from the fill's record. Footers; text boxes with no fill or line, and placeholders; a text
+    shape with a fill or line under 8% of the slide; a text-free shape with a fill or line under 8% that holds at least
+    80% of a cleared text box (its backing); a group whose visible members are all gone, with its hidden members.
+    Nothing that holds 80% of a destination's output box may go, and neither may anything 8% or larger."""
+    dests = {i for i, el in o_sh.items() if i in s_sh and etree.QName(el).localname == "sp" and _has_text(el)}
+    dest_boxes = [o_bx[i] for i in dests if i in o_bx]
+    cleared = [s_bx[i] for i, el in s_sh.items() if etree.QName(el).localname == "sp" and _has_text(el) and i not in dests
+               and i not in hidden and ph_type(el) not in FOOTER and i in s_bx]
+    removed = {i for i in s_sh if i not in o_sh}
+
+    def small_free(i) -> bool:
+        b = s_bx.get(i)
+        return b is not None and b[2] * b[3] < 0.08 * area and not any(_share_inside(d, b) >= 0.8 for d in dest_boxes)
+
+    ok: set[int] = set()
+    for i in removed:
+        el = s_sh[i]
+        local = etree.QName(el).localname
+        if local != "sp":
+            continue
+        if ph_type(el) in FOOTER:
+            ok.add(i)
+        elif _has_text(el):
+            if not _decorated(el) or ph_type(el) is not None or small_free(i):
+                ok.add(i)
+        elif ph_type(el) is None and _decorated(el) and small_free(i) and any(_share_inside(c, s_bx[i]) >= 0.8 for c in cleared):
+            ok.add(i)
+    # groups, innermost first: every visible member gone with an allowed reason; hidden members go with the group
+    groups = [i for i in s_sh if etree.QName(s_sh[i]).localname == "grpSp" and i in removed]
+    changed = True
+    while changed:
+        changed = False
+        for i in groups:
+            if i in ok:
+                continue
+            members = [nv_id(c)[0] for c in s_sh[i].iter() if c is not s_sh[i] and isinstance(c.tag, str)
+                       and etree.QName(c).localname in SHAPES]
+            if all(j in ok or (j in hidden and j in removed) for j in members):
+                ok.add(i)
+                ok.update(j for j in members if j in hidden)
+                changed = True
+    return ok
+
+
 def look_diff(out: bytes, src: bytes) -> list[str]:
     op, sp = parts_of(out), parts_of(src)
     src_names = slides(sp)
@@ -176,18 +255,10 @@ def look_diff(out: bytes, src: bytes) -> list[str]:
         o_sh = {i: e for i, e in o_sh.items() if not (etree.QName(e).localname == "sp" and ph_type(e) in FOOTER)}
         removed = [i for i in s_sh if i not in o_sh]
         removed_text = [s_bx[i] for i in removed if i in s_bx and etree.QName(s_sh[i]).localname == "sp" and _has_text(s_sh[i])]
+        allowed = allowed_removals(s_sh, s_bx, o_sh, o_bx, _hidden_ids(st), _slide_area(sp))
         for i in removed:
-            el = s_sh[i]
-            local = etree.QName(el).localname
-            if local == "sp" and ph_type(el) in FOOTER:
-                continue
-            if local == "sp" and (_has_text(el) and (not _decorated(el) or ph_type(el) is not None)):
-                continue  # a cleared text box, a title fragment or a placeholder
-            if local == "grpSp" and all(j in removed for j in shapes(el) if j != i) and not any(
-                    etree.QName(c).localname != "sp" or not _has_text(c) or _decorated(c) for c in shapes(el).values() if c is not el
-                    and etree.QName(c).localname != "grpSp"):
-                continue  # a group its removals emptied
-            diffs.append(f"slide {n} (s{k}): shape {i} ({local}) missing")
+            if i not in allowed:
+                diffs.append(f"slide {n} (s{k}): shape {i} ({etree.QName(s_sh[i]).localname}) missing")
         widened = set()
         for i, el in o_sh.items():
             if i not in s_sh:

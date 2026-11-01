@@ -14,13 +14,17 @@ from .plan import CHECK, FITS, MAX_BULLETS, MAX_SLIDES, SPLIT, WARNED, Dest, Pla
 from .sample import Sample, SBox
 
 SHRUNK = "shrunk"
+SMALL_TEXT = "small_text"  # QA round 1 (QA4): no candidate met the readability bars, or a user pick below them
 STEPS = 7  # 100%, 95%, ... 70% (D12 fit)
+TITLE_BAR = 4  # QA round 1 Q2: a title destination's written size, percent of the slide height
+BODY_BAR = 2  # QA round 1 Q3: a body destination's written size, percent of the slide height
+EMU_PER_PT = 12700
 MAX_XML = 40 * 1024 * 1024  # generated slide XML, D12 limits
 MAX_COPIED_SHAPES = 20_000
 MAX_PARAS = 20_000
 PARA_MARKUP = 64
 SZ_ATTR = len(b' sz="12345"')
-_ORDER = {FITS: 0, SHRUNK: 1, SPLIT: 2, WARNED: 3, CHECK: 4}
+_ORDER = {FITS: 0, SHRUNK: 1, SMALL_TEXT: 2, SPLIT: 3, WARNED: 4, CHECK: 5}
 
 
 @dataclass(frozen=True)
@@ -96,11 +100,30 @@ def title_fill(S: Sample, paras: tuple[str, ...]) -> BoxFill:
     return fill_box(tb, "title", tuple(Item(1, t) for t in paras), box)
 
 
+def meets(S: Sample, bf: BoxFill) -> bool:
+    """QA round 1 Q2 and Q3: the box's written size after any shrink, level 2 included when the box holds level-2
+    paragraphs, is at least the bar for its role (title 4%, every body destination 2% of the slide height). A box
+    the plan writes no size on is written at its effective size."""
+    sb = S.box(bf.sid)
+    bar = TITLE_BAR if bf.role == "title" else BODY_BAR
+    sizes = [bf.sizes[0] or sb.lvl1.size]
+    if any(lvl == 2 for lvl, _ in bf.paras):
+        sizes.append(bf.sizes[1] or sb.lvl2.size)
+    # size / 100 pt >= bar / 100 * height / 12700 pt
+    return all(sz * EMU_PER_PT >= bar * S.slide[1] for sz in sizes)
+
+
+def readable(S: Sample, built: "Built") -> bool:
+    """QA round 1: every destination of every output slide the candidate makes meets its bar."""
+    return all(meets(S, bf) for p in built.parts for bf in p.boxes)
+
+
 def slot_dest(S: Sample, n: int):
-    """The slot group whose size equals the bullet count; ties to the larger total area, then the earlier first slot."""
+    """The slot group whose size equals the bullet count; ties to the larger total area, then the earlier first slot.
+    A group with a rotated or flipped slot is never a destination: it cannot be measured against the bar (C32)."""
     if not (2 <= n <= MAX_BULLETS):
         return None
-    cands = [g for g in S.slots if len(g) == n]
+    cands = [g for g in S.slots if len(g) == n and not any(S.box(s).unmodelled == "rotated or flipped" for s in g)]
     if not cands:
         return None
 
@@ -110,6 +133,22 @@ def slot_dest(S: Sample, n: int):
         return (-sum(b.area for b in boxes), first.y, first.x)
 
     return sorted(cands, key=key)[0]
+
+
+def slots_for(S: Sample, items: tuple[Item, ...]):
+    """The slot group a content slide's level-1 bullets go into, one per slot (D12), with the groups and their box
+    fills; None when there is none. QA round 1 Q3: a group is a destination only when every slot holds its bullet,
+    children included, at or above the body bar."""
+    if not items:
+        return None
+    groups = groups_of(items)
+    slots = slot_dest(S, len(groups))
+    if slots is None:
+        return None
+    fills = [fill_box(S.box(sid), "slot", g) for sid, g in zip(slots, groups)]
+    if not all(meets(S, bf) for bf in fills):
+        return None
+    return slots, groups, fills
 
 
 def two_dest(S: Sample):
@@ -151,12 +190,10 @@ def build(S: Sample, s: OutlineSlide) -> Built:
         return Built([Part(s.title, (title_fill(S, (s.title,)),), ())], False, False, len(S.bodies))
     if s.kind == "content":
         items = s.columns[0] if s.columns else ()
-        groups = groups_of(items)
-        slots = slot_dest(S, len(groups)) if items else None
-        if slots:
-            boxes = [title_fill(S, (s.title,))]
-            for sid, g in zip(slots, groups):
-                boxes.append(fill_box(S.box(sid), "slot", g))
+        found = slots_for(S, items)
+        if found:
+            slots, _, fills = found
+            boxes = [title_fill(S, (s.title,))] + fills
             return Built([Part(s.title, tuple(boxes), (items,))], False, False, len(S.bodies) - len(slots))
         body = S.box(S.subtitle)
         chunks, _ = chunk(items, floor_fit(body))
@@ -220,9 +257,9 @@ def needs(S: Sample, s: OutlineSlide) -> list[float]:
         return out
     if s.kind == "content":
         items = s.columns[0] if s.columns else ()
-        groups = groups_of(items)
-        slots = slot_dest(S, len(groups)) if items else None
-        if slots:
+        found = slots_for(S, items)
+        if found:
+            slots, groups, _ = found
             return out + [need_of_box(S.box(sid), g) for sid, g in zip(slots, groups)]
         return out + [need_of_box(S.box(S.subtitle), items)]
     pair = two_dest(S)
@@ -232,17 +269,18 @@ def needs(S: Sample, s: OutlineSlide) -> list[float]:
 
 
 def rank_key(S: Sample, s: OutlineSlide, built: Built):
-    """D12 ranking: every destination fits at full size, then the smallest shrink needed, then the fewest body boxes
-    left unused, then file order. A box still over at the floor after any split (a title, subtitle, slot or single
-    long bullet, continuation titles included) needs more shrink than any step gives, so candidates are compared on
-    those boxes first, then on boxes the estimate cannot model, then on the shrink the slide's unsplit text needs
-    (decisions.tsv)."""
+    """D12 ranking with QA round 1's Q4: every destination fits at full size, then the smallest shrink needed, then
+    the fewest continuation slides, then the fewest body boxes left unused, then file order. A box still over at the
+    floor after any split (a title, subtitle, slot or single long bullet, continuation titles included) needs more
+    shrink than any step gives, so candidates are compared on those boxes first, then on boxes the estimate cannot
+    model, then on the shrink the slide's unsplit text needs. Every candidate whose text must split needs more than
+    the floor gives, so those tie on shrink and the fewest continuation slides decides between them (decisions.tsv)."""
     boxes = [b for p in built.parts for b in p.boxes]
     warned = sum(1 for b in boxes if b.status == WARNED)
     check = sum(1 for b in boxes if b.status == CHECK)
     n = needs(S, s)
     worst = max(n, default=0.0)
-    return (warned, check, worst > 0, worst, built.unused, S.k)
+    return (warned, check, worst > 0, min(worst, float(STEPS)), len(built.parts) - 1, built.unused, S.k)
 
 
 def compatible(S: Sample, s: OutlineSlide) -> bool:
@@ -253,11 +291,13 @@ def compatible(S: Sample, s: OutlineSlide) -> bool:
     return True
 
 
-def flags_of(boxes, split: bool) -> tuple[str, ...]:
+def flags_of(boxes, split: bool, small: bool = False) -> tuple[str, ...]:
     st = {b.status for b in boxes}
     out = []
     if SHRUNK in st:
         out.append(SHRUNK)
+    if small:
+        out.append(SMALL_TEXT)
     if split:
         out.append(SPLIT)
     if WARNED in st:
@@ -283,7 +323,8 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
 
     def tiers(s: OutlineSlide):
         if s.kind == "title":
-            return [[title_sample]]
+            # QA round 1 Q2: the title sample first; the content and section samples are its fallbacks
+            return [[title_sample], [S for S in usable if S is not title_sample and ("content" in S.classes or "section" in S.classes)]]
         if s.kind == "section":
             return [of_class("section"), [title_sample], of_class("content")]
         if s.kind == "content":
@@ -304,14 +345,28 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
                 pick = S
             else:
                 warnings.append(Warning(s.line, "layout_dropped", s.title))
+        small = False
         if pick is not None:
             built = build(pick, s)
+            small = not readable(pick, built)  # QA4: a user pick below a bar is kept and warned
         else:
-            tier = next((t for t in ([x for x in t if compatible(x, s)] for t in tiers(s)) if t), None)
-            if tier is None:
+            # QA round 1 precedence: the candidates are the compatible samples of the slide's class and of its class
+            # fallbacks. When any meets both readability bars, only those stay in the pool, from the first tier that
+            # holds one (a readable fallback beats an unreadable class sample; a readable class sample keeps its
+            # class). Else the pool is the first tier with any candidate, and the slide is warned small_text (QA4).
+            # Variety then applies inside the pool, then the ranking.
+            tiers_c = [[x for x in t if compatible(x, s)] for t in tiers(s)]
+            if not any(tiers_c):
                 raise PlanError("incompatible_layout", f"no sample fits slide {s.title!r}")
+            builds = {x.id: build(x, s) for t in tiers_c for x in t}
+            ok = {sid for sid, b in builds.items() if readable(samples[sid], b)}
+            if ok:
+                tier = next([x for x in t if x.id in ok] for t in tiers_c if any(x.id in ok for x in t))
+            else:
+                tier = next(t for t in tiers_c if t)
+                small = True
             pool = [S for S in tier if S.id not in recent[-2:]] or [S for S in tier if S.id not in recent[-1:]] or tier
-            cands = [(rank_key(S, s, b), S, b) for S, b in ((S, build(S, s)) for S in pool)]
+            cands = [(rank_key(S, s, builds[S.id]), S, builds[S.id]) for S in pool]
             _, pick, built = min(cands, key=lambda c: c[0])
         chosen.append(pick.id)
         recent.append(pick.id)
@@ -326,7 +381,7 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
         if any(b.status == CHECK for b in all_boxes):
             warnings.append(Warning(s.line, "fit_check", s.title))
         for p, part in enumerate(built.parts):
-            fl = flags_of(part.boxes, split)
+            fl = flags_of(part.boxes, split, small)
             fit = max(fl, key=lambda f: _ORDER[f]) if fl else FITS
             out.append(PlannedSlide(i, p, pick.id, s.kind, part.title, s.subtitle if s.kind == "title" else (),
                                     part.columns, Dest(None, None, (), False), fit, part.boxes, fl))
