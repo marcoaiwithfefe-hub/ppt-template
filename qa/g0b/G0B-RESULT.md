@@ -54,3 +54,27 @@ Eye notes on Marco's template (renders in `qa/g0b/marco-year-in-breakdowns/rende
 - 預算 on s3 stays warned on all three slides: the title runs onto the body's first line at the floor.
 
 Before and after on Marco's template: `qa/g0b/marco-before-after-qa1.jpg` (top: b38d280; bottom: this run).
+
+## QA round 2 rerun (R1 to R7)
+
+Run on `7d9dbde` with `.venv/bin/python qa/g0b/run_g0b.py`. Each run now renders into a fresh `renders-*` folder: pdftoppm pads page numbers by page count, so a shorter deck left a longer deck's pages behind in a reused folder and the first round 2 sheets mixed old and new pages (caught on the sheets, fixed before this run). The runner adds, per template: slides per outline slide, `closing_bar` (the closing section slide's title against 4% of the slide height), `kept_not_rect` (shapes R5 keeps because they are not rectangular solid-fill backings) and `c23_diffs` (the C23 comparator, `tests/sample_look.py`, run on the real deck).
+
+| template | slides round 1 | slides now | title slide on | closing on, size / bar | blank chips | kept, not a backing (R5) | new overlaps | C23 | verdict |
+|---|---|---|---|---|---|---|---|---|---|
+| corporate-sales-pitch-slides-2 | 7 | 7 | s1 | s1, 104 / 32.4 pt | 0 | 1 (s3's empty third circle, also in round 1) | 0 | 0 | clean |
+| elegant-pitch-deck | 7 | 7 | s33 (was s1) | s22, 45 / 16.2 pt | 0 | 0 | 0 | 0 | clean |
+| 3d-modern-background-pitch-deck | 7 | 7 | s8 (was s1) | s1, 57 / 16.2 pt | 0 | 0 | 0 | 0 | clean |
+| business-conference-slides | 9 | 7 | s12 (was s1) | s6, 80 / 32.4 pt | 0 | 0 | 0 | 0 | clean |
+| simple-business-proposal-slides | 7 | 7 | s6 (was s1) | s2, 62 / 16.2 pt | 0 | 0 | 0 | 0 | clean |
+| viola-free-presentation-template | 9 | 7 | s4 (was s1) | s1, 36 / 16.2 pt | 0 | 0 | 0 | 0 | clean |
+| bullen-free-presentation-template | 7 | 7 | s5 (was s1) | s1, 54 / 16.2 pt | 0 | 0 | 0 | 0 | clean |
+| marco-year-in-breakdowns (Marco's) | 13 | 9 | s7 | s1, 36 / 32.4 pt | 0 | 5 (leaf 74 and circles 80, 83, 86, 89 on 問答) | 0 | 0 | clean by the round 2 definition |
+
+**Verdict: 8 of 8 clean. Marco's template meets the round 2 additions: 時間表 2 slides (s2, the second titled 時間表 with no （續）, R2), 八項行動 2 slides (s6, grown body box, 版面調整), 問答 on s1 at 36 pt against a 32.4 pt bar, 9 slides beside rev 8's 13. 預算 takes 2 slides on s4 with its columns merged (s4 is a content sample) and is warned: the title runs onto the body's first line.**
+
+What moved, and why:
+- R1: the fewest continuation slides comes before variety, so a sample repeats rather than add a slide: Viola uses s39 for four outline slides in a row, edb-mpa2022 uses s5 for four.
+- R6: the readable pool runs across a slide's class and its fallbacks, then the ranking decides. The title slide now leaves the template's cover on six of the eight templates, wherever a content or section sample fits the title at full size and the cover needs a shrink (Bullen's opens on its quote slide, elegant's on its icon grid). Two-column slides can merge onto a content sample when that leaves fewer body boxes unused (Marco's 預算, sample-design's Compare).
+- R5: Marco's olive leaf and the four orange circles under the year digits stay on 問答 (not rectangles, or rotated with a picture fill); corporate's empty third circle on 預算 stays as in round 1.
+
+Before and after on Marco's template: `qa/g0b/marco-before-after-qa2.jpg` (top: b8013a1; bottom: this run).

@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.38,
+ "seconds": 0.41,
  "samples": [
   {
    "id": "s1",
@@ -367,7 +367,7 @@
   }
  ],
  "chosen": [
-  "s1",
+  "s5",
   "s6",
   "s33",
   "s8",
@@ -383,11 +383,9 @@
  "slides": [
   {
    "n": 1,
-   "sample": "s1",
+   "sample": "s5",
    "title": "匯通物流 2027 年度計劃",
-   "flags": [
-    "shrunk"
-   ]
+   "flags": []
   },
   {
    "n": 2,
@@ -433,11 +431,27 @@
  "new_overlaps": [],
  "blank_chips": [],
  "kept_under_text": [],
+ "kept_not_rect": [],
  "title_bar": {
-  "size_pt": 45.5,
+  "size_pt": 30.0,
   "bar_pt": 16.2,
   "meets": true
  },
+ "closing_bar": {
+  "sample": "s1",
+  "size_pt": 54.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 1,
+  "時間表": 1,
+  "預算 港幣 800 萬": 1,
+  "八項行動": 2,
+  "問答": 1
+ },
+ "c23_diffs": [],
  "sheet": "qa/g0b/bullen-free-presentation-template/sheet.jpg",
- "renders": "qa/g0b/bullen-free-presentation-template/renders"
+ "renders": "qa/g0b/bullen-free-presentation-template/renders-n7ss24ir"
 }

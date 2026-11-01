@@ -26,5 +26,7 @@ qa/g0b/**/*.pptx
 qa/g0b/**/lo-*/
 qa/g0b/**/renders/
 qa/rev8/q5/**/renders/
+qa/g0b/**/renders-*/
+qa/rev8/q5/**/renders-*/
 qa/rev8/q5/**/*.pptx
 qa/c12/sample-*.pptx

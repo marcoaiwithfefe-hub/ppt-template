@@ -3,7 +3,7 @@ hkust-template14), filled with fixtures/reference-outline.md on both routes and 
 One sheet per route and template, then one side-by-side image per template (left: layout route, right: sample route).
 D11 is not changed here; Fable judges the default from these sheets.
 
-    .venv/bin/python qa/rev8/q5/run_q5.py
+    .venv/bin/python qa/rev8/q5/run_q5.py [subfolder]   (QA round 2: qa2, beside round 1's sheets)
 """
 import json
 import sys
@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "qa" / "g0b"))
 import run_g0b  # noqa: E402
 
-OUT = ROOT / "qa" / "rev8" / "q5"
+OUT = ROOT / "qa" / "rev8" / "q5" / (sys.argv[1] if len(sys.argv) > 1 else "")
+OUT.mkdir(parents=True, exist_ok=True)
 run_g0b.OUT = OUT
 SET = ["edb-mpa2022.pptx", "elderly-gov-diy.pptx", "hkust-template14.potx"]
 FONT = ImageFont.truetype("/System/Library/Fonts/Supplemental/Arial.ttf", 26)

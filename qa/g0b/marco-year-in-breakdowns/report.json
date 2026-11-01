@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.52,
+ "seconds": 0.47,
  "samples": [
   {
    "id": "s1",
@@ -105,12 +105,16 @@
  "chosen": [
   "s7",
   "s5",
+  "s2",
+  "s4",
   "s6",
-  "s3",
-  "s5",
   "s1"
  ],
  "warnings": [
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ],
   [
    "fit_warn",
    "預算 港幣 800 萬"
@@ -133,7 +137,7 @@
   },
   {
    "n": 3,
-   "sample": "s6",
+   "sample": "s2",
    "title": "時間表",
    "flags": [
     "shrunk",
@@ -142,8 +146,8 @@
   },
   {
    "n": 4,
-   "sample": "s6",
-   "title": "時間表（續）",
+   "sample": "s2",
+   "title": "時間表",
    "flags": [
     "shrunk",
     "split"
@@ -151,25 +155,7 @@
   },
   {
    "n": 5,
-   "sample": "s6",
-   "title": "時間表（續）",
-   "flags": [
-    "shrunk",
-    "split"
-   ]
-  },
-  {
-   "n": 6,
-   "sample": "s6",
-   "title": "時間表（續）",
-   "flags": [
-    "shrunk",
-    "split"
-   ]
-  },
-  {
-   "n": 7,
-   "sample": "s3",
+   "sample": "s4",
    "title": "預算 港幣 800 萬",
    "flags": [
     "shrunk",
@@ -178,53 +164,37 @@
    ]
   },
   {
-   "n": 8,
-   "sample": "s3",
+   "n": 6,
+   "sample": "s4",
    "title": "預算 港幣 800 萬（續）",
    "flags": [
     "shrunk",
     "split",
     "warned"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s6",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "grown",
+    "split"
+   ]
+  },
+  {
+   "n": 8,
+   "sample": "s6",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "grown",
+    "split"
    ]
   },
   {
    "n": 9,
-   "sample": "s3",
-   "title": "預算 港幣 800 萬（續）",
-   "flags": [
-    "shrunk",
-    "split",
-    "warned"
-   ]
-  },
-  {
-   "n": 10,
-   "sample": "s5",
-   "title": "八項行動",
-   "flags": [
-    "shrunk",
-    "split"
-   ]
-  },
-  {
-   "n": 11,
-   "sample": "s5",
-   "title": "八項行動（續）",
-   "flags": [
-    "shrunk",
-    "split"
-   ]
-  },
-  {
-   "n": 12,
-   "sample": "s5",
-   "title": "八項行動（續）",
-   "flags": [
-    "split"
-   ]
-  },
-  {
-   "n": 13,
    "sample": "s1",
    "title": "問答",
    "flags": []
@@ -234,16 +204,38 @@
  "blank_chips": [],
  "kept_under_text": [
   {
-   "slide": 13,
+   "slide": 9,
    "shape": 69
   },
   {
-   "slide": 13,
+   "slide": 9,
    "shape": 72
   },
   {
-   "slide": 13,
+   "slide": 9,
    "shape": 76
+  }
+ ],
+ "kept_not_rect": [
+  {
+   "slide": 9,
+   "shape": 74
+  },
+  {
+   "slide": 9,
+   "shape": 80
+  },
+  {
+   "slide": 9,
+   "shape": 83
+  },
+  {
+   "slide": 9,
+   "shape": 86
+  },
+  {
+   "slide": 9,
+   "shape": 89
   }
  ],
  "title_bar": {
@@ -251,6 +243,21 @@
   "bar_pt": 32.4,
   "meets": true
  },
+ "closing_bar": {
+  "sample": "s1",
+  "size_pt": 36.0,
+  "bar_pt": 32.4,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 1,
+  "時間表": 2,
+  "預算 港幣 800 萬": 2,
+  "八項行動": 2,
+  "問答": 1
+ },
+ "c23_diffs": [],
  "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
- "renders": "qa/g0b/marco-year-in-breakdowns/renders"
+ "renders": "qa/g0b/marco-year-in-breakdowns/renders-wsvo7zc3"
 }

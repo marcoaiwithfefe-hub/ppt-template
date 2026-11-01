@@ -11,6 +11,7 @@ the sheets and written into qa/g0b/G0B-RESULT.md.
 import io
 import json
 import subprocess
+import tempfile
 import sys
 import time
 import zipfile
@@ -21,7 +22,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from lxml import etree  # noqa: E402
 
 from deckfill import fill, parse_outline, plan_deck, read_template  # noqa: E402
-from deckfill.sample import has_text, shape_id, to_slide, walk, _local_box  # noqa: E402
+from deckfill.sample import backing_shape, has_text, shape_id, to_slide, walk, _local_box  # noqa: E402
 from deckfill.xmlsafe import q  # noqa: E402
 
 SET = [
@@ -74,7 +75,7 @@ def shapes_with_boxes(xml: bytes) -> dict[int, tuple]:
         box = _local_box(w.el)
         sid = shape_id(w.el)
         if box is not None and sid is not None and not w.hidden:
-            out[sid] = (w.el, to_slide(box, w.chain))
+            out[sid] = (w.el, to_slide(box, w.chain), w.turned)
     return out
 
 
@@ -90,18 +91,23 @@ def blank_chips(out_xml: bytes, src_xml: bytes, area: int) -> tuple[list[int], l
     held text in the sample or holds 80% of a sample text box whose text is gone from the output. One that sits behind
     an output text box (holds 80% of it, or lies 80% inside it) is listed apart: Q1 keeps it under the text."""
     o, s = shapes_with_boxes(out_xml), shapes_with_boxes(src_xml)
-    o_text = {i for i, (el, _) in o.items() if etree.QName(el).localname == "sp" and has_text(el)}
+    o_text = {i for i, (el, _, _) in o.items() if etree.QName(el).localname == "sp" and has_text(el)}
     texts = [o[i][1] for i in o_text]
-    gone = [b for i, (el, b) in s.items() if etree.QName(el).localname == "sp" and has_text(el) and i not in o_text]
-    chips, under = [], []
-    for i, (el, box) in o.items():
+    gone = [b for i, (el, b, _) in s.items() if etree.QName(el).localname == "sp" and has_text(el) and i not in o_text]
+    chips, under, shaped = [], [], []
+    for i, (el, box, turned) in o.items():
         if etree.QName(el).localname != "sp" or has_text(el) or not decorated_free(el) or box[2] * box[3] >= 0.08 * area:
             continue
         held = i in s and has_text(s[i][0])
         if held or any(inside(g, box) >= 0.8 for g in gone):
             behind = any(inside(t, box) >= 0.8 or inside(box, t) >= 0.8 for t in texts)
-            (under if behind else chips).append(i)
-    return chips, under
+            if behind:
+                under.append(i)
+            elif not held and not backing_shape(el, turned):
+                shaped.append(i)  # QA round 2 R5: not a rectangle with a solid fill, so not a backing; kept by design
+            else:
+                chips.append(i)
+    return chips, under, shaped
 
 
 def title_size(out_xml: bytes, sid: int, eff: int) -> int:
@@ -136,18 +142,24 @@ def run(name: str, route: str | None, tag: str) -> dict:
             src = {n: z.read(n) for n in z.namelist()}
         samples = {s.id: s for s in info.samples}
         sw, sh = info.samples[0].slide
-        rep["blank_chips"], rep["kept_under_text"] = [], []
+        rep["blank_chips"], rep["kept_under_text"], rep["kept_not_rect"] = [], [], []
         for i, ps in enumerate(plan.slides, start=1):
             S = samples[ps.layout]
             rep["slides"].append({"n": i, "sample": ps.layout, "title": ps.title, "flags": list(ps.flags)})
             # QA round 1 clean definition: no blank chip; the title slide's title meets the 4% bar
-            chips, under = blank_chips(slide_xml(parts, i), src[S.part.lstrip("/")], sw * sh)
+            chips, under, shaped = blank_chips(slide_xml(parts, i), src[S.part.lstrip("/")], sw * sh)
             rep["blank_chips"] += [{"slide": i, "shape": sid} for sid in chips]
             rep["kept_under_text"] += [{"slide": i, "shape": sid} for sid in under]
+            rep["kept_not_rect"] += [{"slide": i, "shape": sid} for sid in shaped]
             if i == 1 and ps.kind == "title":
                 tid = ps.boxes[0].sid
                 size = title_size(slide_xml(parts, i), tid, S.box(tid).lvl1.size)
                 rep["title_bar"] = {"size_pt": size / 100, "bar_pt": round(0.04 * sh / 12700, 2), "meets": size * 12700 >= 4 * sh}
+            if i == len(plan.slides) and ps.kind == "section":  # QA round 2: the closing 問答 meets the Q2 bar
+                tid = ps.boxes[0].sid
+                size = title_size(slide_xml(parts, i), tid, S.box(tid).lvl1.size)
+                rep["closing_bar"] = {"sample": ps.layout, "size_pt": size / 100, "bar_pt": round(0.04 * sh / 12700, 2),
+                                      "meets": size * 12700 >= 4 * sh}
             out_boxes = text_boxes(slide_xml(parts, i))
             in_boxes = text_boxes(src[S.part.lstrip("/")])
             ids = sorted(out_boxes)
@@ -158,16 +170,25 @@ def run(name: str, route: str | None, tag: str) -> dict:
                         before = x in in_boxes and y in in_boxes and overlaps(in_boxes[x], in_boxes[y])
                         if not before:
                             rep["new_overlaps"].append({"slide": i, "boxes": [x, y], "flags": list(ps.flags)})
+        # QA round 2: slides per outline slide, and C23's comparator (tests/sample_look.py) on the real deck
+        sys.path.insert(0, str(ROOT / "tests"))
+        from sample_look import look_diff
+        rep["per_outline_slide"] = {s.title: sum(1 for ps in plan.slides if ps.source == k) for k, s in enumerate(plan.outline.slides)}
+        rep["c23_diffs"] = look_diff(deck, data)
     else:
         rep["slides"] = [{"n": i, "layout": ps.layout, "title": ps.title, "fit": ps.fit} for i, ps in enumerate(plan.slides, start=1)]
-    subprocess.run([sys.executable, str(RENDER), str(out_pptx), str(d / "renders"), "36"], check=True, capture_output=True, timeout=900)
-    pngs = sorted((d / "renders").glob("slide-*.png"))
+    # a fresh folder per run: pdftoppm pads page numbers by page count, so a shorter deck would leave a longer
+    # deck's pages behind in a reused folder (QA round 2 finding); old folders are gitignored and never deleted
+    renders = Path(tempfile.mkdtemp(prefix="renders-", dir=d))
+    subprocess.run([sys.executable, str(RENDER), str(out_pptx), str(renders), "36"], check=True, capture_output=True, timeout=900)
+    pngs = sorted(renders.glob("slide-*.png"), key=lambda f: int(f.stem.split("-")[1]))
     cols = 4
     rows = -(-len(pngs) // cols)
-    subprocess.run(["/opt/homebrew/bin/ffmpeg", "-v", "error", "-y", "-pattern_type", "glob", "-i", str(d / "renders" / "slide-*.png"),
+    assert len(pngs) == len(plan.slides), f"{name}: {len(pngs)} pages rendered for {len(plan.slides)} slides"
+    subprocess.run(["/opt/homebrew/bin/ffmpeg", "-v", "error", "-y", "-pattern_type", "glob", "-i", str(renders / "slide-*.png"),
                     "-vf", f"scale=480:-2,tile={cols}x{rows}:padding=6:color=white", "-frames:v", "1", "-q:v", "4", str(d / "sheet.jpg")], check=True)
     rep["sheet"] = str((d / "sheet.jpg").relative_to(ROOT))
-    rep["renders"] = str((d / "renders").relative_to(ROOT))
+    rep["renders"] = str(renders.relative_to(ROOT))
     (d / "report.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1))
     return rep
 
@@ -177,9 +198,11 @@ if __name__ == "__main__":
     for name in SET:
         r = run(name, None, Path(name).stem)
         reports.append({k: r.get(k) for k in ("template", "route", "default_route", "seconds", "chosen", "new_overlaps",
-                                               "blank_chips", "kept_under_text", "title_bar", "sheet")} | {"slides": len(r["slides"])})
+                                               "blank_chips", "kept_under_text", "kept_not_rect", "title_bar", "closing_bar", "per_outline_slide", "c23_diffs", "sheet")}
+                       | {"slides": len(r["slides"])})
         print(name, r["route"], r["seconds"], "s", len(r["slides"]), "slides", "overlaps", len(r["new_overlaps"]),
-              "blank chips", len(r.get("blank_chips", [])), "kept under text", len(r.get("kept_under_text", [])), "title", r.get("title_bar"), flush=True)
+              "blank chips", len(r.get("blank_chips", [])), "kept under text", len(r.get("kept_under_text", [])), "kept not rect", len(r.get("kept_not_rect", [])), "title", r.get("title_bar"), "closing", r.get("closing_bar"),
+              "per slide", r.get("per_outline_slide"), "C23", len(r.get("c23_diffs", [])), flush=True)
     if "--before" in sys.argv:
         r = run("marco-year-in-breakdowns.pptx", "layout", "marco-before-layout-route")
         print("before (layout route)", r["sheet"])

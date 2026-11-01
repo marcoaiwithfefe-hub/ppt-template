@@ -3,7 +3,7 @@
   "template": "corporate-sales-pitch-slides-2.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.34,
+  "seconds": 0.33,
   "chosen": [
    "s1",
    "s5",
@@ -15,11 +15,32 @@
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [
+   {
+    "slide": 4,
+    "shape": 123
+   }
+  ],
   "title_bar": {
    "size_pt": 104.0,
    "bar_pt": 32.4,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s1",
+   "size_pt": 104.0,
+   "bar_pt": 32.4,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
   "slides": 7
  },
@@ -27,23 +48,39 @@
   "template": "elegant-pitch-deck.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.29,
+  "seconds": 0.28,
   "chosen": [
-   "s1",
    "s33",
+   "s10",
    "s12",
-   "s6",
+   "s33",
    "s5",
    "s22"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 51.0,
+   "size_pt": 28.0,
    "bar_pt": 16.2,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s22",
+   "size_pt": 45.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg",
   "slides": 7
  },
@@ -51,9 +88,9 @@
   "template": "3d-modern-background-pitch-deck.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.56,
+  "seconds": 0.51,
   "chosen": [
-   "s1",
+   "s8",
    "s24",
    "s11",
    "s14",
@@ -63,11 +100,27 @@
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 48.0,
+   "size_pt": 40.0,
    "bar_pt": 16.2,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s1",
+   "size_pt": 57.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg",
   "slides": 7
  },
@@ -75,47 +128,79 @@
   "template": "business-conference-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.22,
+  "seconds": 0.18,
   "chosen": [
-   "s1",
+   "s12",
    "s3",
    "s7",
-   "s13",
    "s3",
-   "s1"
+   "s4",
+   "s6"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 97.0,
+   "size_pt": 68.0,
    "bar_pt": 32.4,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s6",
+   "size_pt": 80.0,
+   "bar_pt": 32.4,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/business-conference-slides/sheet.jpg",
-  "slides": 9
+  "slides": 7
  },
  {
   "template": "simple-business-proposal-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.26,
+  "seconds": 0.39,
   "chosen": [
-   "s1",
    "s6",
    "s14",
    "s7",
+   "s11",
    "s6",
-   "s1"
+   "s2"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 80.0,
+   "size_pt": 62.0,
    "bar_pt": 16.2,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s2",
+   "size_pt": 62.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg",
   "slides": 7
  },
@@ -123,33 +208,49 @@
   "template": "viola-free-presentation-template.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.29,
+  "seconds": 0.36,
   "chosen": [
-   "s1",
-   "s39",
    "s4",
-   "s27",
+   "s39",
+   "s39",
+   "s39",
    "s39",
    "s1"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 28.5,
+   "size_pt": 30.0,
    "bar_pt": 16.2,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s1",
+   "size_pt": 36.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg",
-  "slides": 9
+  "slides": 7
  },
  {
   "template": "bullen-free-presentation-template.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.38,
+  "seconds": 0.41,
   "chosen": [
-   "s1",
+   "s5",
    "s6",
    "s33",
    "s8",
@@ -159,11 +260,27 @@
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [],
+  "kept_not_rect": [],
   "title_bar": {
-   "size_pt": 45.5,
+   "size_pt": 30.0,
    "bar_pt": 16.2,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s1",
+   "size_pt": 54.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 1,
+   "預算 港幣 800 萬": 1,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/bullen-free-presentation-template/sheet.jpg",
   "slides": 7
  },
@@ -171,29 +288,51 @@
   "template": "marco-year-in-breakdowns.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.52,
+  "seconds": 0.47,
   "chosen": [
    "s7",
    "s5",
+   "s2",
+   "s4",
    "s6",
-   "s3",
-   "s5",
    "s1"
   ],
   "new_overlaps": [],
   "blank_chips": [],
   "kept_under_text": [
    {
-    "slide": 13,
+    "slide": 9,
     "shape": 69
    },
    {
-    "slide": 13,
+    "slide": 9,
     "shape": 72
    },
    {
-    "slide": 13,
+    "slide": 9,
     "shape": 76
+   }
+  ],
+  "kept_not_rect": [
+   {
+    "slide": 9,
+    "shape": 74
+   },
+   {
+    "slide": 9,
+    "shape": 80
+   },
+   {
+    "slide": 9,
+    "shape": 83
+   },
+   {
+    "slide": 9,
+    "shape": 86
+   },
+   {
+    "slide": 9,
+    "shape": 89
    }
   ],
   "title_bar": {
@@ -201,7 +340,22 @@
    "bar_pt": 32.4,
    "meets": true
   },
+  "closing_bar": {
+   "sample": "s1",
+   "size_pt": 36.0,
+   "bar_pt": 32.4,
+   "meets": true
+  },
+  "per_outline_slide": {
+   "匯通物流 2027 年度計劃": 1,
+   "三個目標": 1,
+   "時間表": 2,
+   "預算 港幣 800 萬": 2,
+   "八項行動": 2,
+   "問答": 1
+  },
+  "c23_diffs": [],
   "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
-  "slides": 13
+  "slides": 9
  }
 ]

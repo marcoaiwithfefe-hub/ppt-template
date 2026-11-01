@@ -9,3 +9,15 @@ Run on `104dc38` with `.venv/bin/python qa/rev8/q5/run_q5.py`: each template fil
 | hkust-template14 | sample | 9 slides | 11 slides (s2, s9 x4, s2) | warned on all 11 | Layout: the HKUST photo layouts, titles and bullets readable. Sample: only 2 usable samples (7 of 9 have no title box); their title boxes are narrow vertical strips, so every title is set one glyph per line down the strip and warned. |
 
 Seat's reading: the sample route is better on elderly-gov-diy and worse on edb-mpa2022 and hkust-template14. Fable's call on D11.
+
+## QA round 2 (R1 to R7), sheets in `qa2/` beside round 1's
+
+Run on `7d9dbde` with `.venv/bin/python qa/rev8/q5/run_q5.py qa2`.
+
+| template | D11 default now | layout route | sample route, round 1 | sample route, round 2 |
+|---|---|---|---|---|
+| edb-mpa2022 | sample | 7 slides | 18 | 9 (s2, s5 for four outline slides, s2): 時間表 1, 預算 3, 八項行動 2 |
+| elderly-gov-diy | sample | 7 | 7 | 7 (s9, s14, s10, s9, s8, s2) |
+| hkust-template14 | layout (R4: 2 usable samples) | 9 | 11 | 11, every slide still warned (the narrow vertical title strips) |
+
+Sheets: `qa2/edb-mpa2022-both.jpg`, `qa2/elderly-gov-diy-both.jpg`, `qa2/hkust-template14-both.jpg`.
