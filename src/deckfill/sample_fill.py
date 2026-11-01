@@ -333,8 +333,8 @@ def fill_sample(info, pkg, plan) -> bytes:
             removed.add(sid)
         # everything that received no outline text is cleared (hidden shapes included). QA round 1 Q1: a cleared
         # shape with a fill or line under 8% of the slide goes whole, and so does a text-free shape with a fill or
-        # line under 8% that holds at least 80% of a cleared text box (its backing); nothing that holds 80% of a
-        # destination's written box goes. Measured in slide space against the sample's boxes.
+        # line under 8% that holds at least 80% of a cleared text box (its backing); nothing behind a destination that
+        # kept its text goes. Measured in slide space against the sample's boxes.
         dests = [bf.box or _xywh(S.box(bf.sid)) for bf in ps.boxes]
         cleared = [_xywh(b) for b in S.boxes if b.sid not in fills]
 
@@ -345,7 +345,9 @@ def fill_sample(info, pkg, plan) -> bytes:
         def goes(box, backing: bool) -> bool:
             if box is None or box[2] * box[3] >= CHIP_SHARE * area:
                 return False
-            if any(_inside(d, box) >= BACKING_SHARE for d in dests):
+            # behind a destination that kept its text: it backs the destination's written box, or it lies under
+            # that box (the word blocks under a joined title's widened box)
+            if any(_inside(d, box) >= BACKING_SHARE or _inside(box, d) >= BACKING_SHARE for d in dests):
                 return False
             return not backing or any(_inside(c, box) >= BACKING_SHARE for c in cleared)
 

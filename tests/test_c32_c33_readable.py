@@ -41,13 +41,21 @@ def test_c32_design_chip_and_6pct_box_go_10pct_panel_stays_empty():
     assert look_diff(out, data) == []
 
 
-def test_c32_design_backings_of_fragments_and_labels_go_with_their_groups():
+def test_c32_design_label_backings_go_blocks_under_the_joined_title_stay():
+    """The year-digit labels' small backings go with their groups. The fragments' white blocks lie under the joined
+    title's widened box, so they sit behind a destination that kept its text and stay (Marco's 問答 slide on s1 needs
+    them: the title is centred across them, black on a photo without them)."""
     data, out = run("sample-design.pptx", "design", None)
-    ids = _shapes(out, 1)  # the title slide, on s1
-    for gone in (120, 121, 130, 131, 140, 141, 150, 151, 160, 161, 170, 171, 180, 181):
-        assert gone not in ids, gone
-    assert 111 in ids and 112 in ids  # the title destination's own white block stays behind it
-    assert _text(ids[112]) == "Annual PlanOperations team"
+    for n in (1, 6):  # the title slide and the Questions section slide, both on s1
+        ids = _shapes(out, n)
+        for gone in (150, 151, 160, 161, 170, 171, 180, 181):
+            assert gone not in ids, (n, gone)
+        for kept in (110, 111, 112, 120, 121, 130, 131, 140, 141):
+            assert kept in ids, (n, kept)
+        for frag in (122, 132, 142):
+            assert frag not in ids, (n, frag)
+    assert _text(_shapes(out, 1)[112]) == "Annual PlanOperations team"
+    assert look_diff(out, data) == []
 
 
 def test_c32_marco_slide6_structure_backings_under_labels():

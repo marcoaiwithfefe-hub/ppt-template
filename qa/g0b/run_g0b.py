@@ -54,6 +54,65 @@ def slide_xml(parts: dict, n: int) -> bytes:
     return parts[f"ppt/slides/slide{n}.xml"]
 
 
+def decorated_free(el) -> bool:
+    """A p:sp with its own fill or line (QA round 1 Q1's chips and backings), read from spPr only."""
+    pr = el.find(q("p:spPr"))
+    if pr is None:
+        return False
+    if any(pr.find(q("a:" + t)) is not None for t in ("solidFill", "gradFill", "blipFill", "pattFill")):
+        return True
+    ln = pr.find(q("a:ln"))
+    return ln is not None and ln.find(q("a:noFill")) is None and (len(ln) > 0 or ln.get("w") is not None)
+
+
+def shapes_with_boxes(xml: bytes) -> dict[int, tuple]:
+    root = etree.fromstring(xml)
+    tree = root.find(q("p:cSld")).find(q("p:spTree"))
+    out = {}
+    for w in walk(tree):
+        box = _local_box(w.el)
+        sid = shape_id(w.el)
+        if box is not None and sid is not None and not w.hidden:
+            out[sid] = (w.el, to_slide(box, w.chain))
+    return out
+
+
+def inside(inner, outer) -> float:
+    ix = min(inner[0] + inner[2], outer[0] + outer[2]) - max(inner[0], outer[0])
+    iy = min(inner[1] + inner[3], outer[1] + outer[3]) - max(inner[1], outer[1])
+    a = inner[2] * inner[3]
+    return ix * iy / a if ix > 0 and iy > 0 and a > 0 else 0.0
+
+
+def blank_chips(out_xml: bytes, src_xml: bytes, area: int) -> tuple[list[int], list[int]]:
+    """QA round 1 clean definition: an output shape with a fill or line, no text, under 8% of the slide, that either
+    held text in the sample or holds 80% of a sample text box whose text is gone from the output. One that sits behind
+    an output text box (holds 80% of it, or lies 80% inside it) is listed apart: Q1 keeps it under the text."""
+    o, s = shapes_with_boxes(out_xml), shapes_with_boxes(src_xml)
+    o_text = {i for i, (el, _) in o.items() if etree.QName(el).localname == "sp" and has_text(el)}
+    texts = [o[i][1] for i in o_text]
+    gone = [b for i, (el, b) in s.items() if etree.QName(el).localname == "sp" and has_text(el) and i not in o_text]
+    chips, under = [], []
+    for i, (el, box) in o.items():
+        if etree.QName(el).localname != "sp" or has_text(el) or not decorated_free(el) or box[2] * box[3] >= 0.08 * area:
+            continue
+        held = i in s and has_text(s[i][0])
+        if held or any(inside(g, box) >= 0.8 for g in gone):
+            behind = any(inside(t, box) >= 0.8 or inside(box, t) >= 0.8 for t in texts)
+            (under if behind else chips).append(i)
+    return chips, under
+
+
+def title_size(out_xml: bytes, sid: int, eff: int) -> int:
+    """The written size of the title destination's runs (hundredths of a point), the effective size where none is set."""
+    root = etree.fromstring(out_xml)
+    for w in walk(root.find(q("p:cSld")).find(q("p:spTree"))):
+        if shape_id(w.el) == sid:
+            szs = [int(r.get("sz")) for r in w.el.iter(q("a:rPr")) if r.get("sz")]
+            return min(szs) if szs else eff
+    return 0
+
+
 def run(name: str, route: str | None, tag: str) -> dict:
     data = (ROOT / "qa" / "real-templates" / name).read_bytes()
     t0 = time.time()
@@ -75,9 +134,19 @@ def run(name: str, route: str | None, tag: str) -> dict:
         with zipfile.ZipFile(io.BytesIO(data)) as z:
             src = {n: z.read(n) for n in z.namelist()}
         samples = {s.id: s for s in info.samples}
+        sw, sh = info.samples[0].slide
+        rep["blank_chips"], rep["kept_under_text"] = [], []
         for i, ps in enumerate(plan.slides, start=1):
             S = samples[ps.layout]
             rep["slides"].append({"n": i, "sample": ps.layout, "title": ps.title, "flags": list(ps.flags)})
+            # QA round 1 clean definition: no blank chip; the title slide's title meets the 4% bar
+            chips, under = blank_chips(slide_xml(parts, i), src[S.part.lstrip("/")], sw * sh)
+            rep["blank_chips"] += [{"slide": i, "shape": sid} for sid in chips]
+            rep["kept_under_text"] += [{"slide": i, "shape": sid} for sid in under]
+            if i == 1 and ps.kind == "title":
+                tid = ps.boxes[0].sid
+                size = title_size(slide_xml(parts, i), tid, S.box(tid).lvl1.size)
+                rep["title_bar"] = {"size_pt": size / 100, "bar_pt": round(0.04 * sh / 12700, 2), "meets": size * 12700 >= 4 * sh}
             out_boxes = text_boxes(slide_xml(parts, i))
             in_boxes = text_boxes(src[S.part.lstrip("/")])
             ids = sorted(out_boxes)
@@ -106,8 +175,10 @@ if __name__ == "__main__":
     reports = []
     for name in SET:
         r = run(name, None, Path(name).stem)
-        reports.append({k: r[k] for k in ("template", "route", "default_route", "seconds", "chosen", "new_overlaps", "sheet")})
-        print(name, r["route"], r["seconds"], "s", len(r["slides"]), "slides", "overlaps", len(r["new_overlaps"]), flush=True)
+        reports.append({k: r.get(k) for k in ("template", "route", "default_route", "seconds", "chosen", "new_overlaps",
+                                               "blank_chips", "kept_under_text", "title_bar", "sheet")} | {"slides": len(r["slides"])})
+        print(name, r["route"], r["seconds"], "s", len(r["slides"]), "slides", "overlaps", len(r["new_overlaps"]),
+              "blank chips", len(r.get("blank_chips", [])), "kept under text", len(r.get("kept_under_text", [])), "title", r.get("title_bar"), flush=True)
     if "--before" in sys.argv:
         r = run("marco-year-in-breakdowns.pptx", "layout", "marco-before-layout-route")
         print("before (layout route)", r["sheet"])

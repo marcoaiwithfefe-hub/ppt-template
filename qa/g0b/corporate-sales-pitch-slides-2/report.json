@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.33,
+ "seconds": 0.37,
  "samples": [
   {
    "id": "s1",
@@ -210,6 +210,13 @@
   }
  ],
  "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "title_bar": {
+  "size_pt": 104.0,
+  "bar_pt": 32.4,
+  "meets": true
+ },
  "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
  "renders": "qa/g0b/corporate-sales-pitch-slides-2/renders"
 }

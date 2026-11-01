@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.24,
+ "seconds": 0.27,
  "samples": [
   {
    "id": "s1",
@@ -229,6 +229,13 @@
   }
  ],
  "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "title_bar": {
+  "size_pt": 80.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
  "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg",
  "renders": "qa/g0b/simple-business-proposal-slides/renders"
 }

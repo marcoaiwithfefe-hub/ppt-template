@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.19,
+ "seconds": 0.22,
  "samples": [
   {
    "id": "s1",
@@ -234,6 +234,13 @@
   }
  ],
  "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "title_bar": {
+  "size_pt": 97.0,
+  "bar_pt": 32.4,
+  "meets": true
+ },
  "sheet": "qa/g0b/business-conference-slides/sheet.jpg",
  "renders": "qa/g0b/business-conference-slides/renders"
 }

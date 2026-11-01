@@ -178,7 +178,7 @@ def make_sample_design(out):
     tb(s4.shapes, 412, 6400000, 2 * M, 5200000, 3600000, "After", 24)
     pic(s4.shapes, 421, 5700000, 6 * M, 800000, 600000, (160, 60, 160))
     # C32 (QA round 1 Q1): a filled label chip and a filled 6% box go when cleared; a filled 10% panel stays, empty
-    tb(s4.shapes, 431, 11 * M, 500000, 500000, 400000, "07", 18, fill=(240, 170, 60))
+    tb(s4.shapes, 431, 11600000, 500000, 400000, 400000, "07", 18, fill=(240, 170, 60))
     tb(s4.shapes, 441, 600000, 5700000, 4600000, 1100000, "Small note here", 16, fill=(255, 255, 255))
     tb(s4.shapes, 451, 6400000, 5200000, 5400000, 1600000, "Panel text here", 18, fill=(255, 255, 255))
 

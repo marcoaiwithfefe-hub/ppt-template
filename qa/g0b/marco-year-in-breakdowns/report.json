@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.41,
+ "seconds": 0.53,
  "samples": [
   {
    "id": "s1",
@@ -103,7 +103,7 @@
   }
  ],
  "chosen": [
-  "s1",
+  "s7",
   "s5",
   "s6",
   "s3",
@@ -112,10 +112,6 @@
  ],
  "warnings": [
   [
-   "subtitle_in_title",
-   "匯通物流 2027 年度計劃"
-  ],
-  [
    "fit_warn",
    "預算 港幣 800 萬"
   ]
@@ -123,11 +119,9 @@
  "slides": [
   {
    "n": 1,
-   "sample": "s1",
+   "sample": "s7",
    "title": "匯通物流 2027 年度計劃",
-   "flags": [
-    "shrunk"
-   ]
+   "flags": []
   },
   {
    "n": 2,
@@ -237,6 +231,26 @@
   }
  ],
  "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [
+  {
+   "slide": 13,
+   "shape": 69
+  },
+  {
+   "slide": 13,
+   "shape": 72
+  },
+  {
+   "slide": 13,
+   "shape": 76
+  }
+ ],
+ "title_bar": {
+  "size_pt": 120.0,
+  "bar_pt": 32.4,
+  "meets": true
+ },
  "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
  "renders": "qa/g0b/marco-year-in-breakdowns/renders"
 }

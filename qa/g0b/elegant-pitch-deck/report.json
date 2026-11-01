@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.26,
+ "seconds": 0.3,
  "samples": [
   {
    "id": "s1",
@@ -408,6 +408,13 @@
   }
  ],
  "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "title_bar": {
+  "size_pt": 51.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
  "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg",
  "renders": "qa/g0b/elegant-pitch-deck/renders"
 }

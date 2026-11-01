@@ -3,7 +3,7 @@
   "template": "corporate-sales-pitch-slides-2.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.33,
+  "seconds": 0.37,
   "chosen": [
    "s1",
    "s5",
@@ -13,13 +13,21 @@
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 104.0,
+   "bar_pt": 32.4,
+   "meets": true
+  },
+  "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
+  "slides": 7
  },
  {
   "template": "elegant-pitch-deck.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.26,
+  "seconds": 0.3,
   "chosen": [
    "s1",
    "s33",
@@ -29,13 +37,21 @@
    "s22"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 51.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg",
+  "slides": 7
  },
  {
   "template": "3d-modern-background-pitch-deck.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.53,
+  "seconds": 0.56,
   "chosen": [
    "s1",
    "s24",
@@ -45,13 +61,21 @@
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 48.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg",
+  "slides": 7
  },
  {
   "template": "business-conference-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.19,
+  "seconds": 0.22,
   "chosen": [
    "s1",
    "s3",
@@ -61,13 +85,21 @@
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/business-conference-slides/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 97.0,
+   "bar_pt": 32.4,
+   "meets": true
+  },
+  "sheet": "qa/g0b/business-conference-slides/sheet.jpg",
+  "slides": 9
  },
  {
   "template": "simple-business-proposal-slides.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.24,
+  "seconds": 0.27,
   "chosen": [
    "s1",
    "s6",
@@ -77,29 +109,45 @@
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 80.0,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg",
+  "slides": 7
  },
  {
   "template": "viola-free-presentation-template.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.3,
+  "seconds": 0.31,
   "chosen": [
    "s1",
    "s39",
-   "s32",
-   "s8",
-   "s35",
+   "s4",
+   "s27",
+   "s39",
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 28.5,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg",
+  "slides": 9
  },
  {
   "template": "bullen-free-presentation-template.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.33,
+  "seconds": 0.4,
   "chosen": [
    "s1",
    "s6",
@@ -109,15 +157,23 @@
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/bullen-free-presentation-template/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [],
+  "title_bar": {
+   "size_pt": 45.5,
+   "bar_pt": 16.2,
+   "meets": true
+  },
+  "sheet": "qa/g0b/bullen-free-presentation-template/sheet.jpg",
+  "slides": 7
  },
  {
   "template": "marco-year-in-breakdowns.pptx",
   "route": "sample",
   "default_route": "sample",
-  "seconds": 0.41,
+  "seconds": 0.53,
   "chosen": [
-   "s1",
+   "s7",
    "s5",
    "s6",
    "s3",
@@ -125,6 +181,27 @@
    "s1"
   ],
   "new_overlaps": [],
-  "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg"
+  "blank_chips": [],
+  "kept_under_text": [
+   {
+    "slide": 13,
+    "shape": 69
+   },
+   {
+    "slide": 13,
+    "shape": 72
+   },
+   {
+    "slide": 13,
+    "shape": 76
+   }
+  ],
+  "title_bar": {
+   "size_pt": 120.0,
+   "bar_pt": 32.4,
+   "meets": true
+  },
+  "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
+  "slides": 13
  }
 ]

@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.53,
+ "seconds": 0.56,
  "samples": [
   {
    "id": "s1",
@@ -303,6 +303,13 @@
   }
  ],
  "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "title_bar": {
+  "size_pt": 48.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
  "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg",
  "renders": "qa/g0b/3d-modern-background-pitch-deck/renders"
 }

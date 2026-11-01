@@ -194,7 +194,8 @@ def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area) -> set[int]:
     destinations, never from the fill's record. Footers; text boxes with no fill or line, and placeholders; a text
     shape with a fill or line under 8% of the slide; a text-free shape with a fill or line under 8% that holds at least
     80% of a cleared text box (its backing); a group whose visible members are all gone, with its hidden members.
-    Nothing that holds 80% of a destination's output box may go, and neither may anything 8% or larger."""
+    Nothing behind a destination that kept its text may go (it holds 80% of the destination's output box, or 80% of it
+    lies inside that box), and neither may anything 8% or larger."""
     dests = {i for i, el in o_sh.items() if i in s_sh and etree.QName(el).localname == "sp" and _has_text(el)}
     dest_boxes = [o_bx[i] for i in dests if i in o_bx]
     cleared = [s_bx[i] for i, el in s_sh.items() if etree.QName(el).localname == "sp" and _has_text(el) and i not in dests
@@ -203,7 +204,8 @@ def allowed_removals(s_sh, s_bx, o_sh, o_bx, hidden, area) -> set[int]:
 
     def small_free(i) -> bool:
         b = s_bx.get(i)
-        return b is not None and b[2] * b[3] < 0.08 * area and not any(_share_inside(d, b) >= 0.8 for d in dest_boxes)
+        return b is not None and b[2] * b[3] < 0.08 * area and not any(
+            _share_inside(d, b) >= 0.8 or _share_inside(b, d) >= 0.8 for d in dest_boxes)
 
     ok: set[int] = set()
     for i in removed:
