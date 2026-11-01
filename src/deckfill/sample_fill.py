@@ -389,7 +389,7 @@ def fill_sample(info, pkg, plan) -> bytes:
             else:
                 tree.append(el)
         _drop_unused_rels(slide)
-        written += len(etree.tostring(slide._element))
+        written += len(etree.tostring(slide._element, encoding="utf-8", xml_declaration=False))  # as saved (E1)
         if written > MAX_XML:
             raise TemplateError("too_big", "sample route: generated slide XML over the cap")
     _update_app_xml(prs, len(plan.slides))

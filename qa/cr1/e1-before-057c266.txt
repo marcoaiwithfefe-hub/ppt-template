@@ -1,0 +1,5 @@
+base 057c266 (057c266), tests from working tree at 8530535, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.jzLnbJPoWi
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_budget_bounds_the_generated_xml[sample-footbig.pptx-## B0\n- x\n\n## B1\n- x\n\n## B2\n- x\n\n]
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_budget_bounds_the_generated_xml[sample-thin.pptx-text1]
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_borrowed_footers_refused_before_any_output_tree
+3 failed, 28 deselected in 0.28s

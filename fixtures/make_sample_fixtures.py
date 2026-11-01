@@ -993,6 +993,25 @@ def make_sample_inherit(out):
     return save(prs, out, "sample-inherit.pptx")
 
 
+def make_sample_footbig(out):
+    """Code review E1 (C30 borrowed footers): b1, a decorated content sample with no footer of its own; b2, a hidden
+    slide on the same layout whose footer holds 1 MB of text. D4 step 1 gives every copy of b1 that footer."""
+    prs = new_prs()
+    lay = layout_named(prs, "Blank")
+    b1 = prs.slides.add_slide(lay)
+    bg(b1, (240, 230, 220))
+    tb(b1.shapes, 101, 600000, 400000, 10900000, 1200000, "Footer borrower", 44)
+    tb(b1.shapes, 111, 600000, 1800000, 10900000, 4200000, "Body", 20)
+    pic(b1.shapes, 121, 9 * M, 6 * M, M, 600000, (40, 100, 160))
+    b2 = prs.slides.add_slide(lay)
+    b2._element.set("show", "0")
+    import hashlib  # incompressible text, so the package stays under the D1b compression-ratio cap
+
+    text = "".join(hashlib.sha256(str(i).encode()).hexdigest() for i in range(1024 * 1024 // 64))
+    b2.shapes._spTree.append(footer_sp(lay, "ftr", text, None, 291))
+    return save(prs, out, "sample-footbig.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -1006,4 +1025,5 @@ def make_all(out) -> list:
         make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
         make_sample_altcontent(out), make_sample_flip(out),
         make_sample_cols2(out), make_sample_inherit(out),
+        make_sample_footbig(out),
     ]

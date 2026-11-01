@@ -168,3 +168,36 @@ def test_c30_fill_rechecks_its_running_total(monkeypatch):
     with pytest.raises(TemplateError) as e:
         fill(data, "sample-design.pptx", plan)
     assert e.value.code == "too_big"
+
+
+# --- C30, code review E1: the budget bounds what the fill writes, borrowed footers and escaped text included
+
+
+def generated(out: bytes) -> int:
+    """The generated slide XML of an output, measured as the fill's running guard measures it."""
+    from sample_oracle import parts_of, slides, xml
+
+    op = parts_of(out)
+    return sum(len(etree.tostring(xml(op[n]), encoding="utf-8", xml_declaration=False)) for n in slides(op))
+
+
+@pytest.mark.parametrize("fixture,text", [
+    ("sample-footbig.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # each copy borrows a 1 MB footer
+    ("sample-thin.pptx", "## Amp\n- " + "&" * 3000 + "\n- " + "<a>" * 500 + "\n- 中文" * 3 + "\n"),  # escaped text
+])
+def test_c30_budget_bounds_the_generated_xml(fixture, text):
+    data = (FIX / fixture).read_bytes()
+    info = read_template(data, fixture)
+    plan = plan_deck(info, parse_outline(text), route="sample")
+    budget = sample_plan.plan_bytes({S.id: S for S in info.samples}, plan.slides)[0]
+    assert budget >= generated(fill(data, fixture, plan))
+
+
+def test_c30_borrowed_footers_refused_before_any_output_tree(monkeypatch):
+    data = (FIX / "sample-footbig.pptx").read_bytes()
+    info = read_template(data, "sample-footbig.pptx")
+    built = []
+    monkeypatch.setattr(sample_fill, "_copy_sample", lambda *a, **k: built.append(1))
+    with pytest.raises(TemplateError) as e:
+        plan_deck(info, parse_outline("".join(f"## B{i}\n- x\n\n" for i in range(45))), route="sample")
+    assert e.value.code == "too_big" and not built

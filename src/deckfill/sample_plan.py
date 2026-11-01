@@ -625,9 +625,16 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
                 compatible=tuple(compat), warnings=tuple(warnings), route="sample")
 
 
+def escaped_len(text: str) -> int:
+    """Code review E1: the bytes a text takes once serialised in an a:t element (UTF-8, with &, < and > escaped and a
+    carriage return written as a character reference)."""
+    return len(text.encode("utf-8")) + 4 * text.count("&") + 3 * (text.count("<") + text.count(">")) + 4 * text.count("\r")
+
+
 def plan_bytes(samples, slides) -> tuple[int, int, int]:
     """D12 limits: the generated slide XML (each copy's source part, plus per written paragraph the exact a:pPr and
-    a:rPr it carries, its UTF-8 text and the markup, plus the footers), copied shapes and written paragraphs."""
+    a:rPr it carries, its serialised text and the markup, plus the footers it can receive), copied shapes and written
+    paragraphs."""
     total = shapes = paras = 0
     for ps in slides:
         S = samples[ps.layout]
@@ -637,7 +644,7 @@ def plan_bytes(samples, slides) -> tuple[int, int, int]:
             sb = S.box(bf.sid)
             for lvl, text in bf.paras:
                 total += (sb.ppr1 if lvl == 1 else sb.ppr2) + sb.rpr + (SZ_ATTR if bf.sizes[0] else 0)
-                total += len(text.encode("utf-8")) + PARA_MARKUP
+                total += escaped_len(text) + PARA_MARKUP
                 paras += 1
     return total, shapes, paras
 

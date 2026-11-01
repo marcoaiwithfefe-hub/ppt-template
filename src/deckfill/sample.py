@@ -934,7 +934,7 @@ def footer_boxes(tree, layout_el=None, master_el=None) -> list:
 
 
 def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, master_bg, layout_master_cover: float,
-                fixed=(), footers=()) -> Sample:
+                fixed=(), footers=(), deck_footers=None) -> Sample:
     el = slide._element
     part = slide.part
     csld = el.find(q("p:cSld"))
@@ -1053,15 +1053,39 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         turned=bool(turned_ids),
         nbytes=len(etree.tostring(el)),
         nshapes=nshapes,
-        footer_bytes=sum(len(etree.tostring(w.el)) for w in walked if etree.QName(w.el).localname == "sp"
-                         and ph_of(w.el) is not None and ph_type(ph_of(w.el)) in FOOTER_TYPES)
-        + sum(len(etree.tostring(sp)) for sp, ph in placeholders(styles.layout_el) if ph_type(ph) in FOOTER_TYPES),
+        footer_bytes=footer_budget(walked, styles.layout_el, deck_footers or {}),
         slide=(sw, sh),
         leaves=leaves,
         groups=groups,
         fixed=tuple(fixed) if el.get("showMasterSp") not in ("0", "false") else (),
         footers=tuple(footers),
     )
+
+
+FOOTER_SLACK = 512  # per footer type: an a:xfrm the fill may add, a new shape id, a slide number's digits
+
+
+def footer_sizes(walked) -> dict[str, int]:
+    """The largest footer placeholder of each type among walked shapes, serialised bytes."""
+    out: dict[str, int] = {}
+    for w in walked:
+        if etree.QName(w.el).localname == "sp" and ph_of(w.el) is not None and ph_type(ph_of(w.el)) in FOOTER_TYPES:
+            t = ph_type(ph_of(w.el))
+            out[t] = max(out.get(t, 0), len(etree.tostring(w.el)))
+    return out
+
+
+def footer_budget(walked, layout_el, deck: dict[str, int]) -> int:
+    """D12 limits, code review E1: an upper bound on the footers a copy can receive, whichever D4 step supplies each
+    type: per type, the largest of this slide's own, any slide's in the deck (step 1 borrows from another slide) and
+    the layout's (step 3), plus slack for what the fill adds."""
+    own = footer_sizes(walked)
+    lay: dict[str, int] = {}
+    for sp, ph in placeholders(layout_el):
+        if ph_type(ph) in FOOTER_TYPES:
+            lay[ph_type(ph)] = max(lay.get(ph_type(ph), 0), len(etree.tostring(sp)))
+    return sum(max(own.get(t, 0), deck.get(t, 0), lay.get(t, 0)) + FOOTER_SLACK
+               for t in FOOTER_TYPES if t in own or t in deck or t in lay)
 
 
 def read_samples(prs) -> tuple[Sample, ...]:
@@ -1074,13 +1098,16 @@ def read_samples(prs) -> tuple[Sample, ...]:
     # step 1's examples), of the layout and of its master (an upper bound, so the grid never under-counts)
     foot: dict[str, list] = {}
     broken: dict[int, str] = {}  # code review F2: a slide whose reading raised is unusable, never the whole template
+    deck_footers: dict[str, int] = {}  # E1: the largest footer of each type on any slide (D4 step 1 can borrow it)
     for k, slide in enumerate(prs.slides, start=1):
         try:
             # F1: the slides are read as the copies will hold them (this Presentation is the reader's own)
             normalise_alternates(slide._element.find(q("p:cSld")))
             lay = slide.slide_layout
-            foot.setdefault(str(lay.part.partname), []).extend(
-                footer_boxes(slide._element.find(q("p:cSld")).find(q("p:spTree")), lay._element, lay.slide_master._element))
+            tree = slide._element.find(q("p:cSld")).find(q("p:spTree"))
+            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))
+            for t, n in footer_sizes(walk(tree)).items():
+                deck_footers[t] = max(deck_footers.get(t, 0), n)
         except MemoryError:
             raise
         except Exception as e:
@@ -1108,7 +1135,7 @@ def read_samples(prs) -> tuple[Sample, ...]:
             layout_bg = resolved_bg(layout._element, layout.part)
             master_bg = resolved_bg(master._element, master.part)
             out.append(read_sample(k, slide, styles, sw, sh, layout_bg, master_bg, cover_cache[lid], fixed_cache[lid],
-                                   foot.get(lid, [])))
+                                   foot.get(lid, []), deck_footers))
         except MemoryError:
             raise
         except Exception as e:
