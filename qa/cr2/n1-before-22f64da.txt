@@ -1,0 +1,12 @@
+base 22f64da (22f64da), tests from working tree at 22f64da, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.AHdVyW7JKF
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_behind_the_kept_body_stays_as_its_backing[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_behind_the_kept_body_stays_as_its_backing[rotated]
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_elsewhere_goes[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_elsewhere_goes[rotated]
+FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[rotated]
+6 failed in 0.14s
+comparator half: 22f64da tests/sample_look.py on the fix-cr2 working-tree source, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.AHdVyW7JKF
+FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[rotated]
+2 failed, 4 deselected in 0.08s

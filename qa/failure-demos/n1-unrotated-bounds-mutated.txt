@@ -1,0 +1,10 @@
+# n1-unrotated-bounds: Q1 measures a text shape by its stored box, ignoring rotation and group flips
+# mutation in src/deckfill/sample.py: '            if lf.ph or not lf.deco or goes(lf.occ, False):' -> '            if lf.ph or not lf.deco or goes(lf.qbox, False):'
+# tests: tests/test_cr2_code_review.py
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_behind_the_kept_body_stays_as_its_backing[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_behind_the_kept_body_stays_as_its_backing[rotated]
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_elsewhere_goes[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_elsewhere_goes[rotated]
+FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[flipped]
+FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[rotated]
+6 failed in 0.12s

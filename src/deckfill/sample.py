@@ -1203,18 +1203,39 @@ def inside(inner, outer) -> float:
     return (ix * iy) / a if ix > 0 and iy > 0 and a > 0 else 0.0
 
 
-def dest_boxes(S: Sample, fills) -> list:
-    """The boxes the Q1 'behind a destination' test reads: a joined title's widened box, every other destination's
-    own sample box (a grown body box counts at its original size, R3)."""
-    return [bf.box if bf.role == "title" and bf.box else box_of(S.box(bf.sid)) for bf in fills]
+def drawn(S: Sample) -> dict:
+    """Code review round 2, N1: each shape's drawn slide-space bounds (its own rotation and every enclosing group's
+    flips and rotation, occ_box), the one measure Q1 reads for shapes and destinations alike."""
+    return {lf.sid: lf.occ for lf in S.leaves if lf.sid is not None and lf.occ is not None}
+
+
+def dest_boxes(S: Sample, fills, occ=None) -> list:
+    """The boxes the Q1 'behind a destination' test reads, drawn bounds: a joined title's region (the union of its
+    boxes, the widened box), every other destination's own sample box (a grown body box counts at its original size,
+    R3)."""
+    occ = drawn(S) if occ is None else occ
+    out = []
+    for bf in fills:
+        if bf.role == "title" and bf.box:
+            parts = [occ.get(sid) for sid in S.title]
+            if all(parts):
+                x1, y1 = min(b[0] for b in parts), min(b[1] for b in parts)
+                x2, y2 = max(b[0] + b[2] for b in parts), max(b[1] + b[3] for b in parts)
+                out.append((x1, y1, x2 - x1, y2 - y1))
+            else:
+                out.append(bf.box)
+        else:
+            out.append(occ.get(bf.sid) or box_of(S.box(bf.sid)))
+    return out
 
 
 def clearing(S: Sample, fills, area: int) -> tuple[set, set]:
     """Q1 (with R5) on a copy of S: the shapes that go whole, and the decorated text shapes that keep their shape
     and lose their text. Title fragments and footer placeholders are handled apart by the fill."""
     fill_ids = {bf.sid for bf in fills}
-    dests = dest_boxes(S, fills)
-    cleared = [box_of(b) for b in S.boxes if b.sid not in fill_ids]
+    occ = drawn(S)
+    dests = dest_boxes(S, fills, occ)
+    cleared = [occ.get(b.sid) or box_of(b) for b in S.boxes if b.sid not in fill_ids]
     frags = set(S.title[1:])
 
     def goes(box, backing: bool) -> bool:
@@ -1230,11 +1251,11 @@ def clearing(S: Sample, fills, area: int) -> tuple[set, set]:
         if lf.tag != "sp" or lf.sid is None or lf.sid in fill_ids or lf.sid in frags or lf.ph in FOOTER_TYPES:
             continue
         if lf.text:
-            if lf.ph or not lf.deco or goes(lf.qbox, False):
+            if lf.ph or not lf.deco or goes(lf.occ, False):
                 remove.add(lf.sid)
             else:
                 clear.add(lf.sid)
-        elif not lf.ph and lf.deco and lf.rect and goes(lf.qbox, True):  # R5: only a rectangle is a backing
+        elif not lf.ph and lf.deco and lf.rect and goes(lf.occ, True):  # R5: only a rectangle is a backing
             remove.add(lf.sid)
     return remove, clear
 

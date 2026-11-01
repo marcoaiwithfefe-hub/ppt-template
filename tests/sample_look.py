@@ -465,7 +465,8 @@ def look_diff(out: bytes, src: bytes) -> list[str]:
             ancestors = {nv_id(a_)[0] for a_ in shapes(ot).get(g).iterancestors() if etree.QName(a_).localname == "grpSp"}
         elif len(grown) > 1:
             diffs.append(f"slide {n} (s{k}): more than one grown box {grown}")
-        allowed = allowed_removals(s_sh, s_bx, o_sh, o_bx, _hidden_ids(st), _slide_area(sp), _turned_ids(st), set(grown))
+        # code review round 2, N1: Q1 reads drawn bounds (rotation and group flips) for shapes and destinations
+        allowed = allowed_removals(s_sh, _occ(st), o_sh, _occ(ot), _hidden_ids(st), _slide_area(sp), _turned_ids(st), set(grown))
         for i in removed:
             if i not in allowed:
                 diffs.append(f"slide {n} (s{k}): shape {i} ({etree.QName(s_sh[i]).localname}) missing")

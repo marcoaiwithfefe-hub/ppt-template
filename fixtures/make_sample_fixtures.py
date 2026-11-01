@@ -1012,6 +1012,29 @@ def make_sample_footbig(out):
     return save(prs, out, "sample-footbig.pptx")
 
 
+def make_sample_flipchip(out):
+    """Code review round 2, N1 (Q1 on drawn bounds): a kept body (0.6M, 1.5M, 5M, 3M) and two small filled number
+    shapes in a group over the right of the slide. f1: the group (0.6M, 1.5M, 11M by 3M, scale 1) is flipped
+    horizontally; chip 121's child box (10M, 1M, 1M, 1M) is drawn at (0.6M, 2.5M), behind the body, so it stays as
+    its backing; chip 122's child box (1M, 1M, 1M, 1M) is stored behind the body but drawn at (9.6M, 2.5M), so it goes.
+    f2: the same with the group rotated 180 degrees instead; chip 221 (10M, 0.5M) is drawn at (0.6M, 3M), behind the
+    body; chip 222 (1M, 1.5M) is drawn at (9.6M, 2M)."""
+    prs = new_prs()
+    for k, (a, b, how) in enumerate((((10 * M, M), (M, M), "flip"), ((10 * M, 500000), (M, 1500000), "rot")), start=1):
+        s = blank_slide(prs, (235 + 5 * k, 240, 250))
+        tb(s.shapes, k * 100 + 1, 600000, 300000, 10 * M, 800000, f"Chips {how}", 40)
+        tb(s.shapes, k * 100 + 11, 600000, 1500000, 5 * M, 3 * M, "Body", 20)
+
+        def kids(sh, k=k, a=a, b=b):
+            tb(sh, k * 100 + 21, a[0], a[1], M, M, "1", 14, fill=(255, 255, 255))
+            tb(sh, k * 100 + 22, b[0], b[1], M, M, "2", 14, fill=(255, 255, 255))
+        g = group(s.shapes, k * 100 + 20, (600000, 1500000), (11 * M, 3 * M), (11 * M, 3 * M), kids,
+                  rot=10800000 if how == "rot" else None)
+        if how == "flip":
+            _flip(g, h=True)
+    return save(prs, out, "sample-flipchip.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -1025,5 +1048,5 @@ def make_all(out) -> list:
         make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
         make_sample_altcontent(out), make_sample_flip(out),
         make_sample_cols2(out), make_sample_inherit(out),
-        make_sample_footbig(out),
+        make_sample_footbig(out), make_sample_flipchip(out),
     ]

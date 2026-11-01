@@ -1,5 +1,5 @@
 """Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27; code
-review round 1: F1, F2, F6).
+review round 1: F1, F2, F6; round 2: N1).
 
 Each demo applies one isolated mutation to the source, runs the check's tests, restores the
 file, and runs the tests again. Output: qa/failure-demos/<id>-mutated.txt and <id>-fixed.txt.
@@ -154,6 +154,13 @@ DEMOS = {
         '  state.overrides = state.overrides.map((o) => ({ ...o, route: "switched" }));\n',
         "",
         ["node", "tests/e2e/c9_privacy.mjs"],
+    ),
+    "n1-unrotated-bounds": (
+        "Q1 measures a text shape by its stored box, ignoring rotation and group flips",
+        "src/deckfill/sample.py",
+        "            if lf.ph or not lf.deco or goes(lf.occ, False):",
+        "            if lf.ph or not lf.deco or goes(lf.qbox, False):",
+        ["tests/test_cr2_code_review.py"],
     ),
     "f2-guide-path": (
         "a custom path's guide-name corner is read as an integer",
