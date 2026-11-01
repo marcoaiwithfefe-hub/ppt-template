@@ -1,0 +1,115 @@
+{
+ "title": "PPT gift rev 8: the sample-slide route, with QA round 1's readability rules",
+ "plain": "Templates that keep their design on their sample slides now get every new slide built as a copy of one of those slides, with the outline's words in its own boxes; the page picks that way or the old layout way, and QA round 1 makes it prefer slides whose text stays readable and drop the empty chips that cleared text leaves behind.",
+ "what_why": "Marco's own SlidesCarnival template came out at 6a576a6 with one background and a plain text block on every slide, because the page read only the layouts and his design lives on 10 sample slides. Rev 8 adds a second route (D11, D12): read every sample slide, decide which ones can take a title and a body, copy the chosen slide for each outline slide and write the text into its own boxes with the sample's own run properties, shrinking in 5% steps to a 70% floor.\n\nQA round 1 (Fable, after the b38d280 build): a candidate sample now has to keep every title at 4% and every body at 2% of the slide height after any shrink, or it ranks after those that do; among candidates whose text must split, the fewest continuation slides wins; small filled shapes left empty by clearing (chips and their backings) go, unless they sit behind text that stayed.\n\n- The layout route is untouched: 213 of 213 layout-route outputs are equal to 6a576a6's.\n- The browser runs the same module the tests run (docs/py/deckfill.zip is rebuilt from src).",
+ "requirements": [
+  "Story 28: every slide of my deck carries one of the template's sample-slide looks, with its background, photos and shapes",
+  "Story 29: step 2 tells me which way the page will build my deck and lets me switch",
+  "Story 30: no words from the template's sample slides survive into my deck",
+  "Story 31: on the sample-slide route the type shrinks a little when my text is longer than the sample's, and a slide that still does not fit is split or flagged before download",
+  "Story 32: slides next to each other use different sample slides when my template has more than one that fits, unless I chose the same one myself",
+  "Story 33: the per-slide picker lists the template's sample slides that can hold that slide's text, each as 範本頁 k with the first words of its sample title",
+  "QA round 1 Q1: a shape that held only cleared text and has a fill or line is removed whole when under 8% of the slide; its backing goes with it; nothing behind a destination that kept its text is removed",
+  "QA round 1 Q2 and Q3: a title under 4% or a body under 2% of the slide height ranks after every compatible sample that meets the bar; the title slide uses the title sample only when its title meets the bar",
+  "QA round 1 Q4: the ranking gains, ahead of the fewest body boxes left unused, the fewest continuation slides",
+  "QA round 1 QA4: when no candidate meets the bars the slide carries small_text, listed in step 3 as 字細"
+ ],
+ "design": {
+  "text": "Reading happens once per template: read_template now also reads every sample slide into a Sample (its title region, labels, body boxes, list slots, classes, whether it carries design of its own) and works out which routes the template offers and which is the default. plan_deck branches on the route; the sample branch picks a sample per outline slide and writes, per box, the paragraphs and the exact size each run gets, so fill only carries the plan out. fill branches the same way: the sample branch copies each chosen slide, writes the text, clears what got none and rebuilds footers once. The page sends the route with every plan and fill call.",
+  "diagram": "sequenceDiagram\n  participant P as Page (app.js)\n  participant W as web.Session\n  participant T as read_template\n  participant S as sample_plan\n  participant F as sample_fill\n  P->>W: read(template)\n  W->>T: layouts and sample slides\n  T-->>W: routes, default route, usable samples\n  W-->>P: route line, switch, 範本頁 options\n  P->>W: plan(outline, picks, route)\n  W->>S: plan_sample\n  S-->>W: per slide: sample, box fills, sizes, flags\n  W-->>P: slide list with 字細咗, 字細, split, warned\n  P->>W: fill(outline, picks, route)\n  W->>S: plan again (same inputs)\n  W->>F: fill_sample(plan)\n  F-->>P: .pptx download",
+  "decisions": [
+   {
+    "decision": "Readability is a pool filter before variety and ranking, tier by tier",
+    "why": "QA round 1's precedence paragraph: a readable fallback beats an unreadable class sample, and Q2 keeps the title sample when its title meets the bar. With no readable candidate the slide keeps D12's class order and is flagged small_text."
+   },
+   {
+    "decision": "Splitting candidates tie on shrink, so the fewest continuation slides decides (Q4)",
+    "why": "With rev 8's continuous overflow ratio kept, Q4 could never decide. sample-split shows the inversion: the ratio picked the six-slide sample, Q4 picks the four-slide one."
+   },
+   {
+    "decision": "'Behind a destination' covers shapes under the destination's written box",
+    "why": "The first reading kept only shapes holding 80% of a destination, which removed the white word blocks under Marco's joined title and drew 問答 black on his photo (G0b render, slide 13)."
+   },
+   {
+    "decision": "C23's comparator computes the allowed Q1 removals itself from the source sample",
+    "why": "QA round 1 QA2: never from the fill's own record. Three negatives (a 10% panel, a backing behind a kept slot, a picture) each fail it."
+   }
+  ]
+ },
+ "call_path": {
+  "text": "From the file drop to the download. The layout route keeps its rev 7 path; only the sample branch is new. Picks made on one route are dropped with a note when the user switches.",
+  "diagram": "flowchart TD\n  A[\"Drop template (step 2)\"] --> B[\"read_template: layouts + sample slides\"]\n  B --> C[\"Route line and switch\"]\n  C --> D[\"plan_deck(route)\"]\n  D -->|layout| E[\"rev 7 planner\"]\n  D -->|sample| G[\"plan_sample: readable pool, variety, ranking\"]\n  G --> H[\"Slide list: 字細咗, 字細, split, warned\"]\n  E --> H\n  H --> I[\"Download click\"]\n  I --> J[\"fill(route)\"]\n  J -->|sample| K[\"fill_sample: copy, write, clear chips, footers\"]\n  J -->|layout| L[\"rev 7 fill\"]\n  class B changed\n  class C new\n  class D changed\n  class G new\n  class H changed\n  class J changed\n  class K new\n  click B href \"#step-1\"\n  click G href \"#step-3\"\n  click K href \"#step-5\""
+ },
+ "implementation": [
+  {
+   "title": "Reading: routes and sample slides",
+   "text": "open_template reads every sample slide and decides the routes: the sample route needs one usable sample with a title and a body box; it is the default when at least half the usable samples carry design of their own (D11).",
+   "peek": {
+    "path": "src/deckfill/template.py",
+    "start": 400,
+    "end": 408,
+    "side": "head"
+   }
+  },
+  {
+   "title": "What a sample slide holds",
+   "text": "read_sample measures every text box in slide space, finds the title region (the largest effective size plus one-word fragments chained to it), labels, body boxes and list slots, excludes hidden, chart, instruction and closing slides, and decides design of its own three ways.",
+   "peek": {
+    "path": "src/deckfill/sample.py",
+    "start": 749,
+    "end": 766,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The pick for each outline slide",
+   "text": "plan_sample builds every compatible candidate across the slide's class and its fallbacks, keeps the first tier that holds a readable one (QA round 1), applies variety inside that pool, then ranks. A user pick is kept; a pick or a pool below the bars marks the slide small_text.",
+   "peek": {
+    "path": "src/deckfill/sample_plan.py",
+    "start": 350,
+    "end": 372,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The bars and the ranking",
+   "text": "meets compares each destination's written size against 4% (title) or 2% (body) of the slide height, level 2 included. rank_key puts boxes over at the floor first, then unmodelled boxes, then fits at full size, then the shrink step (every splitting candidate ties at the floor), then the fewest continuation slides (Q4), unused body boxes and file order.",
+   "peek": {
+    "path": "src/deckfill/sample_plan.py",
+    "start": 103,
+    "end": 118,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The copy and the clearing",
+   "text": "fill_sample copies the sample's background and shape tree, writes the text with the donor run's properties and the planned size, removes the other title fragments, then clears everything that got no text. Q1: a filled cleared shape under 8% goes whole, a small text-free backing of a cleared box goes, nothing behind a kept destination goes, and a group left with no visible member goes.",
+   "peek": {
+    "path": "src/deckfill/sample_fill.py",
+    "start": 345,
+    "end": 368,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The page",
+   "text": "The page keeps the route, shows the route line and the switch when both routes are on offer, lists 範本頁 options in the picker, sends the route with every plan and fill, and shows every state a slide carries (字細咗, 字細, split, warned, check).",
+   "peek": {
+    "path": "docs/app.js",
+    "start": 243,
+    "end": 261,
+    "side": "head"
+   }
+  }
+ ],
+ "check": [
+  "Q5: edb-mpa2022 and hkust-template14 look worse on the sample route than on the layout route (18 and 11 slides, hkust titles set down narrow strips); D11 is unchanged pending Fable's call (qa/rev8/q5/Q5-RESULT.md).",
+  "Marco's 時間表 still splits into 4 slides on s6: every 2-slide candidate overflows 時間表（續） at the floor, and a box over at the floor ranks before Q4 (decisions row 93).",
+  "Variety runs before the ranking (QA3), so on edb-mpa2022 八項行動 takes 8 one-bullet slides on s3 because s5, which holds it in 2, was used by the slide before.",
+  "Q1 reads s1's olive leaf on Marco's template as a backing of the last year-digit label (it holds over 80% of that label's box) and removes it.",
+  "C17 (desktop PowerPoint on Windows) is still open for two sample-route outputs; C5 is a schema proxy.",
+  "Shared modules the layout route also runs: [plan_deck's route branch](src/deckfill/plan.py#L229-L239), [fill's route branch and the shared footer helper footer_for_type](src/deckfill/fill.py#L181-L221), [the bridge's route and pick handling](src/deckfill/web.py#L94-L104), and [route_unavailable in the PlanError docstring](src/deckfill/errors.py#L20-L22). The 213-key layout baseline covers them (qa/rev8/blast-radius.md).",
+  "Not code paths: [the fixture makers](fixtures/make_sample_fixtures.py#L1-L10) and [their caller](fixtures/make_fixtures.py#L770-L772) build the rev 8 and QA round 1 test templates; [.gitignore](.gitignore#L25-L30) keeps real-template decks and renders out of git; [decisions.tsv](decisions.tsv#L90-L120) is the decision log shown below.",
+  "The one em dash on the page is inside the slop scanner's own raw output (qa/slop-scan-rev8.txt), quoted in the diff."
+ ]
+}
