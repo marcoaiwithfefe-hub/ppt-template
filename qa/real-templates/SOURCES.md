@@ -16,3 +16,18 @@ Outside the five, recorded for the D1b size cap (50 MB until spec rev 5, 100 MB 
 |---|---|---|---|
 | `hkust-template14.potx` | HKUST MTPC | 73.7 MB: over the rev 4 cap; reads and fills under rev 5, reported outside the five | https://mtpc.hkust.edu.hk/system/files/2020-05/PPT_template_14.potx (page https://mtpc.hkust.edu.hk/node/295) |
 | not downloaded | HKUST MTPC | `PPT_template_16.potx`, 58.7 MB by Content-Length, over the rev 4 cap, under rev 5 | https://mtpc.hkust.edu.hk/system/files/2020-05/PPT_template_16.potx (page https://mtpc.hkust.edu.hk/node/297) |
+
+## G0b sample-design templates (rev 8, copied 2026-11-01)
+
+The six plain SlidesCarnival templates from the reel's F4 run, Bullen, and Marco's own template. All are the original downloads (the reel seat's `assets/f4-candidates/`, not its filled seven-slide decks), copied by the rev 8 build seat. SlidesCarnival templates are CC BY 4.0.
+
+| file | why it is in the set | source |
+|---|---|---|
+| `corporate-sales-pitch-slides-2.pptx` | F4: filled plain (design on its sample slides) | https://www.slidescarnival.com/download/sc04484/corporate-sales-pitch-slides-2/pptx (page https://www.slidescarnival.com/template/corporate-sales-pitch-slides-2/341223) |
+| `elegant-pitch-deck.pptx` | F4: filled plain | https://www.slidescarnival.com/download/sc00452/elegant-pitch-deck/pptx (page https://www.slidescarnival.com/template/elegant-pitch-deck/30565) |
+| `3d-modern-background-pitch-deck.pptx` | F4: filled plain | https://www.slidescarnival.com/download/sc00346/3d-modern-background-pitch-deck/pptx (page https://www.slidescarnival.com/template/3d-modern-background-pitch-deck/22329) |
+| `business-conference-slides.pptx` | F4: filled plain | https://www.slidescarnival.com/download/sc04048/business-conference-slides/pptx (page https://www.slidescarnival.com/template/business-conference-slides/331607) |
+| `simple-business-proposal-slides.pptx` | F4: filled plain | https://www.slidescarnival.com/download/sc02316/simple-business-proposal-slides/pptx (page https://www.slidescarnival.com/template/simple-business-proposal-slides/208909) |
+| `viola-free-presentation-template.pptx` | F4: filled plain | https://www.slidescarnival.com/download/sc00031/viola-free-presentation-template/pptx (page https://www.slidescarnival.com/template/viola-free-presentation-template/414) |
+| `bullen-free-presentation-template.pptx` | F4: the one clean pass, designed layouts | https://www.slidescarnival.com/download/sc00124/bullen-free-presentation-template/pptx (page https://www.slidescarnival.com/template/bullen-free-presentation-template/4628) |
+| `marco-year-in-breakdowns.pptx` | Marco's own template, the rev 8 trigger | SlidesCarnival, Marco's own download (`~/Downloads/yearend_presentation_A Year in Breakdowns Presentation.pptx`) |
