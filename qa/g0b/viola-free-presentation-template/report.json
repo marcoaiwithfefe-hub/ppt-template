@@ -1,0 +1,449 @@
+{
+ "template": "viola-free-presentation-template.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 0.3,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s11",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s12",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s13",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s14",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s15",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s16",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s17",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s18",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s19",
+   "usable": false,
+   "reason": "closing",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s20",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s21",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s22",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s23",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s24",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s25",
+   "usable": false,
+   "reason": "instructions",
+   "design": false,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s26",
+   "usable": false,
+   "reason": "instructions",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s27",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s28",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s29",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s30",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s31",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s32",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s33",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s34",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s35",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s36",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s37",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s38",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s39",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s40",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s1",
+  "s39",
+  "s32",
+  "s8",
+  "s35",
+  "s1"
+ ],
+ "warnings": [
+  [
+   "subtitle_in_title",
+   "匯通物流 2027 年度計劃"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s1",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 2,
+   "sample": "s39",
+   "title": "三個目標",
+   "flags": []
+  },
+  {
+   "n": 3,
+   "sample": "s32",
+   "title": "時間表",
+   "flags": []
+  },
+  {
+   "n": 4,
+   "sample": "s8",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s35",
+   "title": "八項行動",
+   "flags": [
+    "split"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s35",
+   "title": "八項行動（續）",
+   "flags": [
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s1",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg",
+ "renders": "qa/g0b/viola-free-presentation-template/renders"
+}

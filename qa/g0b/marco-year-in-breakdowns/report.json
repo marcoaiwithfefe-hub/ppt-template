@@ -1,0 +1,242 @@
+{
+ "template": "marco-year-in-breakdowns.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 0.41,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s1",
+  "s5",
+  "s6",
+  "s3",
+  "s5",
+  "s1"
+ ],
+ "warnings": [
+  [
+   "subtitle_in_title",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
+   "fit_warn",
+   "預算 港幣 800 萬"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s1",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 2,
+   "sample": "s5",
+   "title": "三個目標",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 3,
+   "sample": "s6",
+   "title": "時間表",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 4,
+   "sample": "s6",
+   "title": "時間表（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s6",
+   "title": "時間表（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s6",
+   "title": "時間表（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s3",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 8,
+   "sample": "s3",
+   "title": "預算 港幣 800 萬（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 9,
+   "sample": "s3",
+   "title": "預算 港幣 800 萬（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 10,
+   "sample": "s5",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 11,
+   "sample": "s5",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 12,
+   "sample": "s5",
+   "title": "八項行動（續）",
+   "flags": [
+    "split"
+   ]
+  },
+  {
+   "n": 13,
+   "sample": "s1",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg",
+ "renders": "qa/g0b/marco-year-in-breakdowns/renders"
+}

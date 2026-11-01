@@ -1,0 +1,215 @@
+{
+ "template": "corporate-sales-pitch-slides-2.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 0.33,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s11",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s12",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s13",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s14",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s15",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s1",
+  "s5",
+  "s7",
+  "s3",
+  "s5",
+  "s1"
+ ],
+ "warnings": [],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s1",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": []
+  },
+  {
+   "n": 2,
+   "sample": "s5",
+   "title": "三個目標",
+   "flags": []
+  },
+  {
+   "n": 3,
+   "sample": "s7",
+   "title": "時間表",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 4,
+   "sample": "s3",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s5",
+   "title": "八項行動",
+   "flags": [
+    "split"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s5",
+   "title": "八項行動（續）",
+   "flags": [
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s1",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
+ "renders": "qa/g0b/corporate-sales-pitch-slides-2/renders"
+}

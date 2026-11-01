@@ -3,4 +3,4 @@
 # tests: tests/test_c3_c6_package.py -k c5
 FAILED tests/test_c3_c6_package.py::test_c5_broken_templates_refused[dangling-relationship.pptx]
 FAILED tests/test_c3_c6_package.py::test_c5_broken_templates_refused[missing-embed.pptx]
-2 failed, 27 passed, 102 deselected in 0.57s
+2 failed, 27 passed, 106 deselected in 0.57s

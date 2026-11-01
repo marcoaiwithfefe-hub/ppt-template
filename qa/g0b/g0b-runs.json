@@ -1,0 +1,130 @@
+[
+ {
+  "template": "corporate-sales-pitch-slides-2.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.33,
+  "chosen": [
+   "s1",
+   "s5",
+   "s7",
+   "s3",
+   "s5",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg"
+ },
+ {
+  "template": "elegant-pitch-deck.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.26,
+  "chosen": [
+   "s1",
+   "s33",
+   "s12",
+   "s6",
+   "s5",
+   "s22"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/elegant-pitch-deck/sheet.jpg"
+ },
+ {
+  "template": "3d-modern-background-pitch-deck.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.53,
+  "chosen": [
+   "s1",
+   "s24",
+   "s11",
+   "s14",
+   "s12",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg"
+ },
+ {
+  "template": "business-conference-slides.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.19,
+  "chosen": [
+   "s1",
+   "s3",
+   "s7",
+   "s13",
+   "s3",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/business-conference-slides/sheet.jpg"
+ },
+ {
+  "template": "simple-business-proposal-slides.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.24,
+  "chosen": [
+   "s1",
+   "s6",
+   "s14",
+   "s7",
+   "s6",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg"
+ },
+ {
+  "template": "viola-free-presentation-template.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.3,
+  "chosen": [
+   "s1",
+   "s39",
+   "s32",
+   "s8",
+   "s35",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/viola-free-presentation-template/sheet.jpg"
+ },
+ {
+  "template": "bullen-free-presentation-template.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.33,
+  "chosen": [
+   "s1",
+   "s6",
+   "s33",
+   "s8",
+   "s9",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/bullen-free-presentation-template/sheet.jpg"
+ },
+ {
+  "template": "marco-year-in-breakdowns.pptx",
+  "route": "sample",
+  "default_route": "sample",
+  "seconds": 0.41,
+  "chosen": [
+   "s1",
+   "s5",
+   "s6",
+   "s3",
+   "s5",
+   "s1"
+  ],
+  "new_overlaps": [],
+  "sheet": "qa/g0b/marco-year-in-breakdowns/sheet.jpg"
+ }
+]
