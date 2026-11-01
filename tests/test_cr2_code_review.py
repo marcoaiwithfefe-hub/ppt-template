@@ -73,3 +73,22 @@ def test_n1_comparator_agrees_and_rejects_removing_the_backing(k):
             z.writestr(n, b)
     diffs = look_diff(buf.getvalue(), data)
     assert any(f"shape {CHIPS[k][0]} " in d and "missing" in d for d in diffs), diffs
+
+
+# ------------------------------------------------------------------------------------------------------------ Edge 1
+
+REFERENCE = (FIX.parent / "reference-outline.md").read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("route", ["layout", "sample"])
+def test_edge1_borrowed_footer_with_a_bad_idx_is_skipped(route):
+    """sample-badidx: the only footer D4 step 1 can borrow has idx="bad" and the new slides' layout has no footer box
+    of its own, so placing it would read the idx. It is skipped on both routes; the decks fill."""
+    data = (FIX / "sample-badidx.pptx").read_bytes()
+    info = read_template(data, "sample-badidx.pptx")
+    out = fill(data, "sample-badidx.pptx", plan_deck(info, parse_outline(REFERENCE), route=route))
+    assert check_integrity(load(out, "out.pptx").parts) == []
+    op = parts_of(out)
+    for name in slides(op):
+        for ph in etree.fromstring(op[name]).iter("{%s}ph" % P):
+            assert ph.get("idx") is None or ph.get("idx").isdigit(), f"{name}: placeholder idx {ph.get('idx')!r}"

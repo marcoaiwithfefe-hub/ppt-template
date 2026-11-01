@@ -183,6 +183,7 @@ def generated(out: bytes) -> int:
 
 @pytest.mark.parametrize("fixture,text", [
     ("sample-footbig.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # each copy borrows a 1 MB footer
+    ("sample-footbad.pptx", "".join(f"## B{i}\n- x\n\n" for i in range(3))),  # round 2 Edge 2: its box cannot be read
     ("sample-thin.pptx", "## Amp\n- " + "&" * 3000 + "\n- " + "<a>" * 500 + "\n- 中文" * 3 + "\n"),  # escaped text
 ])
 def test_c30_budget_bounds_the_generated_xml(fixture, text):
@@ -193,9 +194,10 @@ def test_c30_budget_bounds_the_generated_xml(fixture, text):
     assert budget >= generated(fill(data, fixture, plan))
 
 
-def test_c30_borrowed_footers_refused_before_any_output_tree(monkeypatch):
-    data = (FIX / "sample-footbig.pptx").read_bytes()
-    info = read_template(data, "sample-footbig.pptx")
+@pytest.mark.parametrize("fixture", ["sample-footbig.pptx", "sample-footbad.pptx"])
+def test_c30_borrowed_footers_refused_before_any_output_tree(fixture, monkeypatch):
+    data = (FIX / fixture).read_bytes()
+    info = read_template(data, fixture)
     built = []
     monkeypatch.setattr(sample_fill, "_copy_sample", lambda *a, **k: built.append(1))
     with pytest.raises(TemplateError) as e:

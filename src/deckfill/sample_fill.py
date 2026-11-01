@@ -26,6 +26,7 @@ from .fill import (
     _zip,
     HLINK_TAGS,
     footer_for_type,
+    idx_ok,
     remove_slides,
 )
 from .package import RT_SLIDE, check_integrity
@@ -275,6 +276,9 @@ def _sample_footers(src_slide, layout):
         if ph is None or ph_type(ph) not in FOOTER_TYPES or ph_type(ph) in out:
             continue
         t = ph_type(ph)
+        if not idx_ok(el):
+            out[t] = None  # Edge 1: a footer whose idx does not parse is never copied
+            continue
         new = copy.deepcopy(el)
         if not w.top:
             _, target_ph = _layout_footer_sp(layout, t)

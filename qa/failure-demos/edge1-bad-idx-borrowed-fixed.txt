@@ -1,0 +1,4 @@
+# edge1-bad-idx-borrowed: a borrowed footer whose idx does not parse is placed anyway
+# mutation in src/deckfill/fill.py: '            return None  # Edge 1: a borrowed footer whose idx does not parse is skipped' -> '            pass'
+# tests: tests/test_cr2_code_review.py -k edge1
+2 passed, 6 deselected in 0.08s

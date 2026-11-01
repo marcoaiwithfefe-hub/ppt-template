@@ -1057,7 +1057,7 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         turned=bool(turned_ids),
         nbytes=len(etree.tostring(el)),
         nshapes=nshapes,
-        footer_bytes=footer_budget(walked, styles.layout_el, deck_footers or {}),
+        footer_bytes=footer_budget(sptree, styles.layout_el, deck_footers or {}),
         slide=(sw, sh),
         leaves=leaves,
         groups=groups,
@@ -1069,21 +1069,23 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
 FOOTER_SLACK = 512  # per footer type: an a:xfrm the fill may add, a new shape id, a slide number's digits
 
 
-def footer_sizes(walked) -> dict[str, int]:
-    """The largest footer placeholder of each type among walked shapes, serialised bytes."""
+def footer_sizes(tree) -> dict[str, int]:
+    """The largest footer placeholder of each type anywhere in a shape tree, by its raw serialised bytes. It parses
+    no attribute, so a footer whose box cannot be read is still counted (code review round 2, Edge 2)."""
     out: dict[str, int] = {}
-    for w in walked:
-        if etree.QName(w.el).localname == "sp" and ph_of(w.el) is not None and ph_type(ph_of(w.el)) in FOOTER_TYPES:
-            t = ph_type(ph_of(w.el))
-            out[t] = max(out.get(t, 0), len(etree.tostring(w.el)))
+    for sp in tree.iter(q("p:sp")):
+        ph = ph_of(sp)
+        if ph is not None and ph_type(ph) in FOOTER_TYPES:
+            t = ph_type(ph)
+            out[t] = max(out.get(t, 0), len(etree.tostring(sp)))
     return out
 
 
-def footer_budget(walked, layout_el, deck: dict[str, int]) -> int:
+def footer_budget(tree, layout_el, deck: dict[str, int]) -> int:
     """D12 limits, code review E1: an upper bound on the footers a copy can receive, whichever D4 step supplies each
     type: per type, the largest of this slide's own, any slide's in the deck (step 1 borrows from another slide) and
     the layout's (step 3), plus slack for what the fill adds."""
-    own = footer_sizes(walked)
+    own = footer_sizes(tree)
     lay: dict[str, int] = {}
     for sp, ph in placeholders(layout_el):
         if ph_type(ph) in FOOTER_TYPES:
@@ -1107,11 +1109,11 @@ def read_samples(prs) -> tuple[Sample, ...]:
         try:
             # F1: the slides are read as the copies will hold them (this Presentation is the reader's own)
             normalise_alternates(slide._element.find(q("p:cSld")))
-            lay = slide.slide_layout
             tree = slide._element.find(q("p:cSld")).find(q("p:spTree"))
-            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))
-            for t, n in footer_sizes(walk(tree)).items():
+            for t, n in footer_sizes(tree).items():  # round 2 Edge 2: counted before anything that can fail
                 deck_footers[t] = max(deck_footers.get(t, 0), n)
+            lay = slide.slide_layout
+            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))
         except MemoryError:
             raise
         except Exception as e:

@@ -1,0 +1,6 @@
+base 22f64da (22f64da), tests from working tree at aa02dc1, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.A9VI4JRlzf
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[layout]
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample]
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_budget_bounds_the_generated_xml[sample-footbad.pptx-## B0\n- x\n\n## B1\n- x\n\n## B2\n- x\n\n]
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_borrowed_footers_refused_before_any_output_tree[sample-footbad.pptx]
+4 failed, 37 deselected in 0.28s

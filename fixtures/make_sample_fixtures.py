@@ -993,9 +993,10 @@ def make_sample_inherit(out):
     return save(prs, out, "sample-inherit.pptx")
 
 
-def make_sample_footbig(out):
+def make_sample_footbig(out, bad_geometry=False):
     """Code review E1 (C30 borrowed footers): b1, a decorated content sample with no footer of its own; b2, a hidden
-    slide on the same layout whose footer holds 1 MB of text. D4 step 1 gives every copy of b1 that footer."""
+    slide on the same layout whose footer holds 1 MB of text. D4 step 1 gives every copy of b1 that footer.
+    bad_geometry (round 2, Edge 2): the footer's offset is x="bad", so reading its box fails."""
     prs = new_prs()
     lay = layout_named(prs, "Blank")
     b1 = prs.slides.add_slide(lay)
@@ -1008,8 +1009,38 @@ def make_sample_footbig(out):
     import hashlib  # incompressible text, so the package stays under the D1b compression-ratio cap
 
     text = "".join(hashlib.sha256(str(i).encode()).hexdigest() for i in range(1024 * 1024 // 64))
-    b2.shapes._spTree.append(footer_sp(lay, "ftr", text, None, 291))
-    return save(prs, out, "sample-footbig.pptx")
+    f = footer_sp(lay, "ftr", text, None, 291)
+    if bad_geometry:
+        xf = etree.SubElement(f.find(q("p:spPr")), q("a:xfrm"))
+        etree.SubElement(xf, q("a:off"), x="bad", y="6300000")
+        etree.SubElement(xf, q("a:ext"), cx="4000000", cy="300000")
+    b2.shapes._spTree.append(f)
+    return save(prs, out, "sample-footbad.pptx" if bad_geometry else "sample-footbig.pptx")
+
+
+def make_sample_badidx(out):
+    """Code review round 2, Edge 1: Title and Content has no footer box of its own. x1, hidden, carries a footer
+    whose idx is "bad"; x2, a decorated content sample on the same layout, has none. D4 step 1 borrows x1's footer
+    for new slides on that layout and must place it itself, which reads its idx."""
+    prs = new_prs()
+    lay = layout_named(prs, "Title and Content")
+    src = footer_sp(layout_named(prs, "Title Only"), "ftr", "Bad index footer", None, 191)
+    for sp in list(lay.placeholders):
+        if sp.placeholder_format.type is not None and int(sp.placeholder_format.type) == 15:  # ftr
+            sp._element.getparent().remove(sp._element)
+    for k in (1, 2):
+        s = prs.slides.add_slide(lay)
+        bg(s, (240, 230 - 10 * k, 220))
+        s.shapes.title.text = f"Bad index {k}"
+        set_id(s.shapes.title, k * 100 + 1)
+        body = next(sp for sp in s.placeholders if sp.placeholder_format.idx == 1)
+        body.text = f"Body {k}"
+        set_id(body, k * 100 + 11)
+        if k == 1:
+            s._element.set("show", "0")
+            src.find(q("p:nvSpPr")).find(q("p:nvPr")).find(q("p:ph")).set("idx", "bad")
+            s.shapes._spTree.append(src)
+    return save(prs, out, "sample-badidx.pptx")
 
 
 def make_sample_flipchip(out):
@@ -1048,5 +1079,6 @@ def make_all(out) -> list:
         make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
         make_sample_altcontent(out), make_sample_flip(out),
         make_sample_cols2(out), make_sample_inherit(out),
-        make_sample_footbig(out), make_sample_flipchip(out),
+        make_sample_footbig(out), make_sample_flipchip(out), make_sample_footbig(out, bad_geometry=True),
+        make_sample_badidx(out),
     ]

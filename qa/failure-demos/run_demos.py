@@ -1,5 +1,5 @@
 """Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27; code
-review round 1: F1, F2, F6; round 2: N1).
+review round 1: F1, F2, F6; round 2: N1, Edge 1, Edge 2).
 
 Each demo applies one isolated mutation to the source, runs the check's tests, restores the
 file, and runs the tests again. Output: qa/failure-demos/<id>-mutated.txt and <id>-fixed.txt.
@@ -162,6 +162,26 @@ DEMOS = {
         "            if lf.ph or not lf.deco or goes(lf.qbox, False):",
         ["tests/test_cr2_code_review.py"],
     ),
+    "edge1-bad-idx-borrowed": (
+        "a borrowed footer whose idx does not parse is placed anyway",
+        "src/deckfill/fill.py",
+        "            return None  # Edge 1: a borrowed footer whose idx does not parse is skipped",
+        "            pass",
+        ["tests/test_cr2_code_review.py", "-k", "edge1"],
+    ),
+    "edge2-footer-size-after-box": (
+        "a slide's footers are sized only after their boxes are read",
+        "src/deckfill/sample.py",
+        "            for t, n in footer_sizes(tree).items():  # round 2 Edge 2: counted before anything that can fail\n"
+        "                deck_footers[t] = max(deck_footers.get(t, 0), n)\n"
+        "            lay = slide.slide_layout\n"
+        "            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))",
+        "            lay = slide.slide_layout\n"
+        "            foot.setdefault(str(lay.part.partname), []).extend(footer_boxes(tree, lay._element, lay.slide_master._element))\n"
+        "            for t, n in footer_sizes(tree).items():  # round 2 Edge 2: counted before anything that can fail\n"
+        "                deck_footers[t] = max(deck_footers.get(t, 0), n)",
+        ["tests/test_c26_c29_c30_sample.py", "-k", "footbad"],
+    ),
     "f2-guide-path": (
         "a custom path's guide-name corner is read as an integer",
         "src/deckfill/sample.py",
@@ -186,9 +206,11 @@ def pytest(args: list[str], tag: str = "") -> str:
         run = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, env=env)
         lines = (run.stdout + run.stderr).strip().splitlines()
         return "\n".join([ln for ln in lines if ln.startswith("FAIL")] + lines[-1:]) + "\n"
+    # no bytecode written: a mutation that keeps the file's size, restored within the same second, would otherwise
+    # leave its compiled form in __pycache__ for the restored run to load (found on edge2-footer-size-after-box)
     run = subprocess.run(
         [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", *args],
-        cwd=ROOT, capture_output=True, text=True,
+        cwd=ROOT, capture_output=True, text=True, env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
     )
     lines = (run.stdout + run.stderr).strip().splitlines()
     failed = [ln for ln in lines if ln.startswith("FAILED")]
