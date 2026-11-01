@@ -21,8 +21,9 @@ const state = {
   session: null,
   ready: false,
   loading: false,
-  template: null, // { name, layouts, defaults }
-  overrides: [], // { title, kind, nth, layout } per picked layout; the bridge places each on its slide
+  template: null, // { name, layouts, defaults, routes, samples }
+  route: "", // rev 8: "sample" or "layout" (D11); the template's default until the user switches
+  overrides: [], // { title, kind, nth, count, layout[, route] } per pick; the bridge places each on its slide
   plan: null,
   planTimer: 0,
   gen: 0, // bumps on every change to the outline, overrides or template; a plan from an older gen is dropped
@@ -189,7 +190,11 @@ async function readTemplate(file) {
     showTemplateError(result.code);
     return;
   }
-  state.template = { name: file.name, layouts: result.layouts, masters: result.masters, defaults: result.defaults };
+  state.template = {
+    name: file.name, layouts: result.layouts, masters: result.masters, defaults: result.defaults,
+    routes: result.routes, samples: result.samples,
+  };
+  state.route = result.route;
   renderTemplate();
   await replan();
 }
@@ -202,6 +207,7 @@ function renderTemplate() {
   if (!t) return;
   $("template-name").textContent = t.name;
   $("layouts-count").textContent = fmt(COPY.foundLayouts, { n: t.layouts.length });
+  renderRoute();
   const defaults = new Set(Object.values(t.defaults));
   const list = $("layouts-list");
   list.replaceChildren();
@@ -230,6 +236,27 @@ function renderTemplate() {
       list.append(row);
     }
   }
+}
+
+// Rev 8 (D11): which way the deck is built, and the switch when both ways are on offer.
+function renderRoute() {
+  const t = state.template;
+  const both = t.routes.length > 1;
+  $("route").hidden = false;
+  const line =
+    state.route === "sample" ? fmt(COPY.routeLineSample, { n: t.samples.length }) : COPY.routeLineLayout;
+  $("route-line").textContent = both ? `${line}${COPY.routeNote}` : line;
+  $("route-switch").hidden = !both;
+  $("route-sample").setAttribute("aria-pressed", String(state.route === "sample"));
+  $("route-layout").setAttribute("aria-pressed", String(state.route === "layout"));
+}
+
+function switchRoute(route) {
+  if (!state.template || state.route === route || !state.template.routes.includes(route)) return;
+  state.route = route; // the bridge drops every pick made on the other route, each with a note (D11)
+  renderRoute();
+  staleNow();
+  replan();
 }
 
 // ---------------------------------------------------------------- step 3
@@ -263,7 +290,7 @@ async function replan() {
   }
   const result = await working(async () => {
     try {
-      return JSON.parse(state.session.plan(text, JSON.stringify(state.overrides)));
+      return JSON.parse(state.session.plan(text, JSON.stringify(state.overrides), state.route));
     } catch (err) {
       console.error(err);
       return { ok: false, code: "unknown" };
@@ -284,6 +311,10 @@ async function replan() {
 }
 
 function layoutName(id) {
+  if (state.route === "sample") {
+    const sm = state.template.samples.find((x) => x.id === id);
+    return sm ? fmt(COPY.sampleOption, { k: sm.k, words: sm.words }) : id;
+  }
   const lay = state.template.layouts.find((l) => l.id === id);
   if (!lay) return id;
   const name = lay.name || COPY.unnamed;
@@ -324,7 +355,9 @@ function renderPlan() {
         // remembered by the slide's title, kind, nth and count, not its index, so it follows the slide
         const same = (o) => o.title === src.title && o.kind === src.kind && o.nth === src.nth;
         state.overrides = state.overrides.filter((o) => !same(o));
-        state.overrides.push({ title: src.title, kind: src.kind, nth: src.nth, count: src.count, layout: sel.value });
+        const o = { title: src.title, kind: src.kind, nth: src.nth, count: src.count, layout: sel.value };
+        if (state.route === "sample") o.route = "sample";
+        state.overrides.push(o);
         staleNow();
         replan();
       });
@@ -337,7 +370,9 @@ function renderPlan() {
     }
     const fit = document.createElement("td");
     fit.className = "fit" + (s.fit === "fits" ? "" : " is-flag");
-    fit.textContent = COPY.fit[s.fit] || s.fit;
+    // the sample route can carry several states on one slide (shrunk, split, warned, check): all are shown
+    const flags = s.flags && s.flags.length ? s.flags : [s.fit];
+    fit.textContent = flags.map((f) => COPY.fit[f] || f).join(" · ");
     tr.append(no, title, lay, fit);
     body.append(tr);
   });
@@ -362,7 +397,7 @@ async function download() {
   const result = await working(async () => {
     let out;
     try {
-      out = state.session.fill(text, overrides);
+      out = state.session.fill(text, overrides, state.route);
       return { bytes: out.toJs(), name: state.session.fill_name };
     } catch (err) {
       console.error(err);
@@ -434,6 +469,8 @@ function wire() {
     renderPlan();
     $("file").click();
   });
+  $("route-sample").addEventListener("click", () => switchRoute("sample"));
+  $("route-layout").addEventListener("click", () => switchRoute("layout"));
   $("outline").addEventListener("input", schedulePlan);
   $("download").addEventListener("click", download);
   $("reset").addEventListener("click", reset);

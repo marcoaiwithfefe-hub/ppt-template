@@ -185,6 +185,12 @@ h1 {
 .layouts__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; margin-bottom: 12px; }
 .layouts__file { font-family: var(--font-display); font-weight: 700; font-size: 18px; overflow-wrap: anywhere; }
 .layouts__head p:not(.layouts__file) { color: var(--muted); font-size: 15px; }
+.route { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 4px 0 16px; }
+.route__line { font-size: 16px; }
+.route__switch { display: inline-flex; border: 1px solid var(--rule-strong); }
+.route__opt { padding: 7px 14px; font-size: 15px; background: transparent; border: 0; color: var(--muted); }
+.route__opt + .route__opt { border-left: 1px solid var(--rule-strong); }
+.route__opt[aria-pressed="true"] { background: var(--cobalt); color: var(--white); }
 .layouts__list { max-height: 360px; overflow: auto; border-top: 1px solid var(--rule); }
 .master-name {
   font-family: var(--font-display); font-size: 13px; letter-spacing: 0.1em; color: var(--muted);

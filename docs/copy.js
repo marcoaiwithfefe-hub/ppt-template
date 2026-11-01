@@ -62,6 +62,12 @@ export const COPY = {
   defaultMark: "預設",
   unnamed: "（冇名）",
   changeTemplate: "換範本",
+  routeSample: "用範本頁嘅設計",
+  routeLayout: "用版面",
+  routeLineSample: "會跟範本頁嘅設計砌每張投影片（搵到 {n} 張範本頁）。",
+  routeLineLayout: "會用範本嘅版面砌每張投影片。",
+  routeNote: "網頁估錯嘅話，撳一下就轉。",
+  sampleOption: "範本頁 {k}　{words}",
 
   step3Label: "第三步",
   step3Title: "貼大綱，下載簡報",
@@ -72,6 +78,7 @@ export const COPY = {
   layoutLabel: "版面",
   fit: {
     fits: "放得落",
+    shrunk: "字細咗",
     split: "太多，分開咗",
     warned: "有一點太長",
     check: "請喺 PowerPoint 檢查",
@@ -97,6 +104,7 @@ export const COPY = {
     too_long: "大綱太長（上限 50,000 字）。請分開幾份做。",
     no_slides: "搵唔到投影片。每張投影片要用「## 」開頭，例如「## 三個目標」。",
     too_many_slides: "投影片太多（上限 200 張）。請分開幾份做。",
+    too_big: "做出嚟嘅簡報太大，網頁處理唔到。請減少投影片或者每張嘅點數，再試。",
     unknown: "出咗錯，請改吓大綱或者版面再試。",
   },
   warnings: {
@@ -113,6 +121,7 @@ export const COPY = {
     fit_check: "「{text}」：呢個版面網頁估唔到放唔放得落，下載後請喺 PowerPoint 檢查。",
     layout_gone: "之前幫「{text}」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。",
     layout_dropped: "「{text}」：之前揀嘅版面放唔落呢張投影片而家嘅內容，改返用預設版面。",
+    subtitle_in_title: "「{text}」：範本封面冇副題框，副題放咗喺標題下面。",
   },
 
   phoneTitle: "呢個工具要用電腦開",
