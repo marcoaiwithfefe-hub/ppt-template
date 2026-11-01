@@ -25,3 +25,4 @@ qa/failure-demos/runs/
 qa/g0b/**/*.pptx
 qa/g0b/**/lo-*/
 qa/g0b/**/renders/
+qa/c12/sample-*.pptx

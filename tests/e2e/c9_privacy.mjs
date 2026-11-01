@@ -134,6 +134,56 @@ async function fillOnce(page, tpl, outline, label, overrideIndex) {
   return { file, name: dl.suggestedFilename(), override, overrideSource: override ? overrideIndex : null, tDownload };
 }
 
+async function sampleRoute(page) {
+  const copy = (await import(path.join(ROOT, "docs", "copy.js"))).COPY;
+  const outlineRel = "tests/outlines/sample/design.md";
+  const outline = await readFile(path.join(ROOT, outlineRel), "utf8");
+  await page.setInputFiles("#file", path.join(FIX, "sample-design.pptx"));
+  await page.waitForSelector("#layouts:not([hidden])");
+  const route = await page.evaluate(() => ({
+    shown: !document.getElementById("route").hidden && !document.getElementById("route-switch").hidden,
+    line: document.getElementById("route-line").textContent,
+    sample: document.getElementById("route-sample").getAttribute("aria-pressed"),
+  }));
+  check("C22", "both routes on offer: the route line and switch show, sample pressed",
+    route.shown && route.sample === "true" && route.line.startsWith(copy.routeLineSample.split("{")[0]), JSON.stringify(route));
+  await page.fill("#outline", outline);
+  await page.waitForSelector("#plan:not([hidden])");
+  await page.waitForFunction(() => document.getElementById("working").hidden);
+  const options = await page.$$eval("#slides select", (sels) => sels.map((s) => [...s.options].map((o) => [o.value, o.textContent])));
+  const okLabels = options.every((opts) => opts.every(([v, t]) => /^s\d+$/.test(v) && t.startsWith("範本頁 " + v.slice(1))));
+  const compatible = { 0: ["s1", "s2", "s3", "s4", "s5", "s6"], 1: ["s2", "s3", "s4", "s5", "s6"] };
+  const okCompat = JSON.stringify(options[1].map(([v]) => v)) === JSON.stringify(compatible[1]);
+  check("C31", "the picker lists only compatible samples as 範本頁 k plus first words", okLabels && okCompat, JSON.stringify(options.slice(0, 2)));
+  // picks on outline slides 1 and 4, each a re-plan
+  const overrides = {};
+  for (const [idx, value] of [[1, "s6"], [4, "s5"]]) {
+    await page.locator("#slides select").nth(idx).selectOption(value);
+    await page.waitForFunction(() => document.getElementById("working").hidden);
+    overrides[idx] = value;
+  }
+  const chosen = await page.$$eval("#slides select", (sels) => sels.map((s) => s.value));
+  check("C31", "choosing a sample re-plans with it", chosen[1] === "s6" && chosen[4] === "s5", chosen.join(" "));
+  const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#download")]);
+  const tDownload = Date.now();
+  const file = path.join(OUT, "c28-sample-design.pptx");
+  await dl.saveAs(file);
+  // switch to layouts: a re-plan, both picks dropped with a note each, the picker now lists layouts
+  await page.click("#route-layout");
+  await page.waitForFunction(() => document.getElementById("working").hidden);
+  const after = await page.evaluate(() => ({
+    pressed: document.getElementById("route-layout").getAttribute("aria-pressed"),
+    notes: [...document.querySelectorAll("#warnings-list li")].map((li) => li.textContent),
+    first: document.querySelector("#slides select")?.value || "",
+  }));
+  const gone = after.notes.filter((t) => t.includes(copy.warnings.layout_gone.split("「")[0]) || t.includes("取消咗")).length;
+  check("C22", "switching to layouts re-plans and drops both picks with a note each",
+    after.pressed === "true" && gone === 2 && after.first.startsWith("/ppt/slideLayouts/"), JSON.stringify(after));
+  await page.click("#route-sample");
+  await page.waitForFunction(() => document.getElementById("working").hidden);
+  return { template: "sample-design.pptx", outline: outlineRel, route: "sample", overrides, file, name: dl.suggestedFilename(), tDownload };
+}
+
 async function session(browser) {
   const { server, log, port } = await startServer();
   const origin = `http://127.0.0.1:${port}`;
@@ -162,6 +212,12 @@ async function session(browser) {
   const fills = [];
   fills.push({ template: "wui-tung.pptx", ...(await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "c10-wui-tung")) });
   fills.push({ template: "typed.pptx", ...(await fillOnce(page, path.join(FIX, "typed.pptx"), outline, "c10-typed-override", 1)) });
+
+  // rev 8: the sample route, offline (C22 page part, C28, C31): route line and switch, the 範本頁 picker,
+  // picks on two slides, a download with the route and every pick recorded, then a switch to layouts that drops both
+  await ctx.setOffline(true);
+  fills.push(await sampleRoute(page));
+  await ctx.setOffline(false);
 
   // offline after ready: a fill still downloads. It runs before the idle, and the network is back
   // on for the idle, so the session's last download is followed by 30 s in which any delayed

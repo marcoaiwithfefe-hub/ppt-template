@@ -1,26 +1,43 @@
 {
  "tested": {
-  "commit": "edaae49cd84c68d8a2000493a51ee8966d73616c",
-  "dirty": "",
+  "commit": "a7751685eb3f67bb7755c39881f9694cf5af1c0b",
+  "dirty": "M docs/app.js\n M docs/copy.js\n M docs/index.html\n M docs/py/deckfill.zip\n M docs/style.css\n M qa/e2e/c10_compare.py\n M tests/e2e/c12_load.mjs\n M tests/e2e/c9_privacy.mjs",
   "files": {
-   "fixtures/out/wui-tung.pptx": "84cb1da55f9113b2e52bb7e4465bed9870d492bce418f72a625b42c697d6b12c",
-   "fixtures/out/typed.pptx": "3d9e91210d484d37a7f8b398337e2810bdb43cdba81ed903fc7fa91e8573be65",
-   "qa/e2e/c10-wui-tung.pptx": "55467cbc40712b7f17a0f027ddfbd91b703101cad5746f8ff1f415cdcd802ca5",
-   "qa/e2e/c10-typed-override.pptx": "65584db4c416d574a4c13b3272922a33466e71c706aa5cc91a6cb7b5d2660552"
+   "fixtures/out/wui-tung.pptx": "1f299d0db906715fbd4cf3dc0f8524f09797bbaa3cc273bbdff17a9789b488cd",
+   "fixtures/out/typed.pptx": "2cc70eb9a3c0f691f86d332acb88e49d0cd4e093ce7d4cf646c973246dcc1e9b",
+   "fixtures/out/sample-design.pptx": "5506045756c25a9dab81a28d1b9d23509dc47d14bc148d52dcad0776ccfea9f1",
+   "qa/e2e/c10-wui-tung.pptx": "8346745cf3f70f955f704481570332200a3d0e52483ce7cbbd9e28c28d03b3d9",
+   "qa/e2e/c10-typed-override.pptx": "3ccb89005a81370bcdefc3fcddaa14bbdefa3e03c26987bb1db0e53c4edb31ce",
+   "qa/e2e/c28-sample-design.pptx": "a90ac2eaf75b904880370219951c17c1ba3bf452cea66cfc56d02da497be339c"
   }
  },
- "browser_run": "edaae49cd84c68d8a2000493a51ee8966d73616c",
+ "browser_run": "a7751685eb3f67bb7755c39881f9694cf5af1c0b",
  "results": [
   {
    "template": "wui-tung.pptx",
+   "route": "layout",
    "override": null,
+   "overrides": null,
    "parts": 50,
    "differ": []
   },
   {
    "template": "typed.pptx",
+   "route": "layout",
    "override": "/ppt/slideLayouts/slideLayout3.xml",
+   "overrides": null,
    "parts": 52,
+   "differ": []
+  },
+  {
+   "template": "sample-design.pptx",
+   "route": "sample",
+   "override": null,
+   "overrides": {
+    "1": "s6",
+    "4": "s5"
+   },
+   "parts": 53,
    "differ": []
   }
  ]

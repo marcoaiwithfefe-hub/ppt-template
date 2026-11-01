@@ -180,6 +180,26 @@ async function main() {
   check(`worst case wasm heap ${w.wasmHeapMB.toFixed(0)} MB, ${w.wasmHeapAtReadyMB.toFixed(0)} MB at ready (bar ${BARS.worstHeapMB})`, w.wasmHeapMB <= BARS.worstHeapMB);
   check(`working state on screen during the longest task (qa/e2e/c12-working-during-longest-task.png)`, w.shotWhileWorking === true, JSON.stringify(w.shot));
 
+  // rev 8 (C30): the sample-route stress cases at the caps the code enforces, each on its own fresh page
+  // (qa/c12/make_worst_sample.py: 19,526 copied shapes; 40.3 MB of generated slide XML)
+  report.sampleStress = [];
+  for (const [file, outlineFile] of [["sample-shapes.pptx", "sample-shapes-outline.md"], ["sample-xml.pptx", "sample-xml-outline.md"]]) {
+    const sctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
+    await sctx.addInitScript(INIT);
+    const spage = await sctx.newPage();
+    await spage.goto(url);
+    await waitReady(spage);
+    const sOutline = await readFile(path.join(ROOT, "qa", "c12", outlineFile), "utf8");
+    const r = await runOne(spage, path.join(ROOT, "qa", "c12", file), sOutline, false);
+    r.wasmHeapMB = await spage.evaluate(() => window.__e2e.py._module.HEAPU8.byteLength / 1e6);
+    report.sampleStress.push(r);
+    await sctx.close();
+    const m = Math.max(r.readMs || 0, r.planMs || 0, r.fillMs || 0);
+    const c = Math.max(r.clickAfterReadMs || 0, r.clickAfterPlanMs || 0, r.clickAfterFillMs || 0);
+    check(`sample-route stress ${file}: longest task ${(m / 1000).toFixed(2)} s (bar ${BARS.worstTaskS}); read ${r.readMs} plan ${r.planMs} fill ${r.fillMs} ms; click ${c} ms (bar ${BARS.clickMs}); wasm heap ${r.wasmHeapMB.toFixed(0)} MB (bar ${BARS.worstHeapMB})`,
+      !r.refused && r.fillMs != null && m <= BARS.worstTaskS * 1000 && c <= BARS.clickMs && r.wasmHeapMB <= BARS.worstHeapMB, r.refused || "");
+  }
+
   await browser.close();
   server.close();
   await writeFile(path.join(OUT, "c12-report.json"), JSON.stringify(report, null, 1));

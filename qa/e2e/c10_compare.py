@@ -27,12 +27,18 @@ def main() -> int:
     results = []
     for f in report["session"]["fills"]:
         data = (ROOT / "fixtures" / "out" / f["template"]).read_bytes()
-        overrides = {f["overrideSource"]: f["override"]} if f.get("override") else None
-        plan = plan_deck(read_template(data, f["template"]), outline, overrides)
+        # rev 8 (C28): a fill records its route and its full override set, replayed here whole
+        if f.get("overrides"):
+            overrides = {int(k): v for k, v in f["overrides"].items()}
+        else:
+            overrides = {f["overrideSource"]: f["override"]} if f.get("override") else None
+        this = parse_outline((ROOT / f["outline"]).read_text(encoding="utf-8")) if f.get("outline") else outline
+        plan = plan_deck(read_template(data, f["template"]), this, overrides, route=f.get("route"))
         want = parts(fill(data, f["template"], plan))
         got = parts(Path(f["file"]).read_bytes())
         differ = sorted(n for n in set(want) | set(got) if want.get(n) != got.get(n))
-        results.append({"template": f["template"], "override": f.get("override"), "parts": len(want), "differ": differ})
+        results.append({"template": f["template"], "route": f.get("route", "layout"), "override": f.get("override"),
+                        "overrides": f.get("overrides"), "parts": len(want), "differ": differ})
         print("PASS" if not differ else "FAIL", f["template"], "override" if overrides else "", len(want), "parts", differ[:5])
     sys.path.insert(0, str(ROOT / "qa"))
     from provenance import tested
