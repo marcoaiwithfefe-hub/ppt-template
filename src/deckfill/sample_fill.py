@@ -29,7 +29,19 @@ from .fill import (
     remove_slides,
 )
 from .package import RT_SLIDE, check_integrity
-from .sample import Styles, _is_hidden, clearing, donor, grown_groups, has_text, level2_written, shape_id, to_local, walk
+from .sample import (
+    Styles,
+    _is_hidden,
+    clearing,
+    donor,
+    grown_groups,
+    has_text,
+    level2_written,
+    normalise_alternates,
+    shape_id,
+    to_local,
+    walk,
+)
 from .sample_plan import MAX_XML
 from .template import FOOTER_TYPES, ph_of, ph_type
 from .xmlsafe import R_NS, q
@@ -48,6 +60,7 @@ def _copy_sample(new_slide, src_slide) -> None:
     new_el, src_el = new_slide._element, src_slide._element
     csld_new = new_el.find(q("p:cSld"))
     csld = copy.deepcopy(src_el.find(q("p:cSld")))
+    normalise_alternates(csld)  # code review F1: the fallback branches only, as the reader classified them
     new_el.replace(csld_new, csld)
     old_map = new_el.find(q("p:clrMapOvr"))
     src_map = src_el.find(q("p:clrMapOvr"))

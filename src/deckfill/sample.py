@@ -131,6 +131,22 @@ def to_local(box, chain: tuple[Xf, ...]) -> tuple[int, int, int, int]:
     return round(min(x1, x2)), round(min(y1, y2)), round(abs(x2 - x1)), round(abs(y2 - y1))
 
 
+def normalise_alternates(root) -> int:
+    """Code review F1: every mc:AlternateContent under root, nested ones included, is replaced by the children of
+    its mc:Fallback (removed when it has none). The reader classifies, the fill edits and PowerPoint draws the same
+    tree, so no choice branch can show a sample's words. Returns how many were replaced."""
+    n = 0
+    while True:
+        ac = next((e for e in root.iter() if isinstance(e.tag, str) and etree.QName(e).localname == "AlternateContent"), None)
+        if ac is None:
+            return n
+        fb = next((c for c in ac if isinstance(c.tag, str) and etree.QName(c).localname == "Fallback"), None)
+        for c in list(fb) if fb is not None else []:
+            ac.addprevious(c)
+        ac.getparent().remove(ac)
+        n += 1
+
+
 @dataclass
 class Walked:
     el: object
@@ -1046,6 +1062,8 @@ def read_samples(prs) -> tuple[Sample, ...]:
     broken: dict[int, str] = {}  # code review F2: a slide whose reading raised is unusable, never the whole template
     for k, slide in enumerate(prs.slides, start=1):
         try:
+            # F1: the slides are read as the copies will hold them (this Presentation is the reader's own)
+            normalise_alternates(slide._element.find(q("p:cSld")))
             lay = slide.slide_layout
             foot.setdefault(str(lay.part.partname), []).extend(
                 footer_boxes(slide._element.find(q("p:cSld")).find(q("p:spTree")), lay._element, lay.slide_master._element))

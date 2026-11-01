@@ -1,0 +1,4 @@
+# f1-choice-kept: a copy keeps every mc:AlternateContent whole, choice branches included
+# mutation in src/deckfill/sample_fill.py: '    normalise_alternates(csld)  # code review F1: the fallback branches only, as the reader classified them\n' -> ''
+# tests: tests/test_c24_c27_sample_text.py tests/test_cr1_code_review.py -k altcontent or f1
+4 passed, 30 deselected in 0.08s

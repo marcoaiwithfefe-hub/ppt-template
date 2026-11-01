@@ -32,6 +32,7 @@ CASES = [
     ("sample-chart.pptx", "two-slides", None, "chart"),
     ("sample-typo.pptx", "two-slides", None, "typo"),
     ("sample-thin.pptx", "two-slides", None, "thin"),
+    ("sample-altcontent.pptx", "two-slides", None, "altcontent"),  # code review F1
 ]
 
 

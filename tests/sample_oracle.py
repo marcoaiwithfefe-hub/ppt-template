@@ -156,6 +156,11 @@ def text_lines(out: bytes, src: bytes) -> list[str]:
                 lvl = int(ppr.get("lvl", "0")) + 1 if ppr is not None else 1
                 lines.append(f"{sid} {lvl} {text}")
         lines += foot
+        # code review F1: text inside an mc:Choice branch is text PowerPoint can draw instead of the fallback; it is
+        # listed so any that survives fails the golden comparison (C24)
+        for ch in xml(x).iter():
+            if isinstance(ch.tag, str) and etree.QName(ch).localname == "Choice":
+                lines += [f"choice {t.text}" for t in ch.iter(a("t")) if (t.text or "").strip()]
     return lines
 
 

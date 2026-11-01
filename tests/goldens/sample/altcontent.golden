@@ -1,0 +1,9 @@
+# sample-altcontent + outlines/sample/two-slides.md (code review F1): only the outline's words; the fallback body
+# takes them, no choice branch, fallback note or table cell survives. A goes to s2 (s1 would leave its note body
+# unused, D12 ranking), B to s1 (variety).
+slide 1 s2
+201 1 A
+211 1 one
+slide 2 s1
+101 1 B
+111 1 two

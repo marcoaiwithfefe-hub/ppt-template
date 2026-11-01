@@ -1,0 +1,4 @@
+base 057c266 (057c266), tests from working tree at 1a70b24, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.s4FiLeLuYJ
+E       AssertionError: C24: text the golden does not hold (sample text left behind?): ['choice Choice table cell', 'choice Choice body words', 'choice Choice note']
+FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[altcontent]
+1 failed, 16 passed in 0.35s

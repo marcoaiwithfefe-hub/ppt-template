@@ -126,6 +126,13 @@ DEMOS = {
         ["tests/test_c24_c27_sample_text.py"],
     ),
     # code review round 1
+    "f1-choice-kept": (
+        "a copy keeps every mc:AlternateContent whole, choice branches included",
+        "src/deckfill/sample_fill.py",
+        "    normalise_alternates(csld)  # code review F1: the fallback branches only, as the reader classified them\n",
+        "",
+        ["tests/test_c24_c27_sample_text.py", "tests/test_cr1_code_review.py", "-k", "altcontent or f1"],
+    ),
     "f2-guide-path": (
         "a custom path's guide-name corner is read as an integer",
         "src/deckfill/sample.py",

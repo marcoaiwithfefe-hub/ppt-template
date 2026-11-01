@@ -863,6 +863,58 @@ def make_sample_malformed(out):
     return save(prs, out, "sample-malformed.pptx")
 
 
+MC = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+P14 = "http://schemas.microsoft.com/office/powerpoint/2010/main"
+TABLE = ('<p:graphicFrame xmlns:p="%s" xmlns:a="%s"><p:nvGraphicFramePr><p:cNvPr id="%d" name="T%d"/>'
+         '<p:cNvGraphicFramePr><a:graphicFrameLocks noGrp="1"/></p:cNvGraphicFramePr><p:nvPr/></p:nvGraphicFramePr>'
+         '<p:xfrm><a:off x="%d" y="%d"/><a:ext cx="%d" cy="%d"/></p:xfrm><a:graphic>'
+         '<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/table"><a:tbl><a:tblGrid>'
+         '<a:gridCol w="%d"/></a:tblGrid><a:tr h="370840"><a:tc><a:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r>'
+         '<a:rPr lang="en-US"/><a:t>%s</a:t></a:r></a:p></a:txBody><a:tcPr/></a:tc></a:tr></a:tbl></a:graphicData>'
+         '</a:graphic></p:graphicFrame>')
+
+
+def alt(el, choice):
+    """Wrap a shape in mc:AlternateContent: the given element as the p14 choice, the shape itself as the fallback."""
+    ac = etree.Element("{%s}AlternateContent" % MC, nsmap={"mc": MC})
+    ch = etree.SubElement(ac, "{%s}Choice" % MC, nsmap={"p14": P14}, Requires="p14")
+    fb = etree.SubElement(ac, "{%s}Fallback" % MC)
+    el.addprevious(ac)
+    ch.append(choice)
+    fb.append(el)
+    return ac
+
+
+def _retext(el, text):
+    for t in el.iter(q("a:t")):
+        t.text = text
+    return el
+
+
+def make_sample_altcontent(out):
+    """Code review F1. a1: its body box and a filled note sit in mc:AlternateContent whose p14 choice holds other
+    words; a2: a choice holds a table, the fallback a picture. Copies show the fallback only, so no choice words reach
+    the deck and the table never does; a3: the fallback holds a table (a choice a picture), so a3 is never usable."""
+    prs = new_prs()
+    s1 = content_slide(prs, 1, (240, 230, 220), "Alt one", "Fallback body words")
+    body = s1.shapes[1]._element
+    alt(body, _retext(copy.deepcopy(body), "Choice body words"))
+    note = tb(s1.shapes, 131, 9 * M, 6 * M, 2 * M, 400000, "Fallback note", 14, fill=(60, 60, 200))._element
+    alt(note, _retext(copy.deepcopy(note), "Choice note"))
+    s2 = content_slide(prs, 2, (220, 240, 230), "Alt two", "Body two")
+    s2.shapes[1].height = Emu(2 * M)
+    picture = pic(s2.shapes, 231, 6 * M, 4500000, 4 * M, 1500000, (40, 100, 160))._element
+    alt(picture, etree.fromstring(TABLE % (NS["p"], NS["a"], 231, 231, 6 * M, 4500000, 4 * M, 1500000, 4 * M,
+                                           "Choice table cell")))
+    s3 = content_slide(prs, 3, (230, 220, 240), "Alt three", "Body three")
+    s3.shapes[1].height = Emu(2 * M)
+    choice_pic = pic(s3.shapes, 331, 6 * M, 4500000, 4 * M, 1500000, (160, 100, 40))._element
+    table = etree.fromstring(TABLE % (NS["p"], NS["a"], 331, 331, 6 * M, 4500000, 4 * M, 1500000, 4 * M, "Fallback cell"))
+    choice_pic.addprevious(table)
+    alt(table, choice_pic)
+    return save(prs, out, "sample-altcontent.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -874,4 +926,5 @@ def make_all(out) -> list:
         make_sample_small(out), make_sample_split(out), make_sample_grow(out), make_sample_geom(out),
         make_sample_order(out), make_sample_two(out), make_sample_only2(out), make_sample_cover(out),
         make_sample_cover2(out), make_sample_cols(out), make_sample_malformed(out),
+        make_sample_altcontent(out),
     ]
