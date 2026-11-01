@@ -1,5 +1,5 @@
 # c24-hidden-left: hidden shapes keep their sample text on the copy
-# mutation in src/deckfill/sample_fill.py: '            el = w.el\n            if sid in fills or sid in removed' -> '            el = w.el\n            if w.hidden:\n                continue\n            if sid in fills or sid in removed'
+# mutation in src/deckfill/sample_fill.py: '            if sid in fills or sid in removed:\n                continue' -> '            if sid in fills or sid in removed:\n                continue\n            if w.hidden:\n                continue'
 # tests: tests/test_c24_c27_sample_text.py
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[hidden]
-1 failed, 15 passed in 0.34s
+1 failed, 15 passed in 0.31s

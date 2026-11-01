@@ -2,4 +2,4 @@
 # mutation in src/deckfill/template.py: 'left, right = sorted((a, b), key=lambda b_: b_.x)' -> 'left, right = sorted((a, b), key=lambda b_: bodies.index(b_))'
 # tests: tests/test_c2_layouts.py
 FAILED tests/test_c2_layouts.py::test_custom_left_column_lands_in_left_placeholder
-1 failed, 18 passed in 0.22s
+1 failed, 18 passed in 0.19s

@@ -1,4 +1,4 @@
 # c5-integrity: the integrity check stops checking relationship attributes (r:id, r:embed, ...)
 # mutation in src/deckfill/package.py: 'if attr.startswith("{%s}" % R_NS) and value and value not in rels:' -> 'if False:'
 # tests: tests/test_c3_c6_package.py -k c5
-29 passed, 106 deselected in 0.58s
+29 passed, 106 deselected in 0.51s
