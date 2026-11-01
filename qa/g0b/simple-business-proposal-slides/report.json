@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.25,
+ "seconds": 0.26,
  "samples": [
   {
    "id": "s1",
@@ -265,5 +265,5 @@
  },
  "c23_diffs": [],
  "sheet": "qa/g0b/simple-business-proposal-slides/sheet.jpg",
- "renders": "qa/g0b/simple-business-proposal-slides/renders-sv50jsjg"
+ "renders": "qa/g0b/simple-business-proposal-slides/renders-udbnh541"
 }

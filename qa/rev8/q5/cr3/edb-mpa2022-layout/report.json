@@ -1,0 +1,139 @@
+{
+ "template": "edb-mpa2022.pptx",
+ "route": "layout",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 0.22,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": false,
+   "reason": "no title",
+   "design": true,
+   "classes": []
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  }
+ ],
+ "chosen": [
+  "/ppt/slideLayouts/slideLayout1.xml",
+  "/ppt/slideLayouts/slideLayout2.xml",
+  "/ppt/slideLayouts/slideLayout2.xml",
+  "/ppt/slideLayouts/slideLayout4.xml",
+  "/ppt/slideLayouts/slideLayout2.xml",
+  "/ppt/slideLayouts/slideLayout3.xml"
+ ],
+ "warnings": [],
+ "slides": [
+  {
+   "n": 1,
+   "layout": "/ppt/slideLayouts/slideLayout1.xml",
+   "title": "匯通物流 2027 年度計劃",
+   "fit": "fits"
+  },
+  {
+   "n": 2,
+   "layout": "/ppt/slideLayouts/slideLayout2.xml",
+   "title": "三個目標",
+   "fit": "fits"
+  },
+  {
+   "n": 3,
+   "layout": "/ppt/slideLayouts/slideLayout2.xml",
+   "title": "時間表",
+   "fit": "fits"
+  },
+  {
+   "n": 4,
+   "layout": "/ppt/slideLayouts/slideLayout4.xml",
+   "title": "預算 港幣 800 萬",
+   "fit": "fits"
+  },
+  {
+   "n": 5,
+   "layout": "/ppt/slideLayouts/slideLayout2.xml",
+   "title": "八項行動",
+   "fit": "split"
+  },
+  {
+   "n": 6,
+   "layout": "/ppt/slideLayouts/slideLayout2.xml",
+   "title": "八項行動（續）",
+   "fit": "split"
+  },
+  {
+   "n": 7,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "問答",
+   "fit": "fits"
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/rev8/q5/cr3/edb-mpa2022-layout/sheet.jpg",
+ "renders": "qa/rev8/q5/cr3/edb-mpa2022-layout/renders-fgk4h01l"
+}

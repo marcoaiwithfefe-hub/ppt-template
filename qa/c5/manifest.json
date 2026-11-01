@@ -147,17 +147,17 @@
   {
    "family": "Q5 sample route",
    "template": "qa/real-templates/edb-mpa2022.pptx",
-   "output": "qa/rev8/q5/cr2/edb-mpa2022-sample/edb-mpa2022-sample-filled.pptx"
+   "output": "qa/rev8/q5/cr3/edb-mpa2022-sample/edb-mpa2022-sample-filled.pptx"
   },
   {
    "family": "Q5 sample route",
    "template": "qa/real-templates/elderly-gov-diy.pptx",
-   "output": "qa/rev8/q5/cr2/elderly-gov-diy-sample/elderly-gov-diy-sample-filled.pptx"
+   "output": "qa/rev8/q5/cr3/elderly-gov-diy-sample/elderly-gov-diy-sample-filled.pptx"
   },
   {
    "family": "Q5 sample route",
    "template": "qa/real-templates/hkust-template14.potx",
-   "output": "qa/rev8/q5/cr2/hkust-template14-sample/hkust-template14-sample-filled.pptx"
+   "output": "qa/rev8/q5/cr3/hkust-template14-sample/hkust-template14-sample-filled.pptx"
   }
  ],
  "generated_sample": [

@@ -1,0 +1,152 @@
+{
+ "template": "hkust-template14.potx",
+ "route": "layout",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "layout",
+ "seconds": 2.24,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s4",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s5",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s6",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s7",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "/ppt/slideLayouts/slideLayout9.xml",
+  "/ppt/slideLayouts/slideLayout9.xml",
+  "/ppt/slideLayouts/slideLayout9.xml",
+  "/ppt/slideLayouts/slideLayout9.xml",
+  "/ppt/slideLayouts/slideLayout9.xml",
+  "/ppt/slideLayouts/slideLayout9.xml"
+ ],
+ "warnings": [
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "匯通物流 2027 年度計劃",
+   "fit": "fits"
+  },
+  {
+   "n": 2,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "三個目標",
+   "fit": "fits"
+  },
+  {
+   "n": 3,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "時間表",
+   "fit": "split"
+  },
+  {
+   "n": 4,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "時間表（續）",
+   "fit": "split"
+  },
+  {
+   "n": 5,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "預算 港幣 800 萬",
+   "fit": "split"
+  },
+  {
+   "n": 6,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "預算 港幣 800 萬（續）",
+   "fit": "split"
+  },
+  {
+   "n": 7,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "八項行動",
+   "fit": "split"
+  },
+  {
+   "n": 8,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "八項行動（續）",
+   "fit": "split"
+  },
+  {
+   "n": 9,
+   "layout": "/ppt/slideLayouts/slideLayout9.xml",
+   "title": "問答",
+   "fit": "fits"
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/rev8/q5/cr3/hkust-template14-layout/sheet.jpg",
+ "renders": "qa/rev8/q5/cr3/hkust-template14-layout/renders-93mf5zd0"
+}
