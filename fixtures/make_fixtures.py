@@ -766,6 +766,10 @@ def main() -> None:
         make_lying_size(wt), make_billion_laughs(wt), make_damaged(wt), make_rels_order(wt),
         make_footer_local(), make_view_outline(), *make_xml_renamed(wt), make_root_missing(wt),
     ]
+    sys.path.insert(0, str(HERE))
+    from make_sample_fixtures import make_all  # rev 8 sample-route fixtures
+
+    made += make_all(OUT)
     for p in made:
         print(f"{p.name:32s} {p.stat().st_size:>10,d}")
 

@@ -15,7 +15,7 @@ REFERENCE = ROOT / "fixtures" / "reference-outline.md"
 
 def pytest_configure(config):
     # Fixture templates are made by script, never downloaded (spec Testing Decisions).
-    if not (FIX / "lying-size.pptx").exists():
+    if not (FIX / "lying-size.pptx").exists() or not (FIX / "sample-fit.pptx").exists():
         subprocess.run([sys.executable, str(ROOT / "fixtures" / "make_fixtures.py")], check=True, capture_output=True)
 
 

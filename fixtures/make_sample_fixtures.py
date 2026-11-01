@@ -1,0 +1,561 @@
+"""Rev 8 fixture templates for the sample-slide route (spec map rev 5), made from python-pptx's default template.
+
+Every shape a test or golden names gets a fixed shape id (slide k uses ids k*100 + n), so the goldens in
+tests/goldens/sample/ are written by hand from D12, never from the planner. Called by make_fixtures.main().
+"""
+
+from __future__ import annotations
+
+import copy
+import io
+
+from lxml import etree
+from PIL import Image
+from pptx import Presentation
+from pptx.chart.data import CategoryChartData
+from pptx.dml.color import RGBColor
+from pptx.enum.chart import XL_CHART_TYPE
+from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
+from pptx.enum.text import MSO_AUTO_SIZE
+from pptx.opc.constants import RELATIONSHIP_TYPE as RT
+from pptx.util import Emu, Pt
+
+NS = {
+    "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+    "p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+    "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+}
+SW, SH = 12192000, 6858000
+M = 1000000  # one "M" EMU, for readable coordinates
+
+
+def q(name: str) -> str:
+    p, local = name.split(":")
+    return "{%s}%s" % (NS[p], local)
+
+
+def new_prs():
+    prs = Presentation()
+    prs.slide_width, prs.slide_height = Emu(SW), Emu(SH)
+    return prs
+
+
+def layout_named(prs, name: str):
+    for master in prs.slide_masters:
+        for lay in master.slide_layouts:
+            if lay.name == name:
+                return lay
+    raise KeyError(name)
+
+
+def png(rgb, size=(60, 40)) -> io.BytesIO:
+    b = io.BytesIO()
+    Image.new("RGB", size, rgb).save(b, "PNG")
+    b.seek(0)
+    return b
+
+
+def set_id(shape, sid: int, name: str | None = None) -> None:
+    c = shape._element.find(".//" + q("p:cNvPr"))
+    c.set("id", str(sid))
+    c.set("name", name or f"S{sid}")
+
+
+def bg(slide, rgb) -> None:
+    slide.background.fill.solid()
+    slide.background.fill.fore_color.rgb = RGBColor(*rgb)
+
+
+def tb(shapes, sid, x, y, w, h, lines, pt, fill=None, hidden=False):
+    """A free text box: one paragraph per line, every run sized pt, wrapping on, no autofit."""
+    s = shapes.add_textbox(Emu(x), Emu(y), Emu(w), Emu(h))
+    set_id(s, sid)
+    tf = s.text_frame
+    tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.NONE
+    for i, line in enumerate([lines] if isinstance(lines, str) else lines):
+        p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
+        r = p.add_run()
+        r.text = line
+        r.font.size = Pt(pt)
+    if fill:
+        s.fill.solid()
+        s.fill.fore_color.rgb = RGBColor(*fill)
+    if hidden:
+        s._element.find(".//" + q("p:cNvPr")).set("hidden", "1")
+    return s
+
+
+def rect(shapes, sid, x, y, w, h, rgb):
+    s = shapes.add_shape(MSO_SHAPE.RECTANGLE, Emu(x), Emu(y), Emu(w), Emu(h))
+    set_id(s, sid)
+    s.fill.solid()
+    s.fill.fore_color.rgb = RGBColor(*rgb)
+    s.line.fill.background()
+    return s
+
+
+def pic(shapes, sid, x, y, w, h, rgb, crop_left=None):
+    s = shapes.add_picture(png(rgb), Emu(x), Emu(y), Emu(w), Emu(h))
+    set_id(s, sid)
+    if crop_left:
+        s.crop_left = crop_left
+    return s
+
+
+def group(shapes, sid, off, ext, chext, build, rot=None):
+    """A group whose children are laid out in child coordinates and scaled to ext (chOff 0, 0)."""
+    g = shapes.add_group_shape()
+    set_id(g, sid)
+    build(g.shapes)
+    pr = g._element.find(q("p:grpSpPr"))
+    for old in pr.findall(q("a:xfrm")):
+        pr.remove(old)
+    xf = etree.Element(q("a:xfrm"))
+    if rot:
+        xf.set("rot", str(rot))
+    etree.SubElement(xf, q("a:off"), x=str(off[0]), y=str(off[1]))
+    etree.SubElement(xf, q("a:ext"), cx=str(ext[0]), cy=str(ext[1]))
+    etree.SubElement(xf, q("a:chOff"), x="0", y="0")
+    etree.SubElement(xf, q("a:chExt"), cx=str(chext[0]), cy=str(chext[1]))
+    pr.insert(0, xf)
+    return g
+
+
+def save(prs, out, name):
+    path = out / name
+    prs.save(path)
+    return path
+
+
+def blank_slide(prs, rgb=None):
+    s = prs.slides.add_slide(layout_named(prs, "Blank"))
+    if rgb:
+        bg(s, rgb)
+    return s
+
+
+# ---------------------------------------------------------------------------------------------
+
+
+def make_sample_design(out):
+    """Layouts with placeholders and no decoration; 8 sample slides with their own backgrounds, pictures and scaled
+    groups: s1 a title split over four one-word boxes plus four year-digit labels, s2 a 3-slot row, s3 a second
+    3-slot list of different slot sizes, s4 a two-box comparison, s5 a section slide, s6 a slide whose text says
+    credit card, s7 a font-guide instruction slide with hex codes, s8 a thank-you slide."""
+    prs = new_prs()
+    s1 = blank_slide(prs, (250, 240, 225))
+    pic(s1.shapes, 101, 7 * M, M // 2, 4 * M + 500000, 5 * M + 800000, (40, 90, 160), crop_left=0.1)
+    for i, word in enumerate(("My", "Year", "In", "Review")):
+        def kids(sh, word=word, i=i):
+            rect(sh, 111 + 10 * i, 0, 0, 300000, 350000, (255, 255, 255))
+            tb(sh, 112 + 10 * i, 0, 0, 300000, 350000, word, 40)
+        group(s1.shapes, 110 + 10 * i, (600000 + 1400000 * i, 2 * M), (1200000, 1400000), (300000, 350000), kids)
+    for i, digit in enumerate("2026"):
+        def kids(sh, digit=digit, i=i):
+            rect(sh, 151 + 10 * i, 0, 0, 125000, 125000, (240, 170, 60))
+            tb(sh, 152 + 10 * i, 0, 0, 125000, 125000, digit, 28)
+        group(s1.shapes, 150 + 10 * i, (600000 + 700000 * i, 3800000), (500000, 500000), (125000, 125000), kids)
+
+    s2 = blank_slide(prs, (225, 240, 250))
+    tb(s2.shapes, 201, 600000, 400000, 10900000, 1200000, "Three Things", 44)
+    for i, label in enumerate(("First item", "Second item", "Third item")):
+        def kids(sh, label=label, i=i):
+            rect(sh, 211 + 10 * i, 0, 0, 800000, 600000, (255, 255, 255))
+            tb(sh, 212 + 10 * i, 0, 0, 800000, 600000, label, 24)
+        group(s2.shapes, 210 + 10 * i, (600000 + 3800000 * i, 2200000), (3200000, 2400000), (800000, 600000), kids)
+    pic(s2.shapes, 241, 200000, 6 * M, M, 600000, (200, 60, 60))
+
+    s3 = blank_slide(prs, (235, 250, 230))
+    tb(s3.shapes, 301, 600000, 400000, 10900000, 1200000, "Process", 44)
+    for i, label in enumerate(("Plan", "Do", "Check")):
+        tb(s3.shapes, 311 + i, M, 2 * M + 1400000 * i, 10 * M, 1200000, label, 20, fill=(255, 255, 255))
+    pic(s3.shapes, 321, 11 * M, 6 * M, 800000, 600000, (60, 160, 90))
+
+    s4 = blank_slide(prs, (250, 230, 240))
+    tb(s4.shapes, 401, 600000, 400000, 10900000, 1200000, "Compare", 44)
+    tb(s4.shapes, 411, 600000, 2 * M, 5200000, 3600000, "Before", 24)
+    tb(s4.shapes, 412, 6400000, 2 * M, 5200000, 3600000, "After", 24)
+    pic(s4.shapes, 421, 5700000, 6 * M, 800000, 600000, (160, 60, 160))
+
+    s5 = blank_slide(prs, (30, 40, 70))
+    tb(s5.shapes, 501, M, 2 * M, 10 * M, 2 * M, "Chapter", 60)
+    tb(s5.shapes, 511, M, 4500000, 2 * M, 400000, "Part two", 14)
+    pic(s5.shapes, 521, 9 * M, 5 * M, 2 * M, M, (220, 200, 60))
+
+    s6 = blank_slide(prs, (245, 245, 245))
+    tb(s6.shapes, 601, 600000, 400000, 10900000, 1200000, "Payment rules", 44)
+    tb(s6.shapes, 611, 600000, 1800000, 10900000, 4200000, "Use the company credit card for travel.", 20)
+    pic(s6.shapes, 621, 10 * M, 6 * M, M, 600000, (90, 90, 90))
+
+    s7 = blank_slide(prs, (255, 255, 255))
+    tb(s7.shapes, 701, 600000, 400000, 10900000, 1200000, "Fonts used", 44)
+    for i, hexcode in enumerate(("#1A2B3C", "#FFAA00", "#00CC88")):
+        tb(s7.shapes, 711 + i, 600000 + 2 * M * i, 3 * M, 1800000, 500000, hexcode, 14)
+    pic(s7.shapes, 721, 9 * M, 5 * M, 2 * M, M, (10, 200, 200))
+
+    s8 = blank_slide(prs, (20, 20, 20))
+    tb(s8.shapes, 801, M, 2 * M, 10 * M, 2 * M, "Thank you", 60)
+    tb(s8.shapes, 811, M, 4500000, 10 * M, 600000, "Questions welcome", 20)
+    return save(prs, out, "sample-design.pptx")
+
+
+def footer_sp(layout, t, text, field, sid):
+    """A slide footer placeholder the way PowerPoint writes one: the layout's placeholder with an empty spPr."""
+    src = None
+    for sp in layout.placeholders:
+        if sp.placeholder_format.type is not None and {16: "dt", 15: "ftr", 13: "sldNum"}.get(int(sp.placeholder_format.type)) == t:
+            src = sp._element
+    sp = copy.deepcopy(src)
+    sp.find(q("p:nvSpPr")).find(q("p:cNvPr")).set("id", str(sid))
+    pr = sp.find(q("p:spPr"))
+    for c in list(pr):
+        pr.remove(c)
+    tx = sp.find(q("p:txBody"))
+    for p in tx.findall(q("a:p")):
+        tx.remove(p)
+    p = etree.SubElement(tx, q("a:p"))
+    if field:
+        fld = etree.SubElement(p, q("a:fld"), id="{B6F15528-21DE-4FAA-801E-634DDDAF4B2B}", type=field)
+        etree.SubElement(fld, q("a:rPr"), lang="en-US")
+        etree.SubElement(fld, q("a:t")).text = text or "‹#›"
+    else:
+        r = etree.SubElement(p, q("a:r"))
+        etree.SubElement(r, q("a:rPr"), lang="en-US")
+        etree.SubElement(r, q("a:t")).text = text
+    return sp
+
+
+def make_sample_footer(out):
+    """Sample slides on one layout (Title Only): f1 carries ftr and sldNum, f2 carries none, f3 a fixed date, f4 a
+    footer inside a group. Each has its own background, a title placeholder and a free body box."""
+    prs = new_prs()
+    lay = layout_named(prs, "Title Only")
+    for k, rgb in enumerate(((240, 230, 220), (220, 240, 230), (230, 220, 240), (240, 240, 210)), start=1):
+        s = prs.slides.add_slide(lay)
+        bg(s, rgb)
+        s.shapes.title.text = f"Footer sample {k}"
+        set_id(s.shapes.title, k * 100 + 1)
+        tb(s.shapes, k * 100 + 11, 600000, 1800000, 10900000, 3600000, f"Body text {k}", 20)
+        tree = s.shapes._spTree
+        if k == 1:
+            tree.append(footer_sp(lay, "ftr", "Company Confidential", None, 191))
+            tree.append(footer_sp(lay, "sldNum", "1", "slidenum", 192))
+        if k == 3:
+            tree.append(footer_sp(lay, "dt", "2026 年 10 月", None, 391))
+        if k == 4:
+            def kids(sh):
+                rect(sh, 492, 0, 0, 400000, 100000, (200, 200, 200))
+            g = group(s.shapes, 490, (600000, 6300000), (4 * M, M), (400000, 100000), kids)
+            f = footer_sp(lay, "ftr", "Grouped footer", None, 491)
+            xf = etree.SubElement(f.find(q("p:spPr")), q("a:xfrm"))
+            etree.SubElement(xf, q("a:off"), x="0", y="0")
+            etree.SubElement(xf, q("a:ext"), cx="400000", cy="100000")
+            g._element.append(f)
+    return save(prs, out, "sample-footer.pptx")
+
+
+def make_sample_footer_nopos(out):
+    """C29's other half: a grouped footer on a layout with no footer placeholder of that type: nothing to place it."""
+    prs = new_prs()
+    lay = layout_named(prs, "Title Only")
+    ftr_lay = next(sp for sp in lay.placeholders if int(sp.placeholder_format.type) == 15)
+    s = prs.slides.add_slide(lay)
+    bg(s, (230, 230, 250))
+    s.shapes.title.text = "No footer place"
+    set_id(s.shapes.title, 101)
+    tb(s.shapes, 111, 600000, 1800000, 10900000, 3600000, "Body text", 20)
+
+    def kids(sh):
+        rect(sh, 192, 0, 0, 400000, 100000, (200, 200, 200))
+    g = group(s.shapes, 190, (600000, 6300000), (4 * M, M), (400000, 100000), kids)
+    f = footer_sp(lay, "ftr", "Grouped footer", None, 191)
+    xf = etree.SubElement(f.find(q("p:spPr")), q("a:xfrm"))
+    etree.SubElement(xf, q("a:off"), x="0", y="0")
+    etree.SubElement(xf, q("a:ext"), cx="400000", cy="100000")
+    g._element.append(f)
+    ftr_lay._element.getparent().remove(ftr_lay._element)
+    return save(prs, out, "sample-footer-nopos.pptx")
+
+
+def content_slide(prs, k, rgb, title, body, title_pt=44, body_pt=20):
+    s = blank_slide(prs, rgb)
+    tb(s.shapes, k * 100 + 1, 600000, 400000, 10900000, 1200000, title, title_pt)
+    tb(s.shapes, k * 100 + 11, 600000, 1800000, 10900000, 4200000, body, body_pt)
+    return s
+
+
+def make_sample_chart(out):
+    """c2 holds a chart (a graphic frame): never usable, never copied."""
+    prs = new_prs()
+    content_slide(prs, 1, (240, 230, 220), "Opening", "Opening text")
+    s2 = content_slide(prs, 2, (220, 240, 230), "Results chart", "Chart notes")
+    data = CategoryChartData()
+    data.categories = ["Q1", "Q2"]
+    data.add_series("Sales", (1, 2))
+    ch = s2.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Emu(6 * M), Emu(3 * M), Emu(4 * M), Emu(3 * M), data)
+    set_id(ch, 221)
+    content_slide(prs, 3, (230, 220, 240), "Details", "Detail text")
+    return save(prs, out, "sample-chart.pptx")
+
+
+def make_sample_jump(out):
+    """j1 carries a decorated shape that jumps to j2: on a copy the link and its relationship are gone."""
+    prs = new_prs()
+    s1 = content_slide(prs, 1, (240, 230, 220), "Agenda", "Agenda text")
+    s2 = content_slide(prs, 2, (220, 240, 230), "Details", "Detail text")
+    r = rect(s1.shapes, 121, 9 * M, 6 * M, 2 * M, 500000, (60, 60, 200))
+    rid = s1.part.relate_to(s2.part, RT.SLIDE)
+    c = r._element.find(".//" + q("p:cNvPr"))
+    h = etree.SubElement(c, q("a:hlinkClick"))
+    h.set(q("r:id"), rid)
+    h.set("action", "ppaction://hlinksldjump")
+    return save(prs, out, "sample-jump.pptx")
+
+
+def make_sample_field(out):
+    """d1's only body box is a date field: the written run keeps the field's run properties, the field goes."""
+    prs = new_prs()
+    s = blank_slide(prs, (240, 230, 220))
+    tb(s.shapes, 101, 600000, 400000, 10900000, 1200000, "Field sample", 44)
+    box = tb(s.shapes, 111, 600000, 1800000, 10900000, 4200000, "x", 20)
+    p = box.text_frame.paragraphs[0]._p
+    for r in p.findall(q("a:r")):
+        p.remove(r)
+    fld = etree.SubElement(p, q("a:fld"), id="{11111111-2222-4333-8444-555555555555}", type="datetime1")
+    etree.SubElement(fld, q("a:rPr"), lang="en-US", sz="2400", b="1")
+    etree.SubElement(fld, q("a:t")).text = "1/11/2026"
+    end = p.find(q("a:endParaRPr"))
+    if end is not None:
+        p.remove(end)
+        p.append(end)
+    return save(prs, out, "sample-field.pptx")
+
+
+def make_sample_connector(out):
+    """k1: a connector bound to two boxes; the box that gets no text is removed, so its reference goes."""
+    prs = new_prs()
+    s = blank_slide(prs, (240, 230, 220))
+    tb(s.shapes, 101, 600000, 400000, 10900000, 1200000, "Flow", 44)
+    a = tb(s.shapes, 111, 600000, 2 * M, 6 * M, 3 * M, "Start here", 20)
+    b = tb(s.shapes, 112, 8 * M, 2 * M, 3 * M, M, "End", 20)
+    c = s.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Emu(6600000), Emu(3 * M), Emu(8 * M), Emu(2500000))
+    set_id(c, 121)
+    c.begin_connect(a, 3)
+    c.end_connect(b, 1)
+    return save(prs, out, "sample-connector.pptx")
+
+
+def make_sample_rotated(out):
+    """r1's body box sits in a rotated group: a destination the estimate cannot model (check this slide)."""
+    prs = new_prs()
+    s = blank_slide(prs, (240, 230, 220))
+    tb(s.shapes, 101, 600000, 400000, 10900000, 1200000, "Rotated", 44)
+
+    def kids(sh):
+        tb(sh, 112, 0, 0, 2 * M, M, "Turned text", 20)
+    group(s.shapes, 110, (2 * M, 2 * M), (6 * M, 3 * M), (2 * M, M), kids, rot=900000)
+    return save(prs, out, "sample-rotated.pptx")
+
+
+def make_sample_hidden(out):
+    """h1 is a hidden slide; h2 holds a hidden title-size box that is never the title and is scrubbed on the copy."""
+    prs = new_prs()
+    s1 = content_slide(prs, 1, (240, 230, 220), "Hidden slide", "Hidden body")
+    s1._element.set("show", "0")
+    s2 = content_slide(prs, 2, (220, 240, 230), "Visible title", "Visible body")
+    tb(s2.shapes, 221, 600000, 6 * M, 10 * M, 700000, "SECRET DRAFT", 60, hidden=True)
+    return save(prs, out, "sample-hidden.pptx")
+
+
+def make_sample_equal(out):
+    """e1: title and body in one size; e2: two comparison headings in the title's size, far apart."""
+    prs = new_prs()
+    s1 = blank_slide(prs, (240, 230, 220))
+    tb(s1.shapes, 101, 600000, 400000, 10900000, 900000, "Quarterly results", 32)
+    tb(s1.shapes, 111, 600000, 1500000, 10900000, 4 * M, "Revenue grew in every region this year", 32)
+    s2 = blank_slide(prs, (220, 240, 230))
+    tb(s2.shapes, 201, 600000, 400000, 10900000, 900000, "Options", 36)
+    tb(s2.shapes, 211, 600000, 2 * M, 4 * M, 3 * M, "Plan A", 36)
+    tb(s2.shapes, 212, 7 * M, 2 * M, 4 * M, 3 * M, "Plan B", 36)
+    return save(prs, out, "sample-equal.pptx")
+
+
+def make_sample_closing5(out):
+    """Marco's slide 8 arrangement (Thank, you, for, viewing in four boxes plus a line under them) is a closing slide;
+    a plain content sample keeps the route available."""
+    prs = new_prs()
+    content_slide(prs, 1, (240, 230, 220), "Overview", "Overview text")
+    s2 = blank_slide(prs, (30, 30, 30))
+    for i, (word, x, w) in enumerate((("Thank", 896150, 2353200), ("you", 3641300, 1500300), ("for", 5533375, 1359900), ("viewing", 7285042, 2705400))):
+        tb(s2.shapes, 201 + i, x, 3731599, w, 1417200, word, 48)
+    tb(s2.shapes, 211, 384709, 5541617, 10116900, 738900, "(and sharing in my misery)!", 48)
+    return save(prs, out, "sample-closing5.pptx")
+
+
+def make_sample_short(out):
+    """q1: 3 slots holding Cost, Time, Risk (short words, body boxes) and a 3-box row of big numbers (labels)."""
+    prs = new_prs()
+    s = blank_slide(prs, (240, 230, 220))
+    tb(s.shapes, 101, 600000, 300000, 10900000, 1300000, "Our numbers", 72)
+    for i, (num, word) in enumerate((("$1,300", "Cost"), ("4", "Time"), ("11", "Risk"))):
+        x = 600000 + 3800000 * i
+        tb(s.shapes, 111 + i, x, 1900000, 3200000, 1500000, num, 60, fill=(255, 255, 255))
+        tb(s.shapes, 121 + i, x, 3700000, 3200000, 2 * M, word, 24)
+    return save(prs, out, "sample-short.pptx")
+
+
+def make_sample_only(out):
+    """No usable layout (only Title Only and Blank remain), 4 decorated sample slides: fills on the sample route."""
+    prs = new_prs()
+    for name in ("Title Slide", "Title and Content", "Section Header", "Two Content", "Comparison", "Content with Caption",
+                 "Picture with Caption", "Title and Vertical Text", "Vertical Title and Text"):
+        lay = layout_named(prs, name)
+        lay.slide_master.slide_layouts.remove(lay)
+    for k, rgb in enumerate(((240, 230, 220), (220, 240, 230), (230, 220, 240), (240, 240, 210)), start=1):
+        s = content_slide(prs, k, rgb, f"Only sample {k}", f"Only text {k}")
+        pic(s.shapes, k * 100 + 21, 9 * M, 6 * M, M, 600000, (20 * k, 100, 160))
+    return save(prs, out, "sample-only.pptx")
+
+
+def make_sample_thin(out):
+    """One usable sample slide, decorated: the only design, so the sample route is the default."""
+    prs = new_prs()
+    s = content_slide(prs, 1, (30, 60, 90), "Thin sample", "Thin text")
+    pic(s.shapes, 121, 9 * M, 5 * M, 2 * M, M, (200, 120, 40))
+    return save(prs, out, "sample-thin.pptx")
+
+
+def make_sample_typo(out):
+    """Sample slides on the layout's plain background with all type in free text boxes: typography-only design."""
+    prs = new_prs()
+    for k in range(1, 4):
+        s = prs.slides.add_slide(layout_named(prs, "Blank"))
+        tb(s.shapes, k * 100 + 1, 600000, 400000, 10900000, 1200000, f"Typo title {k}", 54)
+        tb(s.shapes, k * 100 + 11, 600000, 1800000, 10900000, 4200000, f"Typo body {k}", 22)
+    return save(prs, out, "sample-typo.pptx")
+
+
+def _master_bar(prs):
+    """A header bar and a logo drawn on the master (over 5% of the slide): designed layouts."""
+    master = prs.slide_masters[0]
+    scratch = prs.slides.add_slide(layout_named(prs, "Blank"))
+    bar = rect(scratch.shapes, 9001, 0, 0, SW, 900000, (11, 42, 74))
+    logo = pic(scratch.shapes, 9002, SW - 1400000, 150000, 1100000, 600000, (242, 140, 40))
+    for el in (bar._element, logo._element):
+        master.shapes._spTree.append(el)
+    rid_old = logo._element.find(".//" + q("a:blip")).get(q("r:embed"))
+    img = scratch.part.related_part(rid_old)
+    rid = master.part.relate_to(img, RT.IMAGE)
+    logo._element.find(".//" + q("a:blip")).set(q("r:embed"), rid)
+    sid = prs.slides._sldIdLst[-1]
+    prs.part.drop_rel(sid.rId)
+    prs.slides._sldIdLst.remove(sid)
+
+
+def make_layout_design(out):
+    """Designed layouts (header bar and logo on the master), plain sample slides on the layout placeholders."""
+    prs = new_prs()
+    _master_bar(prs)
+    for k in range(1, 4):
+        s = prs.slides.add_slide(layout_named(prs, "Title and Content"))
+        s.shapes.title.text = f"Plain sample {k}"
+        s.placeholders[1].text = f"Plain body {k}"
+    return save(prs, out, "layout-design.pptx")
+
+
+def make_layout_photos(out):
+    """Header bar and logo on the layouts, sample slides on the layout placeholders, each with one ordinary photo
+    over 15% of the slide: the layout route stays the default."""
+    prs = new_prs()
+    _master_bar(prs)
+    for k in range(1, 4):
+        s = prs.slides.add_slide(layout_named(prs, "Title and Content"))
+        s.shapes.title.text = f"Photo sample {k}"
+        s.placeholders[1].text = f"Photo body {k}"
+        pic(s.shapes, k * 100 + 21, 5 * M, 2 * M, 6 * M, 4 * M, (40 * k, 120, 160))
+    return save(prs, out, "layout-photos.pptx")
+
+
+def make_sample_titleonly(out):
+    """Every sample holds only a title: no sample is compatible with a content slide, so no sample route."""
+    prs = new_prs()
+    for k in range(1, 3):
+        s = blank_slide(prs, (40 * k, 60, 90))
+        tb(s.shapes, k * 100 + 1, M, 2 * M, 10 * M, 2 * M, f"Title only {k}", 54)
+    return save(prs, out, "sample-titleonly.pptx")
+
+
+def make_sample_heavy(out):
+    """C12/C30 stress case: one sample slide carrying 1,500 small shapes, so 14 copies pass the 20,000 copied-shape cap."""
+    prs = new_prs()
+    s = content_slide(prs, 1, (240, 230, 220), "Heavy sample", "Heavy text")
+    tree = s.shapes._spTree
+    proto = rect(s.shapes, 1000, 0, 0, 100000, 100000, (120, 120, 120))._element
+    for i in range(1, 1500):
+        el = copy.deepcopy(proto)
+        el.find(".//" + q("p:cNvPr")).set("id", str(1000 + i))
+        off = el.find(".//" + q("a:off"))
+        off.set("x", str((i % 100) * 120000))
+        off.set("y", str(5 * M + (i // 100) * 110000))
+        tree.append(el)
+    return save(prs, out, "sample-heavy.pptx")
+
+
+def _donor_bulk(n_bytes: int):
+    """An a:extLst of opaque size n_bytes, legal inside a:rPr and a:pPr."""
+    ext = etree.Element(q("a:extLst"))
+    e = etree.SubElement(ext, q("a:ext"), uri="{C0FFEE00-0000-4000-8000-000000000001}")
+    etree.SubElement(e, "{urn:deckfill:test}pad").text = "x" * n_bytes
+    return ext
+
+
+def make_sample_bigrpr(out):
+    """C30: a small source whose donor a:rPr is large (20 KB)."""
+    prs = new_prs()
+    s = content_slide(prs, 1, (240, 230, 220), "Big run properties", "Body")
+    rpr = s.shapes[1].text_frame.paragraphs[0].runs[0]._r.find(q("a:rPr"))
+    rpr.append(_donor_bulk(20000))
+    return save(prs, out, "sample-bigrpr.pptx")
+
+
+def make_sample_biglvl2(out):
+    """C30: a small source with a small donor whose box defines large level-2 paragraph properties (20 KB)."""
+    prs = new_prs()
+    s = content_slide(prs, 1, (240, 230, 220), "Big level two", "Body")
+    tx = s.shapes[1].text_frame._txBody
+    ls = tx.find(q("a:lstStyle"))
+    lvl2 = etree.SubElement(ls, q("a:lvl2pPr"), marL="457200")
+    lvl2.append(_donor_bulk(20000))
+    return save(prs, out, "sample-biglvl2.pptx")
+
+
+def make_sample_fit(out):
+    """C25 fit cases: s1 a title sample with a small title box and a small subtitle box; s2 a content slide whose body
+    holds about three lines; s3 three small slots; s4 a content slide with a narrow title box."""
+    prs = new_prs()
+    s1 = blank_slide(prs, (240, 230, 220))
+    tb(s1.shapes, 101, M, 2 * M, 4 * M, 800000, "Fit title", 40)
+    tb(s1.shapes, 111, M, 3 * M, 4 * M, 500000, "Fit subtitle", 20)
+    s2 = blank_slide(prs, (220, 240, 230))
+    tb(s2.shapes, 201, 600000, 400000, 10 * M, 800000, "Fit content", 40)
+    tb(s2.shapes, 211, 600000, 1500000, 10 * M, 1200000, "Fit body", 20)
+    s3 = blank_slide(prs, (230, 220, 240))
+    tb(s3.shapes, 301, 600000, 400000, 10 * M, 800000, "Fit slots", 40)
+    for i in range(3):
+        tb(s3.shapes, 311 + i, 600000 + 3800000 * i, 2 * M, 3 * M, 600000, f"Slot {i + 1}", 20)
+    s4 = blank_slide(prs, (240, 240, 210))
+    tb(s4.shapes, 401, 600000, 400000, 2 * M, 800000, "Narrow", 40)
+    tb(s4.shapes, 411, 600000, 1500000, 10 * M, 4 * M, "Wide body", 20)
+    return save(prs, out, "sample-fit.pptx")
+
+
+def make_all(out) -> list:
+    return [
+        make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
+        make_sample_jump(out), make_sample_field(out), make_sample_connector(out), make_sample_rotated(out),
+        make_sample_hidden(out), make_sample_equal(out), make_sample_closing5(out), make_sample_short(out),
+        make_sample_only(out), make_sample_thin(out), make_sample_typo(out), make_layout_design(out),
+        make_layout_photos(out), make_sample_titleonly(out), make_sample_heavy(out), make_sample_bigrpr(out),
+        make_sample_biglvl2(out), make_sample_fit(out),
+    ]
