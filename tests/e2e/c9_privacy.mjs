@@ -149,7 +149,9 @@ async function sampleRoute(page) {
     route.shown && route.sample === "true" && route.line.startsWith(copy.routeLineSample.split("{")[0]), JSON.stringify(route));
   await page.fill("#outline", outline);
   await page.waitForSelector("#plan:not([hidden])");
-  await page.waitForFunction(() => document.getElementById("working").hidden);
+  // the plan for this outline is in only when download is enabled again: the template read re-plans the previous
+  // outline first, and the new outline's plan comes after a 450 ms pause (reading rows before it races, QA round 1)
+  await page.waitForFunction(() => !document.getElementById("download").disabled);
   const options = await page.$$eval("#slides select", (sels) => sels.map((s) => [...s.options].map((o) => [o.value, o.textContent])));
   const okLabels = options.every((opts) => opts.every(([v, t]) => /^s\d+$/.test(v) && t.startsWith("範本頁 " + v.slice(1))));
   const compatible = { 0: ["s1", "s2", "s3", "s4", "s5", "s6"], 1: ["s2", "s3", "s4", "s5", "s6"] };
@@ -159,7 +161,7 @@ async function sampleRoute(page) {
   const overrides = {};
   for (const [idx, value] of [[1, "s6"], [4, "s5"]]) {
     await page.locator("#slides select").nth(idx).selectOption(value);
-    await page.waitForFunction(() => document.getElementById("working").hidden);
+    await page.waitForFunction(() => !document.getElementById("download").disabled);
     overrides[idx] = value;
   }
   const chosen = await page.$$eval("#slides select", (sels) => sels.map((s) => s.value));
