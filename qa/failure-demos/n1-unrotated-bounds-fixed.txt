@@ -1,4 +1,4 @@
 # n1-unrotated-bounds: Q1 measures a text shape by its stored box, ignoring rotation and group flips
 # mutation in src/deckfill/sample.py: '            if lf.ph or not lf.deco or goes(lf.occ, False):' -> '            if lf.ph or not lf.deco or goes(lf.qbox, False):'
 # tests: tests/test_cr2_code_review.py
-8 passed in 0.15s
+8 passed in 0.16s

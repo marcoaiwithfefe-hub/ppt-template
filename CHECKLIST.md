@@ -82,3 +82,12 @@
 - [x] Done gates: suite, demos, G0b, Q5 (qa/rev8/q5/cr1), C9, C10/C28, C12, C5, layout baseline 213 of 213, blast radius
 - [x] F7 walkthrough re-rendered over 6a576a6..head
 - [x] Report to ai-brain-24 [75678f] (code review round 1)
+
+## Code review round 2 (fix-cr2 from 22f64da)
+
+- [x] N1 Q1 clearing on drawn bounds in production and in the C23 comparator; flipped and rotated chip cases fail at 22f64da (aa02dc1; demo n1-unrotated-bounds)
+- [x] Edge 1 a footer whose idx does not parse is skipped on both routes; fixture sample-badidx (71c7cea; demo edge1-bad-idx-borrowed)
+- [x] Edge 2 footer sizes read from raw XML before footer_boxes; fixture sample-footbad (71c7cea; demo edge2-footer-size-after-box)
+- [x] Done gates: suite, demos 24 of 24 plus C5 validator, C5 92 of 92, C9, C10/C28, C12, G0b, Q5 (qa/rev8/q5/cr2), layout baseline 213 of 213, blast radius
+- [x] Walkthrough re-rendered over 6a576a6..head
+- [x] Report to ai-brain-24 [75678f] (code review round 2)

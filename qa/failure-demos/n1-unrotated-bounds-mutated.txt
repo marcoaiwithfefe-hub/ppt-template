@@ -7,4 +7,4 @@ FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_elsewhere_goes[flipped]
 FAILED tests/test_cr2_code_review.py::test_n1_chip_drawn_elsewhere_goes[rotated]
 FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[flipped]
 FAILED tests/test_cr2_code_review.py::test_n1_comparator_agrees_and_rejects_removing_the_backing[rotated]
-6 failed, 2 passed in 0.15s
+6 failed, 2 passed in 0.16s

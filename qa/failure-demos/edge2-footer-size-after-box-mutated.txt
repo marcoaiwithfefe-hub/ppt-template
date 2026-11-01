@@ -3,4 +3,4 @@
 # tests: tests/test_c26_c29_c30_sample.py -k footbad
 FAILED tests/test_c26_c29_c30_sample.py::test_c30_budget_bounds_the_generated_xml[sample-footbad.pptx-## B0\n- x\n\n## B1\n- x\n\n## B2\n- x\n\n]
 FAILED tests/test_c26_c29_c30_sample.py::test_c30_borrowed_footers_refused_before_any_output_tree[sample-footbad.pptx]
-2 failed, 31 deselected in 0.22s
+2 failed, 31 deselected in 0.23s

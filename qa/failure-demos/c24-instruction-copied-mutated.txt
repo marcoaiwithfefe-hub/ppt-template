@@ -2,4 +2,4 @@
 # mutation in src/deckfill/sample.py: '    elif instruction(all_text):' -> '    elif False:'
 # tests: tests/test_c24_c27_sample_text.py
 FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
-1 failed, 16 passed in 0.32s
+1 failed, 16 passed in 0.33s

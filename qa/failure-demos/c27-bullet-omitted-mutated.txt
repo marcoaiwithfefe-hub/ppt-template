@@ -3,4 +3,4 @@
 # tests: tests/test_c24_c27_sample_text.py
 FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[design]
 FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
-2 failed, 15 passed in 0.35s
+2 failed, 15 passed in 0.36s

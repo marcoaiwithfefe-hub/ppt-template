@@ -44,3 +44,18 @@ S2 changes only the sample route's pool choice for two-column slides. Proven aga
 - F1 speed: the first scan walked every element in Python; the C12 sample-xml stress fill rose from 5.46 s to 7.06 s. The tag-filtered scan (b0ef3cf) restores it: CPython fill 2.93 s at 057c266, 3.85 s before, 2.98 s after; C12 5.42 s.
 - E2 and the download: a switched pick never reaches `fill`, because a switch disables the download until a plan succeeds, and a successful plan replaces the picks with the ones in use (`docs/app.js` `switchRoute`, `replan`).
 - Privacy: C9 31 of 31 and `qa/e2e/privacy_proof.py` PASS at b0ef3cf.
+
+## Code review round 2 (22f64da..e3db865, branch fix-cr2)
+
+**What it does.** N1: Q1's clearing measures every shape and destination by its drawn bounds (`occ_box`: its own rotation and every enclosing group's flips and rotation), in `sample.clearing` and `dest_boxes` and in the C23 comparator's `allowed_removals`. Edge 1: `fill.idx_ok`; a footer whose idx is not a plain number is never copied, in `footer_for_type` (shared with the layout route) and `_sample_footers`. Edge 2: `footer_sizes` reads raw XML from the shape tree, before `footer_boxes` runs.
+
+**The one fact it is safe because of: the layout route is unchanged on valid input.** Step 4, ran real code: `qa/rev8/layout_baseline.py src qa/rev8/layout-head-cr2.json` at e3db865 gives 213 of 213 baseline keys equal to 6a576a6. `footer_for_type` is the only layout-route function touched, and it changes only for a footer whose idx is not a number; the layout route fills sample-badidx, sample-footbad and sample-flipchip.
+
+**Risks (real ones).**
+- A borrowed footer whose geometry does not parse (`a:off x="bad"`) is still copied as is on both routes, so the output carries the template's own schema error (validator: `Sch_AttributeValueDataTypeDetailed` on the copy, the same error the template has). The layout route behaves as at 6a576a6. Low likelihood (malformed template). Not in this round's scope.
+- N1 changes which small decorated text shapes Q1 keeps where a shape or a group is rotated or flipped. Real templates: G0b reports equal to round 1 apart from timing, sheets byte-equal; Q5 images byte-equal.
+
+**Cleared.**
+- `own_backing` (R3) still reads `qbox`: its candidates must pass the R5 backing test, which rejects any rotated or flipped shape or group, so their `qbox` equals their drawn bounds.
+- The demo runner bug found on the way: a same-size mutation restored within one second left its bytecode in `__pycache__`; demo runs now write no bytecode. Every earlier demo mutation changed the file's size, so none was affected.
+- Privacy: C9 31 of 31 and `qa/e2e/privacy_proof.py` PASS at 34987a8.

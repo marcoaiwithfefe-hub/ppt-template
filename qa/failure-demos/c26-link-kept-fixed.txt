@@ -1,4 +1,4 @@
 # c26-link-kept: an element using a link to a removed slide stays on the copy (its relationship is not copied)
 # mutation in src/deckfill/sample_fill.py: '            if v in dead:' -> '            if False:'
 # tests: tests/test_c26_c29_c30_sample.py -k c26
-31 passed in 2.35s
+33 passed in 2.59s

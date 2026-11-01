@@ -19,4 +19,4 @@ FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-no-sec
 FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-no-title.pptx-reference.title-in-body]
 FAILED tests/test_c1_text.py::test_text_lands_where_golden_says[reference-only-content.pptx-reference.only-content]
 FAILED tests/test_c1_text.py::test_control_characters_do_not_reach_the_deck
-18 failed, 4 passed in 0.38s
+18 failed, 4 passed in 0.35s
