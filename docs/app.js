@@ -254,6 +254,10 @@ function renderRoute() {
 function switchRoute(route) {
   if (!state.template || state.route === route || !state.template.routes.includes(route)) return;
   state.route = route; // the bridge drops every pick made on the other route, each with a note (D11)
+  // code review E2: the picks are forgotten now, not at the next successful plan, so an empty or broken outline
+  // followed by a switch back can never bring them back; marked "switched", they still reach the bridge only to
+  // be dropped there with their note
+  state.overrides = state.overrides.map((o) => ({ ...o, route: "switched" }));
   renderRoute();
   staleNow();
   replan();

@@ -1,0 +1,5 @@
+# e2-picks-kept-on-switch: a route switch forgets picks only at the next successful plan
+# mutation in docs/app.js: '  state.overrides = state.overrides.map((o) => ({ ...o, route: "switched" }));\n' -> ''
+# tests: node tests/e2e/c9_privacy.mjs
+FAIL C22 a pick made before an empty outline and a route round trip stays gone, with its note -- {"auto":"s2","other":"s3","first":"s3","notes":["「Annual Plan」：範本封面冇副題框，副題放咗喺標題下面。"]}
+30 passed, 1 failed

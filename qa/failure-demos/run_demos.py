@@ -148,6 +148,13 @@ DEMOS = {
         "            ppr = None",
         ["tests/test_c25_fit.py"],
     ),
+    "e2-picks-kept-on-switch": (
+        "a route switch forgets picks only at the next successful plan",
+        "docs/app.js",
+        '  state.overrides = state.overrides.map((o) => ({ ...o, route: "switched" }));\n',
+        "",
+        ["node", "tests/e2e/c9_privacy.mjs"],
+    ),
     "f2-guide-path": (
         "a custom path's guide-name corner is read as an integer",
         "src/deckfill/sample.py",

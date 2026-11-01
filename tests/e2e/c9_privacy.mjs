@@ -183,6 +183,27 @@ async function sampleRoute(page) {
     after.pressed === "true" && gone === 2 && after.first.startsWith("/ppt/slideLayouts/"), JSON.stringify(after));
   await page.click("#route-sample");
   await page.waitForFunction(() => document.getElementById("working").hidden);
+  // code review E2: a pick, then an empty outline, a switch away and back, the outline again: the pick stays gone
+  await page.waitForFunction(() => !document.getElementById("download").disabled);
+  const auto = await page.$$eval("#slides select", (sels) => sels.map((s) => s.value));
+  const other = options[1].map(([v]) => v).find((v) => v !== auto[1]);
+  await page.locator("#slides select").nth(1).selectOption(other);
+  await page.waitForFunction(() => !document.getElementById("download").disabled);
+  await page.fill("#outline", "");
+  await page.waitForFunction(() => document.getElementById("plan").hidden);
+  await page.click("#route-layout");
+  await page.waitForFunction(() => document.getElementById("working").hidden);
+  await page.click("#route-sample");
+  await page.waitForFunction(() => document.getElementById("working").hidden);
+  await page.fill("#outline", outline);
+  await page.waitForFunction(() => !document.getElementById("download").disabled);
+  const back = await page.evaluate(() => ({
+    first: document.querySelectorAll("#slides select")[1]?.value || "",
+    notes: [...document.querySelectorAll("#warnings-list li")].map((li) => li.textContent),
+  }));
+  const noted = back.notes.filter((t) => t.includes(copy.warnings.layout_gone.split("「")[0]) || t.includes("取消咗")).length;
+  check("C22", "a pick made before an empty outline and a route round trip stays gone, with its note",
+    back.first === auto[1] && back.first !== other && noted === 1, JSON.stringify({ auto: auto[1], other, ...back }));
   return { template: "sample-design.pptx", outline: outlineRel, route: "sample", overrides, file, name: dl.suggestedFilename(), tDownload };
 }
 
