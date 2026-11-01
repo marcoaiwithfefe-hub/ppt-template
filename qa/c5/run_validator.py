@@ -73,6 +73,16 @@ def main() -> int:
         dst = outdir / f"{src.stem}-{src.suffix[1:]}-filled.pptx"
         dst.write_bytes(fill(data, name, plan_deck(read_template(data, name), outline)))
         pairs.append((src, dst, "fixture"))
+    # rev 8: sample-route outputs, each sample fixture filled from its golden outline on the sample route
+    for item in manifest.get("generated_sample", []):
+        name = item["template"]
+        src = FIX / name
+        data = src.read_bytes()
+        ovr = {int(k): v for k, v in item.get("overrides", {}).items()} or None
+        plan = plan_deck(read_template(data, name), parse_outline((ROOT / item["outline"]).read_text(encoding="utf-8")), ovr, route="sample")
+        dst = outdir / f"{src.stem}-sample-filled.pptx"
+        dst.write_bytes(fill(data, name, plan))
+        pairs.append((src, dst, "fixture, sample route"))
     pairs += required
 
     allow = json.loads((OUT / "allowlist.json").read_text())

@@ -18,3 +18,14 @@ Terms the code adds:
 - **fit status**: `fits`, `split`, `warned` (one paragraph too long for its box), `check` (a box the estimate does not model).
 - **destination**: the placeholder a piece of a slide goes to on a given layout. A layout is compatible with a slide when every piece has one.
 - **ready**: the moment the page has loaded Python, the fill module and the fonts, and locks the network off.
+
+Terms rev 8 adds (the sample-slide route, spec D11 and D12):
+
+- **route**: how the deck is built. `layout`: from the template's layouts (D3 to D5). `sample`: each new slide is a copy of one of the template's sample slides with the outline's words in its own boxes (D12). The page picks one by D11 and offers the other with a switch.
+- **sample slide**: a slide the template file already holds. It is usable when it has a title destination, holds no chart, table or diagram, is not hidden, and is not an instruction or closing slide. Its override id is `s<k>`, k its 1-based position in the file.
+- **title region**: a sample slide's logical title: the anchor (the text box with the largest effective size, then top-most, then left-most) plus the one-word fragments chained to it on the same line or stacked. The title goes into the region's first box, widened to the union of the region.
+- **label**: a body box whose whole sample text is digits, spaces and `.,:/%-+$` (6 characters at most), or a single symbol or arrow. Never a destination; its text is cleared on the copy.
+- **slot group**: 2 or more body boxes with the same effective size, widths within 10%, and a shared top or left edge (within 2% of the slide). When the group's size equals the slide's number of level-1 bullets, each bullet goes into its own slot.
+- **donor run**: the first run or field of a box's first paragraph. Written paragraphs copy its paragraph's properties and written runs copy its run properties; its resolved size is the box's effective size.
+- **effective size**: the donor run's size resolved through the run, the paragraph, the box's list style, the layout and master placeholders (or the presentation's default text style for a free text box), else 18 pt.
+- **shrink**: on the sample route, a box whose text does not fit gets an explicit size on every written run, in 5% steps on a half-point grid, never below 70% of its effective size (the floor). Fit states add `shrunk` (字細咗); a slide can carry several states.

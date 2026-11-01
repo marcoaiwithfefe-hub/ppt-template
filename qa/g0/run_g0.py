@@ -127,7 +127,7 @@ def run_one(path: Path, outline_text: str) -> dict:
         rec.update(result="refused", code=e.code, detail=e.detail)
         return rec
     outline = parse_outline(outline_text)
-    plan = plan_deck(info, outline)
+    plan = plan_deck(info, outline, route="layout")  # G0 is the layout route's gate (rev 8: some now default to sample)
     out = fill(data, path.name, plan)
     rec["seconds"] = round(time.time() - t, 2)
     out_path = work / f"{name}-filled.pptx"
