@@ -546,11 +546,13 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
                     built = g
             small = not readable(pick, built)  # QA4: a user pick below a bar is kept and warned
         else:
-            # QA round 2 R1 and R6: the candidates are the compatible samples of the slide's class and of its class
-            # fallbacks. When any meets both readability bars, only those stay in the pool, across the class and its
-            # fallbacks (QA round 1 precedence); else the pool is the first tier with any candidate and the slide is
-            # warned small_text (QA4). Then only the candidates with the fewest continuation slides stay; variety
-            # picks among those with its relaxation order, so it never adds a slide; then the ranking.
+            # QA round 2 R1 and R6 with round 3's S1: the candidates are the compatible samples of the slide's class and
+            # of its class fallbacks. The readability filter reaches across all of them; inside the readable pool the
+            # slide's own class comes first, in D12's fallback order, and a fallback class is used only when no readable
+            # candidate of the slide's own class exists. With nothing readable the pool is the first tier with any
+            # candidate and the slide is warned small_text (QA4). Inside that tier only the candidates with the fewest
+            # continuation slides stay; variety picks among those with its relaxation order, so it never adds a slide;
+            # then the ranking.
             tiers_c = [[x for x in t if compatible(x, s)] for t in tiers(s)]
             if not any(tiers_c):
                 raise PlanError("incompatible_layout", f"no sample fits slide {s.title!r}")
@@ -562,8 +564,11 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
 
             def pool_of(cands):
                 ok = [(x, b) for x, b in cands if readable(x, b)]
-                if ok:
-                    return ok, False
+                for t in tiers_c:  # S1: the first class tier that holds a readable candidate
+                    ids = {x.id for x in t}
+                    tier = [(x, b) for x, b in ok if x.id in ids]
+                    if tier:
+                        return tier, False
                 first = next(t for t in tiers_c if t)
                 ids = {x.id for x in first}
                 return [(x, b) for x, b in cands if x.id in ids], True

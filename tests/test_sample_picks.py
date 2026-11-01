@@ -62,6 +62,6 @@ def test_incompatible_sample_pick_falls_back_with_layout_dropped():
     s = session()
     two = {**pick("Two", 0, 1, "s1"), "kind": "two"}
     r = json.loads(s.plan("## Two\n- a\n||\n- b\n", json.dumps([two]), "sample"))
-    # s1 has no body box, so a two-column slide cannot use it: the slide takes its default, s6 (QA round 2 R6: the pool
-    # runs across the two class and its content fallback; s6 merges both columns and leaves no box unused, s4 leaves two)
-    assert "layout_dropped" in codes(r) and chosen(r) == [("Two", "s6")] and r["overrides"] == []
+    # s1 has no body box, so a two-column slide cannot use it: the slide takes its default, s4 (QA round 3 S1: the two
+    # class holds a readable sample, so it is used before any content merge)
+    assert "layout_dropped" in codes(r) and chosen(r) == [("Two", "s4")] and r["overrides"] == []

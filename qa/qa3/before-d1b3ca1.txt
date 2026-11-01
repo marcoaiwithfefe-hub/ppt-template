@@ -1,0 +1,6 @@
+d1b3ca1 source (QA round 2), C38 tests, fixtures and the S1 design golden copied in
+FAILED tests/test_c38_covers.py::test_c38_fully_readable_cover_takes_the_title_slide
+FAILED tests/test_c38_covers.py::test_c38_two_column_slide_uses_a_readable_two_sample_before_any_merge
+FAILED tests/test_c24_c27_sample_text.py::test_c24_c27_text_equals_golden[design]
+FAILED tests/test_c24_c27_sample_text.py::test_c24_override_to_instruction_sample_is_dropped
+4 failed, 17 passed in 0.35s

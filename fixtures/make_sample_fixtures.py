@@ -802,6 +802,29 @@ def make_sample_only2(out):
     return save(prs, out, "sample-only2.pptx")
 
 
+def make_sample_cover(out):
+    """C38: c1, the cover, has a title box the deck title needs a small shrink in (still readable) and a 20 pt
+    subtitle box; c2, a content sample, fits the title and the subtitle at full size."""
+    prs = new_prs()
+    c1 = blank_slide(prs, (30, 50, 90))
+    tb(c1.shapes, 101, M, 2 * M, 5 * M, 1200000, "Cover title", 40)
+    tb(c1.shapes, 111, M, 3300000, 5 * M, 600000, "Cover subtitle", 20)
+    pic(c1.shapes, 121, 7 * M, M, 4 * M, 5 * M, (200, 120, 40))
+    content_slide(prs, 2, (220, 240, 230), "Content title", "Content body", 40, 20)
+    return save(prs, out, "sample-cover.pptx")
+
+
+def make_sample_cover2(out):
+    """C38: the cover's title meets the 4% bar but its subtitle box is 8 pt, under the 2% bar; c2 is readable."""
+    prs = new_prs()
+    c1 = blank_slide(prs, (30, 50, 90))
+    tb(c1.shapes, 101, M, 2 * M, 10 * M, 900000, "Cover title", 40)
+    tb(c1.shapes, 111, M, 3 * M, 10 * M, 600000, "Cover subtitle", 8)
+    pic(c1.shapes, 121, 9 * M, 4 * M, 2 * M, 2 * M, (200, 120, 40))
+    content_slide(prs, 2, (220, 240, 230), "Content title", "Content body", 40, 20)
+    return save(prs, out, "sample-cover2.pptx")
+
+
 def make_all(out) -> list:
     return [
         make_sample_design(out), make_sample_footer(out), make_sample_footer_nopos(out), make_sample_chart(out),
@@ -811,5 +834,6 @@ def make_all(out) -> list:
         make_layout_photos(out), make_sample_titleonly(out), make_sample_heavy(out), make_sample_bigrpr(out),
         make_sample_biglvl2(out), make_sample_fit(out), make_sample_backings(out), make_sample_readable(out),
         make_sample_small(out), make_sample_split(out), make_sample_grow(out), make_sample_geom(out),
-        make_sample_order(out), make_sample_two(out), make_sample_only2(out),
+        make_sample_order(out), make_sample_two(out), make_sample_only2(out), make_sample_cover(out),
+        make_sample_cover2(out),
     ]
