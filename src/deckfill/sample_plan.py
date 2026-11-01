@@ -184,8 +184,9 @@ def two_dest(S: Sample):
     return None
 
 
-def build(S: Sample, s: OutlineSlide) -> Built:
-    """Every output slide one outline slide makes on sample S."""
+def build(S: Sample, s: OutlineSlide, merge: bool = False) -> Built:
+    """Every output slide one outline slide makes on sample S. merge: a two-column slide goes into S's largest body
+    box with its columns merged even when S has two column boxes (S2's content variant, code review F4)."""
     used: set[int] = set()
     if s.kind == "title":
         paras = (s.title,)
@@ -218,7 +219,7 @@ def build(S: Sample, s: OutlineSlide) -> Built:
             parts.append(Part(title, (title_fill(S, (title,)), fill_box(body, "body", c)), (c,)))
         return Built(parts, False, False, len(S.bodies) - 1)
     # two columns
-    pair = two_dest(S)
+    pair = None if merge else two_dest(S)
     if pair is None:
         body = S.box(S.subtitle)
         items = s.columns[0] + s.columns[1]
@@ -257,7 +258,7 @@ def need_of_box(sb: SBox, items: tuple[Item, ...], box=None) -> float:
     return STEPS + height(items, f) / max(f.height, 1)
 
 
-def needs(S: Sample, s: OutlineSlide, body_box=None) -> list[float]:
+def needs(S: Sample, s: OutlineSlide, body_box=None, merged: bool = False) -> list[float]:
     """The shrink each destination needs for the outline slide's whole text, before any split (the ranking reads
     D12's "every destination fits at full size" against the slide's text, so a candidate that must split ranks
     by how far over the floor it runs: decisions.tsv)."""
@@ -277,7 +278,7 @@ def needs(S: Sample, s: OutlineSlide, body_box=None) -> list[float]:
             slots, groups, _ = found
             return out + [need_of_box(S.box(sid), g) for sid, g in zip(slots, groups)]
         return out + [need_of_box(S.box(S.subtitle), items, body_box)]
-    pair = two_dest(S)
+    pair = None if merged else two_dest(S)
     if pair is None:
         return out + [need_of_box(S.box(S.subtitle), s.columns[0] + s.columns[1])]
     return out + [need_of_box(b, col) for col, b in zip(s.columns, pair) if col]
@@ -291,7 +292,7 @@ def rank_key(S: Sample, s: OutlineSlide, built: Built):
     whose unsplit text must split counts the same (decisions.tsv)."""
     boxes = [b for p in built.parts for b in p.boxes]
     worse = any(b.status in (WARNED, CHECK) for b in boxes)
-    worst = max(needs(S, s, built.grown), default=0.0)
+    worst = max(needs(S, s, built.grown, built.merged), default=0.0)
     shrink = float(STEPS) if worse else min(worst, float(STEPS))
     return (worse or worst > 0, shrink, built.unused, built.grown is not None, S.k)
 
@@ -561,10 +562,21 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
                 for x in t:
                     seen.setdefault(x.id, x)
             cands = [(x, build(x, s)) for x in seen.values()]
+            if s.kind == "two":
+                # code review F4: a content-tier sample is compared in its merged form, even one that also has two
+                # column boxes (it serves both classes); its two-column form stays a two-tier candidate
+                merged = {x.id: build(x, s, merge=True) for x in tiers_c[1]}
+                cands += [(x, merged[x.id]) for x in tiers_c[1] if not next(b for y, b in cands if y is x).merged]
+
+            def tier_of(x, b, t):
+                ids = {y.id for y in tiers_c[t]}
+                if s.kind == "two":  # the two tier holds column builds, the content tier merged ones
+                    return x.id in ids and b.merged == (t == 1)
+                return x.id in ids
 
             def pool_of(cands):
                 ok = [(x, b) for x, b in cands if readable(x, b)]
-                readable_tiers = [[(x, b) for x, b in ok if x.id in {y.id for y in t}] for t in tiers_c]
+                readable_tiers = [[(x, b) for x, b in ok if tier_of(x, b, t)] for t in range(len(tiers_c))]
                 if s.kind == "two" and all(readable_tiers[:2]):
                     # S2: two columns yield when they add slides: the content merge wins when its best candidate
                     # needs fewer continuation slides than the best two-column one; equal counts keep the columns
@@ -573,9 +585,8 @@ def plan_sample(info, outline: Outline, overrides: dict[int, str]) -> Plan:
                 for tier in readable_tiers:  # S1: the first class tier that holds a readable candidate
                     if tier:
                         return tier, False
-                first = next(t for t in tiers_c if t)
-                ids = {x.id for x in first}
-                return [(x, b) for x, b in cands if x.id in ids], True
+                first = next(t for t in range(len(tiers_c)) if tiers_c[t])
+                return [(x, b) for x, b in cands if tier_of(x, b, first)], True
 
             pool, small = pool_of(cands)
             fewest = min(len(b.parts) for _, b in pool)

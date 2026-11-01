@@ -72,3 +72,32 @@ def test_c38_two_columns_win_at_equal_continuation_counts():
     s = parse_outline(cols(2)).slides[0]
     assert (len(build(info.samples[1], s).parts), len(build(info.samples[2], s).parts)) == (1, 1)
     assert p.chosen == ("s2",) and "columns_merged" not in [w.code for w in p.warnings]
+
+
+# code review F4: S2 with a sample that serves both two and content (its merged variant is compared)
+
+
+def uneven(left: int, right: int) -> str:
+    return "## Cols\n" + "".join(f"- left {i}\n" for i in range(left)) + "||\n" + "".join(f"- right {i}\n" for i in range(right))
+
+
+def test_f4_dual_class_sample_merges_when_its_merge_needs_fewer_slides():
+    """k2 is the only body sample, so it serves both two and content. Its right box holds two bullets at the floor, so
+    five right bullets make three two-column slides; merged into its tall left box (its largest body) all six fit on
+    one. S2: the merge wins, with columns_merged."""
+    info = read_template((FIX / "sample-cols2.pptx").read_bytes(), "sample-cols2.pptx")
+    k2 = info.samples[1]
+    assert {"two", "content"} <= set(k2.classes)
+    p = plan_deck(info, parse_outline(uneven(1, 5)), route="sample")
+    assert p.chosen == ("s2",) and len(p.slides) == 1
+    assert [b.sid for b in p.slides[0].boxes] == [201, 211]
+    assert [t for _, t in p.slides[0].boxes[1].paras] == ["left 0"] + [f"right {i}" for i in range(5)]
+    assert "columns_merged" in [w.code for w in p.warnings]
+
+
+def test_f4_dual_class_sample_keeps_columns_at_equal_counts():
+    info = read_template((FIX / "sample-cols2.pptx").read_bytes(), "sample-cols2.pptx")
+    p = plan_deck(info, parse_outline(uneven(1, 2)), route="sample")
+    assert p.chosen == ("s2",) and len(p.slides) == 1
+    assert [b.sid for b in p.slides[0].boxes] == [201, 211, 212]
+    assert "columns_merged" not in [w.code for w in p.warnings]

@@ -175,3 +175,4 @@ def test_f3_grown_body_never_covers_the_flipped_picture(k):
     assert body.box is not None  # the body grows (into the space the picture leaves free)
     assert not _overlaps(body.box, TRUE_PIC[k][1])
     assert look_diff(out, data) == []
+

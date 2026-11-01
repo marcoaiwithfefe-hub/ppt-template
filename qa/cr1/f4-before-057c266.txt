@@ -1,0 +1,3 @@
+base 057c266 (057c266), tests from working tree at ec50cf0, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.3vAjbCIvR8
+FAILED tests/test_c38_covers.py::test_f4_dual_class_sample_merges_when_its_merge_needs_fewer_slides
+1 failed, 8 passed in 0.14s
