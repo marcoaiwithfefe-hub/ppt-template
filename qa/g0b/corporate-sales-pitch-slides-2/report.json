@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.33,
+ "seconds": 0.35,
  "samples": [
   {
    "id": "s1",
@@ -251,5 +251,5 @@
  },
  "c23_diffs": [],
  "sheet": "qa/g0b/corporate-sales-pitch-slides-2/sheet.jpg",
- "renders": "qa/g0b/corporate-sales-pitch-slides-2/renders-cvbwasg5"
+ "renders": "qa/g0b/corporate-sales-pitch-slides-2/renders-rhp7eeed"
 }

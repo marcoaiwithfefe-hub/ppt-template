@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.52,
+ "seconds": 0.54,
  "samples": [
   {
    "id": "s1",
@@ -339,5 +339,5 @@
  },
  "c23_diffs": [],
  "sheet": "qa/g0b/3d-modern-background-pitch-deck/sheet.jpg",
- "renders": "qa/g0b/3d-modern-background-pitch-deck/renders-zjj0zw8q"
+ "renders": "qa/g0b/3d-modern-background-pitch-deck/renders-vrbselw9"
 }

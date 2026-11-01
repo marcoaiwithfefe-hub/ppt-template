@@ -6,7 +6,7 @@
   "layout"
  ],
  "default_route": "sample",
- "seconds": 0.19,
+ "seconds": 0.22,
  "samples": [
   {
    "id": "s1",
@@ -255,5 +255,5 @@
  },
  "c23_diffs": [],
  "sheet": "qa/g0b/business-conference-slides/sheet.jpg",
- "renders": "qa/g0b/business-conference-slides/renders-9dynsnni"
+ "renders": "qa/g0b/business-conference-slides/renders-nsnyov7c"
 }
