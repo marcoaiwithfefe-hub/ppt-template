@@ -42,4 +42,4 @@
 - [x] Blast radius: layout route 213 of 213 keys equal to 6a576a6 at the final code commit (qa/rev8/)
 - [x] Slop scan once (qa/slop-triage.md, rev 8 section)
 - [x] Walkthrough rendered to qa/walkthrough/rev8/ (not published)
-- [ ] Report to ai-brain-24 [75678f]
+- [x] Report to ai-brain-24 [75678f] (QA round 1)
