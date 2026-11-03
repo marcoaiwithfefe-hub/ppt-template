@@ -40,6 +40,7 @@ class Level:
     before: int  # space before, EMU
     after: int  # space after, EMU
     margin: int  # left margin, EMU
+    cjk_line: int | None = None  # rev 9 T2, sample route: line height of a paragraph holding Chinese; None = line
 
 
 @dataclass(frozen=True)

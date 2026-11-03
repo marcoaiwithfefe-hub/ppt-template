@@ -1,0 +1,26 @@
+# sample-ghost + outlines/sample/ghost.md, overrides {1: s2, 2: s5}, written by hand from rev 9 T3 and T4: the cover
+# s1 takes the title slide; its anchor is the real 60 pt title 101, never the larger 15% ghost 102, which equals it once
+# normalised and so echoes the written title; the 30% ghost 103 holds other text and is cleared (no fill, removed).
+# s2: title 201 (clamped to the content margin), its equal ghost 202 echoes it, the body 211 (clamped) takes the bullet;
+# 231, 232 and the label 221 are cleared. s5: six bullets split 5 and 1 at the 70% floor (D12), the continuation's
+# title carries (cont.) and so does its echo 502.
+slide 1 s1
+101 1 Pitch Deck 2027
+102 1 Pitch Deck 2027
+111 1 Strategic plan
+slide 2 s2
+201 1 See you
+202 1 See you
+211 1 Contact us
+slide 3 s5
+501 1 Long list
+502 1 Long list
+511 1 One
+511 1 Two
+511 1 Three
+511 1 Four
+511 1 Five
+slide 4 s5
+501 1 Long list (cont.)
+502 1 Long list (cont.)
+511 1 Six

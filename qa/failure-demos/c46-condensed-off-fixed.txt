@@ -1,0 +1,4 @@
+# c46-condensed-off: QA round 2 reverted: the title orphan check runs at the D12 Latin width only, so a condensed face's lone glyph stays
+# mutation in src/deckfill/sample_plan.py: '(last_line(items, f, w) for w in (LATIN_EM, CONDENSED_EM))' -> '(last_line(items, f, w) for w in (LATIN_EM,))'
+# tests: tests/test_c46_round1.py -k condensed
+1 passed, 14 deselected in 0.09s

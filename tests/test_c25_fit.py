@@ -15,6 +15,7 @@ from deckfill import fill, parse_outline, plan_deck, read_template
 from deckfill.outline import Item
 from deckfill.plan import height
 from deckfill.sample_plan import SHRUNK, scaled
+from rev9_oracle import any_chinese
 from sample_oracle import nv_id, parts_of, resolved_paras, slides, tree_of, walk
 
 A = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
@@ -24,6 +25,20 @@ def floor_of(eff):
     return (eff * 70 + 4999) // 5000 * 50
 
 
+def floor_for(role, eff, slide_h):
+    """Rev 9 T6: a title whose effective size is at or above 12% of the slide height (three times Q2's bar) floors at
+    50% of it, rounded up to the 50 grid, never under Q2's bar (4% of the slide height, rounded up to the grid);
+    every other box at 70%."""
+    if role == "title" and eff * 12700 >= 12 * slide_h:
+        bar = -(-4 * slide_h // 12700)
+        return max((eff * 50 + 4999) // 5000 * 50, -(-bar // 50) * 50)
+    return floor_of(eff)
+
+
+def floor_ok(role, eff, written, slide_h) -> bool:
+    return written % 50 == 0 and written >= floor_for(role, eff, slide_h)
+
+
 def plan_on(fixture, text, overrides=None):
     data = (FIX / fixture).read_bytes()
     info = read_template(data, fixture)
@@ -31,16 +46,37 @@ def plan_on(fixture, text, overrides=None):
     return data, info, plan
 
 
-def written_sizes(out: bytes) -> dict[tuple[int, int], list[int]]:
-    """(slide, shape id) -> the sz written on each run of that box (None where no size is written)."""
+def written_sizes(out: bytes) -> dict[tuple[int, int], list[list[int | None]]]:
+    """(slide, shape id) -> per paragraph holding runs, the sz written on each of its runs (None where no size is
+    written). Codex rev 9 round 1: T1 cuts a paragraph into several runs, so sizes are compared per paragraph."""
     op = parts_of(out)
     res = {}
     for n, name in enumerate(slides(op), start=1):
         for el in walk(tree_of(op[name])):
             sid, _ = nv_id(el)
-            szs = [r.find(A + "rPr").get("sz") if r.find(A + "rPr") is not None else None for r in el.iter(A + "r")]
-            res[(n, sid)] = [int(s) if s else None for s in szs]
+            paras = []
+            for par in el.iter(A + "p"):
+                rs = [r.find(A + "rPr") for r in par.iter(A + "r")]
+                if rs:
+                    paras.append([int(r.get("sz")) if r is not None and r.get("sz") else None for r in rs])
+            res[(n, sid)] = paras
     return res
+
+
+def t2_line(spec, size, text):
+    """Rev 9 T2 (C40 extends C25 to line spacing): spcPts scaled by the written size over the level's effective size,
+    floored to a hundredth of a point, at least 1.1 times the size on a paragraph holding Chinese; spcPct below 90%
+    raised to 90% on a Chinese paragraph."""
+    kind, val = spec.ln
+    zh = any_chinese(text)
+    if kind == "pts":
+        w = round(val / 127) * size // spec.size
+        if zh:
+            w = max(w, -(-11 * size // 10))
+        return ("pts", w * 12700 / 100)
+    if kind == "pct" and zh and val < 0.9:
+        return ("pct", 0.9)
+    return spec.ln
 
 
 def check_resolved(n, bf, sb, op, name, shapes_by_id):
@@ -49,9 +85,10 @@ def check_resolved(n, bf, sb, op, name, shapes_by_id):
     estimate used: the plan's written size or the box's effective size, and the box's level spacing."""
     got = resolved_paras(op, name, shapes_by_id[bf.sid])
     want = []
-    for lvl, _ in bf.paras:
+    for lvl, text in bf.paras:
         spec = sb.lvl1 if lvl == 1 else sb.lvl2
-        want.append((lvl, bf.sizes[lvl - 1] or spec.size, spec.ln, spec.bef, spec.aft, spec.margin))
+        size = bf.sizes[lvl - 1] or spec.size
+        want.append((lvl, size, t2_line(spec, size, text), spec.bef, spec.aft, spec.margin))
     assert got == want, f"slide {n} box {bf.sid}: resolved {got}, estimate used {want}"
 
 
@@ -65,6 +102,8 @@ def check_plan(info, plan, out):
         S = samples[ps.layout]
         by_id = {nv_id(el)[0]: el for el in walk(tree_of(op[names[n - 1]]))}
         for bf in ps.boxes:
+            if bf.role in ("echo", "label"):
+                continue  # rev 9: echoes and number labels carry no fit estimate (T3, T5)
             sb = S.box(bf.sid)
             check_resolved(n, bf, sb, op, names[n - 1], by_id)
             if bf.status == "check":
@@ -80,16 +119,17 @@ def check_plan(info, plan, out):
                 assert fits, f"slide {n} box {bf.sid}: status {bf.status} but the estimate overflows"
             else:
                 assert bf.status == "warned" and not fits
-                assert bf.sizes[0] == floor_of(sb.lvl1.size)
+                assert bf.sizes[0] == floor_for(bf.role, sb.lvl1.size, S.slide[1])
             got = sizes[(n, bf.sid)]
             if bf.sizes == (0, 0):
-                assert all(g == (sb.lvl1.size if sb.lvl1.size else None) or g is None or g == sb.lvl1.size for g in got)
+                assert all(g is None or g == sb.lvl1.size for par in got for g in par)
             else:
                 want = [bf.sizes[0] if lvl == 1 else bf.sizes[1] for lvl, _ in bf.paras]
-                assert got == want, f"slide {n} box {bf.sid}: written {got}, estimate used {want}"
+                assert len(got) == len(want) and all(all(g == w for g in par) for par, w in zip(got, want)), (
+                    f"slide {n} box {bf.sid}: written {got}, estimate used {want} (every run of a paragraph)")
                 for w, lvl in zip(want, [lvl for lvl, _ in bf.paras]):
                     eff = sb.lvl1.size if lvl == 1 else sb.lvl2.size
-                    assert w % 50 == 0 and w >= floor_of(eff), f"size {w} off the grid or under the floor of {eff}"
+                    assert floor_ok(bf.role, eff, w, S.slide[1]), f"size {w} off the grid or under the floor of {eff}"
 
 
 def test_c25_generic_on_every_fit_case():
@@ -101,6 +141,8 @@ def test_c25_generic_on_every_fit_case():
         ("sample-rotated.pptx", "## Turn\n- spin\n"),
         ("sample-fit.pptx", "## Two levels\n- one\n  - sub one\n- two\n"),
         ("sample-biglvl2.pptx", "## Two levels\n- one\n  - sub one\n"),
+        # Codex rev 9 round 1: a mixed-script title in a Latin-only face (T1 cuts it into runs) that shrinks
+        ("sample-latin-font.pptx", MIXED),
     ]
     for fixture, text in cases:
         data, info, plan = plan_on(fixture, text)
@@ -111,6 +153,19 @@ def test_c25_generic_on_every_fit_case():
 
 
 INHERIT = "## Inherit\n- one\n  - sub one\n- two\n"
+MIXED = ("# 匯通物流 Logistics 2027 年度計劃 Annual Plan Review 全面檢討 Summit\nStrategic consulting 策略顧問 for "
+         "logistics 物流 teams across Hong Kong 香港 and the Greater Bay Area 大灣區 with annual planning 年度計劃 support "
+         "and quarterly 季度 reviews for every regional 區域 office\n")
+
+
+def test_c25_mixed_script_case_is_split_and_shrunk():
+    """The MIXED case above exercises the per-paragraph comparison: its 12 pt Montserrat subtitle is shrunk and each
+    paragraph is written as several runs (T1)."""
+    data, info, plan = plan_on("sample-latin-font.pptx", MIXED)
+    t = next(bf for bf in plan.slides[0].boxes if bf.role == "subtitle")
+    assert t.status == SHRUNK
+    got = written_sizes(fill(data, "sample-latin-font.pptx", plan))[(1, t.sid)]
+    assert len(got) == 1 and len(got[0]) > 1 and set(got[0]) == {t.sizes[0]}
 
 
 def test_c25_inherited_sizes_resolve_on_the_output():
@@ -131,11 +186,16 @@ def test_c25_inherited_sizes_resolve_on_the_output():
             assert got[1][3] == ("pts", 76200.0) and got[1][5] == 600000
 
 
+# rev 9 T6 grows a title into the free space beside and below it, so the overflowing title here runs too long for
+# any grown box as well (four times the rev 8 text): the title still carries its own warning at the 70% floor
+LONG_TITLE = " ".join(["A title far too long for this very narrow box"] * 4)
+
+
 def test_c25_title_shrinks_then_warns():
     _, info, plan = plan_on("sample-fit.pptx", "## Mid length title\n- x\n", {0: "s4"})
     t = plan.slides[0].boxes[0]
-    assert t.role == "title" and t.status in ("shrunk", "warned")
-    _, info, plan = plan_on("sample-fit.pptx", "## A title far too long for this very narrow box\n- x\n", {0: "s4"})
+    assert t.role == "title" and (t.status in ("shrunk", "warned") or t.box is not None)  # rev 9 T6 may grow it
+    _, info, plan = plan_on("sample-fit.pptx", f"## {LONG_TITLE}\n- x\n", {0: "s4"})
     t = plan.slides[0].boxes[0]
     assert t.status == "warned" and t.sizes[0] == floor_of(4000)
     assert "fit_warn" in [w.code for w in plan.warnings]
@@ -171,7 +231,7 @@ def test_c25_rotated_box_is_check_only():
 
 
 def test_c25_split_body_with_an_overflowing_title_carries_both():
-    text = "## A title far too long for this very narrow box\n" + "".join(f"- point {i}\n" for i in range(8))
+    text = f"## {LONG_TITLE}\n" + "".join(f"- point {i}\n" for i in range(8))
     _, info, plan = plan_on("sample-fit.pptx", text, {0: "s4"})
     parts = [s for s in plan.slides if s.source == 0]
     assert len(parts) == 2
@@ -188,7 +248,7 @@ def test_c25_untouched_text_keeps_its_effective_size():
     out = fill(data, "sample-fit.pptx", plan)
     body = next(b for b in plan.slides[0].boxes if b.role == "body")
     assert body.status == "fits" and body.sizes == (0, 0)
-    assert written_sizes(out)[(1, 411)] == [2000]  # the donor's own size, copied unchanged
+    assert written_sizes(out)[(1, 411)] == [[2000]]  # the donor's own size, copied unchanged
 
 
 def test_c25_split_title_lands_in_one_widened_box():

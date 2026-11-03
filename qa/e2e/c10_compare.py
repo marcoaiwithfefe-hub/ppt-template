@@ -33,7 +33,8 @@ def main() -> int:
         else:
             overrides = {f["overrideSource"]: f["override"]} if f.get("override") else None
         this = parse_outline((ROOT / f["outline"]).read_text(encoding="utf-8")) if f.get("outline") else outline
-        plan = plan_deck(read_template(data, f["template"]), this, overrides, route=f.get("route"))
+        plan = plan_deck(read_template(data, f["template"]), this, overrides, route=f.get("route"),
+                         cjk_face=f.get("cjkFace") or "Microsoft JhengHei")  # rev 9 T1: the face the page passed
         want = parts(fill(data, f["template"], plan))
         got = parts(Path(f["file"]).read_bytes())
         differ = sorted(n for n in set(want) | set(got) if want.get(n) != got.get(n))

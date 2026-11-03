@@ -13,7 +13,9 @@ from collections import Counter
 from .errors import DeckfillError
 from .fill import fill
 from .outline import parse_outline
+from .cjk import DEFAULT_FACE
 from .plan import plan_deck
+from .sample_plan import cjk_fired
 from .template import read_template
 
 _UNSAFE_NAME = re.compile(r'[\\/:*?"<>|\x00-\x1f]+')
@@ -91,12 +93,14 @@ class Session:
             ensure_ascii=False,
         )
 
-    def plan(self, text: str, overrides_json: str = "[]", route: str = "") -> str:
+    def plan(self, text: str, overrides_json: str = "[]", route: str = "", cjk_face: str = "") -> str:
         """overrides_json: the page's remembered overrides, a list of {title, kind, nth, count, layout, route}.
         route: layout or sample, empty for the template's default (D11). A remembered override made on the other
         route is dropped (switching drops every pick, D11). The reply's overrides are the ones still in use; a
-        dropped one comes back as a warning."""
+        dropped one comes back as a warning. cjk_face: the face the page picked from its user agent (rev 9 T1), empty
+        for the default; the reply's cjk_face names it when any written run got it (step 3's line), else null."""
         self.plan_ = None
+        cjk_face = cjk_face or DEFAULT_FACE
         route = route or self.info.route
         remembered = json.loads(overrides_json)
         same = [r for r in remembered if r.get("route", "layout") == route]
@@ -105,7 +109,7 @@ class Session:
             outline = parse_outline(text)
             by_index, gone = place_overrides(outline, same)
             gone = switched + gone
-            plan = plan_deck(self.info, outline, by_index or None, route=route)
+            plan = plan_deck(self.info, outline, by_index or None, route=route, cjk_face=cjk_face)
         except DeckfillError as e:
             return json.dumps({"ok": False, "code": e.code})
         self.plan_ = plan
@@ -144,11 +148,12 @@ class Session:
                 ],
                 "warnings": warnings,
                 "overrides": kept,
+                "cjk_face": cjk_face if cjk_fired(self.info, plan) else None,
             },
             ensure_ascii=False,
         )
 
-    def fill(self, text: str, overrides_json: str = "[]", route: str = "") -> bytes:
+    def fill(self, text: str, overrides_json: str = "[]", route: str = "", cjk_face: str = "") -> bytes:
         """Plan from the outline, overrides and route the page reads at the click, then fill, in one
         call, so a download can never use a plan made from older text (Codex round 1, F1).
         The overrides are placed on that outline the same way plan places them.
@@ -157,6 +162,6 @@ class Session:
         outline = parse_outline(text)
         same = [r for r in json.loads(overrides_json) if r.get("route", "layout") == route]
         by_index, _ = place_overrides(outline, same)
-        plan = plan_deck(self.info, outline, by_index or None, route=route)
+        plan = plan_deck(self.info, outline, by_index or None, route=route, cjk_face=cjk_face or DEFAULT_FACE)
         self.fill_name = file_name(outline.title)
         return fill(self.data, self.filename, plan)

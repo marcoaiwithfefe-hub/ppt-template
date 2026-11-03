@@ -1,0 +1,4 @@
+# c41-ghost-anchor: watermarks are not recognised, so a ghost can be the title anchor
+# mutation in src/deckfill/sample.py: '    marks = [b for b in boxes if watermark(by_sid[b.sid], styles)]' -> '    marks = []'
+# tests: tests/test_c41_c42_marks.py tests/test_c24_c27_sample_text.py -k ghost
+5 passed, 25 deselected in 0.16s

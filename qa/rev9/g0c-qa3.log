@@ -1,0 +1,6 @@
+PASS example-mac 4 slides
+PASS example-win 4 slides
+PASS reference-mac 7 slides
+PASS reference-win 7 slides
+4 of 4 outputs pass the G0c script checks
+G0C EXIT 0

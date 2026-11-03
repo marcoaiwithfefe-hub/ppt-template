@@ -1,0 +1,4 @@
+# c45-refine-missing-layout: the first-draft line stays hidden after a download on the layout route
+# mutation in docs/app.js: '  $("refine-note").hidden = false;' -> '  $("refine-note").hidden = state.route === "layout";'
+# tests: node tests/e2e/c9_privacy.mjs
+75 passed, 0 failed

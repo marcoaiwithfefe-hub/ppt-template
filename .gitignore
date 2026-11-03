@@ -30,3 +30,9 @@ qa/g0b/**/renders-*/
 qa/rev8/q5/**/renders-*/
 qa/rev8/q5/**/*.pptx
 qa/c12/sample-*.pptx
+qa/g0c/out/
+qa/g0c/renders/
+qa/g0c/g0c-tmp-*/
+qa/g0b-r9/**/*.pptx
+qa/g0b-r9/**/renders-*/
+qa/g0b-r9/**/unmodified-*/

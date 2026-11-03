@@ -1,0 +1,4 @@
+# c43-child-in-b2: a pair destination writes every point's children into the second pair's B
+# mutation in src/deckfill/sample_plan.py: '        u, H, B = _union(S, h, b), S.box(h), S.box(b)' -> '        u, H, B = _union(S, h, b), S.box(h), S.box(g[1][1] if len(g) > 1 else b)'
+# tests: tests/test_c24_c27_sample_text.py tests/test_c43_pairs.py -k pairs or golden
+30 passed, 1 deselected in 0.71s

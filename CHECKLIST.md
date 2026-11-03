@@ -98,3 +98,63 @@
 - [x] footer with an unreadable a:off or a:ext skipped on both routes; skipped footers not budgeted; sample-footbad in C5 (9fcfc40; demo cr3-footer-box)
 - [x] Gates: suite, 26 mutation demos plus C5 validator, C5 97 of 97, layout baseline 213 of 213, G0b and Q5 unchanged, C9, C10/C28
 - [x] Walkthrough re-rendered; report to ai-brain-24 [75678f] (code review round 3)
+
+## Rev 9 (branch rev9-chinese from acd26e0): Chinese type and showcase decks
+
+- [x] Fixtures: sample-latin-font, sample-ghost, sample-ghostd11, sample-pairs, sample-titlegrow (fixtures/make_rev9_fixtures.py)
+- [x] C39 and C40 checks with negative demos, failing before T1 and T2
+- [x] T1 Chinese face: run split, cjk_face input on plan_deck and the bridge, size budget counts the extra runs, step 3 flag
+- [x] T2 line height: spcPts scaled to the written size, Chinese floors, estimate uses the written values (C25 extended)
+- [x] C41 to C44 checks with negative demos, each failing before its stage
+- [x] T3 watermarks and echoes
+- [x] T4 edge clamp
+- [x] T5 heading and body pairs
+- [x] T6 title growth and display floor
+- [x] T7 first-draft line (refineNote) and C45 (demo c45-refine-missing-layout)
+- [x] Page: cjk_face from navigator.userAgent, step 3 face line, docs bundle rebuilt
+- [x] C9 session on a Mac and a Windows user agent (75 of 75); C10 and C28 replays with cjk_face (8 of 8)
+- [x] C5 validator manifest gains the G0c outputs and the rev 9 fixture outputs (105 of 105)
+- [x] G0c script 4 of 4: Canva deck, both outlines, both faces, LibreOffice and Quick Look renders in qa/g0c/ (eye pending, Fable)
+- [x] G0b-r9 against round 3's report at 2ae997b (FAIL: elegant cover check, business-conference 預算 warned; eye pending)
+- [x] Map rev 6 plus rev 8 rows reported with evidence and commit (qa/rev9/MAP-STATUS.md)
+- [x] Walkthrough over acd26e0..HEAD in qa/walkthrough/rev9/
+- [x] Report to ai-brain-62 [feb9f3] (head ad6169e)
+
+## Rev 9 QA round 1 (from b11f819) with Codex round 1
+
+- [x] C46 fixtures (sample-round1 r1 to r5) and tests, failing first (b2b3c23)
+- [x] Q9-1 unclampable box leaves the choice (ad8cc7a)
+- [x] Q9-2 warned two columns yield to the merge (ad8a97e)
+- [x] Q9-3 no one-glyph last title line (9eb8e28)
+- [x] Q9-4 no empty frames (7dd1bfd), demos c46-orphan-kept and c46-frame-kept
+- [x] Codex E1 clamp floor (d13302d), F2 rank steps (5863ce3), F3 used bodies (5b08ae3), F1 pair columns without built columns (61ba187), F4 C23 pair eligibility and demo (eabd110)
+- [x] Weak checks: C25 per paragraph (7885ea5), G0c donor and bold rule (fd8d305); qa/codex-rev9-1 committed
+- [x] Bundle rebuilt (0a61016); suite 502; C9 75 of 75; C10 8 of 8; C5 105 of 105; layout 213 of 213
+- [x] G0c 4 of 4, G0b-r9 16 of 16 at the fix head
+- [x] Walkthrough over acd26e0..HEAD re-rendered in qa/walkthrough/rev9/
+- [x] REPORT.md and MAP-STATUS.md updated; decisions.tsv rows dated 2026-11-03T20
+- [x] Report to ai-brain-62 [feb9f3]
+
+## Rev 9 QA round 2 (flag 2, from bc0291b)
+
+- [x] Anton's digit advance read from the embedded font (0.494 em; 0.45 em with the deck's tracking), decisions.tsv
+- [x] Orphan check at 0.55 and 0.45 em (2227701), test_r2_condensed_estimate_catches_the_orphan, demo c46-condensed-off
+- [x] Bundle rebuilt (f9753bd); suite 503; G0c 4 of 4 (預算 one line on every sheet); G0b-r9 16 of 16; C5, C9, C10, layout
+- [x] Walkthrough re-rendered; REPORT.md and MAP-STATUS.md updated
+- [x] Report to ai-brain-62 [feb9f3]
+
+## Codex round 2 fixes (fix round 3, from 2195cd2)
+
+- [x] R2-1 warned ranks after any fit (2c183f1), test_r2_1_*, fixture sample-rank-floor
+- [x] R2-2 orphan steps in the ranking (2c183f1), test_r2_2_*, fixture sample-rank-orphan
+- [x] R2-3 C23 complete pair groups (d0d544b), test_r2_3_*, fixture r12, demo c46-r23-no-group
+- [x] Bundle rebuilt (6bcba11); suite 506; G0c 4 of 4; G0b-r9 16 of 16; C5, C9, C10, layout; no pick changed
+- [x] Walkthrough re-rendered; REPORT.md and MAP-STATUS.md updated; qa/codex-rev9-2 committed
+- [x] Report to ai-brain-62 [feb9f3]
+
+## Security audit F1 and the deploy branch (from 28f22da)
+
+- [x] F1 caps (8a82f20), tests/test_security_f1.py, qa/security/f1-regression.txt; bundle rebuilt (c0b548e)
+- [x] Suite 509; G0c 4 of 4; G0b-r9 16 of 16; C5, C9, C10; no pick changed
+- [x] F2 deploy branch rev9-deploy from main, one commit, private paths excluded, not pushed
+- [x] Report to ai-brain-62 [feb9f3]

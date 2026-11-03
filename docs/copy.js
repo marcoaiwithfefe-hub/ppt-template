@@ -86,10 +86,13 @@ export const COPY = {
     check: "請喺 PowerPoint 檢查",
   },
   fitNote: "放唔放得落係網頁估計。有標記嘅投影片，下載後請喺 PowerPoint 睇一次。",
+  cjkFaceNote: "範本嘅字款冇中文字，中文用咗 {face}。",
   warningsHeading: "請睇吓",
   download: "下載 {name}.pptx",
   reset: "重新開始",
   downloaded: "已下載。可以再改大綱或者版面，再下載一次。",
+  refineNote:
+    "呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。",
 
   templateErrors: {
     legacy_ppt: "呢個係舊式 .ppt 檔。請喺 PowerPoint 開，另存做 .pptx，再拖入嚟。",

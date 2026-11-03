@@ -17,6 +17,9 @@ def pytest_configure(config):
     # Fixture templates are made by script, never downloaded (spec Testing Decisions).
     if not (FIX / "lying-size.pptx").exists() or not (FIX / "sample-fit.pptx").exists():
         subprocess.run([sys.executable, str(ROOT / "fixtures" / "make_fixtures.py")], check=True, capture_output=True)
+    elif not (FIX / "sample-titlegrow.pptx").exists() or not (FIX / "sample-round1.pptx").exists() or not (FIX / "sample-rank-orphan.pptx").exists():
+        # rev 9 fixtures alone, so the rev 8 ones (and the committed wui-tung template) are not rewritten
+        subprocess.run([sys.executable, str(ROOT / "fixtures" / "make_rev9_fixtures.py")], check=True, capture_output=True)
 
 
 @pytest.fixture

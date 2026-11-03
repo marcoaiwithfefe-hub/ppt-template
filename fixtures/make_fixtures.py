@@ -770,6 +770,9 @@ def main() -> None:
     from make_sample_fixtures import make_all  # rev 8 sample-route fixtures
 
     made += make_all(OUT)
+    from make_rev9_fixtures import make_all as make_rev9  # rev 9 fixtures (map rev 6)
+
+    made += make_rev9(OUT)
     for p in made:
         print(f"{p.name:32s} {p.stat().st_size:>10,d}")
 

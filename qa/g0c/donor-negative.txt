@@ -1,0 +1,12 @@
+# G0c donor check, Canva deck, example outline, PingFang HK
+fill as written: 0 problems
+bold stripped from cut stretches: 9 problems
+slide 1 box 3 run '匯通物流': b=None, want '1' (display True)
+slide 1 box 3 run '年度計劃': b=None, want '1' (display True)
+slide 1 box 4 run '匯通物流': b=None, want '1' (display True)
+slide 1 box 4 run '年度計劃': b=None, want '1' (display True)
+slide 2 box 5 run '三個目標': b=None, want '1' (display True)
+slide 3 box 3 run '預算': b=None, want '1' (display True)
+slide 3 box 3 run '港幣': b=None, want '1' (display True)
+slide 3 box 3 run '萬': b=None, want '1' (display True)
+slide 4 box 4 run '問答': b=None, want '1' (display True)

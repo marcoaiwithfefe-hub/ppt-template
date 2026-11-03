@@ -11,6 +11,8 @@ const WHEELS = [
 const LOCKDOWN = "connect-src 'none'; img-src data: blob:; worker-src 'none'";
 const FONTS = ['400 16px "Noto Serif TC"', '400 16px "Newsreader"', '700 16px "Mentron Serif"'];
 const PHONE = window.matchMedia("(max-width: 760px)");
+// rev 9 T1: the face Chinese text gets where the template's own face has no Chinese, by the visitor's system
+const CJK_FACE = /Mac|iPhone|iPad/.test(navigator.userAgent) ? "PingFang HK" : "Microsoft JhengHei";
 
 const $ = (id) => document.getElementById(id);
 const fmt = (s, vars = {}) => s.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? String(vars[k]) : `{${k}}`));
@@ -163,6 +165,7 @@ async function readTemplate(file) {
   if (!state.ready || !file) return;
   $("template-error").hidden = true;
   $("downloaded").hidden = true;
+  $("refine-note").hidden = true;
   staleNow();
   state.template = null;
   state.overrides = [];
@@ -273,6 +276,7 @@ function staleNow() {
   state.gen += 1;
   $("download").disabled = true;
   $("downloaded").hidden = true;
+  $("refine-note").hidden = true;
 }
 
 function schedulePlan() {
@@ -285,6 +289,7 @@ async function replan() {
   clearTimeout(state.planTimer);
   $("outline-error").hidden = true;
   $("downloaded").hidden = true;
+  $("refine-note").hidden = true;
   const gen = state.gen;
   const text = $("outline").value;
   if (!state.template || !text.trim()) {
@@ -294,7 +299,7 @@ async function replan() {
   }
   const result = await working(async () => {
     try {
-      return JSON.parse(state.session.plan(text, JSON.stringify(state.overrides), state.route));
+      return JSON.parse(state.session.plan(text, JSON.stringify(state.overrides), state.route, CJK_FACE));
     } catch (err) {
       console.error(err);
       return { ok: false, code: "unknown" };
@@ -389,6 +394,10 @@ function renderPlan() {
     list.append(li);
   }
   $("warnings").hidden = !p.warnings.length;
+  // rev 9 T1: one line naming the Chinese face, only when some written run got it
+  const face = $("cjk-face");
+  face.hidden = !p.cjk_face;
+  face.textContent = p.cjk_face ? fmt(COPY.cjkFaceNote, { face: p.cjk_face }) : "";
   $("download-label").textContent = fmt(COPY.download, { name: p.name });
   $("download").disabled = false;
 }
@@ -401,7 +410,7 @@ async function download() {
   const result = await working(async () => {
     let out;
     try {
-      out = state.session.fill(text, overrides, state.route);
+      out = state.session.fill(text, overrides, state.route, CJK_FACE);
       return { bytes: out.toJs(), name: state.session.fill_name };
     } catch (err) {
       console.error(err);
@@ -425,6 +434,7 @@ async function download() {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  $("refine-note").hidden = false; // rev 9 T7: the first-draft line, under the downloaded line, on both routes
   $("downloaded").hidden = false;
 }
 
@@ -438,6 +448,7 @@ function reset() {
   $("template-error").hidden = true;
   $("outline-error").hidden = true;
   $("downloaded").hidden = true;
+  $("refine-note").hidden = true;
   renderTemplate();
   renderPlan();
   window.scrollTo({ top: $("step2").offsetTop - 24 });

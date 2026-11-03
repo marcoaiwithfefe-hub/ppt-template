@@ -1,17 +1,23 @@
 {
  "tested": {
-  "commit": "b3717b696f1c081ffa1f6d4d99a6e33cbb3dfdcc",
+  "commit": "c0b548e3f346ddf7048f16c0d280b357d87830fb",
   "dirty": "",
   "inputs": {
    "fixtures/reference-outline.md": "245c7954df77306b093a9388e0e2bd8d82cbaa44987369c28c3dd5394bb77166",
    "fixtures/out/wui-tung.pptx": "506172867849295aabc0fe7f97ae445afba5c5ba4dd602d4697ad54d0f9eb61c",
    "fixtures/out/typed.pptx": "4b9baf779417f2b282024561359ccb58d98e46d0e70c95c69536e4c70ea7a8f2",
-   "fixtures/out/sample-design.pptx": "7b8a6810ef0113ae85267ad9438f0e030390c5e0174207ae85d4324e6f2e6486"
+   "fixtures/out/sample-design.pptx": "7b8a6810ef0113ae85267ad9438f0e030390c5e0174207ae85d4324e6f2e6486",
+   "fixtures/out/sample-latin-font.pptx": "211610c7af1c4114e2f63ec11a09cde9b091bc4282fbe72ce819b1ee9660da0d"
   },
   "outputs": {
-   "qa/e2e/c10-wui-tung.pptx": "6e72c188a21d28f11c4481e53afacdb815414b6c4e95341210f8a52352e33bd4",
-   "qa/e2e/c10-typed-override.pptx": "ec489d4a72e491961ba6b7929704477d65711e311f9b1c7a830b47e68d04691a",
-   "qa/e2e/c28-sample-design.pptx": "37f8f07205343c3e109b5149a4ecec2e678fab3cca65aac0ea7945ddaf42b65b"
+   "qa/e2e/c10-wui-tung-mac.pptx": "01307f9fdc89810bd50d7e91c397fa7914cead2c0c8d958828e5ffc63819b365",
+   "qa/e2e/c10-typed-override-mac.pptx": "bd39166662a8bf028e671a923d8e67038ae4b0f6fee64ea1dd16168f0413fc77",
+   "qa/e2e/c28-sample-design-mac.pptx": "2143f15348fd4925a1e77f168021b49c1c92fd705a528cd9ceae14d11839090d",
+   "qa/e2e/c39-latin-font-mac.pptx": "ade8a96b63309758b165d2c7f87d57c25c59402bf3a39013899a81a7029888cc",
+   "qa/e2e/c10-wui-tung-windows.pptx": "6dedbfaf286743f54928194b074ab1a1155ed0d03da587cd901c590e3d7187c3",
+   "qa/e2e/c10-typed-override-windows.pptx": "6a5c5464bc4bce5809321340064a42aa869b994ca42b8303b438d7eaa082370a",
+   "qa/e2e/c28-sample-design-windows.pptx": "6688668b02410184cc68c8aba5db428a22225e3dd5f4ed73c5d539e2085f8910",
+   "qa/e2e/c39-latin-font-windows.pptx": "77ec8e1a674346f24d1a1e6d8f8a1b210762a0953fff2e3c492a2f4e89f9ce5c"
   }
  },
  "checks": [
@@ -28,122 +34,386 @@
    "detail": ""
   },
   {
+   "id": "C39",
+   "name": "(mac) the page runs on the mac user agent",
+   "ok": true,
+   "detail": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+  },
+  {
    "id": "C9",
-   "name": "before ready: only the page origin",
+   "name": "(mac) before ready: only the page origin",
    "ok": true,
    "detail": ""
   },
   {
+   "id": "C39",
+   "name": "(mac) c10-wui-tung-mac (layout route): no face line",
+   "ok": true,
+   "detail": "{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C45",
+   "name": "(mac) c10-wui-tung-mac (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"layout\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
+   "id": "C39",
+   "name": "(mac) c10-typed-override-mac (layout route): no face line",
+   "ok": true,
+   "detail": "{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C45",
+   "name": "(mac) c10-typed-override-mac (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"layout\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
    "id": "C22",
-   "name": "both routes on offer: the route line and switch show, sample pressed",
+   "name": "(mac) both routes on offer: the route line and switch show, sample pressed",
    "ok": true,
    "detail": "{\"shown\":true,\"line\":\"會跟範本頁嘅設計砌每張投影片（搵到 6 張範本頁）。網頁估錯嘅話，撳一下就轉。\",\"sample\":\"true\"}"
   },
   {
    "id": "C31",
-   "name": "the picker lists only compatible samples as 範本頁 k plus first words",
+   "name": "(mac) the picker lists only compatible samples as 範本頁 k plus first words",
    "ok": true,
    "detail": "[[[\"s1\",\"範本頁 1　My Year In Review\"],[\"s2\",\"範本頁 2　Three Things\"],[\"s3\",\"範本頁 3　Process\"],[\"s4\",\"範本頁 4　Compare\"],[\"s5\",\"範本頁 5　Chapter\"],[\"s6\",\"範本頁 6　Payment rules\"]],[[\"s2\",\"範本頁 2　Three Things\"],[\"s3\",\"範本頁 3　Process\"],[\"s4\",\"範本頁 4　Compare\"],[\"s5\",\"範本頁 5　Chapter\"],[\"s6\",\"範本頁 6　Payment rules\"]]]"
   },
   {
    "id": "C31",
-   "name": "choosing a sample re-plans with it",
+   "name": "(mac) choosing a sample re-plans with it",
    "ok": true,
    "detail": "s1 s6 s2 s4 s5 s1"
   },
   {
-   "id": "C22",
-   "name": "switching to layouts re-plans and drops both picks with a note each",
+   "id": "C45",
+   "name": "(mac) c28-sample-design (sample route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
    "ok": true,
-   "detail": "{\"pressed\":\"true\",\"notes\":[\"之前幫「Three Goals」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\",\"之前幫「Paying by card」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\"],\"first\":\"/ppt/slideLayouts/slideLayout1.xml\"}"
+   "detail": "{\"pre\":{\"route\":\"sample\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"sample\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
+   "id": "C45",
+   "name": "(mac) the route switch hides the first-draft line with the downloaded line",
+   "ok": true,
+   "detail": "[true,true]"
   },
   {
    "id": "C22",
-   "name": "a pick made before an empty outline and a route round trip stays gone, with its note",
+   "name": "(mac) switching to layouts re-plans and drops both picks with a note each",
+   "ok": true,
+   "detail": "{\"pressed\":\"true\",\"notes\":[\"之前幫「Three Goals」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\",\"之前幫「Paying by card」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\"],\"first\":\"/ppt/slideLayouts/slideLayout1.xml\",\"lines\":[true,true]}"
+  },
+  {
+   "id": "C22",
+   "name": "(mac) a pick made before an empty outline and a route round trip stays gone, with its note",
    "ok": true,
    "detail": "{\"auto\":\"s2\",\"other\":\"s3\",\"first\":\"s2\",\"notes\":[\"之前幫「Three Goals」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\",\"「Annual Plan」：範本封面冇副題框，副題放咗喺標題下面。\"]}"
   },
   {
+   "id": "C39",
+   "name": "(mac) sample-latin-font (sample route), Chinese outline: step 3 names PingFang HK",
+   "ok": true,
+   "detail": "{\"route\":\"sample\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":true,\"faceText\":\"範本嘅字款冇中文字，中文用咗 PingFang HK。\"}"
+  },
+  {
+   "id": "C39",
+   "name": "(mac) the download's slides carry PingFang HK in a:ea on Chinese runs, Microsoft JhengHei nowhere",
+   "ok": true,
+   "detail": "6 slides, 8 of 13 Chinese runs in PingFang HK, 0 slides naming Microsoft JhengHei"
+  },
+  {
+   "id": "C39",
+   "name": "(mac) sample-latin-font (sample route), English-only outline: no face line",
+   "ok": true,
+   "detail": "{\"route\":\"sample\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C39",
+   "name": "(mac) offline-mac (layout route): no face line",
+   "ok": true,
+   "detail": "{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C45",
+   "name": "(mac) offline-mac (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"layout\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
    "id": "C9",
-   "name": "offline after ready: a fill still downloads",
+   "name": "(mac) offline after ready: a fill still downloads",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "idle starts after the session's last download (4 downloads)",
+   "name": "(mac) idle starts after the session's last download (5 downloads)",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "idle after the last download 30.0 s (at least 30), no request in it",
+   "name": "(mac) idle after the last download 30.0 s (at least 30), no request in it",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "no Worker, shared worker or iframe in the session",
+   "name": "(mac) no Worker, shared worker or iframe in the session",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "no CSP violation in the session (nothing tried the network)",
+   "name": "(mac) no CSP violation in the session (nothing tried the network)",
    "ok": true,
    "detail": "[]"
   },
   {
    "id": "C9",
-   "name": "after ready: fetch from JS and Python and new workers are blocked",
+   "name": "(mac) after ready: fetch from JS and Python and new workers are blocked",
    "ok": true,
    "detail": "{\"jsSame\":\"blocked\",\"jsOther\":\"blocked\",\"worker\":\"blocked\",\"blobWorker\":\"blocked\",\"dataWorker\":\"blocked\",\"js_fetch_same\":\"blocked\",\"js_fetch_other\":\"blocked\",\"pyfetch_same\":\"blocked\",\"pyfetch_other\":\"blocked\"}"
   },
   {
    "id": "C9",
-   "name": "no probe reached the server",
+   "name": "(mac) no probe reached the server",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "no cookie, storage or service worker",
+   "name": "(mac) no cookie, storage or service worker",
    "ok": true,
    "detail": "{\"cookie\":\"\",\"local\":0,\"session\":0,\"sw\":0,\"idb\":0}"
   },
   {
    "id": "C9",
-   "name": "zero requests after ready",
+   "name": "(mac) zero requests after ready",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "server saw nothing after ready",
+   "name": "(mac) server saw nothing after ready",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "every link is a fixed anchor from index.html",
+   "name": "(mac) every link is a fixed anchor from index.html",
    "ok": true,
    "detail": "https://mentron.hk/ https://github.com/marcoaiwithfefe-hub/ppt-template https://gemini.google.com/app"
   },
   {
    "id": "C9",
-   "name": "each of the 3 link-outs clicked, intercepted, the page kept",
+   "name": "(mac) each of the 3 link-outs clicked, intercepted, the page kept",
    "ok": true,
    "detail": "[{\"href\":\"https://gemini.google.com/app\",\"recorded\":[\"https://gemini.google.com/app\"],\"pageStayed\":true},{\"href\":\"https://mentron.hk/\",\"recorded\":[\"https://mentron.hk/\"],\"pageStayed\":true},{\"href\":\"https://github.com/marcoaiwithfefe-hub/ppt-template\",\"recorded\":[\"https://github.com/marcoaiwithfefe-hub/ppt-template\"],\"pageStayed\":true}]"
   },
   {
    "id": "C9",
-   "name": "no URL carries outline text",
+   "name": "(mac) no URL carries outline text",
    "ok": true,
    "detail": ""
   },
   {
    "id": "C9",
-   "name": "link-outs intercepted, only the fixed anchors",
+   "name": "(mac) link-outs intercepted, only the fixed anchors",
+   "ok": true,
+   "detail": "https://gemini.google.com/app https://mentron.hk/ https://github.com/marcoaiwithfefe-hub/ppt-template"
+  },
+  {
+   "id": "C39",
+   "name": "(windows) the page runs on the windows user agent",
+   "ok": true,
+   "detail": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) before ready: only the page origin",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C39",
+   "name": "(windows) c10-wui-tung-windows (layout route): no face line",
+   "ok": true,
+   "detail": "{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C45",
+   "name": "(windows) c10-wui-tung-windows (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"layout\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
+   "id": "C39",
+   "name": "(windows) c10-typed-override-windows (layout route): no face line",
+   "ok": true,
+   "detail": "{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C45",
+   "name": "(windows) c10-typed-override-windows (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"layout\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
+   "id": "C22",
+   "name": "(windows) both routes on offer: the route line and switch show, sample pressed",
+   "ok": true,
+   "detail": "{\"shown\":true,\"line\":\"會跟範本頁嘅設計砌每張投影片（搵到 6 張範本頁）。網頁估錯嘅話，撳一下就轉。\",\"sample\":\"true\"}"
+  },
+  {
+   "id": "C31",
+   "name": "(windows) the picker lists only compatible samples as 範本頁 k plus first words",
+   "ok": true,
+   "detail": "[[[\"s1\",\"範本頁 1　My Year In Review\"],[\"s2\",\"範本頁 2　Three Things\"],[\"s3\",\"範本頁 3　Process\"],[\"s4\",\"範本頁 4　Compare\"],[\"s5\",\"範本頁 5　Chapter\"],[\"s6\",\"範本頁 6　Payment rules\"]],[[\"s2\",\"範本頁 2　Three Things\"],[\"s3\",\"範本頁 3　Process\"],[\"s4\",\"範本頁 4　Compare\"],[\"s5\",\"範本頁 5　Chapter\"],[\"s6\",\"範本頁 6　Payment rules\"]]]"
+  },
+  {
+   "id": "C31",
+   "name": "(windows) choosing a sample re-plans with it",
+   "ok": true,
+   "detail": "s1 s6 s2 s4 s5 s1"
+  },
+  {
+   "id": "C45",
+   "name": "(windows) c28-sample-design (sample route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"sample\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"sample\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
+   "id": "C45",
+   "name": "(windows) the route switch hides the first-draft line with the downloaded line",
+   "ok": true,
+   "detail": "[true,true]"
+  },
+  {
+   "id": "C22",
+   "name": "(windows) switching to layouts re-plans and drops both picks with a note each",
+   "ok": true,
+   "detail": "{\"pressed\":\"true\",\"notes\":[\"之前幫「Three Goals」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\",\"之前幫「Paying by card」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\"],\"first\":\"/ppt/slideLayouts/slideLayout1.xml\",\"lines\":[true,true]}"
+  },
+  {
+   "id": "C22",
+   "name": "(windows) a pick made before an empty outline and a route round trip stays gone, with its note",
+   "ok": true,
+   "detail": "{\"auto\":\"s2\",\"other\":\"s3\",\"first\":\"s2\",\"notes\":[\"之前幫「Three Goals」揀嘅版面取消咗，因為大綱改咗之後，網頁認唔返係邊張投影片。請再揀一次版面。\",\"「Annual Plan」：範本封面冇副題框，副題放咗喺標題下面。\"]}"
+  },
+  {
+   "id": "C39",
+   "name": "(windows) sample-latin-font (sample route), Chinese outline: step 3 names Microsoft JhengHei",
+   "ok": true,
+   "detail": "{\"route\":\"sample\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":true,\"faceText\":\"範本嘅字款冇中文字，中文用咗 Microsoft JhengHei。\"}"
+  },
+  {
+   "id": "C39",
+   "name": "(windows) the download's slides carry Microsoft JhengHei in a:ea on Chinese runs, PingFang HK nowhere",
+   "ok": true,
+   "detail": "6 slides, 8 of 13 Chinese runs in Microsoft JhengHei, 0 slides naming PingFang HK"
+  },
+  {
+   "id": "C39",
+   "name": "(windows) sample-latin-font (sample route), English-only outline: no face line",
+   "ok": true,
+   "detail": "{\"route\":\"sample\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C39",
+   "name": "(windows) offline-windows (layout route): no face line",
+   "ok": true,
+   "detail": "{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}"
+  },
+  {
+   "id": "C45",
+   "name": "(windows) offline-windows (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record",
+   "ok": true,
+   "detail": "{\"pre\":{\"route\":\"layout\",\"downloaded\":false,\"refine\":false,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"},\"post\":{\"route\":\"layout\",\"downloaded\":true,\"refine\":true,\"under\":true,\"refineText\":\"呢份係初稿。想再執靚啲，可以將個檔案上載去 ChatGPT 或者 Claude，講清楚想改邊頁、改乜，例如「第 3 頁啲字太多，幫我縮短，版面唔好郁」。\",\"face\":false,\"faceText\":\"\"}}"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) offline after ready: a fill still downloads",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) idle starts after the session's last download (5 downloads)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) idle after the last download 30.0 s (at least 30), no request in it",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) no Worker, shared worker or iframe in the session",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) no CSP violation in the session (nothing tried the network)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) after ready: fetch from JS and Python and new workers are blocked",
+   "ok": true,
+   "detail": "{\"jsSame\":\"blocked\",\"jsOther\":\"blocked\",\"worker\":\"blocked\",\"blobWorker\":\"blocked\",\"dataWorker\":\"blocked\",\"js_fetch_same\":\"blocked\",\"js_fetch_other\":\"blocked\",\"pyfetch_same\":\"blocked\",\"pyfetch_other\":\"blocked\"}"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) no probe reached the server",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) no cookie, storage or service worker",
+   "ok": true,
+   "detail": "{\"cookie\":\"\",\"local\":0,\"session\":0,\"sw\":0,\"idb\":0}"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) zero requests after ready",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) server saw nothing after ready",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) every link is a fixed anchor from index.html",
+   "ok": true,
+   "detail": "https://mentron.hk/ https://github.com/marcoaiwithfefe-hub/ppt-template https://gemini.google.com/app"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) each of the 3 link-outs clicked, intercepted, the page kept",
+   "ok": true,
+   "detail": "[{\"href\":\"https://gemini.google.com/app\",\"recorded\":[\"https://gemini.google.com/app\"],\"pageStayed\":true},{\"href\":\"https://mentron.hk/\",\"recorded\":[\"https://mentron.hk/\"],\"pageStayed\":true},{\"href\":\"https://github.com/marcoaiwithfefe-hub/ppt-template\",\"recorded\":[\"https://github.com/marcoaiwithfefe-hub/ppt-template\"],\"pageStayed\":true}]"
+  },
+  {
+   "id": "C9",
+   "name": "(windows) no URL carries outline text",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "C9",
+   "name": "(windows) link-outs intercepted, only the fixed anchors",
    "ok": true,
    "detail": "https://gemini.google.com/app https://mentron.hk/ https://github.com/marcoaiwithfefe-hub/ppt-template"
   },
@@ -151,7 +421,7 @@
    "id": "C8",
    "name": "legacy.pptx: legacy_ppt message, no download, responsive",
    "ok": true,
-   "detail": "呢個係舊式 .ppt 檔。請喺 PowerPoint 開，另存做 .pptx，再 | download hidden true | 0 ms"
+   "detail": "呢個係舊式 .ppt 檔。請喺 PowerPoint 開，另存做 .pptx，再 | download hidden true | 15 ms"
   },
   {
    "id": "C8",
@@ -163,37 +433,37 @@
    "id": "C8",
    "name": "not-powerpoint.pptx: not_pptx message, no download, responsive",
    "ok": true,
-   "detail": "呢個唔係 PowerPoint 檔。請揀 .pptx 或 .potx 範本。 | download hidden true | 0 ms"
+   "detail": "呢個唔係 PowerPoint 檔。請揀 .pptx 或 .potx 範本。 | download hidden true | 4 ms"
   },
   {
    "id": "C8",
    "name": "dangling-relationship.pptx: bad_file message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 1 ms"
+   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 4 ms"
   },
   {
    "id": "C8",
    "name": "zip-bomb.pptx: too_big message, no download, responsive",
    "ok": true,
-   "detail": "檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走 | download hidden true | 2 ms"
+   "detail": "檔案太大，網頁處理唔到（上限 100 MB）。可以喺 PowerPoint 刪走 | download hidden true | 4 ms"
   },
   {
    "id": "C8",
    "name": "lying-size.pptx: bad_file message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 3 ms"
+   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 6 ms"
   },
   {
    "id": "C8",
    "name": "billion-laughs.pptx: bad_file message, no download, responsive",
    "ok": true,
-   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 3 ms"
+   "detail": "呢個檔案好似壞咗，網頁讀唔到。請喺 PowerPoint 開一次，另存做新檔再試 | download hidden true | 5 ms"
   },
   {
    "id": "C8",
    "name": "no-body.pptx: no_text_layout message, no download, responsive",
    "ok": true,
-   "detail": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本 | download hidden true | 3 ms"
+   "detail": "呢個範本嘅版面冇標題框，網頁唔知將標題放去邊。請揀一個版面有標題框同內文框嘅範本 | download hidden true | 4 ms"
   },
   {
    "id": "C13",
@@ -203,33 +473,27 @@
   }
  ],
  "session": {
-  "tReady": 1793529201288,
-  "tDownloads": [
-   1793529202288,
-   1793529203277,
-   1793529204338,
-   1793529206474
-  ],
-  "tLastDownload": 1793529206474,
-  "tIdleStart": 1793529206477,
-  "tIdleEnd": 1793529236501,
-  "requestsBeforeReady": 19,
+  "outline": "fixtures/reference-outline.md",
   "fills": [
    {
     "template": "wui-tung.pptx",
-    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c10-wui-tung.pptx",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c10-wui-tung-mac.pptx",
     "name": "匯通物流 2027 年度計劃.pptx",
     "override": null,
     "overrideSource": null,
-    "tDownload": 1793529202288
+    "tDownload": 1793706645667,
+    "ua": "mac",
+    "cjkFace": "PingFang HK"
    },
    {
     "template": "typed.pptx",
-    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c10-typed-override.pptx",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c10-typed-override-mac.pptx",
     "name": "匯通物流 2027 年度計劃.pptx",
     "override": "/ppt/slideLayouts/slideLayout3.xml",
     "overrideSource": 1,
-    "tDownload": 1793529203277
+    "tDownload": 1793706646649,
+    "ua": "mac",
+    "cjkFace": "PingFang HK"
    },
    {
     "template": "sample-design.pptx",
@@ -239,261 +503,604 @@
      "1": "s6",
      "4": "s5"
     },
-    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c28-sample-design.pptx",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c28-sample-design-mac.pptx",
     "name": "Annual Plan.pptx",
-    "tDownload": 1793529204338
-   }
-  ],
-  "outline": "fixtures/reference-outline.md",
-  "linkOuts": [
-   {
-    "t": 1793529236591,
-    "url": "https://gemini.google.com/app",
-    "nav": true
+    "tDownload": 1793706647695,
+    "ua": "mac",
+    "cjkFace": "PingFang HK"
    },
    {
-    "t": 1793529237394,
-    "url": "https://mentron.hk/",
-    "nav": true
+    "template": "sample-latin-font.pptx",
+    "outline": "tests/outlines/sample/latin-font.md",
+    "route": "sample",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c39-latin-font-mac.pptx",
+    "name": "年度計劃 Plan 2027.pptx",
+    "tDownload": 1793706649566,
+    "ua": "mac",
+    "cjkFace": "PingFang HK"
    },
    {
-    "t": 1793529238197,
-    "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
-    "nav": true
+    "template": "wui-tung.pptx",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c10-wui-tung-windows.pptx",
+    "name": "匯通物流 2027 年度計劃.pptx",
+    "override": null,
+    "overrideSource": null,
+    "tDownload": 1793706685831,
+    "ua": "windows",
+    "cjkFace": "Microsoft JhengHei"
+   },
+   {
+    "template": "typed.pptx",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c10-typed-override-windows.pptx",
+    "name": "匯通物流 2027 年度計劃.pptx",
+    "override": "/ppt/slideLayouts/slideLayout3.xml",
+    "overrideSource": 1,
+    "tDownload": 1793706686809,
+    "ua": "windows",
+    "cjkFace": "Microsoft JhengHei"
+   },
+   {
+    "template": "sample-design.pptx",
+    "outline": "tests/outlines/sample/design.md",
+    "route": "sample",
+    "overrides": {
+     "1": "s6",
+     "4": "s5"
+    },
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c28-sample-design-windows.pptx",
+    "name": "Annual Plan.pptx",
+    "tDownload": 1793706687594,
+    "ua": "windows",
+    "cjkFace": "Microsoft JhengHei"
+   },
+   {
+    "template": "sample-latin-font.pptx",
+    "outline": "tests/outlines/sample/latin-font.md",
+    "route": "sample",
+    "file": "/Users/marcoaiwithfefe/Code/ppt-template/qa/e2e/c39-latin-font-windows.pptx",
+    "name": "年度計劃 Plan 2027.pptx",
+    "tDownload": 1793706689478,
+    "ua": "windows",
+    "cjkFace": "Microsoft JhengHei"
    }
   ],
-  "clicked": [
+  "runs": [
    {
-    "href": "https://gemini.google.com/app",
-    "recorded": [
-     "https://gemini.google.com/app"
+    "ua": "mac",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "cjkFace": "PingFang HK",
+    "tReady": 1793706644653,
+    "tDownloads": [
+     1793706645667,
+     1793706646649,
+     1793706647695,
+     1793706649566,
+     1793706651011
     ],
-    "pageStayed": true
-   },
-   {
-    "href": "https://mentron.hk/",
-    "recorded": [
-     "https://mentron.hk/"
+    "tLastDownload": 1793706651011,
+    "tIdleStart": 1793706651018,
+    "tIdleEnd": 1793706681040,
+    "requestsBeforeReady": 19,
+    "outline": "fixtures/reference-outline.md",
+    "linkOuts": [
+     {
+      "t": 1793706681127,
+      "url": "https://gemini.google.com/app",
+      "nav": true
+     },
+     {
+      "t": 1793706681931,
+      "url": "https://mentron.hk/",
+      "nav": true
+     },
+     {
+      "t": 1793706682733,
+      "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
+      "nav": true
+     }
     ],
-    "pageStayed": true
-   },
-   {
-    "href": "https://github.com/marcoaiwithfefe-hub/ppt-template",
-    "recorded": [
-     "https://github.com/marcoaiwithfefe-hub/ppt-template"
+    "clicked": [
+     {
+      "href": "https://gemini.google.com/app",
+      "recorded": [
+       "https://gemini.google.com/app"
+      ],
+      "pageStayed": true
+     },
+     {
+      "href": "https://mentron.hk/",
+      "recorded": [
+       "https://mentron.hk/"
+      ],
+      "pageStayed": true
+     },
+     {
+      "href": "https://github.com/marcoaiwithfefe-hub/ppt-template",
+      "recorded": [
+       "https://github.com/marcoaiwithfefe-hub/ppt-template"
+      ],
+      "pageStayed": true
+     }
     ],
-    "pageStayed": true
+    "requests": [
+     {
+      "t": 1793706643342,
+      "url": "http://127.0.0.1:59162/",
+      "type": "document"
+     },
+     {
+      "t": 1793706643361,
+      "url": "http://127.0.0.1:59162/style.css",
+      "type": "stylesheet"
+     },
+     {
+      "t": 1793706643361,
+      "url": "http://127.0.0.1:59162/app.js",
+      "type": "script"
+     },
+     {
+      "t": 1793706643380,
+      "url": "http://127.0.0.1:59162/fonts/mentron-serif-var.woff2",
+      "type": "font"
+     },
+     {
+      "t": 1793706643380,
+      "url": "http://127.0.0.1:59162/fonts/newsreader-latin.woff2",
+      "type": "font"
+     },
+     {
+      "t": 1793706643381,
+      "url": "http://127.0.0.1:59162/copy.js",
+      "type": "script"
+     },
+     {
+      "t": 1793706643385,
+      "url": "http://127.0.0.1:59162/prompt.txt",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706643391,
+      "url": "http://127.0.0.1:59162/fonts/noto-serif-tc-page.woff2",
+      "type": "font"
+     },
+     {
+      "t": 1793706643399,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/pyodide.mjs",
+      "type": "script"
+     },
+     {
+      "t": 1793706643404,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/pyodide-lock.json",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706643404,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/python_stdlib.zip",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706643405,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/pyodide.asm.wasm",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706643405,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/pyodide.asm.mjs",
+      "type": "script"
+     },
+     {
+      "t": 1793706644178,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706644178,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706644179,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706644179,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706644179,
+      "url": "http://127.0.0.1:59162/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706644317,
+      "url": "http://127.0.0.1:59162/py/deckfill.zip",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706681127,
+      "url": "https://gemini.google.com/app",
+      "type": "document"
+     },
+     {
+      "t": 1793706681931,
+      "url": "https://mentron.hk/",
+      "type": "document"
+     },
+     {
+      "t": 1793706682733,
+      "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
+      "type": "document"
+     }
+    ],
+    "serverLog": [
+     {
+      "t": 1793706643346,
+      "method": "GET",
+      "path": "/"
+     },
+     {
+      "t": 1793706643362,
+      "method": "GET",
+      "path": "/style.css"
+     },
+     {
+      "t": 1793706643362,
+      "method": "GET",
+      "path": "/app.js"
+     },
+     {
+      "t": 1793706643381,
+      "method": "GET",
+      "path": "/fonts/mentron-serif-var.woff2"
+     },
+     {
+      "t": 1793706643381,
+      "method": "GET",
+      "path": "/fonts/newsreader-latin.woff2"
+     },
+     {
+      "t": 1793706643382,
+      "method": "GET",
+      "path": "/copy.js"
+     },
+     {
+      "t": 1793706643386,
+      "method": "GET",
+      "path": "/prompt.txt"
+     },
+     {
+      "t": 1793706643392,
+      "method": "GET",
+      "path": "/fonts/noto-serif-tc-page.woff2"
+     },
+     {
+      "t": 1793706643399,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide.mjs"
+     },
+     {
+      "t": 1793706643405,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide-lock.json"
+     },
+     {
+      "t": 1793706643405,
+      "method": "GET",
+      "path": "/vendor/pyodide/python_stdlib.zip"
+     },
+     {
+      "t": 1793706643406,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide.asm.wasm"
+     },
+     {
+      "t": 1793706643406,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide.asm.mjs"
+     },
+     {
+      "t": 1793706644179,
+      "method": "GET",
+      "path": "/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
+     },
+     {
+      "t": 1793706644179,
+      "method": "GET",
+      "path": "/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
+     },
+     {
+      "t": 1793706644180,
+      "method": "GET",
+      "path": "/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl"
+     },
+     {
+      "t": 1793706644180,
+      "method": "GET",
+      "path": "/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl"
+     },
+     {
+      "t": 1793706644180,
+      "method": "GET",
+      "path": "/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl"
+     },
+     {
+      "t": 1793706644318,
+      "method": "GET",
+      "path": "/py/deckfill.zip"
+     }
+    ],
+    "violations": []
+   },
+   {
+    "ua": "windows",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "cjkFace": "Microsoft JhengHei",
+    "tReady": 1793706684856,
+    "tDownloads": [
+     1793706685831,
+     1793706686809,
+     1793706687594,
+     1793706689478,
+     1793706690924
+    ],
+    "tLastDownload": 1793706690924,
+    "tIdleStart": 1793706690928,
+    "tIdleEnd": 1793706720956,
+    "requestsBeforeReady": 19,
+    "outline": "fixtures/reference-outline.md",
+    "linkOuts": [
+     {
+      "t": 1793706721021,
+      "url": "https://gemini.google.com/app",
+      "nav": true
+     },
+     {
+      "t": 1793706721827,
+      "url": "https://mentron.hk/",
+      "nav": true
+     },
+     {
+      "t": 1793706722627,
+      "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
+      "nav": true
+     }
+    ],
+    "clicked": [
+     {
+      "href": "https://gemini.google.com/app",
+      "recorded": [
+       "https://gemini.google.com/app"
+      ],
+      "pageStayed": true
+     },
+     {
+      "href": "https://mentron.hk/",
+      "recorded": [
+       "https://mentron.hk/"
+      ],
+      "pageStayed": true
+     },
+     {
+      "href": "https://github.com/marcoaiwithfefe-hub/ppt-template",
+      "recorded": [
+       "https://github.com/marcoaiwithfefe-hub/ppt-template"
+      ],
+      "pageStayed": true
+     }
+    ],
+    "requests": [
+     {
+      "t": 1793706683578,
+      "url": "http://127.0.0.1:59195/",
+      "type": "document"
+     },
+     {
+      "t": 1793706683585,
+      "url": "http://127.0.0.1:59195/style.css",
+      "type": "stylesheet"
+     },
+     {
+      "t": 1793706683586,
+      "url": "http://127.0.0.1:59195/app.js",
+      "type": "script"
+     },
+     {
+      "t": 1793706683597,
+      "url": "http://127.0.0.1:59195/fonts/mentron-serif-var.woff2",
+      "type": "font"
+     },
+     {
+      "t": 1793706683597,
+      "url": "http://127.0.0.1:59195/fonts/newsreader-latin.woff2",
+      "type": "font"
+     },
+     {
+      "t": 1793706683597,
+      "url": "http://127.0.0.1:59195/copy.js",
+      "type": "script"
+     },
+     {
+      "t": 1793706683603,
+      "url": "http://127.0.0.1:59195/prompt.txt",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706683610,
+      "url": "http://127.0.0.1:59195/fonts/noto-serif-tc-page.woff2",
+      "type": "font"
+     },
+     {
+      "t": 1793706683614,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/pyodide.mjs",
+      "type": "script"
+     },
+     {
+      "t": 1793706683618,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/pyodide-lock.json",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706683619,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/python_stdlib.zip",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706683619,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/pyodide.asm.wasm",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706683619,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/pyodide.asm.mjs",
+      "type": "script"
+     },
+     {
+      "t": 1793706684379,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706684379,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706684380,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706684380,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706684380,
+      "url": "http://127.0.0.1:59195/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706684521,
+      "url": "http://127.0.0.1:59195/py/deckfill.zip",
+      "type": "fetch"
+     },
+     {
+      "t": 1793706721021,
+      "url": "https://gemini.google.com/app",
+      "type": "document"
+     },
+     {
+      "t": 1793706721827,
+      "url": "https://mentron.hk/",
+      "type": "document"
+     },
+     {
+      "t": 1793706722627,
+      "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
+      "type": "document"
+     }
+    ],
+    "serverLog": [
+     {
+      "t": 1793706683579,
+      "method": "GET",
+      "path": "/"
+     },
+     {
+      "t": 1793706683586,
+      "method": "GET",
+      "path": "/style.css"
+     },
+     {
+      "t": 1793706683586,
+      "method": "GET",
+      "path": "/app.js"
+     },
+     {
+      "t": 1793706683599,
+      "method": "GET",
+      "path": "/fonts/mentron-serif-var.woff2"
+     },
+     {
+      "t": 1793706683599,
+      "method": "GET",
+      "path": "/fonts/newsreader-latin.woff2"
+     },
+     {
+      "t": 1793706683600,
+      "method": "GET",
+      "path": "/copy.js"
+     },
+     {
+      "t": 1793706683603,
+      "method": "GET",
+      "path": "/prompt.txt"
+     },
+     {
+      "t": 1793706683610,
+      "method": "GET",
+      "path": "/fonts/noto-serif-tc-page.woff2"
+     },
+     {
+      "t": 1793706683615,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide.mjs"
+     },
+     {
+      "t": 1793706683619,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide-lock.json"
+     },
+     {
+      "t": 1793706683619,
+      "method": "GET",
+      "path": "/vendor/pyodide/python_stdlib.zip"
+     },
+     {
+      "t": 1793706683619,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide.asm.wasm"
+     },
+     {
+      "t": 1793706683620,
+      "method": "GET",
+      "path": "/vendor/pyodide/pyodide.asm.mjs"
+     },
+     {
+      "t": 1793706684380,
+      "method": "GET",
+      "path": "/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
+     },
+     {
+      "t": 1793706684380,
+      "method": "GET",
+      "path": "/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
+     },
+     {
+      "t": 1793706684380,
+      "method": "GET",
+      "path": "/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl"
+     },
+     {
+      "t": 1793706684380,
+      "method": "GET",
+      "path": "/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl"
+     },
+     {
+      "t": 1793706684381,
+      "method": "GET",
+      "path": "/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl"
+     },
+     {
+      "t": 1793706684522,
+      "method": "GET",
+      "path": "/py/deckfill.zip"
+     }
+    ],
+    "violations": []
    }
-  ],
-  "requests": [
-   {
-    "t": 1793529200070,
-    "url": "http://127.0.0.1:59453/",
-    "type": "document"
-   },
-   {
-    "t": 1793529200087,
-    "url": "http://127.0.0.1:59453/style.css",
-    "type": "stylesheet"
-   },
-   {
-    "t": 1793529200087,
-    "url": "http://127.0.0.1:59453/app.js",
-    "type": "script"
-   },
-   {
-    "t": 1793529200105,
-    "url": "http://127.0.0.1:59453/fonts/mentron-serif-var.woff2",
-    "type": "font"
-   },
-   {
-    "t": 1793529200105,
-    "url": "http://127.0.0.1:59453/fonts/newsreader-latin.woff2",
-    "type": "font"
-   },
-   {
-    "t": 1793529200105,
-    "url": "http://127.0.0.1:59453/copy.js",
-    "type": "script"
-   },
-   {
-    "t": 1793529200110,
-    "url": "http://127.0.0.1:59453/prompt.txt",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200116,
-    "url": "http://127.0.0.1:59453/fonts/noto-serif-tc-page.woff2",
-    "type": "font"
-   },
-   {
-    "t": 1793529200123,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/pyodide.mjs",
-    "type": "script"
-   },
-   {
-    "t": 1793529200128,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/pyodide-lock.json",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200129,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/python_stdlib.zip",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200129,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/pyodide.asm.wasm",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200129,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/pyodide.asm.mjs",
-    "type": "script"
-   },
-   {
-    "t": 1793529200860,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200861,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200861,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200861,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200861,
-    "url": "http://127.0.0.1:59453/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529200995,
-    "url": "http://127.0.0.1:59453/py/deckfill.zip",
-    "type": "fetch"
-   },
-   {
-    "t": 1793529236591,
-    "url": "https://gemini.google.com/app",
-    "type": "document"
-   },
-   {
-    "t": 1793529237394,
-    "url": "https://mentron.hk/",
-    "type": "document"
-   },
-   {
-    "t": 1793529238197,
-    "url": "https://github.com/marcoaiwithfefe-hub/ppt-template",
-    "type": "document"
-   }
-  ],
-  "serverLog": [
-   {
-    "t": 1793529200073,
-    "method": "GET",
-    "path": "/"
-   },
-   {
-    "t": 1793529200087,
-    "method": "GET",
-    "path": "/style.css"
-   },
-   {
-    "t": 1793529200088,
-    "method": "GET",
-    "path": "/app.js"
-   },
-   {
-    "t": 1793529200106,
-    "method": "GET",
-    "path": "/fonts/mentron-serif-var.woff2"
-   },
-   {
-    "t": 1793529200106,
-    "method": "GET",
-    "path": "/fonts/newsreader-latin.woff2"
-   },
-   {
-    "t": 1793529200106,
-    "method": "GET",
-    "path": "/copy.js"
-   },
-   {
-    "t": 1793529200110,
-    "method": "GET",
-    "path": "/prompt.txt"
-   },
-   {
-    "t": 1793529200116,
-    "method": "GET",
-    "path": "/fonts/noto-serif-tc-page.woff2"
-   },
-   {
-    "t": 1793529200124,
-    "method": "GET",
-    "path": "/vendor/pyodide/pyodide.mjs"
-   },
-   {
-    "t": 1793529200129,
-    "method": "GET",
-    "path": "/vendor/pyodide/pyodide-lock.json"
-   },
-   {
-    "t": 1793529200129,
-    "method": "GET",
-    "path": "/vendor/pyodide/python_stdlib.zip"
-   },
-   {
-    "t": 1793529200129,
-    "method": "GET",
-    "path": "/vendor/pyodide/pyodide.asm.wasm"
-   },
-   {
-    "t": 1793529200130,
-    "method": "GET",
-    "path": "/vendor/pyodide/pyodide.asm.mjs"
-   },
-   {
-    "t": 1793529200861,
-    "method": "GET",
-    "path": "/vendor/pyodide/lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
-   },
-   {
-    "t": 1793529200861,
-    "method": "GET",
-    "path": "/vendor/pyodide/pillow-12.2.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl"
-   },
-   {
-    "t": 1793529200861,
-    "method": "GET",
-    "path": "/vendor/pyodide/typing_extensions-4.15.0-py3-none-any.whl"
-   },
-   {
-    "t": 1793529200862,
-    "method": "GET",
-    "path": "/vendor/pyodide/python_pptx-1.0.2-py3-none-any.whl"
-   },
-   {
-    "t": 1793529200862,
-    "method": "GET",
-    "path": "/vendor/pyodide/xlsxwriter-3.2.9-py3-none-any.whl"
-   },
-   {
-    "t": 1793529200996,
-    "method": "GET",
-    "path": "/py/deckfill.zip"
-   }
-  ],
-  "violations": []
+  ]
  }
 }

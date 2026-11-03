@@ -313,7 +313,7 @@ def _zip(parts: dict[str, bytes]) -> bytes:
 
 def fill(data: bytes, filename: str, plan: Plan) -> bytes:
     info, pkg = open_template(data, filename)
-    expected = plan_deck(info, plan.outline, dict(plan.overrides), route=plan.route)
+    expected = plan_deck(info, plan.outline, dict(plan.overrides), route=plan.route, cjk_face=plan.cjk_face)
     if expected != plan:
         raise PlanError("stale_plan", "plan differs from plan_deck for the same overrides")
     if plan.route == "sample":

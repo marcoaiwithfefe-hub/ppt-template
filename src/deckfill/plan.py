@@ -6,6 +6,7 @@ import math
 import unicodedata
 from dataclasses import asdict, dataclass
 
+from .cjk import DEFAULT_FACE, has_chinese
 from .errors import OutlineError, PlanError
 from .outline import Item, Outline, OutlineSlide, Warning
 from .template import Fit, Layout, Level, TemplateInfo
@@ -13,6 +14,10 @@ from .template import Fit, Layout, Level, TemplateInfo
 MAX_SLIDES = 200
 MAX_BULLETS = 6
 LATIN_EM = 0.55
+# Rev 9 QA round 2 (flag 2): a condensed Latin width for the title orphan check. Anton, the Canva deck's embedded
+# display face, advances its digits 0.494 em; the deck's tracking of -14.55 pt at its 297 pt size takes 0.049 em off,
+# so the digit sets at 0.445 em: 0.45 (decisions.tsv)
+CONDENSED_EM = 0.45
 
 FITS, SPLIT, WARNED, CHECK = "fits", "split", "warned", "check"
 _RANK = {FITS: 0, SPLIT: 1, WARNED: 2, CHECK: 3}
@@ -59,6 +64,7 @@ class Plan:
     compatible: tuple[tuple[str, ...], ...]  # compatible layout ids per outline slide
     warnings: tuple[Warning, ...]  # parser warnings first, then planning warnings
     route: str = "layout"  # rev 8: layout or sample (D11)
+    cjk_face: str = DEFAULT_FACE  # rev 9 T1: the face the sample route writes Chinese stretches in
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -136,28 +142,37 @@ def has_cjk(text: str) -> bool:
 def text_lines(text: str, size: int, width: int) -> int:
     """Greedy wrap: CJK glyphs one em and breakable anywhere, other characters 0.55 em and
     broken at spaces."""
+    return wrap(text, size, width)[0]
+
+
+def wrap(text: str, size: int, width: int, latin: float = LATIN_EM) -> tuple[int, int]:
+    """text_lines' greedy wrap, returning (lines, glyphs on the last line). A glyph is any character but a space; the
+    last part of a word broken by character holds the characters its width takes (rev 9 QA round 1 Q9-3). latin: the
+    width of a non-CJK character in em (QA round 2: the title orphan check also runs at CONDENSED_EM)."""
     if width <= 0:
-        return 10**6
-    tokens: list[float] = []
-    word = 0.0
+        return 10**6, 0
+    tokens: list[tuple[float, int]] = []  # (width, glyphs)
+    word, glyphs = 0.0, 0
     for ch in text:
         if is_cjk(ch):
             if word:
-                tokens.append(word)
-                word = 0.0
-            tokens.append(size)
+                tokens.append((word, glyphs))
+                word, glyphs = 0.0, 0
+            tokens.append((size, 1))
         elif ch == " ":
-            word += LATIN_EM * size
-            tokens.append(word)
-            word = 0.0
+            word += latin * size
+            tokens.append((word, glyphs))
+            word, glyphs = 0.0, 0
         else:
-            word += LATIN_EM * size
+            word += latin * size
+            glyphs += 1
     if word:
-        tokens.append(word)
-    lines, used = 1, 0.0
-    for w in tokens:
+        tokens.append((word, glyphs))
+    lines, used, last = 1, 0.0, 0
+    for w, g in tokens:
         if used + w <= width or used == 0 and w <= width:
             used += w
+            last += g
             continue
         if w > width:  # a long word breaks by character, in constant time (Codex round 1, F4)
             if used:
@@ -165,10 +180,12 @@ def text_lines(text: str, size: int, width: int) -> int:
             k = max(0, math.ceil(w / width) - 1)  # full lines before the last part
             lines += k
             used = w - k * width
+            last = min(g, max(1, round(used / (latin * size))))
             continue
         lines += 1
         used = w
-    return lines
+        last = g
+    return lines, last
 
 
 def text_width(text: str, size: int) -> float:
@@ -184,7 +201,8 @@ def height(items: tuple[Item, ...], fit: Fit) -> int:
             n = 1 if text_width(it.text, lv.size) <= fit.width - lv.margin else 10**6
         else:
             n = text_lines(it.text, lv.size, fit.width - lv.margin)
-        total += (lv.before if i else 0) + n * lv.line + lv.after
+        line = lv.cjk_line if lv.cjk_line is not None and has_chinese(it.text) else lv.line  # rev 9 T2
+        total += (lv.before if i else 0) + n * line + lv.after
     return total
 
 
@@ -226,8 +244,10 @@ def cont_title(title: str) -> str:
 # ---------------------------------------------------------------------------------------------
 
 
-def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | None = None, route: str | None = None) -> Plan:
-    """route: layout (D3 to D5) or sample (D12); None takes the template's default route (D11)."""
+def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | None = None, route: str | None = None,
+              cjk_face: str = DEFAULT_FACE) -> Plan:
+    """route: layout (D3 to D5) or sample (D12); None takes the template's default route (D11). cjk_face: the face
+    the sample route gives Chinese stretches in a Latin-only face (rev 9 T1); the layout route records it only."""
     if not outline.slides:
         raise OutlineError("no_slides")
     route = route or info.route
@@ -236,7 +256,7 @@ def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | 
     if route == "sample":
         from .sample_plan import plan_sample
 
-        return plan_sample(info, outline, dict(overrides or {}))
+        return plan_sample(info, outline, dict(overrides or {}), cjk_face)
     overrides = dict(overrides or {})
     ids = {lay.id for lay in info.layouts}
     warnings: list[Warning] = list(outline.warnings)
@@ -309,4 +329,5 @@ def plan_deck(info: TemplateInfo, outline: Outline, overrides: dict[int, str] | 
         chosen=tuple(chosen),
         compatible=tuple(compatible),
         warnings=tuple(warnings),
+        cjk_face=cjk_face,
     )

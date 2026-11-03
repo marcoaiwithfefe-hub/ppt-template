@@ -1,0 +1,70 @@
+{
+  "reviewer": "Codex rev9 round 1",
+  "steps": {
+    "step-1": {
+      "verdict": "holds",
+      "note": "User-agent face selection, propagation through plan and fill, conditional face note, and refineNote visibility on both routes match code. Fill recomputes its plan with the supplied face.",
+      "evidence": "docs/app.js:15-15; docs/app.js:299-302; docs/app.js:394-400; docs/app.js:410-437; src/deckfill/web.py:96-165; src/deckfill/fill.py:314-318"
+    },
+    "step-2": {
+      "verdict": "holds",
+      "note": "Reader records two resolved faces, display flag and donor properties; excludes watermarks from title/body classification; derives echoes, pairs and two-compatibility as described.",
+      "evidence": "src/deckfill/sample.py:1202-1260; src/deckfill/sample.py:1287-1295; src/deckfill/sample.py:1301-1338; src/deckfill/sample.py:1471-1476"
+    },
+    "step-3": {
+      "verdict": "partial",
+      "note": "Read-time clamp and fallback are accurately described. However, the stated 70% test misses T6 display-title floors: E1 retains an off-slide title although its clamped box holds a line at its applicable 50% floor. Fragmented titles update title_box rather than storing that union in SBox.orig.",
+      "evidence": "src/deckfill/sample.py:1371-1411; src/deckfill/sample_plan.py:68-78"
+    },
+    "step-4": {
+      "verdict": "partial",
+      "note": "Slot precedence, pair geometry, child placement and label rewriting hold. Two-column fallback is incomplete: pair columns are attempted only when two_dest returned an existing destination, missing F1. Pair builds also miscount cleared bodies as used, F3.",
+      "evidence": "src/deckfill/sample_plan.py:224-266; src/deckfill/sample_plan.py:330-364"
+    },
+    "step-5": {
+      "verdict": "partial",
+      "note": "Growth search, exact top-left, candidate ordering, group checks and display floor match description. needs reads grown geometry, but downstream rank_key truncates valid display-title shrink scores at seven, contradicting preserved smallest-shrink ranking, F2.",
+      "evidence": "src/deckfill/sample_plan.py:298-306; src/deckfill/sample_plan.py:397-440; src/deckfill/sample_plan.py:570-640"
+    },
+    "step-6": {
+      "verdict": "holds",
+      "note": "Writer performs maximal run splitting, Chinese property overrides, size writes, line-spacing adjustment and echo wrapping as described. Budget counts split-run properties and markup; final writer also checks actual generated XML bytes.",
+      "evidence": "src/deckfill/sample_fill.py:122-172; src/deckfill/sample_fill.py:364-373; src/deckfill/sample_fill.py:423-425; src/deckfill/sample_plan.py:850-883"
+    }
+  },
+  "call_path": {
+    "verdict": "partial",
+    "note": "New and changed boxes correspond to implementation; no gone boxes are declared. Main forward flow holds. Download edge omits Session.fill replanning and fill's second planning comparison before fill_sample. R3 grow_build also supplies an alternate title-growth path. Claim that ranking stays unchanged is undermined by F2 and F3; two-column branch omits F1's absent-destination case.",
+    "evidence": "qa/walkthrough/rev9/walkthrough.json:51-53; src/deckfill/web.py:156-167; src/deckfill/fill.py:314-320; src/deckfill/sample_plan.py:349-364; src/deckfill/sample_plan.py:436-440; src/deckfill/sample_plan.py:622-682"
+  },
+  "missed": [
+    {
+      "note": "Pair-compatible samples can lack a built two-column destination; qualifying pair columns are then skipped, F1.",
+      "evidence": "src/deckfill/sample_plan.py:349-364"
+    },
+    {
+      "note": "Display shrink steps 7 through 10 collapse to the same ranking score, F2.",
+      "evidence": "src/deckfill/sample_plan.py:439"
+    },
+    {
+      "note": "Cleared pair bodies count as used and alter the unused-box ranking, F3.",
+      "evidence": "src/deckfill/sample_plan.py:245; src/deckfill/sample_plan.py:266"
+    },
+    {
+      "note": "C23's independent implementation does not establish T5 eligibility. An invalid pair expansion passes the comparator, F4.",
+      "evidence": "tests/sample_look.py:255-273; tests/sample_look.py:591-593"
+    },
+    {
+      "note": "Clamp eligibility uses 70% even for display titles with a lower applicable floor, E1.",
+      "evidence": "src/deckfill/sample.py:1374; src/deckfill/sample_plan.py:74-78"
+    },
+    {
+      "note": "Generic C25 size comparison assumes one run per paragraph, while T1 can create several. Its listed cases do not exercise the new mixed-script split outputs.",
+      "evidence": "tests/test_c25_fit.py:118-144"
+    },
+    {
+      "note": "G0c's general Chinese oracle omits C39's display-bold and donor-property comparisons, so its PASS establishes only part of the referenced C39 rule.",
+      "evidence": "qa/g0c/run_g0c.py:54-55; tests/rev9_oracle.py:93-129"
+    }
+  ]
+}

@@ -33,6 +33,8 @@ CASES = [
     ("sample-typo.pptx", "two-slides", None, "typo"),
     ("sample-thin.pptx", "two-slides", None, "thin"),
     ("sample-altcontent.pptx", "two-slides", None, "altcontent"),  # code review F1
+    ("sample-ghost.pptx", "ghost", {1: "s2", 2: "s5"}, "ghost"),  # rev 9 T3 echoes, T4 clamps
+    ("sample-pairs.pptx", "pairs", {1: "s1", 2: "s1", 3: "s1"}, "pairs"),  # rev 9 T5 pairs
 ]
 
 

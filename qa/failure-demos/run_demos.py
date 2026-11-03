@@ -1,5 +1,5 @@
 """Failure demos for the silent-break checks (spec rows C1, C2, C4, C5 integrity part; rev 8: C24, C26, C27; code
-review round 1: F1, F2, F6; round 2: N1, Edge 1, Edge 2; round 3).
+review round 1: F1, F2, F6; round 2: N1, Edge 1, Edge 2; round 3; rev 9: C39 to C45; rev 9 QA round 1: C46).
 
 Each demo applies one isolated mutation to the source, runs the check's tests, restores the
 file, and runs the tests again. Output: qa/failure-demos/<id>-mutated.txt and <id>-fixed.txt.
@@ -209,6 +209,98 @@ DEMOS = {
         "            out.append(unreadable(k, slide, _why(e)))\n    return tuple(out)",
         "            raise\n    return tuple(out)",
         ["tests/test_cr1_code_review.py", "-k", "f2"],
+    ),
+    # rev 9 silent-break checks (map rev 6)
+    "c39-split-skipped": (
+        "the fill skips the run split: Chinese stays in the template's Latin-only face with no error",
+        "src/deckfill/sample_fill.py",
+        "        segs = stretches(text) if needs_split(sbox.faces[lvl - 1], text) else [(False, text)]",
+        "        segs = [(False, text)]",
+        ["tests/test_c39_c40_type.py", "-k", "chinese_face"],
+    ),
+    "c40-unscaled-line": (
+        "the fill keeps the copied line spacing: no scaling to the written size, no Chinese floors",
+        "src/deckfill/sample_fill.py",
+        "    want = spec.ln_written(size, has_chinese(text))",
+        "    want = None",
+        ["tests/test_c39_c40_type.py", "-k", "line_height"],
+    ),
+    "c41-ghost-anchor": (
+        "watermarks are not recognised, so a ghost can be the title anchor",
+        "src/deckfill/sample.py",
+        "    marks = [b for b in boxes if watermark(by_sid[b.sid], styles)]",
+        "    marks = []",
+        ["tests/test_c41_c42_marks.py", "tests/test_c24_c27_sample_text.py", "-k", "ghost"],
+    ),
+    "c42-unclamped": (
+        "destinations crossing a slide edge are written at their sample boxes",
+        "src/deckfill/sample.py",
+        "    return apply_clamps(S) if region else S",
+        "    return S",
+        ["tests/test_c41_c42_marks.py", "-k", "clamp"],
+    ),
+    "c43-child-dropped": (
+        "a pair destination drops each point's children instead of writing them into its B",
+        "src/deckfill/sample_plan.py",
+        "        if grp[1:]:\n            fills.append(fill_box(B, \"pbody\"",
+        "        if False:\n            fills.append(fill_box(B, \"pbody\"",
+        ["tests/test_c24_c27_sample_text.py", "tests/test_c43_pairs.py", "-k", "pairs or golden"],
+    ),
+    "c43-child-in-b2": (
+        "a pair destination writes every point's children into the second pair's B",
+        "src/deckfill/sample_plan.py",
+        "        u, H, B = _union(S, h, b), S.box(h), S.box(b)",
+        "        u, H, B = _union(S, h, b), S.box(h), S.box(g[1][1] if len(g) > 1 else b)",
+        ["tests/test_c24_c27_sample_text.py", "tests/test_c43_pairs.py", "-k", "pairs or golden"],
+    ),
+    "c44-no-title-growth": (
+        "a title that does not fit at full size never grows",
+        "src/deckfill/sample_plan.py",
+        "    t = fills[0] if fills else None\n    if t is None or t.role != \"title\"",
+        "    t = None\n    if t is None or t.role != \"title\"",
+        ["tests/test_c44_titlegrow.py"],
+    ),
+    "c46-orphan-kept": (
+        "Q9-3 reverted: a title that leaves one glyph alone on its last line keeps its first fitting size",
+        "src/deckfill/sample_plan.py",
+        "            if title and items and orphaned(items, f):",
+        "            if False:",
+        ["tests/test_c46_round1.py", "-k", "q93 or condensed"],
+    ),
+    "c46-condensed-off": (
+        "QA round 2 reverted: the title orphan check runs at the D12 Latin width only, so a condensed face's lone glyph stays",
+        "src/deckfill/sample_plan.py",
+        "(last_line(items, f, w) for w in (LATIN_EM, CONDENSED_EM))",
+        "(last_line(items, f, w) for w in (LATIN_EM,))",
+        ["tests/test_c46_round1.py", "-k", "condensed"],
+    ),
+    "c46-frame-kept": (
+        "Q9-4 reverted: a line-only frame with no fill element is not a backing, so it stays behind its cleared caption",
+        "src/deckfill/sample.py",
+        "    return has_line and (ref is None or ref.get(\"idx\", \"0\") == \"0\")",
+        "    return False",
+        ["tests/test_c46_round1.py", "-k", "q94"],
+    ),
+    "c46-f4-any-partner": (
+        "Codex F4 reverted: C23 takes any other text box as a T5 partner, so geometry from a non-pair passes",
+        "tests/sample_look.py",
+        "    for (h, b), H, B in t5_pairs(s_sh, s_bx, hidden, sw, sh, size_of):",
+        "    for (h, b), H, B in [((x, y), s_bx[x], s_bx[y]) for x in s_bx for y in s_bx if x != y and i in (x, y)]:",
+        ["tests/test_c46_round1.py", "-k", "f4"],
+    ),
+    "c46-r23-no-group": (
+        "Codex round 2 R2-3 reverted: C23 allows any T5 pair's geometry without a complete pair group",
+        "tests/sample_look.py",
+        "    return {(pr, cl(pr[0]), cl(pr[1])) for pr in pairs if pr in allowed}",
+        "    return {(pr, cl(pr[0]), cl(pr[1])) for pr in pairs}",
+        ["tests/test_c46_round1.py", "-k", "r2_3 or f4"],
+    ),
+    "c45-refine-missing-layout": (
+        "the first-draft line stays hidden after a download on the layout route",
+        "docs/app.js",
+        '  $("refine-note").hidden = false;',
+        '  $("refine-note").hidden = state.route === "layout";',
+        ["node", "tests/e2e/c9_privacy.mjs"],
     ),
 }
 

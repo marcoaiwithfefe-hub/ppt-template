@@ -15,15 +15,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def main() -> int:
-    rep = json.loads((ROOT / "qa" / "e2e" / "c9-report.json").read_text())
-    s = rep["session"]
+def check(s: dict, link_outs: set, norm, tested: dict) -> bool:
+    """One session run (rev 9: the C9 session runs once per user agent). True when it passes."""
     ready = s["tReady"]
-    html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
-    anchors = set(re.findall(r'<a\s[^>]*href="(https?://[^"]+)"', html))
-    norm = lambda u: u.rstrip("/")  # noqa: E731
-    link_outs = {norm(a) for a in anchors}
-
     after = [r for r in s["requests"] if r["t"] > ready]
     page_requests = [r for r in after if not (r["type"] == "document" and norm(r["url"]) in link_outs)]
     server_after = [r for r in s["serverLog"] if r["t"] > ready]
@@ -33,9 +27,7 @@ def main() -> int:
     downloads = s.get("tDownloads") or []
     idle_after_last = bool(downloads) and "tIdleStart" in s and s["tIdleStart"] >= max(downloads)
     idle_s = (s["tIdleEnd"] - s["tIdleStart"]) / 1000 if idle_after_last else 0
-    tested = rep.get("tested", {})
-
-    print(f"tested commit {tested.get('commit', '?')[:12]}{' (dirty)' if tested.get('dirty') else ''}")
+    print(f"run {s.get('ua', '?')} ({s.get('cjkFace', '?')})")
     print(f"session {session_s:.0f} s; {len(s['requests'])} browser requests, {len(s['serverLog'])} server hits")
     print(f"downloads in the session: {len(downloads)}; idle starts after the last one: {'yes' if idle_after_last else 'no'}")
     print(f"idle after the last download: {idle_s:.1f} s")
@@ -44,11 +36,27 @@ def main() -> int:
           f"({', '.join(sorted({r['url'] for r in after if r not in page_requests}))})")
     print(f"after ready: {len(page_requests)} page requests, {len(server_after)} server hits, "
           f"{len(s.get('violations', []))} blocked attempts")
-    print(f"fills after ready: {len(s['fills'])} with downloads, plus one offline")
-    failed = page_requests or server_after or before_other or s.get("violations") or idle_s < 30 or tested.get("dirty")
+    failed = page_requests or server_after or before_other or s.get("violations") or idle_s < 30
     print("FAIL" if failed else "PASS: zero page requests after ready")
-    return 1 if failed else 0
+    return not failed
 
+
+def main() -> int:
+    rep = json.loads((ROOT / "qa" / "e2e" / "c9-report.json").read_text())
+    html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+    anchors = set(re.findall(r'<a\s[^>]*href="(https?://[^"]+)"', html))
+    norm = lambda u: u.rstrip("/")  # noqa: E731
+    link_outs = {norm(a) for a in anchors}
+    tested = rep.get("tested", {})
+    print(f"tested commit {tested.get('commit', '?')[:12]}{' (dirty)' if tested.get('dirty') else ''}")
+    session = rep["session"]
+    runs = session.get("runs") or [session]  # rev 9: one run per user agent
+    ok = all([check(s, link_outs, norm, tested) for s in runs])
+    print(f"fills after ready: {len(session['fills'])} with downloads across {len(runs)} runs, plus one offline each")
+    if tested.get("dirty"):
+        print("FAIL: the tested tree was dirty")
+        return 1
+    return 0 if ok else 1
 
 if __name__ == "__main__":
     sys.exit(main())

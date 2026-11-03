@@ -28,10 +28,12 @@ from .fill import (
     footer_for_type,
     remove_slides,
 )
+from .cjk import has_chinese, needs_split, stretches
 from .package import RT_SLIDE, check_integrity
 from .sample import (
     Styles,
     _is_hidden,
+    cjk_rpr,
     clearing,
     donor,
     grown_groups,
@@ -117,10 +119,28 @@ def _clear_text(sp) -> None:
     etree.SubElement(tx, q("a:p"))
 
 
-def _write(sp, sbox, bf, l2_ppr) -> None:
+def _line(ppr, spec, size: int, text: str):
+    """Rev 9 T2: the paragraph's a:lnSpc when T2 changes it (scaled to the written size, the Chinese floors); the
+    a:pPr is made when the paragraph has none. Returns the a:pPr, or None when there is none to write."""
+    want = spec.ln_written(size, has_chinese(text))
+    if want is None or want == spec.ln_written(spec.size, False):
+        return ppr
+    if ppr is None:
+        ppr = etree.Element(q("a:pPr"))
+    for old in ppr.findall(q("a:lnSpc")):
+        ppr.remove(old)
+    ln = etree.Element(q("a:lnSpc"))
+    etree.SubElement(ln, q("a:spcPts" if want[0] == "pts" else "a:spcPct"), val=str(want[1]))
+    ppr.insert(0, ln)
+    return ppr
+
+
+def _write(sp, sbox, bf, l2_ppr, face: str) -> None:
     """Replace a destination box's paragraphs (D12 text): each written paragraph copies the donor paragraph's a:pPr
-    (level-2 paragraphs take the box's level-2 properties when defined, else the donor's with lvl="1"), each run the
-    donor run's a:rPr (a field's, for a field-only box), with the plan's size when the box shrinks."""
+    (level-2 paragraphs take the box's level-2 properties when defined, else the donor's with lvl="1"), with rev 9 T2's
+    line spacing; each run the donor run's a:rPr (a field's, for a field-only box), with the plan's size when the box
+    shrinks. Rev 9 T1: in a Latin-only face, a paragraph holding Chinese is cut into Chinese and other stretches, each
+    its own run, the Chinese ones in face (sample.cjk_rpr)."""
     para, run = donor(sp)
     d_ppr = None if para is None else para.find(q("a:pPr"))
     d_rpr = None if run is None else run.find(q("a:rPr"))
@@ -133,17 +153,23 @@ def _write(sp, sbox, bf, l2_ppr) -> None:
             ppr = copy.deepcopy(d_ppr) if d_ppr is not None else None
         else:
             ppr = copy.deepcopy(l2_ppr)
+        spec = sbox.lvl1 if lvl == 1 else sbox.lvl2
+        size = bf.sizes[0] if lvl == 1 else bf.sizes[1]
+        ppr = _line(ppr, spec, size or spec.size, text)
         if ppr is not None:
             p.append(ppr)
-        r = etree.SubElement(p, q("a:r"))
-        rpr = copy.deepcopy(d_rpr) if d_rpr is not None else etree.Element(q("a:rPr"))
-        if rpr.tag != q("a:rPr"):
-            rpr.tag = q("a:rPr")
-        size = bf.sizes[0] if lvl == 1 else bf.sizes[1]
-        if size:
-            rpr.set("sz", str(size))
-        r.append(rpr)
-        etree.SubElement(r, q("a:t")).text = text
+        segs = stretches(text) if needs_split(sbox.faces[lvl - 1], text) else [(False, text)]
+        for zh, seg in segs:
+            r = etree.SubElement(p, q("a:r"))
+            if zh:
+                rpr = cjk_rpr(d_rpr, face, sbox.display)
+            else:
+                rpr = copy.deepcopy(d_rpr) if d_rpr is not None else etree.Element(q("a:rPr"))
+                rpr.tag = q("a:rPr")
+            if size:
+                rpr.set("sz", str(size))
+            r.append(rpr)
+            etree.SubElement(r, q("a:t")).text = seg
 
 
 def _put_xfrm(sp, local) -> None:
@@ -338,7 +364,9 @@ def fill_sample(info, pkg, plan) -> bytes:
         for bf in ps.boxes:
             w = walked[bf.sid]
             para, _ = donor(w.el)
-            _write(w.el, S.box(bf.sid), bf, level2_written(w.el, styles, para))
+            _write(w.el, S.box(bf.sid), bf, level2_written(w.el, styles, para), plan.cjk_face)
+            if bf.role == "echo":  # rev 9 T3: one line at its own size, its box (and bleed) kept
+                w.el.find(q("p:txBody")).find(q("a:bodyPr")).set("wrap", "none")
             if bf.box is not None and bf.backing:
                 _set_boxes([(w, bf.box), (walked[bf.backing[0]], bf.backing[1])])
             elif bf.box is not None:

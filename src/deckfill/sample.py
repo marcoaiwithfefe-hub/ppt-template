@@ -11,7 +11,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from lxml import etree
 
@@ -31,7 +31,7 @@ from .template import (
     ph_type,
     placeholders,
 )
-from .xmlsafe import R_NS, q
+from .xmlsafe import R_NS, parse, q
 
 DEF_SIZE = 1800
 INSTRUCTION_PHRASES = (
@@ -271,7 +271,32 @@ class LevelSpec:
                 return int(emu * 1.2 * val)
             return default
 
-        return Level(emu, sp(self.ln, int(emu * 1.2)), sp(self.bef, 0), sp(self.aft, 0), self.margin)
+        return Level(emu, self.line_at(size, False), sp(self.bef, 0), sp(self.aft, 0), self.margin,
+                     self.line_at(size, True))
+
+    def ln_written(self, size: int, chinese: bool) -> tuple[str, int] | None:
+        """Rev 9 T2: the a:lnSpc a paragraph written at size carries, as ('pts', hundredths of a point) or ('pct',
+        thousandths of a percent); None when the level has no line spacing (single, 1.2 times the size). spcPts is
+        scaled by the written size over this level's effective size, rounded down to a hundredth of a point, and on a
+        paragraph holding Chinese raised to at least 1.1 times the written size; spcPct below 90% is raised to 90% on
+        a paragraph holding Chinese."""
+        kind, val = self.ln
+        if kind == "pts":
+            w = round(val / 127) * size // self.size
+            return ("pts", max(w, -(-11 * size // 10)) if chinese else w)
+        if kind == "pct":
+            v = round(val * 100000)
+            return ("pct", max(v, 90000) if chinese else v)
+        return None
+
+    def line_at(self, size: int, chinese: bool) -> int:
+        """The line height the estimate uses, EMU: exactly what ln_written writes (C40)."""
+        w = self.ln_written(size, chinese)
+        if w is None:
+            return int(size * EMU_PER_PT // 100 * 1.2)
+        if w[0] == "pts":
+            return w[1] * EMU_PER_PT // 100
+        return int(size * EMU_PER_PT // 100 * 1.2 * w[1] / 100000)
 
 
 def _spacing(ppr, tag):
@@ -312,6 +337,7 @@ class Styles:
     layout_el: object
     master_el: object
     default_style: object  # presentation p:defaultTextStyle
+    theme: dict | None = None  # rev 9 T1: the master theme's font references (+mj-lt, +mn-ea, ...) to their names
 
     def ph_chain(self, sp, level: int):
         """a:lvlNpPr elements a placeholder inherits, nearest first: layout placeholder, master placeholder, master
@@ -373,6 +399,101 @@ def level_spec(sp, styles: Styles, para, run, level: int) -> LevelSpec:
     vals = {tag: _first(chain, lambda e, t=tag: _spacing(e, t)) or ("", 0.0) for tag in ("lnSpc", "spcBef", "spcAft")}
     margin = _first(chain, lambda e: int(e.get("marL")) if e is not None and e.get("marL") is not None else None) or 0
     return LevelSpec(size, vals["lnSpc"], vals["spcBef"], vals["spcAft"], max(margin, 0))
+
+
+def theme_fonts(master) -> dict:
+    """Rev 9 T1: a master's theme font references, +mj-lt, +mj-ea, +mj-cs, +mn-lt, +mn-ea and +mn-cs, to the names its
+    theme gives them (empty when unnamed)."""
+    from pptx.opc.constants import RELATIONSHIP_TYPE as RT
+
+    out: dict[str, str] = {}
+    try:
+        root = parse(master.part.part_related_by(RT.THEME).blob, "theme")
+    except KeyError:
+        return out
+    for tag, key in (("majorFont", "mj"), ("minorFont", "mn")):
+        f = next(root.iter(q("a:" + tag)), None)
+        for t, k in (("latin", "lt"), ("ea", "ea"), ("cs", "cs")):
+            e = None if f is None else f.find(q("a:" + t))
+            out[f"+{key}-{k}"] = "" if e is None else (e.get("typeface") or "")
+    return out
+
+
+def _named_face(el, theme) -> str:
+    """T1 at one element (a:rPr or a:defRPr): its a:ea typeface, else its a:latin typeface, a theme reference resolved;
+    an empty name counts as none."""
+    if el is None:
+        return ""
+    for t in ("ea", "latin"):
+        e = el.find(q("a:" + t))
+        if e is not None:
+            name = e.get("typeface") or ""
+            if name.startswith("+"):
+                name = (theme or {}).get(name, "")
+            if name.strip():
+                return name
+    return ""
+
+
+def run_chain(sp, styles: Styles, ppr, level: int) -> list:
+    """The a:defRPr elements a run of a paragraph at this level inherits after its own a:rPr (the D12 walk used for
+    size): the paragraph's, the box's list style, then the placeholder or default text style chain."""
+    out = [None if ppr is None else ppr.find(q("a:defRPr"))]
+    for e in [lvl_ppr(_lst(sp), level)] + styles.chain(sp, level):
+        out.append(None if e is None else e.find(q("a:defRPr")))
+    return out
+
+
+def resolved_face(rpr, chain, theme) -> str:
+    for el in [rpr] + chain:
+        name = _named_face(el, theme)
+        if name:
+            return name
+    return ""
+
+
+def effective_bold(rpr, chain) -> bool:
+    for el in [rpr] + chain:
+        if el is not None and el.get("b") is not None:
+            return el.get("b") in ("1", "true")
+    return False
+
+
+_AFTER_LATIN = ("ea", "cs", "sym", "hlinkClick", "hlinkMouseOver", "rtl", "extLst")
+
+
+def _face_el(rpr, tag: str, after: tuple[str, ...]):
+    """The rPr's a:latin or a:ea, made when missing at its schema position (before the first of after)."""
+    el = rpr.find(q("a:" + tag))
+    if el is not None:
+        el.attrib.clear()
+        return el
+    el = etree.Element(q("a:" + tag))
+    nxt = next((c for c in rpr if isinstance(c.tag, str) and etree.QName(c).localname in after), None)
+    if nxt is None:
+        rpr.append(el)
+    else:
+        nxt.addprevious(el)
+    return el
+
+
+def cjk_rpr(rpr, face: str, display: bool):
+    """Rev 9 T1: the a:rPr of a Chinese stretch: a copy of the donor's (an element or its serialised bytes), with the
+    Chinese face in a:latin and a:ea (the old face's panose, pitch and charset dropped with it), spc="0" and i="0"
+    written so inherited tracking and italic cannot apply, lang="zh-HK", and b="1" on display text."""
+    if isinstance(rpr, (bytes, bytearray)):
+        el = parse(rpr, "rPr") if rpr else etree.Element(q("a:rPr"))
+    else:
+        el = copy.deepcopy(rpr) if rpr is not None else etree.Element(q("a:rPr"))
+    el.tag = q("a:rPr")
+    el.set("lang", "zh-HK")
+    el.set("spc", "0")
+    el.set("i", "0")
+    if display:
+        el.set("b", "1")
+    _face_el(el, "latin", _AFTER_LATIN).set("typeface", face)
+    _face_el(el, "ea", _AFTER_LATIN[1:]).set("typeface", face)
+    return el
 
 
 def level2_ppr(sp, styles: Styles):
@@ -497,6 +618,10 @@ class SBox:
     ppr1: int  # bytes of the a:pPr a level-1 paragraph carries
     ppr2: int  # bytes of the a:pPr a level-2 paragraph carries
     rpr: int  # bytes of the donor a:rPr every written run carries
+    faces: tuple[str, str] = ("", "")  # rev 9 T1: the named face of a written level-1 and level-2 run, "" for none
+    display: bool = False  # rev 9 T1: display text (effective size at or above the Q2 bar, or effective bold)
+    rpr_xml: bytes = b""  # rev 9 T1: the donor a:rPr, serialised (the planner sizes the Chinese runs from it)
+    orig: tuple | None = None  # rev 9 T4: the sample's own slide-space box when x, y, cx, cy were clamped
 
     @property
     def area(self) -> int:
@@ -539,6 +664,11 @@ class Sample:
     fixed: tuple = ()  # QA round 2 R3: drawn bounds of the layout's and master's visible non-placeholder shapes
     footers: tuple = ()  # QA round 2 R3: every box a rebuilt footer can take (an upper bound)
     error: str = ""  # code review F2: why reading this slide failed (reason "unreadable"); "" when it read
+    marks: tuple[int, ...] = ()  # rev 9 T3: watermark text boxes (never a title, label, body or destination)
+    echoes: tuple[int, ...] = ()  # rev 9 T3: watermarks whose text equals the title region's: written with the title
+    pair_groups: tuple = ()  # rev 9 T5: groups of (H, B) shape-id pairs, each in its B slot group's order
+    pair_labels: tuple = ()  # rev 9 T5: (H, label) for each pair with a number label
+    edge: tuple[int, ...] = ()  # rev 9 QA round 1 Q9-1: destination boxes crossing a slide edge that T4 cannot clamp
 
     def box(self, sid: int) -> SBox:
         return next(b for b in self.boxes if b.sid == sid)
@@ -638,6 +768,94 @@ def slot_groups(bodies, sw: int, sh: int) -> list[tuple]:
     return out
 
 
+@dataclass(frozen=True)
+class _UBox:
+    x: int
+    y: int
+    cx: int
+    cy: int
+
+
+_SEQ = re.compile(r"^([0-9]{1,2})(\.?)$")
+
+
+def pair_box(boxes, h: int, b: int) -> tuple[int, int, int, int]:
+    """T5: the union of a pair's H and B slide-space boxes."""
+    by = {x.sid: x for x in boxes}
+    return union([by[h], by[b]])
+
+
+MAX_PAIR_BODIES = 64  # security audit F1: T5 pairs are read on slides with at most this many body boxes
+
+
+def read_pairs(bodies, labels, slots):
+    """T5 reading. A pair is a heading H and a body B among the body boxes: B's top at or below H's top and within 2
+    of H's line heights (1.2 times H's effective size) below H's bottom, horizontal overlap at least half the narrower
+    box, B's effective size smaller than H's, and no other body box between H's bottom and B's top inside the overlap.
+    H boxes are taken in reading order, each with its nearest qualifying B; a box is in one pair at most. A pair group
+    is a D12 slot group made only of B boxes whose H boxes share one effective size, in the slot group's order. A pair's
+    number label is a sequence-number label above or left of H within 2 of H's line heights, overlapping the pair's
+    union across. Returns (pairs, pair groups, (H, label) pairs). Security audit F1: a slide with more than
+    MAX_PAIR_BODIES body boxes reads no pairs (the search is cubic in body boxes and runs on the page's main thread)."""
+    if len(bodies) > MAX_PAIR_BODIES:
+        return (), (), ()
+    by = {b.sid: b for b in bodies}
+    taken: set[int] = set()
+    pairs: list[tuple[int, int]] = []
+    for h in _reading(bodies):
+        if h.sid in taken:
+            continue
+        lh = 1.2 * h.size * EMU_PER_PT / 100
+        best = None
+        for b in bodies:
+            if b is h or b.sid in taken or b.size >= h.size or b.y < h.y or b.y > h.y + h.cy + 2 * lh:
+                continue
+            lo, hi = max(h.x, b.x), min(h.x + h.cx, b.x + b.cx)
+            if hi - lo < min(h.cx, b.cx) / 2:
+                continue
+            top, bot = h.y + h.cy, b.y
+            if any(o is not h and o is not b and o.x < hi and o.x + o.cx > lo and o.y < bot and o.y + o.cy > top
+                   for o in bodies):
+                continue
+            key = (b.y - top, b.y, b.x)
+            if best is None or key < best[0]:
+                best = (key, b)
+        if best is not None:
+            pairs.append((h.sid, best[1].sid))
+            taken |= {h.sid, best[1].sid}
+    of_b = {b: (h, b) for h, b in pairs}
+    groups = []
+    for g in slots:
+        if len(g) >= 2 and all(s in of_b for s in g):
+            prs = tuple(of_b[s] for s in g)
+            if len({by[h].size for h, _ in prs}) == 1 and prs not in groups:
+                groups.append(prs)
+    marks = []
+    for h, b in pairs:
+        H, u = by[h], union([by[h], by[b]])
+        lh = 1.2 * H.size * EMU_PER_PT / 100
+        best = None
+        for lb in labels:
+            if not _SEQ.match(lb.text.strip()):
+                continue
+            above = lb.y + lb.cy <= H.y and H.y - (lb.y + lb.cy) <= 2 * lh and lb.x < u[0] + u[2] and lb.x + lb.cx > u[0]
+            left = lb.x + lb.cx <= H.x and H.x - (lb.x + lb.cx) <= 2 * lh and lb.y < u[1] + u[3] and lb.y + lb.cy > u[1]
+            if above or left:
+                gap = (H.y - lb.y - lb.cy) if above else (H.x - lb.x - lb.cx)
+                if best is None or gap < best[0]:
+                    best = (gap, lb.sid)
+        if best is not None:
+            marks.append((h, best[1]))
+    return tuple(pairs), tuple(groups), tuple(marks)
+
+
+def label_text(sample_text: str, i: int) -> str:
+    """T5: a used pair's number label written as its position i in the sample label's own format (1., 01)."""
+    m = _SEQ.match(sample_text.strip())
+    digits, dot = (m.group(1), m.group(2)) if m else ("1", "")
+    return (f"{i:0{len(digits)}d}" if digits.startswith("0") else str(i)) + dot
+
+
 def _overlap_x(a, b) -> bool:
     return not (a.x + a.cx <= b.x or b.x + b.cx <= a.x)
 
@@ -694,14 +912,14 @@ def covered(rects, sw: int, sh: int, n: int = 160) -> float:
     return sum(sum(r) for r in hit) / (n * n)
 
 
-def decoration_rects(sptree) -> list:
+def decoration_rects(sptree, skip=frozenset()) -> list:
     """Slide-space boxes of non-placeholder pictures, groups and shapes with a fill or line (text shapes with a
     fill count); placeholders never count (D11)."""
     out = []
     for w in walk(sptree):
         el = w.el
         tag = etree.QName(el).localname
-        if tag == "sp" and ph_of(el) is not None:
+        if tag == "sp" and (ph_of(el) is not None or shape_id(el) in skip):
             continue
         if tag == "pic":
             nv = el.find(q("p:nvPicPr"))
@@ -773,7 +991,9 @@ def is_rect_geom(el) -> bool:
 
 def backing_shape(el, turned: bool) -> bool:
     """R5 backing test on a text-free p:sp: rectangular geometry (is_rect_geom), unrotated and unflipped (its groups
-    too), and filled with a:solidFill, or with a:noFill and a line. A picture, gradient or pattern fill never is."""
+    too), and filled with a:solidFill, or with no fill and a line. A picture, gradient or pattern fill never is. No
+    fill is a:noFill, or (rev 9 QA round 1 Q9-4) no fill element at all with no theme style fill reference: Canva's
+    caption frames carry a line and no fill element."""
     if turned or not is_rect_geom(el):
         return False
     pr = el.find(q("p:spPr"))
@@ -781,7 +1001,13 @@ def backing_shape(el, turned: bool) -> bool:
         return True
     ln = pr.find(q("a:ln"))
     has_line = ln is not None and ln.find(q("a:noFill")) is None and (len(ln) > 0 or ln.get("w") is not None)
-    return pr.find(q("a:noFill")) is not None and has_line
+    if pr.find(q("a:noFill")) is not None:
+        return has_line
+    if any(pr.find(q(t)) is not None for t in FILL_TAGS):
+        return False
+    style = el.find(q("p:style"))
+    ref = None if style is None else style.find(q("a:fillRef"))
+    return has_line and (ref is None or ref.get("idx", "0") == "0")
 
 
 def _rot(el) -> int:
@@ -938,6 +1164,9 @@ def footer_boxes(tree, layout_el=None, master_el=None) -> list:
 # ---------------------------------------------------------------------------------------------
 
 
+MAX_SAMPLE_TEXT_BOXES = 500  # security audit F1: a sample slide with more text boxes is unusable (reason too_big)
+
+
 def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, master_bg, layout_master_cover: float,
                 fixed=(), footers=(), deck_footers=None) -> Sample:
     el = slide._element
@@ -946,8 +1175,12 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
     sptree = csld.find(q("p:spTree"))
     walked = walk(sptree)
     nshapes = sum(1 for w in walked)
+    ntext = sum(1 for w in walked if etree.QName(w.el).localname == "sp" and has_text(w.el))
+    if ntext > MAX_SAMPLE_TEXT_BOXES:  # security audit F1: never read, never usable
+        return unreadable(k, slide, f"{ntext} text boxes", reason="too_big")
     graphic = any(etree.QName(w.el).localname == "graphicFrame" for w in walked)
     boxes: list[SBox] = []
+    by_sid: dict[int, object] = {}
     hidden_ids: set[int] = set()
     turned_ids: set[int] = set()
     all_text: list[str] = []
@@ -990,15 +1223,25 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         ppr = None if para is None else para.find(q("a:pPr"))
         rpr = None if run is None else run.find(q("a:rPr"))
         ppr1 = len(etree.tostring(ppr)) if ppr is not None else 0
-        ppr2 = len(etree.tostring(level2_written(sp, styles, para)))
+        l2_ppr = level2_written(sp, styles, para)
+        ppr2 = len(etree.tostring(l2_ppr))
+        chain1, chain2 = run_chain(sp, styles, ppr, lvl), run_chain(sp, styles, l2_ppr, 2)
+        faces = (resolved_face(rpr, chain1, styles.theme), resolved_face(rpr, chain2, styles.theme))
+        display = l1.size * EMU_PER_PT >= 4 * sh or effective_bold(rpr, chain1)  # T1: the Q2 bar, or bold
+        rxml = etree.tostring(rpr) if rpr is not None else b""
         boxes.append(SBox(sid, x, y, cx, cy, text, l1.size, ph is not None, decorated(sp), why, attrs.get("wrap") == "none", insets(attrs), l1, l2, l2_def,
-                          ppr1, ppr2, len(etree.tostring(rpr)) if rpr is not None else 0))
+                          ppr1, ppr2, len(rxml), faces, display, rxml))
+        by_sid[sid] = sp
     hidden_slide = el.get("show") in ("0", "false")
-    region = title_region(boxes, turned_ids)
+    # T3: watermarks are never a title anchor, fragment, label or body box
+    marks = [b for b in boxes if watermark(by_sid[b.sid], styles)]
+    mark_ids = {b.sid for b in marks}
+    plain = [b for b in boxes if b.sid not in mark_ids]
+    region = title_region(plain, turned_ids)
     region_ids = {b.sid for b in region}
-    labels = [b for b in boxes if b.sid not in region_ids and is_label(b.text)]
+    labels = [b for b in plain if b.sid not in region_ids and is_label(b.text)]
     label_ids = {b.sid for b in labels}
-    bodies = _reading([b for b in boxes if b.sid not in region_ids and b.sid not in label_ids])
+    bodies = _reading([b for b in plain if b.sid not in region_ids and b.sid not in label_ids])
     reason = ""
     title_text = " ".join(b.text.strip() for b in region)
     whole = " ".join(t.strip() for t in all_text)
@@ -1013,32 +1256,19 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
     elif closing(title_text, whole):
         reason = "closing"
     tbox = union(region) if region else (0, 0, 0, 0)
-    tarea = tbox[2] * tbox[3]
-    classes = []
-    slots = slot_groups(bodies, sw, sh)
-    if region:
-        if not bodies or sum(b.area for b in bodies) < 0.1 * tarea:
-            classes.append("section")
-        two = (len(bodies) == 2 and not _overlap_x(bodies[0], bodies[1])) or any(
-            len(g) == 2 and not _overlap_x(*[next(b for b in bodies if b.sid == s) for s in g]) for g in slots
-        )
-        if two:
-            classes.append("two")
-        if bodies:
-            classes.append("content")
-    subtitle = max(bodies, key=lambda b: (b.area, -b.y, -b.x)).sid if bodies else None
+    roles = _roles(region, bodies, labels, tbox, sw, sh)
     # D11 design of its own
     own_bg = resolved_bg(el, part)
     design = False
     if own_bg is not None and own_bg != (layout_bg if layout_bg is not None else master_bg):
         design = True
-    if boxes and all(not b.placeholder for b in boxes):
+    if plain and all(not b.placeholder for b in plain):  # T3: watermarks do not count toward the design test
         design = True
-    if covered(decoration_rects(sptree), sw, sh) >= 0.15 and layout_master_cover < 0.05:
+    if covered(decoration_rects(sptree, mark_ids), sw, sh) >= 0.15 and layout_master_cover < 0.05:
         design = True
     words = " ".join(title_text.split())
     leaves, groups = shape_tree_leaves(sptree, styles)
-    return Sample(
+    S = Sample(
         k=k,
         id=f"s{k}",
         part=str(part.partname),
@@ -1050,9 +1280,6 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         title_box=tbox,
         labels=tuple(b.sid for b in _reading(labels)),
         bodies=tuple(b.sid for b in bodies),
-        subtitle=subtitle,
-        slots=tuple(slots),
-        classes=tuple(classes),
         boxes=tuple(boxes),
         words=words[:24] + ("…" if len(words) > 24 else ""),
         turned=bool(turned_ids),
@@ -1064,7 +1291,164 @@ def read_sample(k: int, slide, styles: Styles, sw: int, sh: int, layout_bg, mast
         groups=groups,
         fixed=tuple(fixed) if el.get("showMasterSp") not in ("0", "false") else (),
         footers=tuple(footers),
+        marks=tuple(b.sid for b in marks),
+        echoes=tuple(b.sid for b in marks if region and normalised(b.text) == normalised(title_text)),
+        **roles,
     )
+    if not region:
+        return S
+    S = apply_clamps(S)
+    edge = frozenset(S.edge) & frozenset(S.bodies)
+    # rev 9 QA round 1 Q9-1: a body box T4 cannot clamp leaves the choice; the roles are read again without it
+    return replace(S, **_roles(region, bodies, labels, tbox, sw, sh, edge)) if edge else S
+
+
+def _roles(region, bodies, labels, tbox, sw: int, sh: int, edge=frozenset()) -> dict:
+    """D12 and T5 destination roles of a read sample: the subtitle (the body box with the largest area), the slot
+    groups, the pair groups and the classes. Rev 9 QA round 1 Q9-1: a box in edge (one T4 cannot clamp) is not a
+    candidate: slot and pair groups holding one are dropped, it is never one of a sample's only two column boxes, and
+    the subtitle is the largest other body box. Only when no other body box remains does it keep the subtitle role
+    (and check-this-slide, as built)."""
+    classes = []
+    slots = [g for g in slot_groups(bodies, sw, sh) if not edge & set(g)]
+    _, pgroups, plabels = read_pairs(bodies, labels, slots)
+    pgroups = tuple(g for g in pgroups if not any(h in edge for h, _ in g))
+    cands = [b for b in bodies if b.sid not in edge]
+    if region:
+        if not bodies or sum(b.area for b in bodies) < 0.1 * tbox[2] * tbox[3]:
+            classes.append("section")
+        two = (len(bodies) == 2 and not edge and not _overlap_x(bodies[0], bodies[1])) or any(
+            len(g) == 2 and not _overlap_x(*[next(b for b in bodies if b.sid == s) for s in g]) for g in slots
+        ) or any(not _overlap_x(*[_UBox(*pair_box(bodies, *pr)) for pr in g[:2]]) for g in pgroups)  # T5
+        if two:
+            classes.append("two")
+        if bodies:
+            classes.append("content")
+    subtitle = max(cands or bodies, key=lambda b: (b.area, -b.y, -b.x)).sid if bodies else None
+    return dict(subtitle=subtitle, slots=tuple(slots), classes=tuple(classes), pair_groups=pgroups, pair_labels=plabels)
+
+
+WATERMARK_ALPHA = 40000  # rev 9 T3: 40%
+
+
+def _alpha_ok(rpr, chain) -> bool:
+    """T3: the run's effective fill (its own, else its inheritance) is a:solidFill whose colour carries a:alpha at
+    or below 40%."""
+    for el in [rpr] + chain:
+        if el is None:
+            continue
+        for c in el:
+            if not isinstance(c.tag, str) or etree.QName(c).localname not in (
+                    "noFill", "solidFill", "gradFill", "blipFill", "pattFill", "grpFill"):
+                continue
+            if etree.QName(c).localname != "solidFill":
+                return False
+            clr = next((x for x in c if isinstance(x.tag, str)), None)
+            al = None if clr is None else clr.find(q("a:alpha"))
+            if al is None:
+                return False
+            v = al.get("val", "100000")
+            return (float(v[:-1]) * 1000 if v.endswith("%") else int(v)) <= WATERMARK_ALPHA
+    return False
+
+
+def watermark(sp, styles: Styles) -> bool:
+    """T3: a text box is a watermark when every run holding text is filled at 40% alpha or less."""
+    tx = sp.find(q("p:txBody"))
+    found = False
+    for par in tx.findall(q("a:p")):
+        ppr = par.find(q("a:pPr"))
+        chain = run_chain(sp, styles, ppr, _lvl(par))
+        for r in par:
+            if r.tag not in (q("a:r"), q("a:fld")):
+                continue
+            t = r.find(q("a:t"))
+            if t is None or not (t.text or "").strip():
+                continue
+            found = True
+            if not _alpha_ok(r.find(q("a:rPr")), chain):
+                return False
+    return found
+
+
+_NON_WORD = re.compile(r"[^\w\s]", re.UNICODE)
+
+
+def normalised(text: str) -> str:
+    """T3: case-folded, punctuation stripped, whitespace collapsed."""
+    return " ".join(_NON_WORD.sub("", text.casefold()).split())
+
+
+def content_margins(boxes, sw: int, sh: int) -> tuple[int, int, int, int]:
+    """T4: per slide edge (left, top, right, bottom), the smallest distance between it and a text box lying wholly
+    on the slide, else 5% of the slide's width or height."""
+    on = [b for b in boxes if b.x >= 0 and b.y >= 0 and b.x + b.cx <= sw and b.y + b.cy <= sh]
+    if not on:
+        return round(0.05 * sw), round(0.05 * sh), round(0.05 * sw), round(0.05 * sh)
+    return (min(b.x for b in on), min(b.y for b in on), min(sw - b.x - b.cx for b in on), min(sh - b.y - b.cy for b in on))
+
+
+def clamped(box, margins, sw: int, sh: int):
+    """T4: each side of the box that crosses a slide edge moved to that edge's content margin; None when no side
+    crosses."""
+    x, y, cx, cy = box
+    x1, y1, x2, y2 = x, y, x + cx, y + cy
+    ml, mt, mr, mb = margins
+    if x1 >= 0 and y1 >= 0 and x2 <= sw and y2 <= sh:
+        return None
+    x1, y1 = (ml if x1 < 0 else x1), (mt if y1 < 0 else y1)
+    x2, y2 = (sw - mr if x2 > sw else x2), (sh - mb if y2 > sh else y2)
+    return x1, y1, x2 - x1, y2 - y1
+
+
+def _holds_a_line(sb: SBox, box, floor: int | None = None) -> bool:
+    """T4: the clamped box still holds one line of the destination's text at its floor (70%, or a display title's T6
+    floor, Codex rev 9 round 1 E1): one em wide and one line (the taller of the Latin and Chinese line heights) high
+    inside its insets."""
+    if floor is None:
+        floor = (sb.lvl1.size * 70 + 4999) // 5000 * 50
+    l, r, t, b = sb.ins
+    em = floor * EMU_PER_PT // 100
+    line = max(sb.lvl1.line_at(floor, False), sb.lvl1.line_at(floor, True))
+    return box[2] - l - r >= em and box[3] - t - b >= line
+
+
+def apply_clamps(S: "Sample") -> "Sample":
+    """T4 on a read sample: every title, subtitle and body destination box crossing a slide edge is pulled inside to
+    the content margins (watermarks excluded). The title clamps as its region's union. A clamp that cannot be written
+    within the group rules (grow_in_groups), or would not hold a line, leaves the sample box and marks the box
+    unmodelled, so a slide using it is "check this slide"."""
+    from .sample_plan import title_floor  # the destination's own floor (E1); sample_plan imports this module
+
+    sw, sh = S.slide
+    marks = set(S.marks)
+    margins = content_margins([b for b in S.boxes if b.sid not in marks], sw, sh)
+    tfloor = title_floor(S, S.box(S.title[0]))[0]
+    new = {b.sid: b for b in S.boxes}
+    title_box = S.title_box
+    edge = []
+    dests = list(S.bodies) + ([S.title[0]] if len(S.title) == 1 else [])
+    for sid in dests:
+        b = new[sid]
+        c = clamped(box_of(b), margins, sw, sh)
+        if c is None:
+            continue
+        if c[2] > 0 and c[3] > 0 and _holds_a_line(b, c, tfloor if sid == S.title[0] else None) and grow_in_groups(S, [(sid, c)]):
+            new[sid] = replace(b, x=c[0], y=c[1], cx=c[2], cy=c[3], orig=box_of(b))
+            if sid == S.title[0]:
+                title_box = c
+        else:
+            new[sid] = replace(b, unmodelled=b.unmodelled or "edge clamp")
+            edge.append(sid)
+    if len(S.title) > 1:
+        c = clamped(S.title_box, margins, sw, sh)
+        if c is not None:
+            if c[2] > 0 and c[3] > 0 and _holds_a_line(new[S.title[0]], c, tfloor) and grow_in_groups(S, [(S.title[0], c)]):
+                title_box = c
+            else:
+                new[S.title[0]] = replace(new[S.title[0]], unmodelled=new[S.title[0]].unmodelled or "edge clamp")
+                edge.append(S.title[0])
+    return replace(S, boxes=tuple(new[b.sid] for b in S.boxes), title_box=title_box, edge=tuple(edge))
 
 
 FOOTER_SLACK = 512  # per footer type: an a:xfrm the fill may add, a new shape id, a slide number's digits
@@ -1101,6 +1485,7 @@ def read_samples(prs) -> tuple[Sample, ...]:
     default_style = prs.part._element.find(q("p:defaultTextStyle"))
     out = []
     cover_cache: dict[str, float] = {}
+    themes: dict[str, dict] = {}
     fixed_cache: dict[str, list] = {}
     # R3: every box a rebuilt footer can take on a copy: footer placeholders of every slide on the same layout (D4
     # step 1's examples), of the layout and of its master (an upper bound, so the grid never under-counts)
@@ -1127,7 +1512,9 @@ def read_samples(prs) -> tuple[Sample, ...]:
         try:
             layout = slide.slide_layout
             master = layout.slide_master
-            styles = Styles(layout._element, master._element, default_style)
+            if str(master.part.partname) not in themes:
+                themes[str(master.part.partname)] = theme_fonts(master)
+            styles = Styles(layout._element, master._element, default_style, themes[str(master.part.partname)])
             lid = str(layout.part.partname)
             lay_tree = layout._element.find(q("p:cSld")).find(q("p:spTree"))
             mas_tree = master._element.find(q("p:cSld")).find(q("p:spTree"))
@@ -1155,9 +1542,10 @@ def _why(e: Exception) -> str:
     return f"{type(e).__name__}: {e}"[:200]
 
 
-def unreadable(k: int, slide, why: str) -> Sample:
-    """Code review F2: a sample slide whose reading raised (a malformed attribute, an unresolved reference). It is
-    never usable, so neither route uses it, and why it failed stays in the template info (Sample.error)."""
+def unreadable(k: int, slide, why: str, reason: str = "unreadable") -> Sample:
+    """Code review F2: a sample slide whose reading raised (a malformed attribute, an unresolved reference), or (security
+    audit F1, reason too_big) one with more than MAX_SAMPLE_TEXT_BOXES text boxes. It is never usable, so neither route
+    uses it, and why stays in the template info (Sample.error)."""
     def name(get):
         try:
             return str(get())
@@ -1165,7 +1553,7 @@ def unreadable(k: int, slide, why: str) -> Sample:
             return ""
 
     return Sample(k=k, id=f"s{k}", part=name(lambda: slide.part.partname),
-                  layout=name(lambda: slide.slide_layout.part.partname), usable=False, reason="unreadable",
+                  layout=name(lambda: slide.slide_layout.part.partname), usable=False, reason=reason,
                   design=False, title=(), title_box=(0, 0, 0, 0), labels=(), bodies=(), subtitle=None, slots=(),
                   classes=(), boxes=(), words="", turned=False, nbytes=0, nshapes=0, footer_bytes=0, error=why)
 
@@ -1220,6 +1608,8 @@ def dest_boxes(S: Sample, fills, occ=None) -> list:
     occ = drawn(S) if occ is None else occ
     out = []
     for bf in fills:
+        if bf.role in ("echo", "label"):
+            continue  # rev 9: echoes and number labels are written text, never destinations
         if bf.role == "title" and bf.box:
             parts = [occ.get(sid) for sid in S.title]
             if all(parts):
@@ -1238,28 +1628,36 @@ def clearing(S: Sample, fills, area: int) -> tuple[set, set]:
     and lose their text. Title fragments and footer placeholders are handled apart by the fill."""
     fill_ids = {bf.sid for bf in fills}
     occ = drawn(S)
-    dests = dest_boxes(S, fills, occ)
-    cleared = [occ.get(b.sid) or box_of(b) for b in S.boxes if b.sid not in fill_ids]
+    dests = list(zip([bf.sid for bf in fills if bf.role not in ("echo", "label")], dest_boxes(S, fills, occ)))
+    cleared = [(b.sid, occ.get(b.sid) or box_of(b)) for b in S.boxes if b.sid not in fill_ids]
     frags = set(S.title[1:])
+    z = {lf.sid: n for n, lf in enumerate(S.leaves)}  # drawing order
 
-    def goes(box, backing: bool) -> bool:
+    def goes(sid, box, backing: bool) -> bool:
         if box is None or box[2] * box[3] >= CHIP_SHARE * area:
             return False
+        # security audit F1: only a backing needs the cleared boxes it holds (one pass over them per backing, not per leaf)
+        holds = [c for c, cb in cleared if inside(cb, box) >= BACKING_SHARE] if backing else []
+        # rev 9 QA round 1 Q9-4: the backing of a cleared text box other than a title fragment, drawn above a
+        # destination, is not behind it (Canva s6's caption frame 15 inside the joined title's box); a title
+        # fragment's block stays under the joined title (C32)
+        over = backing and any(c not in frags for c in holds)
         # behind a destination that kept its text: it backs the destination's box, or it lies under that box
-        if any(inside(d, box) >= BACKING_SHARE or inside(box, d) >= BACKING_SHARE for d in dests):
+        if any(inside(d, box) >= BACKING_SHARE or inside(box, d) >= BACKING_SHARE for dsid, d in dests
+               if not (over and z.get(sid, -1) > z.get(dsid, -1))):
             return False
-        return not backing or any(inside(c, box) >= BACKING_SHARE for c in cleared)
+        return not backing or bool(holds)
 
     remove, clear = set(), set()
     for lf in S.leaves:
         if lf.tag != "sp" or lf.sid is None or lf.sid in fill_ids or lf.sid in frags or lf.ph in FOOTER_TYPES:
             continue
         if lf.text:
-            if lf.ph or not lf.deco or goes(lf.occ, False):
+            if lf.ph or not lf.deco or goes(lf.sid, lf.occ, False):
                 remove.add(lf.sid)
             else:
                 clear.add(lf.sid)
-        elif not lf.ph and lf.deco and lf.rect and goes(lf.occ, True):  # R5: only a rectangle is a backing
+        elif not lf.ph and lf.deco and lf.rect and goes(lf.sid, lf.occ, True):  # R5: only a rectangle is a backing
             remove.add(lf.sid)
     return remove, clear
 

@@ -1,0 +1,32 @@
+# sample-pairs + outlines/sample/pairs.md, overrides {1: s1, 2: s1, 3: s1}, written by hand from rev 9 T5 on p1 (Marco's
+# Canva slide 2: three heading and body pairs 111/121, 112/122, 113/123, number labels 131 to 133 on backings).
+# The cover takes s1, every other box cleared. 三個目標: two bullets; the 2-slot heading group (111, 112) cannot hold
+# bullet 1 with its child (R7), so the pair group is used: bullet i to H_i, bullet 1's child to B1 (121) as a
+# first-level paragraph, B2 cleared (no children), pair 3 and its label cleared, labels written 1. and 2.
+# 預算: the built column destination (111, 112 as a 2-slot group) fails its per-column test, so the columns go to the
+# first two pairs' H boxes in x order, B1 and B2 cleared, labels 1. and 2. 三點: three bullets fill all three pairs.
+slide 1 s1
+101 1 計劃
+slide 2 s1
+101 1 三個目標
+111 1 本地送貨準時率：92% 升到 97%
+112 1 葵涌倉存貨周轉：45 日減到 35 日
+121 1 試行 AI 排程
+131 1 1.
+132 1 2.
+slide 3 s1
+101 1 預算 港幣 800 萬
+111 1 科技 350 萬
+111 1 車隊 300 萬
+112 1 科技佔 44%
+112 1 車隊佔 37%
+131 1 1.
+132 1 2.
+slide 4 s1
+101 1 三點
+111 1 一
+112 1 二
+113 1 三
+131 1 1.
+132 1 2.
+133 1 3.

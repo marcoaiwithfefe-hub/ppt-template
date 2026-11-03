@@ -1,0 +1,6 @@
+# c46-orphan-kept: Q9-3 reverted: a title that leaves one glyph alone on its last line keeps its first fitting size
+# mutation in src/deckfill/sample_plan.py: '            if title and items and orphaned(items, f):' -> '            if False:'
+# tests: tests/test_c46_round1.py -k q93 or condensed
+FAILED tests/test_c46_round1.py::test_c46_q93_orphan_glyph_steps_the_title_down
+FAILED tests/test_c46_round1.py::test_r2_condensed_estimate_catches_the_orphan
+2 failed, 1 passed, 12 deselected in 0.15s

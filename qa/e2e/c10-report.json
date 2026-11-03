@@ -1,17 +1,23 @@
 {
  "tested": {
-  "commit": "b3717b696f1c081ffa1f6d4d99a6e33cbb3dfdcc",
+  "commit": "c0b548e3f346ddf7048f16c0d280b357d87830fb",
   "dirty": "",
   "files": {
    "fixtures/out/wui-tung.pptx": "506172867849295aabc0fe7f97ae445afba5c5ba4dd602d4697ad54d0f9eb61c",
    "fixtures/out/typed.pptx": "4b9baf779417f2b282024561359ccb58d98e46d0e70c95c69536e4c70ea7a8f2",
    "fixtures/out/sample-design.pptx": "7b8a6810ef0113ae85267ad9438f0e030390c5e0174207ae85d4324e6f2e6486",
-   "qa/e2e/c10-wui-tung.pptx": "6e72c188a21d28f11c4481e53afacdb815414b6c4e95341210f8a52352e33bd4",
-   "qa/e2e/c10-typed-override.pptx": "ec489d4a72e491961ba6b7929704477d65711e311f9b1c7a830b47e68d04691a",
-   "qa/e2e/c28-sample-design.pptx": "37f8f07205343c3e109b5149a4ecec2e678fab3cca65aac0ea7945ddaf42b65b"
+   "fixtures/out/sample-latin-font.pptx": "211610c7af1c4114e2f63ec11a09cde9b091bc4282fbe72ce819b1ee9660da0d",
+   "qa/e2e/c10-wui-tung-mac.pptx": "01307f9fdc89810bd50d7e91c397fa7914cead2c0c8d958828e5ffc63819b365",
+   "qa/e2e/c10-typed-override-mac.pptx": "bd39166662a8bf028e671a923d8e67038ae4b0f6fee64ea1dd16168f0413fc77",
+   "qa/e2e/c28-sample-design-mac.pptx": "2143f15348fd4925a1e77f168021b49c1c92fd705a528cd9ceae14d11839090d",
+   "qa/e2e/c39-latin-font-mac.pptx": "ade8a96b63309758b165d2c7f87d57c25c59402bf3a39013899a81a7029888cc",
+   "qa/e2e/c10-wui-tung-windows.pptx": "6dedbfaf286743f54928194b074ab1a1155ed0d03da587cd901c590e3d7187c3",
+   "qa/e2e/c10-typed-override-windows.pptx": "6a5c5464bc4bce5809321340064a42aa869b994ca42b8303b438d7eaa082370a",
+   "qa/e2e/c28-sample-design-windows.pptx": "6688668b02410184cc68c8aba5db428a22225e3dd5f4ed73c5d539e2085f8910",
+   "qa/e2e/c39-latin-font-windows.pptx": "77ec8e1a674346f24d1a1e6d8f8a1b210762a0953fff2e3c492a2f4e89f9ce5c"
   }
  },
- "browser_run": "b3717b696f1c081ffa1f6d4d99a6e33cbb3dfdcc",
+ "browser_run": "c0b548e3f346ddf7048f16c0d280b357d87830fb",
  "results": [
   {
    "template": "wui-tung.pptx",
@@ -38,6 +44,49 @@
     "4": "s5"
    },
    "parts": 53,
+   "differ": []
+  },
+  {
+   "template": "sample-latin-font.pptx",
+   "route": "sample",
+   "override": null,
+   "overrides": null,
+   "parts": 49,
+   "differ": []
+  },
+  {
+   "template": "wui-tung.pptx",
+   "route": "layout",
+   "override": null,
+   "overrides": null,
+   "parts": 50,
+   "differ": []
+  },
+  {
+   "template": "typed.pptx",
+   "route": "layout",
+   "override": "/ppt/slideLayouts/slideLayout3.xml",
+   "overrides": null,
+   "parts": 52,
+   "differ": []
+  },
+  {
+   "template": "sample-design.pptx",
+   "route": "sample",
+   "override": null,
+   "overrides": {
+    "1": "s6",
+    "4": "s5"
+   },
+   "parts": 53,
+   "differ": []
+  },
+  {
+   "template": "sample-latin-font.pptx",
+   "route": "sample",
+   "override": null,
+   "overrides": null,
+   "parts": 49,
    "differ": []
   }
  ]

@@ -1,0 +1,76 @@
+PASS C9 base policy in docs/index.html 
+PASS C9 no file under docs/ names another origin for a resource 
+PASS C39 (mac) the page runs on the mac user agent 
+PASS C9 (mac) before ready: only the page origin 
+PASS C39 (mac) c10-wui-tung-mac (layout route): no face line 
+PASS C45 (mac) c10-wui-tung-mac (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C39 (mac) c10-typed-override-mac (layout route): no face line 
+PASS C45 (mac) c10-typed-override-mac (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C22 (mac) both routes on offer: the route line and switch show, sample pressed 
+PASS C31 (mac) the picker lists only compatible samples as 範本頁 k plus first words 
+PASS C31 (mac) choosing a sample re-plans with it 
+PASS C45 (mac) c28-sample-design (sample route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C45 (mac) the route switch hides the first-draft line with the downloaded line 
+PASS C22 (mac) switching to layouts re-plans and drops both picks with a note each 
+PASS C22 (mac) a pick made before an empty outline and a route round trip stays gone, with its note 
+PASS C39 (mac) sample-latin-font (sample route), Chinese outline: step 3 names PingFang HK 
+PASS C39 (mac) the download's slides carry PingFang HK in a:ea on Chinese runs, Microsoft JhengHei nowhere 
+PASS C39 (mac) sample-latin-font (sample route), English-only outline: no face line 
+PASS C39 (mac) offline-mac (layout route): no face line 
+PASS C45 (mac) offline-mac (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C9 (mac) offline after ready: a fill still downloads 
+PASS C9 (mac) idle starts after the session's last download (5 downloads) 
+PASS C9 (mac) idle after the last download 30.0 s (at least 30), no request in it 
+PASS C9 (mac) no Worker, shared worker or iframe in the session 
+PASS C9 (mac) no CSP violation in the session (nothing tried the network) 
+PASS C9 (mac) after ready: fetch from JS and Python and new workers are blocked 
+PASS C9 (mac) no probe reached the server 
+PASS C9 (mac) no cookie, storage or service worker 
+PASS C9 (mac) zero requests after ready 
+PASS C9 (mac) server saw nothing after ready 
+PASS C9 (mac) every link is a fixed anchor from index.html 
+PASS C9 (mac) each of the 3 link-outs clicked, intercepted, the page kept 
+PASS C9 (mac) no URL carries outline text 
+PASS C9 (mac) link-outs intercepted, only the fixed anchors 
+PASS C39 (windows) the page runs on the windows user agent 
+PASS C9 (windows) before ready: only the page origin 
+PASS C39 (windows) c10-wui-tung-windows (layout route): no face line 
+PASS C45 (windows) c10-wui-tung-windows (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C39 (windows) c10-typed-override-windows (layout route): no face line 
+PASS C45 (windows) c10-typed-override-windows (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C22 (windows) both routes on offer: the route line and switch show, sample pressed 
+PASS C31 (windows) the picker lists only compatible samples as 範本頁 k plus first words 
+PASS C31 (windows) choosing a sample re-plans with it 
+PASS C45 (windows) c28-sample-design (sample route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C45 (windows) the route switch hides the first-draft line with the downloaded line 
+PASS C22 (windows) switching to layouts re-plans and drops both picks with a note each 
+PASS C22 (windows) a pick made before an empty outline and a route round trip stays gone, with its note 
+PASS C39 (windows) sample-latin-font (sample route), Chinese outline: step 3 names Microsoft JhengHei 
+PASS C39 (windows) the download's slides carry Microsoft JhengHei in a:ea on Chinese runs, PingFang HK nowhere 
+PASS C39 (windows) sample-latin-font (sample route), English-only outline: no face line 
+PASS C39 (windows) offline-windows (layout route): no face line 
+PASS C45 (windows) offline-windows (layout route): the first-draft line hidden before the download, under the downloaded line after it, text of record 
+PASS C9 (windows) offline after ready: a fill still downloads 
+PASS C9 (windows) idle starts after the session's last download (5 downloads) 
+PASS C9 (windows) idle after the last download 30.0 s (at least 30), no request in it 
+PASS C9 (windows) no Worker, shared worker or iframe in the session 
+PASS C9 (windows) no CSP violation in the session (nothing tried the network) 
+PASS C9 (windows) after ready: fetch from JS and Python and new workers are blocked 
+PASS C9 (windows) no probe reached the server 
+PASS C9 (windows) no cookie, storage or service worker 
+PASS C9 (windows) zero requests after ready 
+PASS C9 (windows) server saw nothing after ready 
+PASS C9 (windows) every link is a fixed anchor from index.html 
+PASS C9 (windows) each of the 3 link-outs clicked, intercepted, the page kept 
+PASS C9 (windows) no URL carries outline text 
+PASS C9 (windows) link-outs intercepted, only the fixed anchors 
+PASS C8 legacy.pptx: legacy_ppt message, no download, responsive 
+PASS C8 encrypted.pptx: encrypted message, no download, responsive 
+PASS C8 not-powerpoint.pptx: not_pptx message, no download, responsive 
+PASS C8 dangling-relationship.pptx: bad_file message, no download, responsive 
+PASS C8 zip-bomb.pptx: too_big message, no download, responsive 
+PASS C8 lying-size.pptx: bad_file message, no download, responsive 
+PASS C8 billion-laughs.pptx: bad_file message, no download, responsive 
+PASS C8 no-body.pptx: no_text_layout message, no download, responsive 
+PASS C13 390x844: no horizontal scroll, three steps, copy-link button 
+75 passed, 0 failed

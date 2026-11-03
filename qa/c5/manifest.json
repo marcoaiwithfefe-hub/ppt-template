@@ -158,6 +158,26 @@
    "family": "Q5 sample route",
    "template": "qa/real-templates/hkust-template14.potx",
    "output": "qa/rev8/q5/cr3/hkust-template14-sample/hkust-template14-sample-filled.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-example-mac.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-example-win.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-reference-mac.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-reference-win.pptx"
   }
  ],
  "generated_sample": [
@@ -410,6 +430,48 @@
    "template": "sample-footrot.pptx",
    "outline": "tests/outlines/sample/two-slides.md",
    "overrides": {}
+  },
+  {
+   "template": "sample-latin-font.pptx",
+   "outline": "tests/outlines/sample/latin-font.md",
+   "overrides": {
+    "1": "s2",
+    "2": "s3",
+    "3": "s4",
+    "4": "s5",
+    "5": "s6"
+   },
+   "name": "latin-font"
+  },
+  {
+   "template": "sample-ghost.pptx",
+   "outline": "tests/outlines/sample/ghost.md",
+   "overrides": {
+    "1": "s2",
+    "2": "s5"
+   },
+   "name": "ghost"
+  },
+  {
+   "template": "sample-pairs.pptx",
+   "outline": "tests/outlines/sample/pairs.md",
+   "overrides": {
+    "1": "s1",
+    "2": "s1",
+    "3": "s1"
+   },
+   "name": "pairs"
+  },
+  {
+   "template": "sample-titlegrow.pptx",
+   "outline": "tests/outlines/sample/titlegrow.md",
+   "overrides": {
+    "1": "s2",
+    "2": "s5",
+    "3": "s7",
+    "4": "s8"
+   },
+   "name": "titlegrow"
   }
  ]
 }

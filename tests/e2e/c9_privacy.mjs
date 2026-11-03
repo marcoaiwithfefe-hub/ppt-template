@@ -1,5 +1,7 @@
 // C9 privacy, C8 page part, C10 downloads, C13 phone: the page in headless Chromium on a local
 // static server. One browser context logs every request for the whole session.
+// Rev 9: the whole session runs twice, on a Mac user agent and on a Windows one (C39 page part: the page picks the
+// Chinese face from it), and each run checks the first-draft line after its downloads (C45).
 // Run: node tests/e2e/c9_privacy.mjs   (report: qa/e2e/c9-report.json, exit 1 on any failure)
 // E2E_OUT=<dir> writes the report and downloads there instead (failure demos use it, so a mutated
 // run never overwrites the evidence run).
@@ -7,6 +9,7 @@ import { chromium } from "playwright-core";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { inflateRawSync } from "node:zlib";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { startServer } from "./server.mjs";
@@ -21,8 +24,20 @@ const REQUIRED = {
   "base-uri": ["'none'"], "object-src": ["'none'"], "script-src": ["'self'", "'wasm-unsafe-eval'"],
 };
 
+// rev 9: one session per user agent; T1 gives Chinese text PingFang HK on Mac, iPhone and iPad, else Microsoft JhengHei
+const AGENTS = [
+  { tag: "mac", face: "PingFang HK",
+    ua: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" },
+  { tag: "windows", face: "Microsoft JhengHei",
+    ua: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" },
+];
+const COPY = (await import(path.join(ROOT, "docs", "copy.js"))).COPY;
+const fmt = (s, vars) => s.replace(/\{(\w+)\}/g, (_, k) => String(vars[k]));
+const HAN = /[\u3400-\u4DBF\u4E00-\u9FFF\u{20000}-\u{323AF}]/u;
+
 const checks = [];
-const check = (id, name, ok, detail = "") => checks.push({ id, name, ok: !!ok, detail });
+let RUN = ""; // the user agent of the session under way; its checks carry it in their names
+const check = (id, name, ok, detail = "") => checks.push({ id, name: RUN ? `(${RUN}) ${name}` : name, ok: !!ok, detail });
 
 // ------------------------------------------------------------------ static: every HTML page's policy
 function parsePolicy(content) {
@@ -109,6 +124,49 @@ async function waitReady(page) {
   await page.waitForFunction(() => document.getElementById("status").dataset.state === "ready", null, { timeout: 120000 });
 }
 
+// step 3's rev 9 lines: the face line (T1) and the first-draft line under `downloaded` (T7)
+async function lines(page) {
+  return page.evaluate(() => {
+    const d = document.getElementById("downloaded");
+    const r = document.getElementById("refine-note");
+    const f = document.getElementById("cjk-face");
+    return {
+      route: document.getElementById("route-sample").getAttribute("aria-pressed") === "true" ? "sample" : "layout",
+      downloaded: !d.hidden && d.checkVisibility(),
+      refine: !r.hidden && r.checkVisibility(),
+      under: d.nextElementSibling === r && r.getBoundingClientRect().top >= d.getBoundingClientRect().bottom,
+      refineText: r.textContent,
+      face: !f.hidden && f.checkVisibility(),
+      faceText: f.textContent,
+    };
+  });
+}
+
+// C45: hidden before the download; after it, shown under `downloaded` with the copy of record byte for byte
+function checkRefine(label, route, pre, post) {
+  check("C45", `${label} (${route} route): the first-draft line hidden before the download, under the downloaded line after it, text of record`,
+    pre.route === route && post.route === route && !pre.refine && !pre.downloaded && post.downloaded && post.refine && post.under &&
+      post.refineText === COPY.refineNote, JSON.stringify({ pre, post }));
+}
+
+// a zip's parts by name (stored or deflated entries)
+function unzip(buf) {
+  const eocd = buf.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+  const out = {};
+  let p = buf.readUInt32LE(eocd + 16);
+  for (let i = buf.readUInt16LE(eocd + 10); i > 0; i--) {
+    const method = buf.readUInt16LE(p + 10);
+    const size = buf.readUInt32LE(p + 20);
+    const nameLen = buf.readUInt16LE(p + 28);
+    const local = buf.readUInt32LE(p + 42);
+    const start = local + 30 + buf.readUInt16LE(local + 26) + buf.readUInt16LE(local + 28);
+    const data = buf.subarray(start, start + size);
+    out[buf.toString("utf8", p + 46, p + 46 + nameLen)] = method === 8 ? inflateRawSync(data) : data;
+    p += 46 + nameLen + buf.readUInt16LE(p + 30) + buf.readUInt16LE(p + 32);
+  }
+  return out;
+}
+
 async function fillOnce(page, tpl, outline, label, overrideIndex) {
   await page.setInputFiles("#file", tpl);
   await page.waitForSelector("#layouts:not([hidden])");
@@ -127,14 +185,18 @@ async function fillOnce(page, tpl, outline, label, overrideIndex) {
       override = next;
     }
   }
+  const pre = await lines(page);
+  check("C39", `${label} (layout route): no face line`, pre.route === "layout" && !pre.face, JSON.stringify(pre));
   const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#download")]);
   const tDownload = Date.now();
   const file = path.join(OUT, `${label}.pptx`);
   await dl.saveAs(file);
+  await page.waitForFunction(() => !document.getElementById("downloaded").hidden);
+  checkRefine(label, "layout", pre, await lines(page));
   return { file, name: dl.suggestedFilename(), override, overrideSource: override ? overrideIndex : null, tDownload };
 }
 
-async function sampleRoute(page) {
+async function sampleRoute(page, agent) {
   const copy = (await import(path.join(ROOT, "docs", "copy.js"))).COPY;
   const outlineRel = "tests/outlines/sample/design.md";
   const outline = await readFile(path.join(ROOT, outlineRel), "utf8");
@@ -166,10 +228,13 @@ async function sampleRoute(page) {
   }
   const chosen = await page.$$eval("#slides select", (sels) => sels.map((s) => s.value));
   check("C31", "choosing a sample re-plans with it", chosen[1] === "s6" && chosen[4] === "s5", chosen.join(" "));
+  const pre = await lines(page);
   const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#download")]);
   const tDownload = Date.now();
-  const file = path.join(OUT, "c28-sample-design.pptx");
+  const file = path.join(OUT, `c28-sample-design-${agent.tag}.pptx`);
   await dl.saveAs(file);
+  await page.waitForFunction(() => !document.getElementById("downloaded").hidden);
+  checkRefine("c28-sample-design", "sample", pre, await lines(page));
   // switch to layouts: a re-plan, both picks dropped with a note each, the picker now lists layouts
   await page.click("#route-layout");
   await page.waitForFunction(() => document.getElementById("working").hidden);
@@ -177,7 +242,9 @@ async function sampleRoute(page) {
     pressed: document.getElementById("route-layout").getAttribute("aria-pressed"),
     notes: [...document.querySelectorAll("#warnings-list li")].map((li) => li.textContent),
     first: document.querySelector("#slides select")?.value || "",
+    lines: [document.getElementById("downloaded").hidden, document.getElementById("refine-note").hidden],
   }));
+  check("C45", "the route switch hides the first-draft line with the downloaded line", after.lines.every(Boolean), JSON.stringify(after.lines));
   const gone = after.notes.filter((t) => t.includes(copy.warnings.layout_gone.split("「")[0]) || t.includes("取消咗")).length;
   check("C22", "switching to layouts re-plans and drops both picks with a note each",
     after.pressed === "true" && gone === 2 && after.first.startsWith("/ppt/slideLayouts/"), JSON.stringify(after));
@@ -207,10 +274,45 @@ async function sampleRoute(page) {
   return { template: "sample-design.pptx", outline: outlineRel, route: "sample", overrides, file, name: dl.suggestedFilename(), tDownload };
 }
 
-async function session(browser) {
+// rev 9 (C39 page part): sample-latin-font on the sample route. A Chinese outline: step 3 names the face the page
+// picked from its user agent, and the downloaded slides carry it in a:ea on Chinese runs (the other face nowhere).
+// An English-only outline: no face line.
+async function faceRoute(page, agent) {
+  const outlineRel = "tests/outlines/sample/latin-font.md";
+  const outline = await readFile(path.join(ROOT, outlineRel), "utf8");
+  await page.setInputFiles("#file", path.join(FIX, "sample-latin-font.pptx"));
+  await page.waitForSelector("#layouts:not([hidden])");
+  await page.fill("#outline", outline);
+  await page.waitForFunction(() => !document.getElementById("download").disabled);
+  const shown = await lines(page);
+  check("C39", `sample-latin-font (sample route), Chinese outline: step 3 names ${agent.face}`,
+    shown.route === "sample" && shown.face && shown.faceText === fmt(COPY.cjkFaceNote, { face: agent.face }), JSON.stringify(shown));
+  const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#download")]);
+  const tDownload = Date.now();
+  const file = path.join(OUT, `c39-latin-font-${agent.tag}.pptx`);
+  await dl.saveAs(file);
+  const slides = Object.entries(unzip(await readFile(file)))
+    .filter(([n]) => /^ppt\/slides\/slide\d+\.xml$/.test(n)).map(([, b]) => b.toString("utf8"));
+  const runs = slides.flatMap((x) => x.match(/<a:r>[\s\S]*?<\/a:r>/g) || []);
+  const chinese = runs.filter((r) => HAN.test((r.match(/<a:t(?:\s[^>]*)?>([^<]*)<\/a:t>/) || ["", ""])[1]));
+  const withFace = chinese.filter((r) => r.includes(`<a:ea typeface="${agent.face}"`));
+  const other = AGENTS.find((a) => a !== agent).face;
+  const elsewhere = slides.filter((x) => x.includes(`typeface="${other}"`)).length;
+  check("C39", `the download's slides carry ${agent.face} in a:ea on Chinese runs, ${other} nowhere`,
+    slides.length > 0 && withFace.length > 0 && !elsewhere,
+    `${slides.length} slides, ${withFace.length} of ${chinese.length} Chinese runs in ${agent.face}, ${elsewhere} slides naming ${other}`);
+  await page.fill("#outline", await readFile(path.join(ROOT, "tests", "outlines", "english.md"), "utf8"));
+  await page.waitForFunction(() => !document.getElementById("download").disabled);
+  const english = await lines(page);
+  check("C39", "sample-latin-font (sample route), English-only outline: no face line",
+    english.route === "sample" && !english.face && !english.faceText, JSON.stringify(english));
+  return { template: "sample-latin-font.pptx", outline: outlineRel, route: "sample", file, name: dl.suggestedFilename(), tDownload };
+}
+
+async function session(browser, agent) {
   const { server, log, port } = await startServer();
   const origin = `http://127.0.0.1:${port}`;
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true, userAgent: agent.ua });
   await ctx.addInitScript(INIT);
   const reqs = [];
   const linkOuts = [];
@@ -228,25 +330,28 @@ async function session(browser) {
   await page.goto(`${origin}/#e2e`);
   await waitReady(page);
   const tReady = Date.now();
+  const ua = await page.evaluate(() => navigator.userAgent);
+  check("C39", `the page runs on the ${agent.tag} user agent`, ua === agent.ua, ua);
   const before = reqs.filter((r) => r.t <= tReady);
   check("C9", "before ready: only the page origin",
     before.every((r) => r.url.startsWith(origin) || r.url.startsWith("data:")), before.filter((r) => !r.url.startsWith(origin)).map((r) => r.url).join(" "));
 
   const fills = [];
-  fills.push({ template: "wui-tung.pptx", ...(await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "c10-wui-tung")) });
-  fills.push({ template: "typed.pptx", ...(await fillOnce(page, path.join(FIX, "typed.pptx"), outline, "c10-typed-override", 1)) });
+  fills.push({ template: "wui-tung.pptx", ...(await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, `c10-wui-tung-${agent.tag}`)) });
+  fills.push({ template: "typed.pptx", ...(await fillOnce(page, path.join(FIX, "typed.pptx"), outline, `c10-typed-override-${agent.tag}`, 1)) });
 
   // rev 8: the sample route, offline (C22 page part, C28, C31): route line and switch, the 範本頁 picker,
   // picks on two slides, a download with the route and every pick recorded, then a switch to layouts that drops both
   await ctx.setOffline(true);
-  fills.push(await sampleRoute(page));
+  fills.push(await sampleRoute(page, agent));
+  fills.push(await faceRoute(page, agent));
   await ctx.setOffline(false);
 
   // offline after ready: a fill still downloads. It runs before the idle, and the network is back
   // on for the idle, so the session's last download is followed by 30 s in which any delayed
   // request could reach the server (Codex round 2, F10)
   await ctx.setOffline(true);
-  const off = await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, "offline");
+  const off = await fillOnce(page, path.join(FIX, "wui-tung.pptx"), outline, `offline-${agent.tag}`);
   check("C9", "offline after ready: a fill still downloads", off.name.endsWith(".pptx"));
   await ctx.setOffline(false);
 
@@ -367,7 +472,10 @@ json.dumps(r)
 
   await ctx.close();
   server.close();
+  // every fill records the face the page passed, for the C10 and C28 replays
+  for (const f of fills) Object.assign(f, { ua: agent.tag, cjkFace: agent.face });
   return {
+    ua: agent.tag, userAgent: agent.ua, cjkFace: agent.face,
     tReady, tDownloads, tLastDownload, tIdleStart, tIdleEnd, requestsBeforeReady: before.length, fills, outline: "fixtures/reference-outline.md",
     linkOuts, clicked, requests: reqs, serverLog: log, violations,
   };
@@ -438,14 +546,20 @@ await mkdir(OUT, { recursive: true });
 await staticPolicy();
 await staticOrigins();
 const browser = await chromium.launch({ executablePath: EXE });
-let info = {};
+const runs = [];
 try {
-  info = await session(browser);
+  for (const agent of AGENTS) {
+    RUN = agent.tag;
+    runs.push(await session(browser, agent));
+  }
+  RUN = "";
   await pageErrors(browser);
   await phone(browser);
 } finally {
   await browser.close();
 }
+// the fills of both runs in one list, each with its ua and cjkFace (qa/e2e/c10_compare.py replays session.fills)
+const info = { outline: "fixtures/reference-outline.md", fills: runs.flatMap((r) => r.fills), runs: runs.map(({ fills, ...r }) => r) };
 const failed = checks.filter((c) => !c.ok);
 await writeFile(path.join(OUT, "c9-report.json"), JSON.stringify({ tested: await provenance(info), checks, session: info }, null, 1));
 for (const c of checks) console.log(c.ok ? "PASS" : "FAIL", c.id, c.name, c.ok ? "" : `-- ${c.detail}`);

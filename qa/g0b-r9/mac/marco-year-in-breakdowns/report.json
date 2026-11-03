@@ -1,0 +1,255 @@
+{
+ "template": "marco-year-in-breakdowns.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 0.72,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s7",
+  "s5",
+  "s2",
+  "s5",
+  "s5",
+  "s1"
+ ],
+ "warnings": [],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s7",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": []
+  },
+  {
+   "n": 2,
+   "sample": "s5",
+   "title": "三個目標",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 3,
+   "sample": "s2",
+   "title": "時間表",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 4,
+   "sample": "s2",
+   "title": "時間表（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s5",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s5",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "grown",
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s5",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "grown",
+    "split"
+   ]
+  },
+  {
+   "n": 8,
+   "sample": "s1",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [
+  {
+   "slide": 8,
+   "shape": 69
+  },
+  {
+   "slide": 8,
+   "shape": 72
+  },
+  {
+   "slide": 8,
+   "shape": 76
+  }
+ ],
+ "kept_not_rect": [
+  {
+   "slide": 8,
+   "shape": 74
+  },
+  {
+   "slide": 8,
+   "shape": 80
+  },
+  {
+   "slide": 8,
+   "shape": 83
+  },
+  {
+   "slide": 8,
+   "shape": 86
+  },
+  {
+   "slide": 8,
+   "shape": 89
+  }
+ ],
+ "title_bar": {
+  "size_pt": 120.0,
+  "bar_pt": 32.4,
+  "meets": true
+ },
+ "closing_bar": {
+  "sample": "s1",
+  "size_pt": 36.0,
+  "bar_pt": 32.4,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 1,
+  "時間表": 2,
+  "預算 港幣 800 萬": 1,
+  "八項行動": 2,
+  "問答": 1
+ },
+ "title_slide": {
+  "sample": "s7",
+  "cover": "s1",
+  "is_cover": false
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s5",
+  "slides": 1,
+  "merged": false,
+  "warned": false
+ },
+ "c23_diffs": [],
+ "sheet": "qa/g0b-r9/mac/marco-year-in-breakdowns/sheet.jpg",
+ "renders": "qa/g0b-r9/mac/marco-year-in-breakdowns/renders-6xsocdcl"
+}
