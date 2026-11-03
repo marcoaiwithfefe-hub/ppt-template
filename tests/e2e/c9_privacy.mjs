@@ -134,7 +134,7 @@ async function lines(page) {
       route: document.getElementById("route-sample").getAttribute("aria-pressed") === "true" ? "sample" : "layout",
       downloaded: !d.hidden && d.checkVisibility(),
       refine: !r.hidden && r.checkVisibility(),
-      under: d.nextElementSibling === r && r.getBoundingClientRect().top >= d.getBoundingClientRect().bottom,
+      above: r.nextElementSibling === document.querySelector("#plan .actions") && r.getBoundingClientRect().bottom <= document.getElementById("download").getBoundingClientRect().top,
       refineText: r.textContent,
       face: !f.hidden && f.checkVisibility(),
       faceText: f.textContent,
@@ -142,11 +142,11 @@ async function lines(page) {
   });
 }
 
-// C45: hidden before the download; after it, shown under `downloaded` with the copy of record byte for byte
+// C45 (amended 2026-11-03, Marco): shown above the download button before and after the download, with the copy of record byte for byte
 function checkRefine(label, route, pre, post) {
-  check("C45", `${label} (${route} route): the first-draft line hidden before the download, under the downloaded line after it, text of record`,
-    pre.route === route && post.route === route && !pre.refine && !pre.downloaded && post.downloaded && post.refine && post.under &&
-      post.refineText === COPY.refineNote, JSON.stringify({ pre, post }));
+  check("C45", `${label} (${route} route): the first-draft line shown above the download button before and after the download, text of record`,
+    pre.route === route && post.route === route && pre.refine && pre.above && !pre.downloaded && post.downloaded && post.refine && post.above &&
+      pre.refineText === COPY.refineNote && post.refineText === COPY.refineNote, JSON.stringify({ pre, post }));
 }
 
 // a zip's parts by name (stored or deflated entries)
@@ -244,7 +244,7 @@ async function sampleRoute(page, agent) {
     first: document.querySelector("#slides select")?.value || "",
     lines: [document.getElementById("downloaded").hidden, document.getElementById("refine-note").hidden],
   }));
-  check("C45", "the route switch hides the first-draft line with the downloaded line", after.lines.every(Boolean), JSON.stringify(after.lines));
+  check("C45", "the route switch hides the downloaded line and keeps the first-draft line", after.lines[0] === true && after.lines[1] === false, JSON.stringify(after.lines));
   const gone = after.notes.filter((t) => t.includes(copy.warnings.layout_gone.split("「")[0]) || t.includes("取消咗")).length;
   check("C22", "switching to layouts re-plans and drops both picks with a note each",
     after.pressed === "true" && gone === 2 && after.first.startsWith("/ppt/slideLayouts/"), JSON.stringify(after));

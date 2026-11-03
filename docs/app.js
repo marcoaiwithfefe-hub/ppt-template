@@ -165,7 +165,6 @@ async function readTemplate(file) {
   if (!state.ready || !file) return;
   $("template-error").hidden = true;
   $("downloaded").hidden = true;
-  $("refine-note").hidden = true;
   staleNow();
   state.template = null;
   state.overrides = [];
@@ -276,7 +275,6 @@ function staleNow() {
   state.gen += 1;
   $("download").disabled = true;
   $("downloaded").hidden = true;
-  $("refine-note").hidden = true;
 }
 
 function schedulePlan() {
@@ -289,7 +287,6 @@ async function replan() {
   clearTimeout(state.planTimer);
   $("outline-error").hidden = true;
   $("downloaded").hidden = true;
-  $("refine-note").hidden = true;
   const gen = state.gen;
   const text = $("outline").value;
   if (!state.template || !text.trim()) {
@@ -434,7 +431,6 @@ async function download() {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 60_000);
-  $("refine-note").hidden = false; // rev 9 T7: the first-draft line, under the downloaded line, on both routes
   $("downloaded").hidden = false;
 }
 
@@ -448,7 +444,6 @@ function reset() {
   $("template-error").hidden = true;
   $("outline-error").hidden = true;
   $("downloaded").hidden = true;
-  $("refine-note").hidden = true;
   renderTemplate();
   renderPlan();
   window.scrollTo({ top: $("step2").offsetTop - 24 });
