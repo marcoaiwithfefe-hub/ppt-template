@@ -1,0 +1,119 @@
+{
+  "reviewer": "Codex rev9 round 1",
+  "spec": "/Users/marcoaiwithfefe/Desktop/AI brain/Projects/ai-agency/specs/2026-10-29-ppt-template-gift-design.md",
+  "missing": [],
+  "not_asked": [],
+  "built_wrong": [
+    {
+      "id": "F1",
+      "severity": "MAJOR",
+      "tag": "[spec]",
+      "spec_line": 461,
+      "quote": "When it does not, and the sample has a pair group of 2 or more pairs, the pair columns below are used if every used H fits at or above the 70% floor with no fit warning.",
+      "note": "Absent built columns bypass pair_columns entirely. Three identical heading/body pairs produce a two-compatible sample with qualifying pair columns, yet build merges the columns.",
+      "evidence": "src/deckfill/sample_plan.py:349-364"
+    },
+    {
+      "id": "F2",
+      "severity": "MAJOR",
+      "tag": "[spec]",
+      "spec_line": 466,
+      "quote": "smallest shrink, fewest body boxes left unused, file order",
+      "note": "Display titles may need steps 7 through 10 under T6, but rank_key caps each at 7. Reproduced 65% and 50% titles receiving equal shrink scores.",
+      "evidence": "src/deckfill/sample_plan.py:64-78; src/deckfill/sample_plan.py:436-440"
+    },
+    {
+      "id": "F3",
+      "severity": "MAJOR",
+      "tag": "[spec]",
+      "spec_line": 466,
+      "quote": "fewest body boxes left unused",
+      "note": "Content pair builds subtract two used boxes per pair even when a childless bullet clears B. Pair-column builds subtract four although both B boxes are cleared. Ranking therefore understates unused body boxes.",
+      "evidence": "src/deckfill/sample_plan.py:238-245; src/deckfill/sample_plan.py:255-266; src/deckfill/sample_plan.py:336-340"
+    },
+    {
+      "id": "E1",
+      "severity": "MAJOR",
+      "tag": "[spec]",
+      "edge_case": true,
+      "spec_line": 441,
+      "quote": "under one line of the destination's text at its floor size",
+      "related_spec_line": 473,
+      "related_quote": "down to 50% of its effective size",
+      "note": "Clamp eligibility always tests 70%. A display title whose clamped box fits its legal 50% floor is incorrectly left off-slide with check-this-slide. Uncommon combination of off-slide position and tight clamped dimensions.",
+      "evidence": "src/deckfill/sample.py:1371-1378; src/deckfill/sample.py:1396-1401; src/deckfill/sample_plan.py:68-78"
+    }
+  ],
+  "unproven": [
+    {
+      "entry": "C43 / C23",
+      "state": "weak_check",
+      "gate": "build",
+      "tag": "[spec]",
+      "spec_line": 467,
+      "quote": "C23 computes the allowed boxes itself from the source sample.",
+      "note": "F4: comparator computes unions with arbitrary text shapes rather than eligible T5 partners. An equal-size, disjoint, distant pair mutation passes look_diff. Recorded PASS does not establish that only declared pair edits are accepted.",
+      "evidence": "tests/sample_look.py:255-273; tests/sample_look.py:591-593; tests/sample_look.py:647-648; qa/rev9/MAP-STATUS.md:14,28"
+    },
+    {
+      "entry": "C25",
+      "state": "weak_check",
+      "gate": "build",
+      "tag": "[spec]",
+      "spec_line": 349,
+      "quote": "every size the fill wrote is on the 50 grid and at or above its 70% floor, and equals the size the estimate used",
+      "note": "T6 amends the floor, but T1 also changes run count. written_sizes returns one value per run while check_plan expects one per paragraph for shrunk boxes. Correct mixed-script split paragraphs would fail this comparison. Listed generic cases omit the new split-run fixtures, so PASS does not cover this interaction.",
+      "evidence": "tests/test_c25_fit.py:49-58; tests/test_c25_fit.py:118-144; qa/rev9/MAP-STATUS.md:30"
+    },
+    {
+      "entry": "G0c",
+      "state": "weak_check",
+      "gate": "build",
+      "tag": "[spec]",
+      "spec_line": 504,
+      "quote": "every Chinese run passes C39's rule",
+      "note": "G0c invokes cjk_problems, which checks face, character grouping, tracking, italic and language but never checks display bold. C39's fixture-specific bold and donor-property checks are separate and are not applied to the Canva outputs. Four recorded PASSes establish a narrower promise.",
+      "evidence": "qa/g0c/run_g0c.py:54-55; tests/rev9_oracle.py:93-129; tests/test_c39_c40_type.py:79-94; qa/rev9/MAP-STATUS.md:17"
+    },
+    {
+      "entry": "G0c eye",
+      "state": "PENDING",
+      "gate": "final_qa",
+      "tag": "[spec]",
+      "spec_line": 504,
+      "quote": "Fable judges each slide against `target-sheet.png` on four points",
+      "note": "Visual verdict remains explicitly pending. Later-gate obligation, not an accepted PASS or missing build execution.",
+      "evidence": "qa/rev9/MAP-STATUS.md:18"
+    },
+    {
+      "entry": "G0b-r9 eye",
+      "state": "PENDING",
+      "gate": "final_qa",
+      "tag": "[spec]",
+      "spec_line": 505,
+      "quote": "an eye verdict recorded per slide in the G0b-r9 report",
+      "note": "Eye review remains pending. Known script regressions are excluded from this review as requested; this records only the outstanding later gate.",
+      "evidence": "qa/rev9/MAP-STATUS.md:20"
+    },
+    {
+      "entry": "C17",
+      "state": "PENDING",
+      "gate": "deploy",
+      "tag": "[spec]",
+      "spec_line": 229,
+      "quote": "the row stays PENDING for Windows until that run exists",
+      "note": "Desktop Windows PowerPoint opening and rendering remain unproven. Rev 8 also adds two sample-route outputs at spec line 357. Schema checks and LibreOffice or Quick Look renders do not close this gate.",
+      "evidence": "qa/rev9/MAP-STATUS.md:42,47"
+    },
+    {
+      "entry": "T7 Canto proof",
+      "state": "PENDING",
+      "gate": "final_qa",
+      "tag": "[spec]",
+      "spec_line": 480,
+      "quote": "copy of record pending Marco's Canto proof at the final QA gate",
+      "note": "C45 verifies the implemented line and visibility. Editorial proof remains a separate pending obligation, explicitly named in the walkthrough but absent from the map-status table.",
+      "evidence": "qa/walkthrough/rev9/walkthrough.json:122; qa/rev9/MAP-STATUS.md:16"
+    }
+  ]
+}

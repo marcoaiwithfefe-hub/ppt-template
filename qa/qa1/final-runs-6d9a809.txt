@@ -1,0 +1,45 @@
+== c9_privacy
+PASS C8 no-body.pptx: no_text_layout message, no download, responsive 
+PASS C13 390x844: no horizontal scroll, three steps, copy-link button 
+30 passed, 0 failed
+== c1_edit_download
+PASS C1 page ordinary click after an edit ships the new outline 
+PASS C1 page download name follows the new title 
+4 passed, 0 failed
+== f9_prompt_load
+PASS F9 after retry the page is ready and Copy is enabled 
+PASS F9 Copy puts the prompt on the clipboard after retry 
+4 passed, 0 failed
+== override_follow
+PASS override F16: the note says the pick for Status was dropped 
+PASS override F16: the download keeps the other Status on its default 
+13 passed, 0 failed
+== smoke_pyodide
+console: Loading Pillow, lxml, python_pptx, typing-extensions, xlsxwriter
+console: Loaded Pillow, lxml, python_pptx, typing-extensions, xlsxwriter
+{"readyMs":900,"fillMs":379,"outBytes":34732,"wallMs":1427}
+== c10
+PASS wui-tung.pptx  50 parts []
+PASS typed.pptx override 52 parts []
+PASS sample-design.pptx override 53 parts []
+== privacy
+fills after ready: 3 with downloads, plus one offline
+PASS: zero page requests after ready
+== g0b
+corporate-sales-pitch-slides-2.pptx sample 0.34 s 7 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 104.0, 'bar_pt': 32.4, 'meets': True}
+elegant-pitch-deck.pptx sample 0.29 s 7 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 51.0, 'bar_pt': 16.2, 'meets': True}
+3d-modern-background-pitch-deck.pptx sample 0.56 s 7 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 48.0, 'bar_pt': 16.2, 'meets': True}
+business-conference-slides.pptx sample 0.22 s 9 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 97.0, 'bar_pt': 32.4, 'meets': True}
+simple-business-proposal-slides.pptx sample 0.26 s 7 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 80.0, 'bar_pt': 16.2, 'meets': True}
+viola-free-presentation-template.pptx sample 0.29 s 9 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 28.5, 'bar_pt': 16.2, 'meets': True}
+bullen-free-presentation-template.pptx sample 0.38 s 7 slides overlaps 0 blank chips 0 kept under text 0 title {'size_pt': 45.5, 'bar_pt': 16.2, 'meets': True}
+marco-year-in-breakdowns.pptx sample 0.52 s 13 slides overlaps 0 blank chips 0 kept under text 3 title {'size_pt': 120.0, 'bar_pt': 32.4, 'meets': True}
+== q5
+edb-mpa2022.pptx layout 7 sample 18
+elderly-gov-diy.pptx layout 7 sample 7
+hkust-template14.potx layout 9 sample 11
+== c5
+PASS qa/rev8/q5/hkust-template14-sample/hkust-template14-sample-filled.pptx output 1 errors, added 0, unlisted 0 allowlisted: Sch_UndeclaredAttribute (provisional until C17)
+69 passed, 0 failed
+== pytest
+348 passed in 17.49s

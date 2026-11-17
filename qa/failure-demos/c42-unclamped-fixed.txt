@@ -1,0 +1,4 @@
+# c42-unclamped: destinations crossing a slide edge are written at their sample boxes
+# mutation in src/deckfill/sample.py: '    return apply_clamps(S) if region else S' -> '    return S'
+# tests: tests/test_c41_c42_marks.py -k clamp
+4 passed, 7 deselected in 0.13s

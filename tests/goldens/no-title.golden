@@ -1,0 +1,6 @@
+#! No # line: the first ## title is the deck title, no title slide, warned.
+slide 1 title 第一張
+slide 1 body1 L1 甲
+slide 2 title 第二張
+slide 2 body1 L1 乙
+warn 1 no_title

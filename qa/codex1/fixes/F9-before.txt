@@ -1,0 +1,4 @@
+FAIL F9 prompt failure shows the retry state, not ready -- {"state":"ready","retry":false,"copyDisabled":false}
+FAIL F9 Copy is disabled while the prompt is missing -- {"state":"ready","retry":false,"copyDisabled":false}
+FAIL F9 the flow ran to the end -- no retry button to press
+0 passed, 3 failed

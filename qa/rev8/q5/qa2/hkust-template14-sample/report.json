@@ -1,0 +1,339 @@
+{
+ "template": "hkust-template14.potx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "layout",
+ "seconds": 2.03,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s4",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s5",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s6",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s7",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "no title",
+   "design": false,
+   "classes": []
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s2",
+  "s9",
+  "s9",
+  "s9",
+  "s9",
+  "s2"
+ ],
+ "warnings": [
+  [
+   "subtitle_in_title",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
+   "fit_warn",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
+   "fit_warn",
+   "三個目標"
+  ],
+  [
+   "fit_warn",
+   "時間表"
+  ],
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ],
+  [
+   "fit_warn",
+   "預算 港幣 800 萬"
+  ],
+  [
+   "fit_warn",
+   "八項行動"
+  ],
+  [
+   "fit_warn",
+   "問答"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s2",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": [
+    "warned"
+   ]
+  },
+  {
+   "n": 2,
+   "sample": "s9",
+   "title": "三個目標",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 3,
+   "sample": "s9",
+   "title": "三個目標（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 4,
+   "sample": "s9",
+   "title": "三個目標（續）",
+   "flags": [
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s9",
+   "title": "時間表",
+   "flags": [
+    "shrunk",
+    "warned"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s9",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s9",
+   "title": "預算 港幣 800 萬（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 8,
+   "sample": "s9",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 9,
+   "sample": "s9",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 10,
+   "sample": "s9",
+   "title": "八項行動（續）",
+   "flags": [
+    "split",
+    "warned"
+   ]
+  },
+  {
+   "n": 11,
+   "sample": "s2",
+   "title": "問答",
+   "flags": [
+    "warned"
+   ]
+  }
+ ],
+ "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [
+  {
+   "slide": 5,
+   "shape": 32
+  }
+ ],
+ "kept_not_rect": [
+  {
+   "slide": 1,
+   "shape": 16
+  },
+  {
+   "slide": 1,
+   "shape": 18
+  },
+  {
+   "slide": 2,
+   "shape": 32
+  },
+  {
+   "slide": 3,
+   "shape": 32
+  },
+  {
+   "slide": 4,
+   "shape": 32
+  },
+  {
+   "slide": 6,
+   "shape": 32
+  },
+  {
+   "slide": 7,
+   "shape": 32
+  },
+  {
+   "slide": 8,
+   "shape": 32
+  },
+  {
+   "slide": 9,
+   "shape": 32
+  },
+  {
+   "slide": 10,
+   "shape": 32
+  },
+  {
+   "slide": 11,
+   "shape": 16
+  },
+  {
+   "slide": 11,
+   "shape": 18
+  }
+ ],
+ "title_bar": {
+  "size_pt": 46.0,
+  "bar_pt": 35.62,
+  "meets": true
+ },
+ "closing_bar": {
+  "sample": "s2",
+  "size_pt": 46.0,
+  "bar_pt": 35.62,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 3,
+  "時間表": 1,
+  "預算 港幣 800 萬": 2,
+  "八項行動": 3,
+  "問答": 1
+ },
+ "c23_diffs": [
+  "slide 1 (s2): shape 13 (sp) missing",
+  "slide 1 (s2): shape 11 (sp) missing",
+  "slide 1 (s2): shape 10 (sp) missing",
+  "slide 1 (s2): shape 22 (sp) missing",
+  "slide 1 (s2): shape 24 (sp) missing",
+  "slide 1 (s2): shape 26 (sp) missing",
+  "slide 1 (s2): shape 27 (sp) missing",
+  "slide 2 (s9): shape 48 (sp) missing",
+  "slide 2 (s9): shape 49 (sp) missing",
+  "slide 3 (s9): shape 48 (sp) missing",
+  "slide 3 (s9): shape 49 (sp) missing",
+  "slide 4 (s9): shape 48 (sp) missing",
+  "slide 4 (s9): shape 49 (sp) missing",
+  "slide 5 (s9): shape 48 (sp) missing",
+  "slide 5 (s9): shape 49 (sp) missing",
+  "slide 6 (s9): shape 48 (sp) missing",
+  "slide 6 (s9): shape 49 (sp) missing",
+  "slide 7 (s9): shape 48 (sp) missing",
+  "slide 7 (s9): shape 49 (sp) missing",
+  "slide 8 (s9): shape 48 (sp) missing",
+  "slide 8 (s9): shape 49 (sp) missing",
+  "slide 9 (s9): shape 48 (sp) missing",
+  "slide 9 (s9): shape 49 (sp) missing",
+  "slide 10 (s9): shape 48 (sp) missing",
+  "slide 10 (s9): shape 49 (sp) missing",
+  "slide 11 (s2): shape 13 (sp) missing",
+  "slide 11 (s2): shape 11 (sp) missing",
+  "slide 11 (s2): shape 10 (sp) missing",
+  "slide 11 (s2): shape 22 (sp) missing",
+  "slide 11 (s2): shape 24 (sp) missing",
+  "slide 11 (s2): shape 26 (sp) missing",
+  "slide 11 (s2): shape 27 (sp) missing"
+ ],
+ "sheet": "qa/rev8/q5/qa2/hkust-template14-sample/sheet.jpg",
+ "renders": "qa/rev8/q5/qa2/hkust-template14-sample/renders-_h6hl7bj"
+}

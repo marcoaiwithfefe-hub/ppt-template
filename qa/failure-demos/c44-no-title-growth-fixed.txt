@@ -1,0 +1,4 @@
+# c44-no-title-growth: a title that does not fit at full size never grows
+# mutation in src/deckfill/sample_plan.py: '    t = fills[0] if fills else None\n    if t is None or t.role != "title"' -> '    t = None\n    if t is None or t.role != "title"'
+# tests: tests/test_c44_titlegrow.py
+10 passed in 0.24s

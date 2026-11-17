@@ -1,0 +1,161 @@
+{
+ "title": "PPT gift rev 8: the sample-slide route, with QA rounds 1 to 3 and code review rounds 1 to 3",
+ "plain": "Templates that keep their design on their sample slides get every new slide built as a copy of one of those slides, with the outline's words in its own boxes; round 1 makes the page prefer readable text and drop empty chips, and round 2 stops near-empty split slides by choosing the fewest slides before variety, dropping a lone （續） that would overflow, and growing a body box into free space; round 3 puts the slide's own class first inside the readable pool, so covers and two-column samples come back. Code review round 1 makes a malformed sample slide unusable instead of breaking the template, copies only what the reader classified, and lets a two-column sample compare its own merged form. Round 2 makes the clearing judge every shape where it is drawn, so a mirrored or turned backing stays behind its text.",
+ "what_why": "Marco's own SlidesCarnival template came out at 6a576a6 with one background and a plain text block on every slide, because the page read only the layouts and his design lives on 10 sample slides. Rev 8 adds a second route (D11, D12): read every sample slide, decide which ones can take a title and a body, copy the chosen slide for each outline slide and write the text into its own boxes with the sample's own run properties, shrinking in 5% steps to a 70% floor.\n\nQA round 1 (Fable, after the b38d280 build): a candidate sample now has to keep every title at 4% and every body at 2% of the slide height after any shrink, or it ranks after those that do; among candidates whose text must split, the fewest continuation slides wins; small filled shapes left empty by clearing (chips and their backings) go, unless they sit behind text that stayed.\n\n- The layout route is untouched: 213 of 213 layout-route outputs are equal to 6a576a6's.\n- The browser runs the same module the tests run (docs/py/deckfill.zip is rebuilt from src).\n\nQA round 2 (Fable, after b8013a1): Marco's 時間表 still took 4 slides and edb-mpa2022 18. The pool now keeps only the candidates with the fewest continuation slides before variety picks (R1), across the slide's class and its fallbacks (R6); a continuation keeps its plain title when the suffix alone overflows (R2); when 2 or more continuations remain, a body box may grow into the free cells of a 64 by 36 grid, its own backing growing with it (R3); the sample route needs 3 usable content samples to be the default (R4); only an unrotated solid rectangle counts as a backing (R5); slots must fit (R7). Marco's deck goes from 13 slides to 9, edb-mpa2022 from 18 to 9.\n\nQA round 3 (Fable, after d1b3ca1): the flattened pool had moved the title slide off the cover on six of eight templates and merged two-column slides. S1 keeps the readability filter across the class and its fallbacks, then uses the first class tier that holds a readable candidate; R1's continuation filter, variety and ranking run inside it. Every readable cover opens the deck again; Marco's deck is 10 slides (預算 back on his two-column sample, 3 slides, warned).\n\nCode review round 1 (Codex, 0 BLOCKER, 6 MAJOR at 057c266): a guide-name corner in a custom path raised ValueError and lost both routes (F2); copies kept whole mc:AlternateContent branches the reader never read (F1); the R3 grid ignored group flips (F3); S2 compared a two-column sample only with itself (F4); C5's evidence held 50 of 74 results because the suite overwrote it (F5); C25 never resolved inherited sizes on the output (F6); the size budget missed borrowed footers and escaped text (E1); a route round trip could bring back a dropped pick (E2).\n\nCode review round 2 (Codex, 0 BLOCKER, 1 MAJOR at 22f64da): Q1 measured shapes at their stored, unrotated and unflipped place, so a small filled shape inside a flipped group could be deleted from behind the body it backs (N1). Two malformed-input edges: a borrowed footer with idx=\"bad\" raised in _place_footer, and a slide whose footer box could not be read dropped out of the size budget.\n\nCode review round 3 (Codex, no normal-path BLOCKER or MAJOR at 3df373e): the footer check now converts with int() as the code downstream does (\"²\" passed isdigit()), and a footer whose own box does not convert is skipped like one with a bad idx, and is not counted in the size budget.",
+ "requirements": [
+  "Story 28: every slide of my deck carries one of the template's sample-slide looks, with its background, photos and shapes",
+  "Story 29: step 2 tells me which way the page will build my deck and lets me switch",
+  "Story 30: no words from the template's sample slides survive into my deck",
+  "Story 31: on the sample-slide route the type shrinks a little when my text is longer than the sample's, and a slide that still does not fit is split or flagged before download",
+  "Story 32: slides next to each other use different sample slides when my template has more than one that fits, unless I chose the same one myself",
+  "Story 33: the per-slide picker lists the template's sample slides that can hold that slide's text, each as 範本頁 k with the first words of its sample title",
+  "QA round 1 Q1: a shape that held only cleared text and has a fill or line is removed whole when under 8% of the slide; its backing goes with it; nothing behind a destination that kept its text is removed",
+  "QA round 1 Q2 and Q3: a title under 4% or a body under 2% of the slide height ranks after every compatible sample that meets the bar; the title slide uses the title sample only when its title meets the bar",
+  "QA round 1 Q4: the ranking gains, ahead of the fewest body boxes left unused, the fewest continuation slides",
+  "QA round 1 QA4: when no candidate meets the bars the slide carries small_text, listed in step 3 as 字細",
+  "QA round 2 R1: the pool is filtered for readability, then for the fewest continuation slides, and only then does variety pick; variety never adds a slide",
+  "QA round 2 R2: when the original title fits at the floor and the title with （續） or (cont.) does not, the continuation keeps the original title",
+  "QA round 2 R3: when 2 or more continuation slides remain, a single body box grows into free space on a 64 by 36 grid (at least 25% by 15%), its own backing at the same margins, groups grown with siblings exact; step 3 shows 版面調整",
+  "QA round 2 R4: with both routes available, the sample route is the default only with the design test and at least 3 usable content-compatible samples",
+  "QA round 2 R5: a backing is a rectangle (preset or four-corner path), unrotated, with a solid fill or no fill and a line",
+  "QA round 2 R6: every slide's pool follows the QA round 1 precedence across its class and its fallbacks",
+  "QA round 2 R7: a slot group is a destination only when every slot fits at or above the floor",
+  "QA round 3 S1: inside the readable pool the slide's own class comes first; a fallback class is used only when no readable candidate of the slide's own class exists; R1 runs inside the first non-empty class tier",
+  "QA round 3 S2: for a two-column slide, when the best readable two candidate needs more continuation slides than the best readable content merge, the merge wins; equal counts keep the two sample; covers never yield"
+ ],
+ "design": {
+  "text": "Reading happens once per template: read_template now also reads every sample slide into a Sample (its title region, labels, body boxes, list slots, classes, whether it carries design of its own) and works out which routes the template offers and which is the default. plan_deck branches on the route; the sample branch picks a sample per outline slide and writes, per box, the paragraphs and the exact size each run gets, so fill only carries the plan out. fill branches the same way: the sample branch copies each chosen slide, writes the text, clears what got none and rebuilds footers once. The page sends the route with every plan and fill call.",
+  "diagram": "sequenceDiagram\n  participant P as Page (app.js)\n  participant W as web.Session\n  participant T as read_template\n  participant S as sample_plan\n  participant F as sample_fill\n  P->>W: read(template)\n  W->>T: layouts and sample slides\n  T-->>W: routes, default route, usable samples\n  W-->>P: route line, switch, 範本頁 options\n  P->>W: plan(outline, picks, route)\n  W->>S: plan_sample\n  S-->>W: per slide: sample, box fills, sizes, flags\n  W-->>P: slide list with 字細咗, 字細, split, warned\n  P->>W: fill(outline, picks, route)\n  W->>S: plan again (same inputs)\n  W->>F: fill_sample(plan)\n  F-->>P: .pptx download",
+  "decisions": [
+   {
+    "decision": "Readability is a pool filter before variety and ranking, tier by tier",
+    "why": "QA round 1's precedence paragraph: a readable fallback beats an unreadable class sample, and Q2 keeps the title sample when its title meets the bar. With no readable candidate the slide keeps D12's class order and is flagged small_text."
+   },
+   {
+    "decision": "Splitting candidates tie on shrink, so the fewest continuation slides decides (Q4)",
+    "why": "With rev 8's continuous overflow ratio kept, Q4 could never decide. sample-split shows the inversion: the ratio picked the six-slide sample, Q4 picks the four-slide one."
+   },
+   {
+    "decision": "'Behind a destination' covers shapes under the destination's written box",
+    "why": "The first reading kept only shapes holding 80% of a destination, which removed the white word blocks under Marco's joined title and drew 問答 black on his photo (G0b render, slide 13)."
+   },
+   {
+    "decision": "C23's comparator computes the allowed Q1 removals itself from the source sample",
+    "why": "QA round 1 QA2: never from the fill's own record. Three negatives (a 10% panel, a backing behind a kept slot, a picture) each fail it."
+   },
+   {
+    "decision": "The R3 grid counts an upper bound of footers and the shared Q1 clearing",
+    "why": "The planner must never think a cell free that the copy covers; C23 recomputes the grid from the real output and passes on all eight real decks."
+   },
+   {
+    "decision": "A user's pick uses its own grown body when that is readable and shorter",
+    "why": "R3 grows candidates in the pool; without this a picked sample would lose the growth the automatic choice gets (decisions.tsv)."
+   },
+   {
+    "decision": "S1: class first inside the readable pool",
+    "why": "QA round 3, after the seat's flag that R6's flattened pool moved covers and merged columns; C38 and the G0b title-slide sheet (qa/g0b/title-slides-qa3.jpg)."
+   },
+   {
+    "decision": "S2: two columns yield when they add slides",
+    "why": "QA round 3 S2, after the seat's flag that S1 split Marco's and business-conference's 預算 into 3 warned slides each; with S2 they take 2 and 1 (qa/g0b/G0B-RESULT.md)."
+   }
+  ]
+ },
+ "call_path": {
+  "text": "From the file drop to the download. The layout route keeps its rev 7 path; only the sample branch is new. Picks made on one route are dropped with a note when the user switches.",
+  "diagram": "flowchart TD\n  A[\"Drop template (step 2)\"] --> B[\"read_template: layouts + sample slides\"]\n  B --> C[\"Route line and switch\"]\n  C --> D[\"plan_deck(route)\"]\n  D -->|layout| E[\"rev 7 planner\"]\n  D -->|sample| G[\"plan_sample: readable pool, variety, ranking\"]\n  G --> H[\"Slide list: 字細咗, 字細, split, warned\"]\n  E --> H\n  H --> I[\"Download click\"]\n  I --> J[\"fill(route)\"]\n  J -->|sample| K[\"fill_sample: copy, write, clear chips, footers\"]\n  J -->|layout| L[\"rev 7 fill\"]\n  class B changed\n  class C new\n  class D changed\n  class G new\n  class H changed\n  class J changed\n  class K new\n  click B href \"#step-1\"\n  click G href \"#step-3\"\n  click K href \"#step-5\""
+ },
+ "implementation": [
+  {
+   "title": "Reading: routes and sample slides",
+   "text": "open_template reads every sample slide and decides the routes: the sample route needs one usable sample with a title and a body box. With both routes on offer, the sample route is the default only when at least half the usable samples carry design of their own and at least 3 usable samples are content-compatible ([sample_default, R4](src/deckfill/sample.py#L1182-L1188)); a template that offers one route uses it whatever that test says.",
+   "peek": {
+    "path": "src/deckfill/template.py",
+    "start": 400,
+    "end": 408,
+    "side": "head"
+   }
+  },
+  {
+   "title": "What a sample slide holds",
+   "text": "read_sample walks the slide's shape tree, already reduced to its fallback branches, counts a graphic frame there as a chart, table or diagram, then measures every text box in slide space. From those boxes it finds the title region (the largest effective size plus one-word fragments chained to it), labels, body boxes and list slots, excludes hidden, chart, instruction and closing slides, and decides design of its own three ways.",
+   "peek": {
+    "path": "src/deckfill/sample.py",
+    "start": 940,
+    "end": 969,
+    "side": "head"
+   }
+  },
+  {
+   "title": "Reading never breaks a template (code review F1, F2)",
+   "text": "read_samples first reduces each slide to its fallback branches ([normalise_alternates](src/deckfill/sample.py#L138-L155)), the same step every copy takes ([in _copy_sample](src/deckfill/sample_fill.py#L64-L64)), so the reader, the fill and PowerPoint see one tree. It then sizes the slide's footers from their raw XML ([footer_sizes](src/deckfill/sample.py#L1073-L1084)) before anything that can fail, so the size budget counts them even when their box cannot be read (round 2, Edge 2). Any error while reading one slide makes that sample unusable with reason unreadable and the message kept; MemoryError still stops the read. A custom path whose corners are guide names is simply not a backing ([_coord and is_rect_geom](src/deckfill/sample.py#L726-L760)).",
+   "peek": {
+    "path": "src/deckfill/sample.py",
+    "start": 1108,
+    "end": 1132,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The pick for each outline slide (R1, R6, S1, S2, code review F4)",
+   "text": "plan_sample builds every compatible candidate across the class and its fallbacks. For a two-column slide the content tier holds merged builds only, so a sample with two column boxes is also tried with its columns merged into its largest body box (F4). The readable candidates of the first class tier that holds one form the pool (S1); a two-column slide takes its content tier instead when that tier needs fewer continuation slides (S2), equal counts keeping the columns; with nothing readable, the first tier with small_text. Grown candidates join when 2 or more continuation slides remain; then the fewest continuation slides, variety and the ranking.",
+   "peek": {
+    "path": "src/deckfill/sample_plan.py",
+    "start": 565,
+    "end": 592,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The bars and the ranking",
+   "text": "meets compares each destination's written size against 4% (title) or 2% (body) of the slide height. rank_key orders what variety leaves: fits at full size (a warned or unmodelled box does not), the shrink (those count as 7 steps), unused body boxes, the ungrown box, file order. Before any copy is built, the size budget counts each copy's source part, every written paragraph's properties and its escaped text, and per footer type the largest footer any D4 step could supply ([plan_bytes](src/deckfill/sample_plan.py#L628-L648), [footer_budget](src/deckfill/sample.py#L1086-L1097)).",
+   "peek": {
+    "path": "src/deckfill/sample_plan.py",
+    "start": 287,
+    "end": 301,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The clearing, shared by fill and planner (Q1, R5, code review N1)",
+   "text": "clearing decides on the sample's own shapes which go whole and which keep their shape and lose their text: chips under 8%, rectangular backings of cleared boxes, never anything behind a destination that kept its text. Every shape, cleared text box and destination is measured where it is drawn, its rotation and its groups' flips and rotation included ([drawn and dest_boxes](src/deckfill/sample.py#L1210-L1234)), so a chip inside a mirrored group that sits behind the body stays (N1). [The fill applies it](src/deckfill/sample_fill.py#L354-L362) and [writes a grown body with its backing in one group growth](src/deckfill/sample_fill.py#L175-L183); the R3 grid reads it. Footers rebuilt on a copy skip any whose idx or own box does not convert with int() ([footer_ok](src/deckfill/template.py#L134-L167), [in footer_for_type](src/deckfill/fill.py#L197-L199)), so a malformed footer never raises and never reaches the deck (round 2 Edge 1, round 3).",
+   "peek": {
+    "path": "src/deckfill/sample.py",
+    "start": 1236,
+    "end": 1264,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The grown body (R3)",
+   "text": "grow_build finds the body's own backing, marks the cells visible content takes, searches the largest free rectangle around the body's footprint, checks the 25% by 15% floor and that siblings in its groups stay put, then fits the text in the grown box at the box's own sizes. Each shape's taken cells come from [occ_box](src/deckfill/sample.py#L809-L834), which mirrors a flipped group's children about its centre before its rotation (F3).",
+   "peek": {
+    "path": "src/deckfill/sample_plan.py",
+    "start": 417,
+    "end": 446,
+    "side": "head"
+   }
+  },
+  {
+   "title": "The page",
+   "text": "The page keeps the route, shows the route line and the switch when both routes are on offer, lists 範本頁 options in the picker, sends the route with every plan and fill, and shows every state a slide carries (字細咗, 字細, split, warned, check). A route switch marks every remembered pick switched at once, so the bridge drops it with its note and no later switch back revives it, even after an empty outline (E2).",
+   "peek": {
+    "path": "docs/app.js",
+    "start": 242,
+    "end": 264,
+    "side": "head"
+   }
+  }
+ ],
+ "check": [
+  "Marco's 預算 merges onto s4 in 2 slides and stays warned (the title runs onto the body); business-conference's merges onto s3 in 1 slide.",
+  "R1 lets one sample repeat rather than add a slide: Viola uses s39 four times, edb-mpa2022 s5 four times.",
+  "Marco's grouped bodies on s2 and s4 sit within 2% of their titles, so the padded title takes their cells and they do not grow; 八項行動 grows on s6.",
+  "R5 keeps Marco's olive leaf and the four year-digit circles on 問答 as shapes.",
+  "C17 (desktop PowerPoint on Windows) is still open for two sample-route outputs; C5 is a schema proxy.",
+  "Shared modules the layout route also runs: [plan_deck's route branch](src/deckfill/plan.py#L229-L239), [fill's route branch and the shared footer helper footer_for_type](src/deckfill/fill.py#L181-L221), [the bridge's route and pick handling](src/deckfill/web.py#L94-L104), and [route_unavailable in the PlanError docstring](src/deckfill/errors.py#L20-L22). The 213-key layout baseline covers them (qa/rev8/blast-radius.md).",
+  "The one em dash on the page is inside the slop scanner's own raw output (qa/slop-scan-rev8.txt, qa/slop-scan-rev8-qa2.txt), quoted in the diff.",
+  "Code review round 1: edb-mpa2022 on the sample route goes from 9 to 7 slides (預算 merges on s5, F4); G0b reports and sheets are equal to the S2 run.",
+  "Not code paths: [the fixture makers](fixtures/make_sample_fixtures.py#L1-L10) and [their caller](fixtures/make_fixtures.py#L770-L772) build the test templates (rounds 1 and 2 add sample-malformed, altcontent, flip, cols2, inherit, footbig, flipchip, footbad, badidx); [.gitignore](.gitignore#L25-L30) keeps real-template decks and renders out of git; [decisions.tsv](decisions.tsv#L90-L139) is the decision log shown below."
+ ]
+}

@@ -1,0 +1,5 @@
+PASS F9 prompt failure shows the retry state, not ready 
+PASS F9 Copy is disabled while the prompt is missing 
+PASS F9 after retry the page is ready and Copy is enabled 
+PASS F9 Copy puts the prompt on the clipboard after retry 
+4 passed, 0 failed

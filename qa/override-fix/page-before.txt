@@ -1,0 +1,12 @@
+# before the fix: page test at code c49de09
+PASS override the pick is shown on 乙 
+FAIL override after an insert above, 乙 keeps its layout -- {"封面":["/ppt/slideLayouts/slideLayout1.xml","Title Slide"],"新":["/ppt/slideLayouts/slideLayout2.xml","Title and Content"],"甲":["/ppt/slideLayouts/slideLayout3.xml","Section Header"],"乙":["/ppt/slideLayouts/slideLayout2.xml","Title and Content"]}
+FAIL override after an insert above, 甲 (now at 乙's old place) keeps its default -- {"封面":["/ppt/slideLayouts/slideLayout1.xml","Title Slide"],"新":["/ppt/slideLayouts/slideLayout2.xml","Title and Content"],"甲":["/ppt/slideLayouts/slideLayout3.xml","Section Header"],"乙":["/ppt/slideLayouts/slideLayout2.xml","Title and Content"]}
+FAIL override the download puts 乙 on the picked layout -- {"封面":"Title Slide","新":"Title and Content","甲":"Section Header","乙":"Title and Content"}
+FAIL override the download keeps 甲 on its default -- {"封面":"Title Slide","新":"Title and Content","甲":"Section Header","乙":"Title and Content"}
+FAIL override after 乙 is deleted, no slide takes its layout -- {"封面":["/ppt/slideLayouts/slideLayout1.xml","Title Slide"],"新":["/ppt/slideLayouts/slideLayout2.xml","Title and Content"],"甲":["/ppt/slideLayouts/slideLayout3.xml","Section Header"]}
+FAIL override after 乙 is deleted, 甲 keeps its default -- {"封面":["/ppt/slideLayouts/slideLayout1.xml","Title Slide"],"新":["/ppt/slideLayouts/slideLayout2.xml","Title and Content"],"甲":["/ppt/slideLayouts/slideLayout3.xml","Section Header"]}
+FAIL override a one-line note says the layout for 乙 was dropped -- []
+FAIL override the note goes with the next edit -- []
+FAIL override 甲 still keeps its default -- 
+1 passed, 9 failed

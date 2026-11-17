@@ -1,0 +1,17 @@
+{
+ "F3": {
+  "verdict": "fixed",
+  "note": "ZIP64 locator now triggers validation regardless of classic EOCD sentinel values. New tests cover conflicting nonsentinel classic fields and locator without ZIP64 record. Both fail without fix: old preflight accepts their classic spans and reaches monkeypatched ZipFile, which raises AssertionError. Fixed code rejects before construction with too_big or bad_file respectively.",
+  "evidence": "45d803f:src/deckfill/package.py:93-117,122-124; 45d803f:tests/test_c8_errors.py:153-157,178-217"
+ },
+ "F10": {
+  "verdict": "fixed",
+  "note": "Offline download now precedes idle period, with network restored before waiting. Runner records all three download times and checks idle starts after latest download, lasts at least 30 seconds, and contains no browser requests or server hits. Proof checker rejects missing timeline or idle preceding final download. Saved before run fails principally because old report lacks new timeline fields, so it is not an isolated reorder mutation test. Inspected ordering and current timestamps establish corrected coverage.",
+  "evidence": "45d803f:tests/e2e/c9_privacy.mjs:130-134,169-185; 45d803f:qa/e2e/privacy_proof.py:32-35,48-50; 45d803f:qa/e2e/c9-report.json:175-182; 45d803f:qa/codex2/fixes/F10-before.txt:4-12"
+ },
+ "F15": {
+  "verdict": "fixed",
+  "note": "Relationship XML now compared canonically after removing authorized dead-slide relationships. Four regression cases reorder relationships or rewrite equivalent target spelling, both with and without authorized link removal. Each requires detection; old normalized-set comparison misses changes and fails assertions. Tests also establish unmodified output passes before mutation.",
+  "evidence": "45d803f:tests/oracle.py:275-287,313-315; 45d803f:tests/test_c3_c6_package.py:145-186; 45d803f:qa/codex2/fixes/F15-before.txt:2-6"
+ }
+}

@@ -1,0 +1,5 @@
+base 3df373e (3df373e), tests from working tree at 3df373e, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.CqHONzom1z
+samples = {'s1': Sample(k=1, id='s1', part='/ppt/slides/slide1.xml', layout='/ppt/slideLayouts/slideLayout7.xml', usable=True, r...(0, 0), leaves=(), groups=(), fixed=(), footers=(), error="ValueError: invalid literal for int() with base 10: 'bad'")}
+E           deckfill.errors.TemplateError: too_big: sample route: 47439350 bytes, 135 shapes, 90 paragraphs
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_a_footer_never_copied_is_not_budgeted
+1 failed, 1 passed, 33 deselected in 0.12s

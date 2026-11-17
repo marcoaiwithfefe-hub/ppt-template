@@ -1,0 +1,42 @@
+{
+ "slides": [
+  "匯通物流 2027 年度計劃 -> Title Slide (fits)",
+  "目標一：本地送貨準時率 -> Title and Content (fits)",
+  "目標二：葵涌倉存貨周轉 -> Title and Content (fits)",
+  "目標三：大灣區跨境路線 -> Title and Content (fits)",
+  "全年預算 -> Title and Content (fits)",
+  "主要風險 -> Title and Content (fits)",
+  "營運部建議 -> Title and Content (fits)"
+ ],
+ "warnings": [],
+ "c1_round_trip": true,
+ "c3_kept_problems": [],
+ "c3_unexpected_new_parts": [],
+ "c5_integrity": [],
+ "c5_validator": "NOT RUN: Open XML SDK not installed",
+ "renders": [
+  "qa/demo/renders/slide01.pptx.png",
+  "qa/demo/renders/slide02.pptx.png",
+  "qa/demo/renders/slide03.pptx.png",
+  "qa/demo/renders/slide04.pptx.png",
+  "qa/demo/renders/slide05.pptx.png",
+  "qa/demo/renders/slide06.pptx.png",
+  "qa/demo/renders/slide07.pptx.png"
+ ],
+ "tested": {
+  "commit": "c038a9bfdefa3d36ada27f78cac1e0f929e00815",
+  "dirty": "",
+  "files": {
+   "fixtures/wui-tung-template.pptx": "84cb1da55f9113b2e52bb7e4465bed9870d492bce418f72a625b42c697d6b12c",
+   "qa/demo/wui-tung-outline.md": "ca3ce7c3ec811e6185ec8afea656eb29ee05f3304b4f5716e5fbf50e3033d5ef",
+   "qa/demo/wui-tung-deck.pptx": "3cb1d6661ede750a46459fb832948fbbc1cdea825d1051dd0d9ffd2c05700869",
+   "qa/demo/renders/slide01.pptx.png": "0f656521eba32e1df5ce0734d8b014d51ec26a1a8b20c34eb14bd7c4dee87e72",
+   "qa/demo/renders/slide02.pptx.png": "11f6b5265e6ad8fe316df7de8d5ed00fd8a57ecf307768a2a653f4ff6173480f",
+   "qa/demo/renders/slide03.pptx.png": "1cd4f3058df0a952e2011157eaeee0f903440da142919c96f3756c37dd57c1d8",
+   "qa/demo/renders/slide04.pptx.png": "2c7d2e21faeb387e4326ace657bf86b49eee5116fcd8d16d98c004122afc2efd",
+   "qa/demo/renders/slide05.pptx.png": "f420d22f30cbf14060cc6a7e517b92db6e0e8934f0df01b881afbbfec6910743",
+   "qa/demo/renders/slide06.pptx.png": "d31aec37feecacb2891962c17a0f214f8c00f03a90f27b08656c200b57bab93d",
+   "qa/demo/renders/slide07.pptx.png": "3b193be1fb13e7576b6abd0481d2e9de34618f0fa68b4fb7e80f3377f480f72e"
+  }
+ }
+}

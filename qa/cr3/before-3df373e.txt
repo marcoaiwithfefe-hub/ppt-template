@@ -1,0 +1,19 @@
+base 3df373e (3df373e), tests from working tree at 3df373e, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.U50VY9UHBf
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[layout-sample-badidx2.pptx]
+FAILED tests/test_cr2_code_review.py::test_edge1_borrowed_footer_with_a_bad_idx_is_skipped[sample-sample-badidx2.pptx]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[none] - ...
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[11] - Im...
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[bad] - I...
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[superscript-two]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[box] - I...
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[off-bad]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[ext-decimal]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_ok_uses_int[ext-superscript]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_with_an_unreadable_box_is_skipped[layout]
+FAILED tests/test_cr2_code_review.py::test_round3_footer_with_an_unreadable_box_is_skipped[sample]
+12 failed, 5 passed, 38 deselected in 0.68s
+base 3df373e (3df373e), tests from working tree at 3df373e, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.CqHONzom1z
+samples = {'s1': Sample(k=1, id='s1', part='/ppt/slides/slide1.xml', layout='/ppt/slideLayouts/slideLayout7.xml', usable=True, r...(0, 0), leaves=(), groups=(), fixed=(), footers=(), error="ValueError: invalid literal for int() with base 10: 'bad'")}
+E           deckfill.errors.TemplateError: too_big: sample route: 47439350 bytes, 135 shapes, 90 paragraphs
+FAILED tests/test_c26_c29_c30_sample.py::test_c30_a_footer_never_copied_is_not_budgeted
+1 failed, 1 passed, 33 deselected in 0.12s

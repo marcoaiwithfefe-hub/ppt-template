@@ -1,0 +1,15 @@
+# Security audit F1 regression (CPython, .venv)
+
+## Without the fix: tests/test_security_f1.py::test_f1_crafted_1600_box_slide_reads_fast_and_is_unusable on the source at 28f22da (git archive; the new constants' import line dropped)
+E       AssertionError: read took 44.2 s
+E       assert 44.16540412494214 < 2.0
+1 failed, 2 deselected in 44.99s
+
+## With the fix
+3 passed (test_f1_crafted_1600_box_slide_reads_fast_and_is_unusable, test_f1_slide_at_the_text_box_cap_reads_plans_and_fills_fast, test_f1_pairs_are_not_read_past_the_body_cap) in 1.11s
+
+## Probe (scratch script, the audit's generator rebuilt in memory): read_template seconds, then plan and fill
+400 boxes 32194 bytes 0.09 s [('s1', True, '')]
+1600 boxes 43408 bytes 0.04 s [('s1', False, 'too_big')]
+400 plan 0.0 fill 0.04
+1600: the sample route is unavailable (its only sample slide is too_big), so plan_deck(route="sample") refuses with route_unavailable, as intended.

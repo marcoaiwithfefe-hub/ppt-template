@@ -1,0 +1,18 @@
+PASS mac corporate-sales-pitch-slides-2 slides 7->7 eye 0 picks changed 0
+PASS mac elegant-pitch-deck slides 7->7 eye 0 picks changed 3
+PASS mac 3d-modern-background-pitch-deck slides 7->7 eye 0 picks changed 1
+PASS mac business-conference-slides slides 7->7 eye 0 picks changed 2
+PASS mac simple-business-proposal-slides slides 7->7 eye 0 picks changed 2
+PASS mac viola-free-presentation-template slides 7->7 eye 0 picks changed 0
+PASS mac bullen-free-presentation-template slides 7->7 eye 0 picks changed 0
+PASS mac marco-year-in-breakdowns slides 9->8 eye 0 picks changed 2
+PASS win corporate-sales-pitch-slides-2 slides 7->7 eye 0 picks changed 0
+PASS win elegant-pitch-deck slides 7->7 eye 0 picks changed 3
+PASS win 3d-modern-background-pitch-deck slides 7->7 eye 0 picks changed 1
+PASS win business-conference-slides slides 7->7 eye 0 picks changed 2
+PASS win simple-business-proposal-slides slides 7->7 eye 0 picks changed 2
+PASS win viola-free-presentation-template slides 7->7 eye 0 picks changed 0
+PASS win bullen-free-presentation-template slides 7->7 eye 0 picks changed 0
+PASS win marco-year-in-breakdowns slides 9->8 eye 0 picks changed 2
+16 of 16 runs pass the script half; slides for the eye: 0
+G0B EXIT 0

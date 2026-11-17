@@ -1,0 +1,7 @@
+# c42-unclamped: destinations crossing a slide edge are written at their sample boxes
+# mutation in src/deckfill/sample.py: '    return apply_clamps(S) if region else S' -> '    return S'
+# tests: tests/test_c41_c42_marks.py -k clamp
+FAILED tests/test_c41_c42_marks.py::test_c42_clamps - AssertionError: assert ...
+FAILED tests/test_c41_c42_marks.py::test_c42_group_clamp_keeps_sibling - Asse...
+FAILED tests/test_c41_c42_marks.py::test_c42_short_clamp_falls_back_with_check
+3 failed, 1 passed, 7 deselected in 0.13s

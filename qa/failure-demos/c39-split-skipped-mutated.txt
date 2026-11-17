@@ -1,0 +1,6 @@
+# c39-split-skipped: the fill skips the run split: Chinese stays in the template's Latin-only face with no error
+# mutation in src/deckfill/sample_fill.py: '        segs = stretches(text) if needs_split(sbox.faces[lvl - 1], text) else [(False, text)]' -> '        segs = [(False, text)]'
+# tests: tests/test_c39_c40_type.py -k chinese_face
+FAILED tests/test_c39_c40_type.py::test_c39_chinese_face[PingFang HK] - asser...
+FAILED tests/test_c39_c40_type.py::test_c39_chinese_face[Microsoft JhengHei]
+2 failed, 13 deselected in 0.11s

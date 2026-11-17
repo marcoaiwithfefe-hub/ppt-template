@@ -1,0 +1,5 @@
+# c46-r23-no-group: Codex round 2 R2-3 reverted: C23 allows any T5 pair's geometry without a complete pair group
+# mutation in tests/sample_look.py: '    return {(pr, cl(pr[0]), cl(pr[1])) for pr in pairs if pr in allowed}' -> '    return {(pr, cl(pr[0]), cl(pr[1])) for pr in pairs}'
+# tests: tests/test_c46_round1.py -k r2_3 or f4
+FAILED tests/test_c46_round1.py::test_r2_3_c23_rejects_pair_geometry_without_a_complete_pair_group
+1 failed, 1 passed, 16 deselected in 0.15s

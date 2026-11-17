@@ -1,0 +1,21 @@
+C24/C27 golden cases: plan picks at d1b3ca1 (left) and at the S1 head (right); only design moves
+1c1
+< design ('s1', 's2', 's3', 's6', 's2', 's1')
+---
+> design ('s1', 's2', 's3', 's4', 's6', 's1')
+--- head
+design ('s1', 's2', 's3', 's4', 's6', 's1')
+footer ('s1', 's1', 's2', 's3', 's4')
+footer-nopos ('s1',)
+field ('s1',)
+hidden ('s2',)
+equal ('s1', 's2')
+closing5 ('s1', 's1')
+short ('s1',)
+only ('s1', 's2', 's3', 's1')
+connector ('s1',)
+rotated ('s1',)
+jump ('s1', 's2')
+chart ('s1', 's3')
+typo ('s1', 's2')
+thin ('s1', 's1')

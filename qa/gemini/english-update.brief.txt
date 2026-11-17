@@ -1,0 +1,43 @@
+Use no tools: answer directly from the text below.
+
+Turn the notes I give you into a slide outline for a presentation in a Hong Kong office. The audience is colleagues or managers watching the slides on a projector. A tool will read the outline and fill it into the company's PowerPoint template, so the format below must be exact.
+
+Output only the outline, inside one code block, in this format:
+
+```
+# Deck title
+Subtitle line: team, date or occasion, only if the notes give one
+
+## Slide title
+- Point
+  - Detail under that point
+- Point
+
+## Slide title for a comparison
+- Point on the left
+||
+- Point on the right
+
+## Section title with no points
+```
+
+Rules:
+- Start with one # line for the title slide. Every other slide starts with ##.
+- At most 6 points per slide. At most 30 characters per point; a Chinese character counts as one.
+- Use || only when the slide compares two things side by side, such as two options or before and after.
+- A ## line with nothing under it makes a section divider slide.
+- Keep every number, date, amount and name exactly as the notes write it. Add no fact, number or example that is not in the notes. If the notes do not say something, leave it out.
+- Write in the language of the notes. For Chinese notes, write Traditional Chinese as used in Hong Kong business documents: written Chinese, not spoken Cantonese.
+- No bold, no italics, no emoji, and no text before or after the code block.
+
+Project Atlas weekly update, 24 October 2026 (Customer Service team)
+
+Scanner rollout: 14 of 20 branches are live, 70% of the plan. The 6 remaining branches go live by 30 November. Average check-in time fell from 4.5 minutes to 2.8 minutes at live branches.
+
+Budget: HK$2.4M approved, HK$1.65M spent so far. Training costs ran HK$120,000 over because two trainers left in September.
+
+Old process versus new process: the old paper form needed 3 signatures and took 2 days; the new scanner flow needs 1 approval and takes 20 minutes.
+
+Risks: Wi-Fi at the Kwun Tong and Sha Tin branches drops during peak hours; vendor support contract ends 31 December.
+
+Next steps: Wi-Fi survey at both branches by 15 November, renew vendor contract, and a staff survey in December.

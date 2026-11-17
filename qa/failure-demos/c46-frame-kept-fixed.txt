@@ -1,0 +1,4 @@
+# c46-frame-kept: Q9-4 reverted: a line-only frame with no fill element is not a backing, so it stays behind its cleared caption
+# mutation in src/deckfill/sample.py: '    return has_line and (ref is None or ref.get("idx", "0") == "0")' -> '    return False'
+# tests: tests/test_c46_round1.py -k q94
+2 passed, 6 deselected in 2.75s

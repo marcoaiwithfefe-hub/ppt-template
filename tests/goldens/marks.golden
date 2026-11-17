@@ -1,0 +1,28 @@
+#! Every D2 bullet mark and indent. Eleven level-1 bullets split after the sixth (D5).
+slide 1 title 符號測試
+slide 2 title 各種符號
+slide 2 body1 L1 減號
+slide 2 body1 L1 星號
+slide 2 body1 L1 圓點
+slide 2 body1 L1 中間點
+slide 2 body1 L1 連字點
+slide 2 body1 L1 數字點
+slide 3 title 各種符號（續）
+slide 3 body1 L1 數字括號
+slide 3 body1 L1 數字頓號
+slide 3 body1 L1 中文數字
+slide 3 body1 L1 緊貼圓點
+slide 3 body1 L1 緊貼頓號
+slide 4 title 縮排
+slide 4 body1 L1 第一層
+slide 4 body1 L2 兩格空格
+slide 4 body1 L2 tab 縮排
+slide 4 body1 L2 全形空格
+slide 4 body1 L1 一格空格算第一層
+slide 4 body1 L2 四格空格
+slide 4 body1 L2 六格空格都係第二層
+slide 4 body1 L2 冇符號嘅第二層
+slide 5 title 唔係符號
+slide 5 body1 L1 -5% 成本
+slide 5 body1 L1 1.5 億
+slide 5 body1 L1 *重要*

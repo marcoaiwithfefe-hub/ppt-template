@@ -1,0 +1,477 @@
+{
+ "note": "C5 runs on every output listed here. 'generated' outputs are made by the runner from fixtures; 'required' outputs are made by other QA runs and must all exist, or the run fails as incomplete. 'generated_sample' outputs (rev 8) are made by the runner on the sample route, each fixture with its golden outline. Each output's name is unique; an entry with a 'name' gets it in its output file name. The runner fails when the outputs it validated differ from this list (code review F5).",
+ "generated": {
+  "outline": "fixtures/reference-outline.md",
+  "templates": [
+   "typed.pptx",
+   "custom.pptx",
+   "contradict.pptx",
+   "two-masters.pptx",
+   "no-two.pptx",
+   "no-section.pptx",
+   "no-title.pptx",
+   "only-content.pptx",
+   "small-body.pptx",
+   "small-body-insets.pptx",
+   "nowrap.pptx",
+   "footer-active.pptx",
+   "footer-mixed.pptx",
+   "footer-two-masters.pptx",
+   "footer-fixed-date.pptx",
+   "footer-hf.pptx",
+   "external-link.pptx",
+   "sections.pptx",
+   "wui-tung.pptx",
+   "wui-tung.potx",
+   "rels-order.pptx",
+   "view-outline.pptx",
+   "footer-local.pptx",
+   "xml-renamed.pptx",
+   "sample-malformed.pptx",
+   "sample-badidx.pptx",
+   "sample-footbad.pptx",
+   "sample-badidx2.pptx"
+  ]
+ },
+ "required": [
+  {
+   "family": "G0",
+   "template": "qa/real-templates/edb-mpa2022.pptx",
+   "output": "qa/g0/edb-mpa2022/edb-mpa2022-filled.pptx"
+  },
+  {
+   "family": "G0",
+   "template": "qa/real-templates/elderly-gov-diy.pptx",
+   "output": "qa/g0/elderly-gov-diy/elderly-gov-diy-filled.pptx"
+  },
+  {
+   "family": "G0",
+   "template": "qa/real-templates/ms-business-proposal.pptx",
+   "output": "qa/g0/ms-business-proposal/ms-business-proposal-filled.pptx"
+  },
+  {
+   "family": "G0",
+   "template": "qa/real-templates/usc-substitute-fonts-wide.potx",
+   "output": "qa/g0/usc-substitute-fonts-wide/usc-substitute-fonts-wide-filled.pptx"
+  },
+  {
+   "family": "G0 outside the five",
+   "template": "qa/real-templates/hkust-template14.potx",
+   "output": "qa/g0/hkust-template14/hkust-template14-filled.pptx"
+  },
+  {
+   "family": "D10",
+   "template": "fixtures/wui-tung-template.pptx",
+   "output": "qa/demo/wui-tung-deck.pptx"
+  },
+  {
+   "family": "C10",
+   "template": "fixtures/out/wui-tung.pptx",
+   "output": "qa/e2e/c10-wui-tung.pptx"
+  },
+  {
+   "family": "C10",
+   "template": "fixtures/out/typed.pptx",
+   "output": "qa/e2e/c10-typed-override.pptx"
+  },
+  {
+   "family": "C1 page",
+   "template": "fixtures/out/wui-tung.pptx",
+   "output": "qa/e2e/c1-edit-download-1.pptx"
+  },
+  {
+   "family": "C1 page",
+   "template": "fixtures/out/wui-tung.pptx",
+   "output": "qa/e2e/c1-edit-download-2.pptx"
+  },
+  {
+   "family": "C15",
+   "template": "fixtures/out/wui-tung.pptx",
+   "output": "qa/gemini/wui-tung-report.wui-tung.pptx"
+  },
+  {
+   "family": "C15",
+   "template": "fixtures/out/wui-tung.pptx",
+   "output": "qa/gemini/english-update.wui-tung.pptx"
+  },
+  {
+   "family": "C15",
+   "template": "fixtures/out/wui-tung.pptx",
+   "output": "qa/gemini/meeting-summary.wui-tung.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/corporate-sales-pitch-slides-2.pptx",
+   "output": "qa/g0b/corporate-sales-pitch-slides-2/corporate-sales-pitch-slides-2-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/elegant-pitch-deck.pptx",
+   "output": "qa/g0b/elegant-pitch-deck/elegant-pitch-deck-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/3d-modern-background-pitch-deck.pptx",
+   "output": "qa/g0b/3d-modern-background-pitch-deck/3d-modern-background-pitch-deck-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/business-conference-slides.pptx",
+   "output": "qa/g0b/business-conference-slides/business-conference-slides-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/simple-business-proposal-slides.pptx",
+   "output": "qa/g0b/simple-business-proposal-slides/simple-business-proposal-slides-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/viola-free-presentation-template.pptx",
+   "output": "qa/g0b/viola-free-presentation-template/viola-free-presentation-template-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/bullen-free-presentation-template.pptx",
+   "output": "qa/g0b/bullen-free-presentation-template/bullen-free-presentation-template-filled.pptx"
+  },
+  {
+   "family": "G0b (sample route)",
+   "template": "qa/real-templates/marco-year-in-breakdowns.pptx",
+   "output": "qa/g0b/marco-year-in-breakdowns/marco-year-in-breakdowns-filled.pptx"
+  },
+  {
+   "family": "C28 page (sample route)",
+   "template": "fixtures/out/sample-design.pptx",
+   "output": "qa/e2e/c28-sample-design.pptx"
+  },
+  {
+   "family": "Q5 sample route",
+   "template": "qa/real-templates/edb-mpa2022.pptx",
+   "output": "qa/rev8/q5/cr3/edb-mpa2022-sample/edb-mpa2022-sample-filled.pptx"
+  },
+  {
+   "family": "Q5 sample route",
+   "template": "qa/real-templates/elderly-gov-diy.pptx",
+   "output": "qa/rev8/q5/cr3/elderly-gov-diy-sample/elderly-gov-diy-sample-filled.pptx"
+  },
+  {
+   "family": "Q5 sample route",
+   "template": "qa/real-templates/hkust-template14.potx",
+   "output": "qa/rev8/q5/cr3/hkust-template14-sample/hkust-template14-sample-filled.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-example-mac.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-example-win.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-reference-mac.pptx"
+  },
+  {
+   "family": "G0c",
+   "template": "qa/real-templates/canva-red-pink-pitch.pptx",
+   "output": "qa/g0c/out/canva-reference-win.pptx"
+  }
+ ],
+ "generated_sample": [
+  {
+   "template": "sample-design.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-footer.pptx",
+   "outline": "tests/outlines/sample/footer.md",
+   "overrides": {
+    "1": "s1",
+    "2": "s2",
+    "3": "s3",
+    "4": "s4"
+   }
+  },
+  {
+   "template": "sample-footer-nopos.pptx",
+   "outline": "tests/outlines/sample/only.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-field.pptx",
+   "outline": "tests/outlines/sample/field.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-hidden.pptx",
+   "outline": "tests/outlines/sample/hidden.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-equal.pptx",
+   "outline": "tests/outlines/sample/equal.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-closing5.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-short.pptx",
+   "outline": "tests/outlines/sample/short.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-only.pptx",
+   "outline": "tests/outlines/sample/four.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-connector.pptx",
+   "outline": "tests/outlines/sample/connector.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-rotated.pptx",
+   "outline": "tests/outlines/sample/rotated.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-jump.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-chart.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-typo.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-thin.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-heavy.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-backings.pptx",
+   "outline": "tests/outlines/sample/backings.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-readable.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-small.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-split.pptx",
+   "outline": "tests/outlines/sample/split.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-grow.pptx",
+   "outline": "tests/outlines/sample/four-long.md",
+   "overrides": {
+    "0": "s1"
+   }
+  },
+  {
+   "template": "sample-geom.pptx",
+   "outline": "tests/outlines/sample/backings.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-order.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-two.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-only2.pptx",
+   "outline": "tests/outlines/sample/readable.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-fit.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cover.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cover2.pptx",
+   "outline": "tests/outlines/sample/design.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cols.pptx",
+   "outline": "tests/outlines/sample/cols.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-cols2.pptx",
+   "outline": "tests/outlines/sample/cols.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-malformed.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-altcontent.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-flip.pptx",
+   "outline": "tests/outlines/sample/four-long.md",
+   "overrides": {
+    "0": "s1"
+   },
+   "name": "flipH"
+  },
+  {
+   "template": "sample-flip.pptx",
+   "outline": "tests/outlines/sample/four-long.md",
+   "overrides": {
+    "0": "s2"
+   },
+   "name": "flipV"
+  },
+  {
+   "template": "sample-inherit.pptx",
+   "outline": "tests/outlines/sample/inherit.md",
+   "overrides": {
+    "0": "s1"
+   },
+   "name": "placeholder"
+  },
+  {
+   "template": "sample-inherit.pptx",
+   "outline": "tests/outlines/sample/inherit.md",
+   "overrides": {
+    "0": "s2"
+   },
+   "name": "default"
+  },
+  {
+   "template": "sample-inherit.pptx",
+   "outline": "tests/outlines/sample/inherit.md",
+   "overrides": {
+    "0": "s3"
+   },
+   "name": "own"
+  },
+  {
+   "template": "sample-footbig.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-flipchip.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {
+    "0": "s1",
+    "1": "s1"
+   },
+   "name": "flip"
+  },
+  {
+   "template": "sample-flipchip.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {
+    "0": "s2",
+    "1": "s2"
+   },
+   "name": "rot"
+  },
+  {
+   "template": "sample-badidx.pptx",
+   "outline": "fixtures/reference-outline.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-footbad.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-badidx2.pptx",
+   "outline": "fixtures/reference-outline.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-footrot.pptx",
+   "outline": "tests/outlines/sample/two-slides.md",
+   "overrides": {}
+  },
+  {
+   "template": "sample-latin-font.pptx",
+   "outline": "tests/outlines/sample/latin-font.md",
+   "overrides": {
+    "1": "s2",
+    "2": "s3",
+    "3": "s4",
+    "4": "s5",
+    "5": "s6"
+   },
+   "name": "latin-font"
+  },
+  {
+   "template": "sample-ghost.pptx",
+   "outline": "tests/outlines/sample/ghost.md",
+   "overrides": {
+    "1": "s2",
+    "2": "s5"
+   },
+   "name": "ghost"
+  },
+  {
+   "template": "sample-pairs.pptx",
+   "outline": "tests/outlines/sample/pairs.md",
+   "overrides": {
+    "1": "s1",
+    "2": "s1",
+    "3": "s1"
+   },
+   "name": "pairs"
+  },
+  {
+   "template": "sample-titlegrow.pptx",
+   "outline": "tests/outlines/sample/titlegrow.md",
+   "overrides": {
+    "1": "s2",
+    "2": "s5",
+    "3": "s7",
+    "4": "s8"
+   },
+   "name": "titlegrow"
+  }
+ ]
+}

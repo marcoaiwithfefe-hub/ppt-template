@@ -1,0 +1,297 @@
+{
+ "template": "elderly-gov-diy.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 1.24,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s11",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s12",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s13",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s14",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s15",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s16",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s17",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s18",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s9",
+  "s14",
+  "s10",
+  "s9",
+  "s8",
+  "s2"
+ ],
+ "warnings": [
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s9",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 2,
+   "sample": "s14",
+   "title": "三個目標",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 3,
+   "sample": "s10",
+   "title": "時間表",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 4,
+   "sample": "s9",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s8",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s8",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s2",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "kept_not_rect": [
+  {
+   "slide": 1,
+   "shape": 44
+  },
+  {
+   "slide": 2,
+   "shape": 25
+  },
+  {
+   "slide": 3,
+   "shape": 22
+  },
+  {
+   "slide": 4,
+   "shape": 44
+  },
+  {
+   "slide": 5,
+   "shape": 23
+  },
+  {
+   "slide": 6,
+   "shape": 23
+  }
+ ],
+ "title_bar": {
+  "size_pt": 37.0,
+  "bar_pt": 21.6,
+  "meets": true
+ },
+ "closing_bar": {
+  "sample": "s2",
+  "size_pt": 48.0,
+  "bar_pt": 21.6,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 1,
+  "時間表": 1,
+  "預算 港幣 800 萬": 1,
+  "八項行動": 2,
+  "問答": 1
+ },
+ "c23_diffs": [],
+ "sheet": "qa/rev8/q5/qa2/elderly-gov-diy-sample/sheet.jpg",
+ "renders": "qa/rev8/q5/qa2/elderly-gov-diy-sample/renders-vqxi5v9g"
+}

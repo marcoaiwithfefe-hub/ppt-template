@@ -1,0 +1,10 @@
+base 057c266 (057c266), tests from working tree at d6b4778, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.jB9LU8tpUm
+FAILED tests/test_cr1_code_review.py::test_f3_reader_occupancy_mirrors_flipped_groups[1]
+FAILED tests/test_cr1_code_review.py::test_f3_reader_occupancy_mirrors_flipped_groups[2]
+FAILED tests/test_cr1_code_review.py::test_f3_grown_body_never_covers_the_flipped_picture[1]
+FAILED tests/test_cr1_code_review.py::test_f3_grown_body_never_covers_the_flipped_picture[2]
+4 failed, 2 passed, 17 deselected in 0.15s
+comparator half: base 057c266 tests/sample_look.py, F3 tests from working tree, scratch /var/folders/mq/sc4hp40n1w9_l1cnqbjdfdkw0000gn/T/tmp.U9XUswIClJ
+FAILED tests/test_cr1_code_review.py::test_f3_comparator_occupancy_mirrors_flipped_groups[1]
+FAILED tests/test_cr1_code_review.py::test_f3_comparator_occupancy_mirrors_flipped_groups[2]
+2 failed, 21 deselected in 0.11s

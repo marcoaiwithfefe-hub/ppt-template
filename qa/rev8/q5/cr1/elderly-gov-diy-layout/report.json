@@ -1,0 +1,235 @@
+{
+ "template": "elderly-gov-diy.pptx",
+ "route": "layout",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 1.14,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s11",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s12",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s13",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s14",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s15",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s16",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s17",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s18",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "/ppt/slideLayouts/slideLayout20.xml",
+  "/ppt/slideLayouts/slideLayout20.xml",
+  "/ppt/slideLayouts/slideLayout20.xml",
+  "/ppt/slideLayouts/slideLayout20.xml",
+  "/ppt/slideLayouts/slideLayout20.xml",
+  "/ppt/slideLayouts/slideLayout20.xml"
+ ],
+ "warnings": [
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "匯通物流 2027 年度計劃",
+   "fit": "fits"
+  },
+  {
+   "n": 2,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "三個目標",
+   "fit": "fits"
+  },
+  {
+   "n": 3,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "時間表",
+   "fit": "fits"
+  },
+  {
+   "n": 4,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "預算 港幣 800 萬",
+   "fit": "fits"
+  },
+  {
+   "n": 5,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "八項行動",
+   "fit": "split"
+  },
+  {
+   "n": 6,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "八項行動（續）",
+   "fit": "split"
+  },
+  {
+   "n": 7,
+   "layout": "/ppt/slideLayouts/slideLayout20.xml",
+   "title": "問答",
+   "fit": "fits"
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/rev8/q5/cr1/elderly-gov-diy-layout/sheet.jpg",
+ "renders": "qa/rev8/q5/cr1/elderly-gov-diy-layout/renders-jstv8vy6"
+}

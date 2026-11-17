@@ -1,0 +1,4 @@
+# sample-hidden + outlines/sample/hidden.md: s1 is hidden; the hidden 60 pt box on s2 is never the title and is scrubbed.
+slide 1 s2
+201 1 Shown
+211 1 y

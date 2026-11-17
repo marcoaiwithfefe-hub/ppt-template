@@ -1,0 +1,42 @@
+```
+# Project Atlas weekly update
+Customer Service team, 24 October 2026
+
+## Scanner rollout
+- 14 of 20 branches are live
+  - 70% of the plan
+- 6 remaining branches:
+  - Go live by 30 November
+- Average check-in time fell:
+  - 4.5 minutes to 2.8 minutes
+
+## Budget
+- HK$2.4M approved
+- HK$1.65M spent so far
+- Training costs:
+  - Ran HK$120,000 over
+  - Two trainers left
+  - In September
+
+## Old process versus new process
+- Old paper form
+- Needed 3 signatures
+- Took 2 days
+||
+- New scanner flow
+- Needs 1 approval
+- Takes 20 minutes
+
+## Risks
+- Kwun Tong and Sha Tin Wi-Fi:
+  - Drops during peak hours
+- Vendor support contract:
+  - Ends 31 December
+
+## Next steps
+- Wi-Fi survey:
+  - At both branches
+  - By 15 November
+- Renew vendor contract
+- Staff survey in December
+```

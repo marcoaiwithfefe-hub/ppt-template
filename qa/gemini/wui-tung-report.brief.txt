@@ -1,0 +1,39 @@
+Use no tools: answer directly from the text below.
+
+Turn the notes I give you into a slide outline for a presentation in a Hong Kong office. The audience is colleagues or managers watching the slides on a projector. A tool will read the outline and fill it into the company's PowerPoint template, so the format below must be exact.
+
+Output only the outline, inside one code block, in this format:
+
+```
+# Deck title
+Subtitle line: team, date or occasion, only if the notes give one
+
+## Slide title
+- Point
+  - Detail under that point
+- Point
+
+## Slide title for a comparison
+- Point on the left
+||
+- Point on the right
+
+## Section title with no points
+```
+
+Rules:
+- Start with one # line for the title slide. Every other slide starts with ##.
+- At most 6 points per slide. At most 30 characters per point; a Chinese character counts as one.
+- Use || only when the slide compares two things side by side, such as two options or before and after.
+- A ## line with nothing under it makes a section divider slide.
+- Keep every number, date, amount and name exactly as the notes write it. Add no fact, number or example that is not in the notes. If the notes do not say something, leave it out.
+- Write in the language of the notes. For Chinese notes, write Traditional Chinese as used in Hong Kong business documents: written Chinese, not spoken Cantonese.
+- No bold, no italics, no emoji, and no text before or after the code block.
+
+匯通物流 2027 年度計劃（營運部內部簡報）
+
+營運部 2027 年有三個目標。第一，本地送貨準時率由 92% 升到 97%：第一季先試行 AI 排程，第二季擴展到全部車隊，先做九龍區。第二，葵涌倉存貨周轉由 45 日減到 35 日，會引入新貨架系統。第三，大灣區新增 3 條跨境路線，第三季開深圳、東莞、佛山線，第四季檢討成效。
+
+全年預算港幣 800 萬：科技 350 萬，佔 44%；人手培訓 150 萬，佔 19%；車隊 300 萬，佔 37%。
+
+主要風險有兩個：司機人手不足，以及跨境清關時間不穩定。營運部建議每月公布準時率，並在年中開檢討會，必要時調整第四季預算。

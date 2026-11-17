@@ -1,0 +1,166 @@
+{
+ "template": "marco-year-in-breakdowns.pptx",
+ "route": "layout",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 0.32,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "/ppt/slideLayouts/slideLayout3.xml",
+  "/ppt/slideLayouts/slideLayout3.xml",
+  "/ppt/slideLayouts/slideLayout3.xml",
+  "/ppt/slideLayouts/slideLayout3.xml",
+  "/ppt/slideLayouts/slideLayout3.xml",
+  "/ppt/slideLayouts/slideLayout4.xml"
+ ],
+ "warnings": [
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "匯通物流 2027 年度計劃",
+   "fit": "fits"
+  },
+  {
+   "n": 2,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "三個目標",
+   "fit": "fits"
+  },
+  {
+   "n": 3,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "時間表",
+   "fit": "fits"
+  },
+  {
+   "n": 4,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "預算 港幣 800 萬",
+   "fit": "fits"
+  },
+  {
+   "n": 5,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "八項行動",
+   "fit": "split"
+  },
+  {
+   "n": 6,
+   "layout": "/ppt/slideLayouts/slideLayout3.xml",
+   "title": "八項行動（續）",
+   "fit": "split"
+  },
+  {
+   "n": 7,
+   "layout": "/ppt/slideLayouts/slideLayout4.xml",
+   "title": "問答",
+   "fit": "fits"
+  }
+ ],
+ "new_overlaps": [],
+ "sheet": "qa/g0b/marco-before-layout-route/sheet.jpg",
+ "renders": "qa/g0b/marco-before-layout-route/renders"
+}

@@ -1,0 +1,5 @@
+PASS C1 page download is disabled as soon as the outline changes 
+PASS C1 page forced click mid-edit ships the new outline 
+PASS C1 page ordinary click after an edit ships the new outline 
+PASS C1 page download name follows the new title 
+4 passed, 0 failed

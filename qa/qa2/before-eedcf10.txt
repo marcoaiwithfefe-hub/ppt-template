@@ -1,0 +1,15 @@
+eedcf10 source (QA round 2 groundwork only), round 2 tests, comparator and fixtures copied in; imports of names eedcf10 lacks replaced by stand-ins for this run only
+FAILED tests/test_c34_c37_round2.py::test_c34_marco_slide6_four_bullets_on_one_slide_in_a_grown_box
+FAILED tests/test_c34_c37_round2.py::test_c34_declared_background_takes_no_cells
+FAILED tests/test_c34_c37_round2.py::test_c34_equal_area_ties_go_top_most - A...
+FAILED tests/test_c34_c37_round2.py::test_c34_equal_area_ties_then_left_most
+FAILED tests/test_c34_c37_round2.py::test_c34_grouped_body_grows_with_its_backing_and_groups_siblings_fixed
+FAILED tests/test_c34_c37_round2.py::test_c34_positive_margin_backing_beside_an_obstacle
+FAILED tests/test_c34_c37_round2.py::test_c35_variety_never_adds_a_slide - As...
+FAILED tests/test_c34_c37_round2.py::test_c35_continuation_drops_its_suffix_only_when_the_suffix_alone_overflows
+FAILED tests/test_c34_c37_round2.py::test_c35_overflowing_one_slide_slots_lose_to_a_fitting_body
+FAILED tests/test_c34_c37_round2.py::test_c36_backings_by_geometry - assert 1...
+FAILED tests/test_c34_c37_round2.py::test_c37_route_default[sample-thin.pptx-routes0-layout]
+FAILED tests/test_c34_c37_round2.py::test_c37_route_default[sample-two.pptx-routes1-layout]
+FAILED tests/test_c22_route.py::test_c22_default_route[sample-thin.pptx-layout]
+13 failed, 17 passed in 0.37s

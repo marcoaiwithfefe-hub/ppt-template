@@ -1,0 +1,13 @@
+# sample-only + outlines/sample/four.md: variety s1, s2, s3, then s1 (the two previous are s2 and s3).
+slide 1 s1
+101 1 A
+111 1 x
+slide 2 s2
+201 1 B
+211 1 y
+slide 3 s3
+301 1 C
+311 1 z
+slide 4 s1
+101 1 D
+111 1 w

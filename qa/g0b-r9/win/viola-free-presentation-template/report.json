@@ -1,0 +1,487 @@
+{
+ "template": "viola-free-presentation-template.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 1.08,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s11",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s12",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s13",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s14",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s15",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s16",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s17",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s18",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s19",
+   "usable": false,
+   "reason": "closing",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s20",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s21",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s22",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s23",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s24",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s25",
+   "usable": false,
+   "reason": "instructions",
+   "design": false,
+   "classes": [
+    "section",
+    "content"
+   ]
+  },
+  {
+   "id": "s26",
+   "usable": false,
+   "reason": "instructions",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s27",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s28",
+   "usable": true,
+   "reason": "",
+   "design": false,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s29",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s30",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s31",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s32",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s33",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s34",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s35",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s36",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": false,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s37",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s38",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s39",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s40",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s1",
+  "s39",
+  "s39",
+  "s39",
+  "s39",
+  "s1"
+ ],
+ "warnings": [
+  [
+   "subtitle_in_title",
+   "匯通物流 2027 年度計劃"
+  ],
+  [
+   "columns_merged",
+   "預算 港幣 800 萬"
+  ]
+ ],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s1",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": []
+  },
+  {
+   "n": 2,
+   "sample": "s39",
+   "title": "三個目標",
+   "flags": []
+  },
+  {
+   "n": 3,
+   "sample": "s39",
+   "title": "時間表",
+   "flags": []
+  },
+  {
+   "n": 4,
+   "sample": "s39",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s39",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s39",
+   "title": "八項行動（續）",
+   "flags": [
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s1",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "kept_not_rect": [],
+ "title_bar": {
+  "size_pt": 36.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
+ "closing_bar": {
+  "sample": "s1",
+  "size_pt": 36.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 1,
+  "時間表": 1,
+  "預算 港幣 800 萬": 1,
+  "八項行動": 2,
+  "問答": 1
+ },
+ "title_slide": {
+  "sample": "s1",
+  "cover": "s1",
+  "is_cover": true
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s39",
+  "slides": 1,
+  "merged": true,
+  "warned": false
+ },
+ "c23_diffs": [],
+ "sheet": "qa/g0b-r9/win/viola-free-presentation-template/sheet.jpg",
+ "renders": "qa/g0b-r9/win/viola-free-presentation-template/renders-uuykhem8"
+}

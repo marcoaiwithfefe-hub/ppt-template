@@ -1,0 +1,4 @@
+# c40-unscaled-line: the fill keeps the copied line spacing: no scaling to the written size, no Chinese floors
+# mutation in src/deckfill/sample_fill.py: '    want = spec.ln_written(size, has_chinese(text))' -> '    want = None'
+# tests: tests/test_c39_c40_type.py -k line_height
+2 passed, 13 deselected in 0.09s

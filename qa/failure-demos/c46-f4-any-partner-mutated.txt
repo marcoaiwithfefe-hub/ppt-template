@@ -1,0 +1,5 @@
+# c46-f4-any-partner: Codex F4 reverted: C23 takes any other text box as a T5 partner, so geometry from a non-pair passes
+# mutation in tests/sample_look.py: '    for (h, b), H, B in t5_pairs(s_sh, s_bx, hidden, sw, sh, size_of):' -> '    for (h, b), H, B in [((x, y), s_bx[x], s_bx[y]) for x in s_bx for y in s_bx if x != y and i in (x, y)]:'
+# tests: tests/test_c46_round1.py -k f4
+FAILED tests/test_c46_round1.py::test_f4_c23_rejects_geometry_from_a_non_pair
+1 failed, 13 deselected in 0.05s

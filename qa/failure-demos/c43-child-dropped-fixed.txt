@@ -1,0 +1,4 @@
+# c43-child-dropped: a pair destination drops each point's children instead of writing them into its B
+# mutation in src/deckfill/sample_plan.py: '        if grp[1:]:\n            fills.append(fill_box(B, "pbody"' -> '        if False:\n            fills.append(fill_box(B, "pbody"'
+# tests: tests/test_c24_c27_sample_text.py tests/test_c43_pairs.py -k pairs or golden
+30 passed, 1 deselected in 0.66s

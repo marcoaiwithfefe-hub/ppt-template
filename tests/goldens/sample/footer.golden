@@ -1,0 +1,32 @@
+# sample-footer + outlines/sample/footer.md with picks s1, s2, s3, s4 on slides 2 to 5 (the title slide takes s1).
+# Footers once per copy, in sldNum, ftr, dt order: the copy's own sample first (s1's ftr and number, s3's fixed date,
+# s4's grouped ftr re-placed on the layout's box), then D4 step 1 over the samples on the same layout.
+slide 1 s1
+101 1 Footers
+footer sldNum 1
+footer ftr Company Confidential
+footer dt 2026 年 10 月
+slide 2 s1
+101 1 One
+111 1 a
+footer sldNum 2
+footer ftr Company Confidential
+footer dt 2026 年 10 月
+slide 3 s2
+201 1 Two
+211 1 b
+footer sldNum 3
+footer ftr Company Confidential
+footer dt 2026 年 10 月
+slide 4 s3
+301 1 Three
+311 1 c
+footer sldNum 4
+footer ftr Company Confidential
+footer dt 2026 年 10 月
+slide 5 s4
+401 1 Four
+411 1 d
+footer sldNum 5
+footer ftr Grouped footer
+footer dt 2026 年 10 月

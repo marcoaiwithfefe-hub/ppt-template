@@ -1,0 +1,359 @@
+{
+ "template": "3d-modern-background-pitch-deck.pptx",
+ "route": "sample",
+ "routes": [
+  "sample",
+  "layout"
+ ],
+ "default_route": "sample",
+ "seconds": 1.1,
+ "samples": [
+  {
+   "id": "s1",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s2",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s3",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s4",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s5",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s6",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s7",
+   "usable": false,
+   "reason": "chart, table or diagram",
+   "design": true,
+   "classes": [
+    "section"
+   ]
+  },
+  {
+   "id": "s8",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s9",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s10",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s11",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s12",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s13",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s14",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s15",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s16",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "two",
+    "content"
+   ]
+  },
+  {
+   "id": "s17",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s18",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s19",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s20",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s21",
+   "usable": false,
+   "reason": "closing",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s22",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s23",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s24",
+   "usable": true,
+   "reason": "",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  },
+  {
+   "id": "s25",
+   "usable": false,
+   "reason": "instructions",
+   "design": true,
+   "classes": [
+    "content"
+   ]
+  }
+ ],
+ "chosen": [
+  "s1",
+  "s24",
+  "s11",
+  "s3",
+  "s12",
+  "s1"
+ ],
+ "warnings": [],
+ "slides": [
+  {
+   "n": 1,
+   "sample": "s1",
+   "title": "匯通物流 2027 年度計劃",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 2,
+   "sample": "s24",
+   "title": "三個目標",
+   "flags": []
+  },
+  {
+   "n": 3,
+   "sample": "s11",
+   "title": "時間表",
+   "flags": []
+  },
+  {
+   "n": 4,
+   "sample": "s3",
+   "title": "預算 港幣 800 萬",
+   "flags": [
+    "shrunk"
+   ]
+  },
+  {
+   "n": 5,
+   "sample": "s12",
+   "title": "八項行動",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 6,
+   "sample": "s12",
+   "title": "八項行動（續）",
+   "flags": [
+    "shrunk",
+    "split"
+   ]
+  },
+  {
+   "n": 7,
+   "sample": "s1",
+   "title": "問答",
+   "flags": []
+  }
+ ],
+ "new_overlaps": [],
+ "blank_chips": [],
+ "kept_under_text": [],
+ "kept_not_rect": [
+  {
+   "slide": 4,
+   "shape": 163
+  },
+  {
+   "slide": 4,
+   "shape": 166
+  },
+  {
+   "slide": 4,
+   "shape": 169
+  }
+ ],
+ "title_bar": {
+  "size_pt": 48.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
+ "closing_bar": {
+  "sample": "s1",
+  "size_pt": 57.0,
+  "bar_pt": 16.2,
+  "meets": true
+ },
+ "per_outline_slide": {
+  "匯通物流 2027 年度計劃": 1,
+  "三個目標": 1,
+  "時間表": 1,
+  "預算 港幣 800 萬": 1,
+  "八項行動": 2,
+  "問答": 1
+ },
+ "title_slide": {
+  "sample": "s1",
+  "cover": "s1",
+  "is_cover": true
+ },
+ "two_column_slide": {
+  "title": "預算 港幣 800 萬",
+  "sample": "s3",
+  "slides": 1,
+  "merged": false,
+  "warned": false
+ },
+ "c23_diffs": [],
+ "sheet": "qa/g0b-r9/mac/3d-modern-background-pitch-deck/sheet.jpg",
+ "renders": "qa/g0b-r9/mac/3d-modern-background-pitch-deck/renders-t37t13rv"
+}

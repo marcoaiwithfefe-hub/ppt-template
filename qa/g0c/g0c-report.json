@@ -1,0 +1,730 @@
+{
+ "tested": {
+  "commit": "c0b548e3f346ddf7048f16c0d280b357d87830fb",
+  "dirty": "",
+  "files": {
+   "src/deckfill/__init__.py": "c816ac341869e8465b8a038996944b6f62aa6b4318003d1cdc8efe84e01c3dc9",
+   "src/deckfill/cjk.py": "c32a66c83dbc375b22504ecb15b54f2e0eaf69cffc78061d1066b5a8e24f4990",
+   "src/deckfill/errors.py": "062ef882584b38ecacf8f5f110c9e4a21d63eca674fe577bad953eaa332ce709",
+   "src/deckfill/fill.py": "39b6865b2269244d5d82e146ca2bcb5ce89db3839174675dc2cdb5e18647ddf6",
+   "src/deckfill/outline.py": "6376d745158e320a9f92cccbf0448c4ef14cabf0e9030ab8406b366a4244130c",
+   "src/deckfill/package.py": "9bcd0a9892df1da8b4f8e56aa319c11294b4ca63e02532461610c422f206fe02",
+   "src/deckfill/plan.py": "4f1e9c3092db1ac9b30f943d2800443cb6e6cb6f88eb05e615f505e5c97cc17e",
+   "src/deckfill/sample.py": "81de46821d425807748da364d2814bafddf0acf9c645d39281d179916573fdd4",
+   "src/deckfill/sample_fill.py": "af57af9e7a553c95bea30b7a13d552556849b118bf3e47d3aa88031e50dc4e85",
+   "src/deckfill/sample_plan.py": "82f0a1c23cf2f1e46661ca5c3d45f40671bd1d79ecdd3281ce9d3bc611e94611",
+   "src/deckfill/template.py": "56333382b236d99b31b70216e30adc87c25a120c2320419a5793c7f68d4eaa98",
+   "src/deckfill/web.py": "a57524ad5665c9b4d70f30566fae475bc171300b1c7669a722b8f03b246c1ccf",
+   "src/deckfill/xmlsafe.py": "d36e557eea2c25db789c4193c545474c1fe478607a6ad0c6c3a9add8dba23392",
+   "qa/real-templates/canva-red-pink-pitch.pptx": "34f475efd3da23b8b3b5a2ea5258089da8f7fc7e7475c272a4e7dd4ed9832aac"
+  }
+ },
+ "rows": [
+  {
+   "outline": "example",
+   "cjk_face": "PingFang HK",
+   "route": "sample",
+   "output": "qa/g0c/out/canva-example-mac.pptx",
+   "slides": [
+    {
+     "sample": "s1",
+     "title": "匯通物流 2027 年度計劃",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       16300,
+       "shrunk"
+      ],
+      [
+       5,
+       "subtitle",
+       2750,
+       "shrunk"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s2",
+     "title": "三個目標",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       5,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       6,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       7,
+       "pbody",
+       0,
+       "fits"
+      ],
+      [
+       8,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       18,
+       "label",
+       0,
+       "fits"
+      ],
+      [
+       19,
+       "label",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s7",
+     "title": "預算 港幣 800 萬",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       14000,
+       "shrunk"
+      ],
+      [
+       4,
+       "body",
+       2200,
+       "shrunk"
+      ],
+      [
+       8,
+       "body",
+       2200,
+       "shrunk"
+      ]
+     ]
+    },
+    {
+     "sample": "s6",
+     "title": "問答",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       4,
+       "title",
+       0,
+       "fits"
+      ]
+     ]
+    }
+   ],
+   "problems": [],
+   "ok": true
+  },
+  {
+   "outline": "example",
+   "cjk_face": "Microsoft JhengHei",
+   "route": "sample",
+   "output": "qa/g0c/out/canva-example-win.pptx",
+   "slides": [
+    {
+     "sample": "s1",
+     "title": "匯通物流 2027 年度計劃",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       16300,
+       "shrunk"
+      ],
+      [
+       5,
+       "subtitle",
+       2750,
+       "shrunk"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s2",
+     "title": "三個目標",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       5,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       6,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       7,
+       "pbody",
+       0,
+       "fits"
+      ],
+      [
+       8,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       18,
+       "label",
+       0,
+       "fits"
+      ],
+      [
+       19,
+       "label",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s7",
+     "title": "預算 港幣 800 萬",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       14000,
+       "shrunk"
+      ],
+      [
+       4,
+       "body",
+       2200,
+       "shrunk"
+      ],
+      [
+       8,
+       "body",
+       2200,
+       "shrunk"
+      ]
+     ]
+    },
+    {
+     "sample": "s6",
+     "title": "問答",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       4,
+       "title",
+       0,
+       "fits"
+      ]
+     ]
+    }
+   ],
+   "problems": [],
+   "ok": true
+  },
+  {
+   "outline": "reference",
+   "cjk_face": "PingFang HK",
+   "route": "sample",
+   "output": "qa/g0c/out/canva-reference-mac.pptx",
+   "slides": [
+    {
+     "sample": "s1",
+     "title": "匯通物流 2027 年度計劃",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       16300,
+       "shrunk"
+      ],
+      [
+       5,
+       "subtitle",
+       2750,
+       "shrunk"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s2",
+     "title": "三個目標",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       5,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       6,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       7,
+       "pbody",
+       0,
+       "fits"
+      ],
+      [
+       8,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       10,
+       "pbody",
+       0,
+       "fits"
+      ],
+      [
+       9,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       18,
+       "label",
+       0,
+       "fits"
+      ],
+      [
+       19,
+       "label",
+       0,
+       "fits"
+      ],
+      [
+       20,
+       "label",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s1",
+     "title": "時間表",
+     "fit": "grown",
+     "flags": [
+      "grown"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       5,
+       "body",
+       0,
+       "fits"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s7",
+     "title": "預算 港幣 800 萬",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       14000,
+       "shrunk"
+      ],
+      [
+       4,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       8,
+       "head",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s1",
+     "title": "八項行動",
+     "fit": "split",
+     "flags": [
+      "grown",
+      "split"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       5,
+       "body",
+       0,
+       "fits"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s1",
+     "title": "八項行動（續）",
+     "fit": "split",
+     "flags": [
+      "shrunk",
+      "grown",
+      "split"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       16300,
+       "shrunk"
+      ],
+      [
+       5,
+       "body",
+       0,
+       "fits"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s6",
+     "title": "問答",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       4,
+       "title",
+       0,
+       "fits"
+      ]
+     ]
+    }
+   ],
+   "problems": [],
+   "ok": true
+  },
+  {
+   "outline": "reference",
+   "cjk_face": "Microsoft JhengHei",
+   "route": "sample",
+   "output": "qa/g0c/out/canva-reference-win.pptx",
+   "slides": [
+    {
+     "sample": "s1",
+     "title": "匯通物流 2027 年度計劃",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       16300,
+       "shrunk"
+      ],
+      [
+       5,
+       "subtitle",
+       2750,
+       "shrunk"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s2",
+     "title": "三個目標",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       5,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       6,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       7,
+       "pbody",
+       0,
+       "fits"
+      ],
+      [
+       8,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       10,
+       "pbody",
+       0,
+       "fits"
+      ],
+      [
+       9,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       18,
+       "label",
+       0,
+       "fits"
+      ],
+      [
+       19,
+       "label",
+       0,
+       "fits"
+      ],
+      [
+       20,
+       "label",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s1",
+     "title": "時間表",
+     "fit": "grown",
+     "flags": [
+      "grown"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       5,
+       "body",
+       0,
+       "fits"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s7",
+     "title": "預算 港幣 800 萬",
+     "fit": "shrunk",
+     "flags": [
+      "shrunk"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       14000,
+       "shrunk"
+      ],
+      [
+       4,
+       "head",
+       0,
+       "fits"
+      ],
+      [
+       8,
+       "head",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s1",
+     "title": "八項行動",
+     "fit": "split",
+     "flags": [
+      "grown",
+      "split"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       0,
+       "fits"
+      ],
+      [
+       5,
+       "body",
+       0,
+       "fits"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s1",
+     "title": "八項行動（續）",
+     "fit": "split",
+     "flags": [
+      "shrunk",
+      "grown",
+      "split"
+     ],
+     "boxes": [
+      [
+       3,
+       "title",
+       16300,
+       "shrunk"
+      ],
+      [
+       5,
+       "body",
+       0,
+       "fits"
+      ],
+      [
+       4,
+       "echo",
+       0,
+       "fits"
+      ]
+     ]
+    },
+    {
+     "sample": "s6",
+     "title": "問答",
+     "fit": "fits",
+     "flags": [],
+     "boxes": [
+      [
+       4,
+       "title",
+       0,
+       "fits"
+      ]
+     ]
+    }
+   ],
+   "problems": [],
+   "ok": true
+  }
+ ]
+}
